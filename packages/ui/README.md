@@ -100,6 +100,14 @@ form explicitly.
 
 Components never hardcode user-facing text. The few strings this package
 needs internally (close-button labels, toast status announcements) are
-react-intl messages with ids in the `ui.` namespace, defined in
-`lang/ui.en.json`; everything else is passed in by the caller as
-already-localized content.
+react-intl messages with ids in the `ui.` namespace; everything else is
+passed in by the caller as already-localized content.
+
+Translations follow the ml-trainer pipeline shape: `lang/ui.<locale>.json`
+files (formatjs extracted format) are the source of truth, compiled with
+`npm run i18n:compile` into `src/messages/ui.<locale>.json` (formatjs AST,
+committed) and shipped via the `@microbit/ui/messages` export. Components
+also carry the English text inline as `defaultMessage`, so an app that
+merges no catalogs still renders English. Adding or changing a message
+means editing every `lang/*.json` (English text for untranslated locales)
+and recompiling; there is no Crowdin wiring for this package yet.

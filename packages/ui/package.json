@@ -20,7 +20,8 @@
   "sideEffects": false,
   "scripts": {
     "panda": "panda codegen",
-    "typecheck": "npm run panda && tsc --noEmit"
+    "typecheck": "npm run panda && tsc --noEmit",
+    "i18n:compile": "formatjs compile-folder --ast lang src/messages"
   },
   "peerDependencies": {
     "@pandacss/dev": "^1.11.4",
@@ -36,6 +37,7 @@
     "react-aria-components": "^1.19.0",
     "react-icons": "^4.12.0",
     "react-intl": "^6.6.8",
-    "typescript": "^5.4.2"
+    "typescript": "^5.4.2",
+    "@formatjs/cli": "^6.7.2"
   }
 }
