@@ -15,7 +15,6 @@
   },
   "dependencies": {
     "@microbit/ui": "*",
-    "@microbit/ui-theme": "*",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-aria-components": "^1.19.0",

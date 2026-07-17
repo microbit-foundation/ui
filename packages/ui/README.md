@@ -18,10 +18,16 @@ The [demo app](../../apps/demo) is the reference setup. Everything an app
 must do:
 
 1. **Panda preset stack** (`panda.config.ts`): `@pandacss/preset-base`, then
-   this package's core preset (`@microbit/ui/panda-preset`), then the
-   micro:bit vocabulary preset (`@microbit/ui-theme`), then the app preset,
-   then an optional private brand preset. Later presets override earlier
-   ones token-by-token. `eject: true` (the stack supplies the full token
+   the brand-agnostic core preset (`@microbit/ui/panda-preset`), then the
+   micro:bit foundation preset (`@microbit/ui/microbit-preset` — the
+   house vocabulary the family's app censuses found in every app: pill
+   `radii.button`, `outline*` focus shadows, Helvetica with a `display`
+   marketing-font slot, the `language`/`toolbar` button variants, toast
+   status colours, the status-bar background; brand values are OSS
+   placeholders), then the app preset, then an optional private brand
+   preset. Later presets override earlier ones token-by-token — core
+   recipes consume tokens whose values the outer presets define, which is
+   how private brand presets restyle everything without touching recipes. `eject: true` (the stack supplies the full token
    system). After changing an _external_ preset dependency, regenerate
    clean: `rm -rf styled-system src/styled-system.css && npm run panda` —
    incremental codegen does not detect external preset changes.

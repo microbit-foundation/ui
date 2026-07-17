@@ -9,12 +9,13 @@ Extracted from [ml-trainer](https://github.com/microbit-foundation/ml-trainer)
 
 ## Packages
 
-- [`@microbit/ui`](./packages/ui) — the component library and its core Panda
-  preset. Ships as source; see the package README for the consumption setup
-  (preset stack, `styled-system` alias, cascade layers, react-intl messages).
-- [`@microbit/ui-theme`](./packages/ui-theme) — the micro:bit house styling
-  vocabulary as a preset layered over the core, with OSS placeholder brand
-  values. Private brand presets override the colour ramps and display font.
+- [`@microbit/ui`](./packages/ui) — the component library and its Panda
+  presets: the brand-agnostic core preset (`@microbit/ui/panda-preset`) and
+  the micro:bit house vocabulary layered over it
+  (`@microbit/ui/microbit-preset`, OSS placeholder brand values — private
+  brand presets override the colour ramps and display font). Ships as
+  source; see the package README for the consumption setup (preset stack,
+  `styled-system` alias, cascade layers, react-intl messages).
 
 ## Apps
 

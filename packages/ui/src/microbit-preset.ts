@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 import { definePreset } from "@pandacss/dev";
-import { colors } from "@microbit/ui/chakra-tokens";
+import { colors } from "./chakra-tokens";
 
 /**
  * The micro:bit foundation preset: the styling vocabulary the censuses found

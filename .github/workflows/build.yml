@@ -22,11 +22,8 @@ jobs:
       - uses: microbit-foundation/npm-package-versioner-action@v3
         with:
           working-directory: packages/ui
-      - uses: microbit-foundation/npm-package-versioner-action@v3
-        with:
-          working-directory: packages/ui-theme
       - run: npm run ci
-      - run: npm publish -w @microbit/ui -w @microbit/ui-theme
+      - run: npm publish -w @microbit/ui
         if: github.event_name == 'release' && github.event.action == 'created'
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

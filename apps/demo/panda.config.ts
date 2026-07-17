@@ -4,14 +4,15 @@
  * SPDX-License-Identifier: MIT
  */
 import { sharedUiPreset } from "@microbit/ui/panda-preset";
-import { microbitPreset } from "@microbit/ui-theme";
+import { microbitPreset } from "@microbit/ui/microbit-preset";
 import { defineConfig } from "@pandacss/dev";
 
 /**
  * The reference consumer setup for @microbit/ui (see the package README):
  * the preset stack merged in order (later wins), and the package's shipped
  * source included so Panda extracts the styles its components use. Apps add
- * their own preset (and an optional private brand preset) after ui-theme.
+ * their own preset (and an optional private brand preset) after the
+ * micro:bit foundation preset.
  */
 export default defineConfig({
   preflight: true,
