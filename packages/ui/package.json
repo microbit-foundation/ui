@@ -1,0 +1,40 @@
+{
+  "name": "@microbit/ui",
+  "version": "0.0.0",
+  "description": "micro:bit design-system primitives: react-aria-components + Panda CSS with a Chakra v2 design language. Ships as source; see README for the consumption setup.",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./panda-preset": "./src/panda-preset.ts",
+    "./chakra-tokens": "./src/chakra-tokens.ts",
+    "./messages": "./src/messages.ts"
+  },
+  "files": [
+    "src",
+    "lang",
+    "README.md",
+    "LICENSE.md"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "panda": "panda codegen",
+    "typecheck": "npm run panda && tsc --noEmit"
+  },
+  "peerDependencies": {
+    "@pandacss/dev": "^1.11.4",
+    "react": "^18.3.1",
+    "react-aria-components": "^1.19.0",
+    "react-icons": "^4.12.0 || ^5.0.0",
+    "react-intl": "^6.6.8 || ^7.0.0"
+  },
+  "devDependencies": {
+    "@pandacss/dev": "^1.11.4",
+    "@types/react": "^18.3.3",
+    "react": "^18.3.1",
+    "react-aria-components": "^1.19.0",
+    "react-icons": "^4.12.0",
+    "react-intl": "^6.6.8",
+    "typescript": "^5.4.2"
+  }
+}

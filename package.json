@@ -1,0 +1,19 @@
+{
+  "name": "microbit-ui-monorepo",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "build": "npm run build -w @microbit/ui-demo",
+    "dev": "npm run dev -w @microbit/ui-demo",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "ci": "npm run typecheck && npm run build",
+    "format": "prettier --write --list-different .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "prettier": "3.3.2"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    /* Panda CSS generated output (run `npm run panda`), imported as
+       styled-system/* both here and from @microbit/ui's shipped source. */
+    "paths": {
+      "styled-system/*": ["./styled-system/*"]
+    }
+  },
+  "include": ["src", "vite.config.ts", "panda.config.ts"]
+}
