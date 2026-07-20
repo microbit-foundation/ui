@@ -13,7 +13,7 @@ import { defineSlotRecipe } from "@pandacss/dev";
  * State styling keys off data attributes stamped by the shared-ui Switch
  * (react-aria provides the state via render props).
  *
- * Registered in the shared-ui core preset (panda-preset.ts). No variants, so it
+ * Registered in the base preset (base-preset.ts). No variants, so it
  * needs no `staticCss` entry.
  */
 export const switchRecipe = defineSlotRecipe({

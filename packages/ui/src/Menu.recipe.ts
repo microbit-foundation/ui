@@ -14,7 +14,7 @@ import { defineSlotRecipe } from "@pandacss/dev";
  * `dialog` and so presets can override it later if brands diverge.
  * No variants, so it needs no `staticCss` entry.
  *
- * Registered in the shared-ui core preset (panda-preset.ts).
+ * Registered in the base preset (base-preset.ts).
  */
 export const menu = defineSlotRecipe({
   className: "menu",

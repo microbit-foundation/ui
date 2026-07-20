@@ -20,13 +20,13 @@ const transitionCommon =
  *
  * A config recipe (not a component cva): styles land in the `recipes` layer so
  * call sites can override with plain style props, and presets extend the
- * variants. This file holds the core variant set; the micro:bit foundation
- * preset merges in the family-wide `language`/`toolbar` variants and the app
- * preset its `led`/`record*`/`secondary-disabled` vocabulary. Brand
- * divergence within a variant is token-driven (see the `languageText`
- * semantic tokens).
+ * variants. This file holds the brand-independent variant set — the core
+ * Chakra variants plus the family-wide `language`/`toolbar` variants; a
+ * consuming app's preset extends it with app vocabulary (e.g. ml-trainer's
+ * `led`/`record*`/`secondary-disabled`). Brand divergence within a variant is
+ * token-driven (see the `languageText` semantic tokens).
  *
- * Registered in the shared-ui core preset (panda-preset.ts).
+ * Registered in the base preset (base-preset.ts).
  */
 export const button = defineRecipe({
   className: "btn",
@@ -137,6 +137,21 @@ export const button = defineRecipe({
         bg: "danger.500",
         _hover: { bg: "danger.600", _disabled: { bg: "danger.500" } },
         _active: { bg: "danger.700" },
+      },
+      // Family-wide variants (every censused app has language- and
+      // toolbar-class buttons).
+      toolbar: {
+        color: "black",
+        bg: "white",
+        _hover: { bg: "whiteAlpha.900", _disabled: { bg: "white" } },
+        _active: { bg: "whiteAlpha.800" },
+        _focusVisible: { focusShadow: "outlineDark" },
+      },
+      language: {
+        borderWidth: "2px",
+        borderColor: "gray.200",
+        color: "languageText",
+        _hover: { color: "languageTextHover", bg: "gray.100" },
       },
     },
   },

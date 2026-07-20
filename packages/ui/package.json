@@ -6,8 +6,7 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./panda-preset": "./src/panda-preset.ts",
-    "./microbit-preset": "./src/microbit-preset.ts",
+    "./base-preset": "./src/base-preset.ts",
     "./chakra-tokens": "./src/chakra-tokens.ts",
     "./messages": "./src/messages.ts"
   },

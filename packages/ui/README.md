@@ -19,19 +19,25 @@ worked example of the setup below, minus the app/brand presets. Everything
 an app must do:
 
 1. **Panda preset stack** (`panda.config.ts`): `@pandacss/preset-base`, then
-   the brand-agnostic core preset (`@microbit/ui/panda-preset`), then the
-   micro:bit foundation preset (`@microbit/ui/microbit-preset` — the
-   house vocabulary the family's app censuses found in every app: pill
-   `radii.button`, `outline*` focus shadows, Helvetica with a `display`
-   marketing-font slot, the `language`/`toolbar` button variants, toast
-   status colours, the status-bar background; brand values are OSS
-   placeholders), then the app preset, then an optional private brand
-   preset. Later presets override earlier ones token-by-token — core
-   recipes consume tokens whose values the outer presets define, which is
-   how private brand presets restyle everything without touching recipes. `eject: true` (the stack supplies the full token
-   system). After changing an _external_ preset dependency, regenerate
-   clean: `rm -rf styled-system src/styled-system.css && npm run panda` —
-   incremental codegen does not detect external preset changes.
+   the **base preset** (`@microbit/ui/base-preset` — the complete micro:bit
+   design system: Chakra scales, recipes, the micro:bit vocabulary the
+   family's app censuses found in every app such as the pill `radii.button`,
+   `outline*` focus shadows, Helvetica fonts, the `language`/`toolbar` button
+   variants, and the `languageText`/`toast*Bg`/`statusBarBg` semantic tokens,
+   with OSS default brand values), then optionally the app's own preset, then
+   optionally a **private brand preset** (a sibling repo, e.g. CreateAI). The
+   base preset alone renders in the OSS default look; a private brand preset
+   merged last overrides just the brand token values it references — the
+   `brand`/`brand2` colour ramps and the `display` font.
+
+   Later presets override earlier ones token-by-token — the base recipes and
+   semantic tokens reference the brand tokens, which is how a brand swap
+   restyles everything without touching recipes. Set `eject: true` (the stack
+   supplies the full token system). After changing an _external_ preset
+   dependency, regenerate clean: `rm -rf styled-system styled-system.css &&
+npm run panda` — incremental codegen does not detect external preset
+   changes.
+
 2. **Include this package's source** in `panda.config.ts` so Panda extracts
    the styles the components use:
    ```ts

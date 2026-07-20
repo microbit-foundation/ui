@@ -14,7 +14,7 @@ import { defineSlotRecipe } from "@pandacss/dev";
  * stiffness 180) with a decelerating tween; exit matches its 0.15s ease-in-out
  * tween.
  *
- * Registered in the shared-ui core preset (panda-preset.ts); `placement` is
+ * Registered in the base preset (base-preset.ts); `placement` is
  * forwarded as a runtime prop so the variants are generated via `staticCss`.
  */
 export const drawer = defineSlotRecipe({

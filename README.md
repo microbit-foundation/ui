@@ -12,13 +12,14 @@ Extracted from [ml-trainer](https://github.com/microbit-foundation/ml-trainer)
 One package for now:
 
 - [`@microbit/ui`](./packages/ui) — the component library. It also exposes,
-  as subpath exports, the two Panda presets that style the components: the
-  brand-agnostic core preset (`@microbit/ui/panda-preset`) and the micro:bit
-  house vocabulary layered over it (`@microbit/ui/microbit-preset`, OSS
-  placeholder brand values — private brand presets override the colour ramps
-  and display font). Ships as source; see the package README for the
-  consumption setup (preset stack, `styled-system` alias, cascade layers,
-  react-intl messages).
+  as a subpath export, the **base preset** (`@microbit/ui/base-preset`): the
+  complete micro:bit design system (Chakra scales, recipes, the micro:bit
+  house vocabulary, and OSS default brand values). Used alone it renders in
+  the OSS default look; a private brand preset (a sibling repo) merged after
+  it overrides the `brand`/`brand2` ramps and `display` font for branded
+  builds. Ships as source; see the package README for the consumption setup
+  (preset stack, `styled-system` alias, cascade layers, react-intl
+  messages).
 
 (The monorepo layout anticipates more packages later — see ml-trainer's
 RAC-MIGRATION.md extraction plan.)
@@ -27,9 +28,9 @@ RAC-MIGRATION.md extraction plan.)
 
 Components are developed and browsed in Storybook, which lives in
 `packages/ui` (config in `.storybook/`, stories in `packages/ui/stories/`).
-It assembles the core + micro:bit foundation preset stack (OSS placeholder
-brand values, so it shows the foundation look rather than a private brand)
-and is the CI build target.
+It uses the base preset alone, so it shows the components in the OSS default
+look (Chakra blue/gray) rather than a private brand, and is the CI build
+target.
 
 ## Development
 

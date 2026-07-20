@@ -11,7 +11,7 @@ import { defineRecipe } from "@pandacss/dev";
  * the `marketing` variant is token-driven via the `display` font, so brands
  * only override tokens.
  *
- * Registered in the shared-ui core preset (panda-preset.ts).
+ * Registered in the base preset (base-preset.ts).
  */
 export const heading = defineRecipe({
   className: "heading",

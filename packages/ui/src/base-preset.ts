@@ -37,21 +37,28 @@ import { field } from "./TextField.recipe";
 import { toast } from "./Toast.recipe";
 
 /**
- * The shared-ui core preset: Chakra v2's design language on Panda. The exact
- * Chakra default token scales (chakra-tokens.ts snapshot), the shared-ui
+ * The base preset: the complete, working micro:bit design system. Chakra v2's
+ * default token scales (chakra-tokens.ts snapshot), the micro:bit house style
+ * (pill `radii.button`, `outline*` focus shadows, Helvetica fonts, the
+ * `language`/`toolbar` button variants in Button.recipe.ts, the
+ * `languageText`/`toast*Bg`/`statusBarBg` semantic tokens), the shared-ui
  * component recipes, the react-aria condition widening, the Chakra-reset
  * parity `globalCss`, and the `staticCss` that keeps runtime-prop recipe
- * variants generated.
+ * variants generated. Used alone it renders in the OSS default look.
  *
- * Some recipe styling goes through tokens this preset does not define — the
- * brand token contract a consuming app's preset stack must supply:
- * `brand`/`brand2` ramps, `radii.button`, the `outline*` shadows, the
- * `display` font and the `languageText`/`toast*Bg`/`statusBarBg` semantic
- * tokens. In this repo the micro:bit foundation preset and the app preset
- * (src/deployment/default/) provide them.
+ * ── Brand contract ──────────────────────────────────────────────────────
+ * A private brand preset (a sibling repo, e.g. CreateAI) is merged AFTER this
+ * one to restyle everything by overriding just these token *values* (never
+ * their names — see the CSS-var contract in the README):
+ *   - colours: the `brand` and `brand2` ramps (OSS defaults: Chakra
+ *     blue / Chakra's unmodified gray). Other ramps a brand tweaks
+ *     (teal/purple/pink/…) already exist in the Chakra scales below.
+ *   - font: `display` (OSS default: Helvetica; e.g. GT Walsheim privately).
+ * The recipes and semantic tokens here reference those, so a brand swap needs
+ * no recipe changes. With no private preset, these OSS defaults stand.
  */
-export const sharedUiPreset = definePreset({
-  name: "shared-ui",
+export const basePreset = definePreset({
+  name: "microbit-ui-base",
   theme: {
     breakpoints,
     keyframes: {
@@ -62,7 +69,21 @@ export const sharedUiPreset = definePreset({
       },
     },
     tokens: {
-      colors,
+      colors: {
+        ...colors,
+        gray: {
+          ...colors.gray,
+          // Very light grays the family's designs use below Chakra's 50.
+          10: { value: "#fcfcfc" },
+          25: { value: "#f5f5f5" },
+        },
+        // OSS default brand ramps (see the brand contract above). `brand`
+        // aliases Chakra blue; `brand2` Chakra's *unmodified* gray (not the
+        // `gray` above, whose 10/25 additions are lighter — getting this
+        // wrong once made card text near-invisible).
+        brand: colors.blue,
+        brand2: colors.gray,
+      },
       spacing,
       sizes,
       fontSizes,
@@ -74,23 +95,32 @@ export const sharedUiPreset = definePreset({
       borders,
       durations,
       easings,
-      radii,
-      shadows,
-      // Chakra v2's default font stacks (mono is consumed as-is; heading and
-      // body are overridden by the foundation preset's Helvetica).
+      radii: {
+        ...radii,
+        // Pill button radius (4/4 apps in the family census).
+        button: { value: "2rem" },
+      },
+      shadows: {
+        ...shadows,
+        // Chakra's outline shadow widened to 4px, plus dark/light-surface
+        // companions. Consumed via the `focusShadow` utility.
+        outline: { value: "0 0 0 4px rgba(66, 153, 225, 0.6)" },
+        outlineDark: { value: "0 0 0 4px rgba(0, 0, 0, 0.5)" },
+        outlineLight: { value: "0 0 0 4px rgba(255, 255, 255, 0.8)" },
+      },
       fonts: {
-        heading: {
-          value:
-            '-apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
-        },
-        body: {
-          value:
-            '-apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
-        },
+        // Helvetica heading/body (4/4 apps); a brand preset leaves these and
+        // overrides only `display` (the marketing font — see the brand
+        // contract above). `mono` is Chakra's default stack.
+        heading: { value: "Helvetica, Arial, sans-serif" },
+        body: { value: "Helvetica, Arial, sans-serif" },
         mono: {
           value:
             'SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace',
         },
+        // OSS default marketing font (the `marketing` heading variant). No OSS
+        // brand display face, so it falls back to the body stack.
+        display: { value: "Helvetica, Arial, sans-serif" },
       },
     },
     semanticTokens: {
@@ -115,6 +145,22 @@ export const sharedUiPreset = definePreset({
           600: { value: "{colors.red.600}" },
           700: { value: "{colors.red.700}" },
         },
+        // The `language` button variant's text colour is the one place the
+        // brands diverge structurally (OSS uses the grey brand2 ramp, the
+        // CreateAI brand its blue brand ramp with no hover change). Driven by
+        // these semantic tokens so the recipe stays shared and a brand preset
+        // overrides only the values.
+        languageText: { value: "{colors.brand2.500}" },
+        languageTextHover: { value: "{colors.brand2.600}" },
+        // Toast status colours: the Chakra-era toast Alert restyle (teal for
+        // every status except error) shared across the app family.
+        toastInfoBg: { value: "{colors.teal.800}" },
+        toastSuccessBg: { value: "{colors.teal.800}" },
+        toastWarningBg: { value: "{colors.teal.800}" },
+        toastErrorBg: { value: "{colors.danger.600}" },
+        // The native app's status-bar area colour, shared by the ActionBar
+        // and the full-size dialog's safe-area gradient.
+        statusBarBg: { value: "{colors.brand2.500}" },
       },
     },
     recipes: {
@@ -229,4 +275,4 @@ export const sharedUiPreset = definePreset({
   },
 });
 
-export default sharedUiPreset;
+export default basePreset;
