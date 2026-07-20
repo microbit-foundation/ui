@@ -10,6 +10,8 @@
     "dev": "npm run dev -w @microbit/ui-demo",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "ci": "npm run typecheck && npm run build",
+    "update-translations": "node bin/update-translations.cjs",
+    "i18n:compile": "npm run i18n:compile --workspaces --if-present",
     "format": "prettier --write --list-different .",
     "format:check": "prettier --check ."
   },

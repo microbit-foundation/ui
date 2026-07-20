@@ -108,6 +108,13 @@ files (formatjs extracted format) are the source of truth, compiled with
 `npm run i18n:compile` into `src/messages/ui.<locale>.json` (formatjs AST,
 committed) and shipped via the `@microbit/ui/messages` export. Components
 also carry the English text inline as `defaultMessage`, so an app that
-merges no catalogs still renders English. Adding or changing a message
-means editing every `lang/*.json` (English text for untranslated locales)
-and recompiling; there is no Crowdin wiring for this package yet.
+merges no catalogs still renders English.
+
+`en` is hand-edited; `en-US` is maintained manually. Other locales come
+from Crowdin via the repo-root `npm run update-translations -- <path to
+extracted Crowdin ZIP>` (config-driven over packages in
+`bin/update-translations.cjs`), after which you run `npm run i18n:compile`
+(root, across packages). Adding or changing a message before Crowdin has
+the translation means editing every `lang/*.json` (English text stands in)
+and recompiling. The Crowdin project itself is not wired up yet — the
+export path in the script is a placeholder.
