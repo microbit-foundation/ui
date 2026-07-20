@@ -17,5 +17,9 @@
   },
   "devDependencies": {
     "prettier": "3.3.2"
+  },
+  "allowScripts": {
+    "esbuild": true,
+    "fsevents": true
   }
 }
