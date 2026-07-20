@@ -1,8 +1,8 @@
 /**
  * Packages with translated message catalogs. Consumed by
  * bin/tidy-lang.cjs and bin/update-translations.cjs so adding a package here
- * brings it into both. Each package keeps its source `lang/ui.<locale>.json`
- * files and compiles them to `src/messages/` via its own `i18n:compile`.
+ * brings it into both. Each package ships its source `lang/ui.<locale>.json`
+ * files; consuming apps compile them into their own per-locale catalogs.
  *
  * `en` is the hand-edited source and `en-US` is maintained manually, so
  * `languages` lists only the locales pulled from Crowdin.

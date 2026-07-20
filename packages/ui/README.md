@@ -46,8 +46,13 @@ npm run panda` — incremental codegen does not detect external preset
    so it beats the preflight but loses to app styling.
 5. **react-intl**: an `IntlProvider` above any shared-ui usage. English
    works with no setup (components carry inline `defaultMessage`); for
-   other locales merge this package's catalogs into the provider's
-   `messages` (`import { messages } from "@microbit/ui/messages"`).
+   other locales compile this package's `lang/ui.<locale>.json` into the
+   app's per-locale catalogs as part of the app's formatjs compile step,
+   e.g. `formatjs compile lang/ui.fr.json
+node_modules/@microbit/ui/lang/ui.fr.json --ast --out-file ...` (multiple
+   input files merge; ids are `ui.`-namespaced so they can't collide). This
+   keeps the strings in the app's lazily loaded locale chunks rather than
+   an eagerly bundled catalog-of-all-locales.
 6. **`ToastProvider`** once near the root, inside the `IntlProvider`.
 7. Optionally **`SharedUIProvider`** with an overlay-close registrar so the
    app can dismiss open menus from outside the tree (e.g. the Android
@@ -101,14 +106,13 @@ react-intl messages with ids in the `ui.` namespace; everything else is
 passed in by the caller as already-localized content.
 
 The `lang/ui.<locale>.json` files (formatjs extracted format) are the source
-of truth, compiled with `npm run i18n:compile` into
-`src/messages/ui.<locale>.json` (formatjs AST, committed) and shipped via
-the `@microbit/ui/messages` export. Components also carry the English text
-inline as `defaultMessage`, so an app that merges no catalogs still renders
-English.
+of truth and are shipped as-is (exported at `./lang/*`); consuming apps
+compile them into their own per-locale catalogs (see the consumption setup
+above). Components also carry the English text inline as `defaultMessage`,
+so an app that compiles no catalogs still renders English.
 
 `en` is hand-edited; `en-US` is maintained manually. Other locales come from
 Crowdin via the repo-root `npm run update-translations -- <path to extracted
 Crowdin ZIP>` (config-driven over packages in
-`bin/update-translations.cjs`), after which you run `npm run i18n:compile`
+`bin/update-translations.cjs`), after which you run `npm run i18n:tidy`
 from the root.

@@ -8,7 +8,8 @@
     ".": "./src/index.ts",
     "./base-preset": "./src/base-preset.ts",
     "./chakra-tokens": "./src/chakra-tokens.ts",
-    "./messages": "./src/messages.ts"
+    "./messages": "./src/messages.ts",
+    "./lang/*": "./lang/*"
   },
   "files": [
     "src",
@@ -20,7 +21,6 @@
   "scripts": {
     "panda": "panda codegen && panda cssgen --outfile styled-system.css",
     "typecheck": "npm run panda && tsc --noEmit",
-    "i18n:compile": "formatjs compile-folder --ast lang src/messages",
     "prestorybook": "npm run panda",
     "storybook": "storybook dev -p 6006 --no-open",
     "prebuild-storybook": "npm run panda",
@@ -34,7 +34,6 @@
     "react-intl": "^6.6.8 || ^7.0.0"
   },
   "devDependencies": {
-    "@formatjs/cli": "^6.7.2",
     "@pandacss/dev": "^1.11.4",
     "@storybook/react-vite": "^10.5.2",
     "@types/react": "^18.3.3",

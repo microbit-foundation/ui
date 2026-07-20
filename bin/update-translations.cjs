@@ -3,8 +3,8 @@
  *
  * Pass the path to the extracted Crowdin ZIP. For each configured package and
  * language it copies the translated `ui.en.json` out of the export into the
- * package's `lang/ui.<lang>.json`, then you run `npm run i18n:compile` to
- * regenerate the committed AST bundles.
+ * package's `lang/ui.<lang>.json`, then you run `npm run i18n:tidy` to sort
+ * the catalogs.
  *
  * Lives at the repo root and is driven by the shared `bin/i18n-packages.cjs`
  * table so it acts on every translated package at once.
@@ -44,5 +44,5 @@ for (const pkg of packages) {
   }
 }
 
-console.log("\nNow run `npm run i18n:compile` to regenerate the AST bundles.");
+console.log("\nNow run `npm run i18n:tidy` to sort the catalogs.");
 process.exit(okExitStatus);
