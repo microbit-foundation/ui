@@ -32,6 +32,13 @@ const dialogBox = {
   padding: "0",
 };
 
+// The `full` variant also styles these slots; same symmetry requirement.
+const dialogSlots = {
+  header: { pl: "6" },
+  body: { overflowY: "visible" },
+  closeTrigger: { top: "2" },
+};
+
 export const dialog = defineSlotRecipe({
   className: "dialog",
   slots: [
@@ -117,16 +124,16 @@ export const dialog = defineSlotRecipe({
       },
     },
     size: {
-      xs: { content: { ...dialogBox, maxWidth: "xs" } },
-      sm: { content: { ...dialogBox, maxWidth: "sm" } },
-      md: { content: { ...dialogBox, maxWidth: "md" } },
-      lg: { content: { ...dialogBox, maxWidth: "lg" } },
-      xl: { content: { ...dialogBox, maxWidth: "xl" } },
-      "2xl": { content: { ...dialogBox, maxWidth: "2xl" } },
-      "3xl": { content: { ...dialogBox, maxWidth: "3xl" } },
-      "4xl": { content: { ...dialogBox, maxWidth: "4xl" } },
-      "5xl": { content: { ...dialogBox, maxWidth: "5xl" } },
-      "6xl": { content: { ...dialogBox, maxWidth: "6xl" } },
+      xs: { ...dialogSlots, content: { ...dialogBox, maxWidth: "xs" } },
+      sm: { ...dialogSlots, content: { ...dialogBox, maxWidth: "sm" } },
+      md: { ...dialogSlots, content: { ...dialogBox, maxWidth: "md" } },
+      lg: { ...dialogSlots, content: { ...dialogBox, maxWidth: "lg" } },
+      xl: { ...dialogSlots, content: { ...dialogBox, maxWidth: "xl" } },
+      "2xl": { ...dialogSlots, content: { ...dialogBox, maxWidth: "2xl" } },
+      "3xl": { ...dialogSlots, content: { ...dialogBox, maxWidth: "3xl" } },
+      "4xl": { ...dialogSlots, content: { ...dialogBox, maxWidth: "4xl" } },
+      "5xl": { ...dialogSlots, content: { ...dialogBox, maxWidth: "5xl" } },
+      "6xl": { ...dialogSlots, content: { ...dialogBox, maxWidth: "6xl" } },
       full: {
         content: {
           maxWidth: "100vw",
