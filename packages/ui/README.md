@@ -1,11 +1,7 @@
 # @microbit/ui
 
-react-aria-components + Panda CSS primitives with a design language ported
-from the micro:bit Foundation apps' Chakra UI v2 themes. Visuals match the
-Chakra v2 theme; behaviour follows react-aria patterns. Extracted from
-[ml-trainer](https://github.com/microbit-foundation/ml-trainer) — see its
-RAC-MIGRATION.md for the migration history, conventions and hard-won gotchas
-(start with "Styles must be literals").
+react-aria-components + Panda CSS primitives with a design language ported from
+the Micro:bit Educational Foundation apps' original Chakra UI v2 themes.
 
 The package **ships as source**: components import `styled-system/*`, which
 each consumer generates with its own Panda preset stack. There is no build
@@ -20,15 +16,9 @@ an app must do:
 
 1. **Panda preset stack** (`panda.config.ts`): `@pandacss/preset-base`, then
    the **base preset** (`@microbit/ui/base-preset` — the complete micro:bit
-   design system: Chakra scales, recipes, the micro:bit vocabulary the
-   family's app censuses found in every app such as the pill `radii.button`,
-   `outline*` focus shadows, Helvetica fonts, the `language`/`toolbar` button
-   variants, and the `languageText`/`toast*Bg`/`statusBarBg` semantic tokens,
-   with OSS default brand values), then optionally the app's own preset, then
-   optionally a **private brand preset** (a sibling repo, e.g. CreateAI). The
-   base preset alone renders in the OSS default look; a private brand preset
-   merged last overrides just the brand token values it references — the
-   `brand`/`brand2` colour ramps and the `display` font.
+   design system , then optionally the app's own preset, then optionally a
+   **private brand preset** (these are used for Foundation colours, licensed
+   fonts).
 
    Later presets override earlier ones token-by-token — the base recipes and
    semantic tokens reference the brand tokens, which is how a brand swap
@@ -110,18 +100,15 @@ needs internally (close-button labels, toast status announcements) are
 react-intl messages with ids in the `ui.` namespace; everything else is
 passed in by the caller as already-localized content.
 
-Translations follow the ml-trainer pipeline shape: `lang/ui.<locale>.json`
-files (formatjs extracted format) are the source of truth, compiled with
-`npm run i18n:compile` into `src/messages/ui.<locale>.json` (formatjs AST,
-committed) and shipped via the `@microbit/ui/messages` export. Components
-also carry the English text inline as `defaultMessage`, so an app that
-merges no catalogs still renders English.
+The `lang/ui.<locale>.json` files (formatjs extracted format) are the source
+of truth, compiled with `npm run i18n:compile` into
+`src/messages/ui.<locale>.json` (formatjs AST, committed) and shipped via
+the `@microbit/ui/messages` export. Components also carry the English text
+inline as `defaultMessage`, so an app that merges no catalogs still renders
+English.
 
-`en` is hand-edited; `en-US` is maintained manually. Other locales come
-from Crowdin via the repo-root `npm run update-translations -- <path to
-extracted Crowdin ZIP>` (config-driven over packages in
+`en` is hand-edited; `en-US` is maintained manually. Other locales come from
+Crowdin via the repo-root `npm run update-translations -- <path to extracted
+Crowdin ZIP>` (config-driven over packages in
 `bin/update-translations.cjs`), after which you run `npm run i18n:compile`
-(root, across packages). Adding or changing a message before Crowdin has
-the translation means editing every `lang/*.json` (English text stands in)
-and recompiling. The Crowdin project itself is not wired up yet — the
-export path in the script is a placeholder.
+from the root.
