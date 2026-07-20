@@ -17,6 +17,7 @@ jobs:
           node-version: "24.x"
           registry-url: "https://registry.npmjs.org"
           cache: npm
+      - run: npm install -g npm@11
       - run: npm ci
       - run: npm run format:check
       - uses: microbit-foundation/npm-package-versioner-action@v3
