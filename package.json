@@ -6,10 +6,10 @@
     "apps/*"
   ],
   "scripts": {
-    "build": "npm run build -w @microbit/ui-demo",
-    "dev": "npm run dev -w @microbit/ui-demo",
+    "storybook": "npm run storybook -w @microbit/ui",
+    "build-storybook": "npm run build-storybook -w @microbit/ui",
     "typecheck": "npm run typecheck --workspaces --if-present",
-    "ci": "npm run typecheck && npm run build",
+    "ci": "npm run typecheck && npm run build-storybook",
     "update-translations": "node bin/update-translations.cjs",
     "i18n:compile": "node bin/tidy-lang.cjs && npm run i18n:compile --workspaces --if-present",
     "format": "prettier --write --list-different .",

@@ -19,9 +19,13 @@
   ],
   "sideEffects": false,
   "scripts": {
-    "panda": "panda codegen",
+    "panda": "panda codegen && panda cssgen --outfile styled-system.css",
     "typecheck": "npm run panda && tsc --noEmit",
-    "i18n:compile": "formatjs compile-folder --ast lang src/messages"
+    "i18n:compile": "formatjs compile-folder --ast lang src/messages",
+    "prestorybook": "npm run panda",
+    "storybook": "storybook dev -p 6006 --no-open",
+    "prebuild-storybook": "npm run panda",
+    "build-storybook": "storybook build"
   },
   "peerDependencies": {
     "@pandacss/dev": "^1.11.4",
@@ -31,13 +35,19 @@
     "react-intl": "^6.6.8 || ^7.0.0"
   },
   "devDependencies": {
+    "@formatjs/cli": "^6.7.2",
     "@pandacss/dev": "^1.11.4",
+    "@storybook/react-vite": "^10.5.2",
     "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.5.2",
     "react": "^18.3.1",
     "react-aria-components": "^1.19.0",
+    "react-dom": "^18.3.1",
     "react-icons": "^4.12.0",
     "react-intl": "^6.6.8",
+    "storybook": "^10.5.2",
     "typescript": "^5.4.2",
-    "@formatjs/cli": "^6.7.2"
+    "vite": "^6.3.5"
   }
 }

@@ -12,6 +12,9 @@ dist
 styled-system
 styled-system.css
 
+# Storybook build output
+storybook-static
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

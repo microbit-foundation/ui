@@ -6,5 +6,5 @@
       "styled-system/*": ["./styled-system/*"]
     }
   },
-  "include": ["src", "panda.config.ts"]
+  "include": ["src", "stories", ".storybook", "panda.config.ts"]
 }

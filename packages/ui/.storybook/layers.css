@@ -1,0 +1,12 @@
+/*
+ * (c) 2026, Micro:bit Educational Foundation and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ *
+ * Establishes the cascade layer order before Panda's stylesheet declares
+ * layers (the first @layer statement fixes relative order for the whole
+ * document), mirroring the consumption setup in the package README. `vendor`
+ * holds third-party CSS so it beats Panda's preflight but loses to app
+ * styling; the other names are Panda's own layers.
+ */
+@layer reset, vendor, base, tokens, recipes, utilities;

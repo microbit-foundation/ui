@@ -14,8 +14,9 @@ its tree uses.
 
 ## App-side installation
 
-The [demo app](../../apps/demo) is the reference setup. Everything an app
-must do:
+This package's own Storybook (`.storybook/` + `panda.config.ts`) is a
+worked example of the setup below, minus the app/brand presets. Everything
+an app must do:
 
 1. **Panda preset stack** (`panda.config.ts`): `@pandacss/preset-base`, then
    the brand-agnostic core preset (`@microbit/ui/panda-preset`), then the
@@ -41,8 +42,8 @@ must do:
    ```
 3. **Resolve `styled-system/*` onto the generated output** for all
    importers, this package's source included — a `styled-system` alias in
-   both `tsconfig.json` `paths` and the bundler config (see the demo app's
-   `vite.config.ts`).
+   both `tsconfig.json` `paths` and the bundler config (see `.storybook/
+main.ts`'s `viteFinal`).
 4. **Cascade layers** (`src/layers.css`, imported first): declares the
    document-wide layer order including the `vendor` layer for third-party
    stylesheets — import any vendor CSS with `@import "..." layer(vendor)`

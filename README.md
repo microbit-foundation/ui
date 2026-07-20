@@ -17,18 +17,21 @@ Extracted from [ml-trainer](https://github.com/microbit-foundation/ml-trainer)
   source; see the package README for the consumption setup (preset stack,
   `styled-system` alias, cascade layers, react-intl messages).
 
-## Apps
+## Storybook
 
-- [`apps/demo`](./apps/demo) — a kitchen-sink Vite app that consumes the
-  packages the way a real app does. It is the reference consumption setup and
-  the CI build target.
+Components are developed and browsed in Storybook, which lives in
+`packages/ui` (config in `.storybook/`, stories in `packages/ui/stories/`).
+It assembles the core + micro:bit foundation preset stack (OSS placeholder
+brand values, so it shows the foundation look rather than a private brand)
+and is the CI build target.
 
 ## Development
 
 ```bash
 npm install
-npm run dev        # demo app
-npm run typecheck  # all workspaces
+npm run storybook        # component browser
+npm run build-storybook  # static build (CI target)
+npm run typecheck        # all workspaces
 npm run format
 ```
 
