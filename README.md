@@ -9,13 +9,19 @@ Extracted from [ml-trainer](https://github.com/microbit-foundation/ml-trainer)
 
 ## Packages
 
-- [`@microbit/ui`](./packages/ui) — the component library and its Panda
-  presets: the brand-agnostic core preset (`@microbit/ui/panda-preset`) and
-  the micro:bit house vocabulary layered over it
-  (`@microbit/ui/microbit-preset`, OSS placeholder brand values — private
-  brand presets override the colour ramps and display font). Ships as
-  source; see the package README for the consumption setup (preset stack,
-  `styled-system` alias, cascade layers, react-intl messages).
+One package for now:
+
+- [`@microbit/ui`](./packages/ui) — the component library. It also exposes,
+  as subpath exports, the two Panda presets that style the components: the
+  brand-agnostic core preset (`@microbit/ui/panda-preset`) and the micro:bit
+  house vocabulary layered over it (`@microbit/ui/microbit-preset`, OSS
+  placeholder brand values — private brand presets override the colour ramps
+  and display font). Ships as source; see the package README for the
+  consumption setup (preset stack, `styled-system` alias, cascade layers,
+  react-intl messages).
+
+(The monorepo layout anticipates more packages later — see ml-trainer's
+RAC-MIGRATION.md extraction plan.)
 
 ## Storybook
 
