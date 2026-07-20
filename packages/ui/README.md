@@ -42,8 +42,8 @@ an app must do:
    ```
 3. **Resolve `styled-system/*` onto the generated output** for all
    importers, this package's source included — a `styled-system` alias in
-   both `tsconfig.json` `paths` and the bundler config (see `.storybook/
-main.ts`'s `viteFinal`).
+   both `tsconfig.json` `paths` and the bundler config (see the
+   `viteFinal` in `.storybook/main.ts`).
 4. **Cascade layers** (`src/layers.css`, imported first): declares the
    document-wide layer order including the `vendor` layer for third-party
    stylesheets — import any vendor CSS with `@import "..." layer(vendor)`
