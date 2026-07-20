@@ -6,45 +6,18 @@
  * package's `lang/ui.<lang>.json`, then you run `npm run i18n:compile` to
  * regenerate the committed AST bundles.
  *
- * Lives at the repo root and is driven by the `packages` table below so it can
- * act on every translated package at once — add a package by giving it a
- * `dir`, the `crowdinDir` its strings sit under in the export, and the
- * languages to pull.
+ * Lives at the repo root and is driven by the shared `bin/i18n-packages.cjs`
+ * table so it acts on every translated package at once.
  *
  * `en` is the hand-edited source of truth and `en-US` is maintained manually
- * (see the package README), so neither is pulled from Crowdin.
+ * (see the package README), so neither is in a package's `languages` list.
  */
 const fs = require("node:fs");
 const path = require("node:path");
+const packages = require("./i18n-packages.cjs");
 
 const okExitStatus = 0;
 const errExitStatus = 2;
-
-// Adding a new language? Add it here, then re-run once Crowdin has it.
-const languages = [
-  "ca",
-  "es-ES",
-  "fr",
-  "ja",
-  "ko",
-  "nl",
-  "pl",
-  "pt-BR",
-  "zh-TW",
-  "lol",
-];
-
-const packages = [
-  {
-    // Package directory, relative to the repo root.
-    dir: "packages/ui",
-    // Where this package's strings sit within each language's export dir.
-    // Placeholder until the Crowdin project is wired up — update to match the
-    // real export layout then.
-    crowdinDir: "new/packages/microbit-ui",
-    languages,
-  },
-];
 
 const readJSON = (filepath) => JSON.parse(fs.readFileSync(filepath));
 
