@@ -9,17 +9,19 @@
     "./base-preset": "./src/base-preset.ts",
     "./chakra-tokens": "./src/chakra-tokens.ts",
     "./messages": "./src/messages.ts",
+    "./postcss-legacy-safari": "./postcss-legacy-safari.cjs",
     "./lang/*": "./lang/*"
   },
   "files": [
     "src",
     "lang",
+    "postcss-legacy-safari.cjs",
     "README.md",
     "LICENSE.md"
   ],
   "sideEffects": false,
   "scripts": {
-    "panda": "panda codegen && panda cssgen --outfile styled-system.css",
+    "panda": "panda codegen",
     "typecheck": "npm run panda && tsc --noEmit",
     "prestorybook": "npm run panda",
     "storybook": "storybook dev -p 6006 --no-open",

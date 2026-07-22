@@ -6,8 +6,9 @@
 import type { Preview } from "@storybook/react-vite";
 import { IntlProvider } from "react-intl";
 import { ToastProvider } from "../src";
+// @pandacss/dev/postcss (postcss.config.cjs) generates Panda's CSS into this
+// file's cascade-layer declaration at build time — no separate styled-system.css.
 import "./layers.css";
-import "../styled-system.css";
 
 /**
  * Wraps every story in the providers the README lists for consumers: an

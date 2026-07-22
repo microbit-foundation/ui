@@ -5,8 +5,9 @@ the Micro:bit Educational Foundation apps' original Chakra UI v2 themes.
 
 The package **ships as source**: components import `styled-system/*`, which
 each consumer generates with its own Panda preset stack. There is no build
-step and no CSS shipped — the consumer's codegen produces exactly the styles
-its tree uses.
+step and no CSS shipped — the consumer's Panda run produces exactly the styles
+its tree uses (`panda codegen` for the `styled-system/*` helpers, the Panda
+PostCSS plugin for the CSS).
 
 ## App-side installation
 
@@ -16,17 +17,15 @@ an app must do:
 
 1. **Panda preset stack** (`panda.config.ts`): `@pandacss/preset-base`, then
    the **base preset** (`@microbit/ui/base-preset` — the complete micro:bit
-   design system , then optionally the app's own preset, then optionally a
-   **private brand preset** (these are used for Foundation colours, licensed
-   fonts).
+   design system), then optionally the app's own preset, then optionally a
+   **private brand preset** (Foundation colours, licensed fonts).
 
    Later presets override earlier ones token-by-token — the base recipes and
    semantic tokens reference the brand tokens, which is how a brand swap
    restyles everything without touching recipes. Set `eject: true` (the stack
    supplies the full token system). After changing an _external_ preset
-   dependency, regenerate clean: `rm -rf styled-system styled-system.css &&
-npm run panda` — incremental codegen does not detect external preset
-   changes.
+   dependency, regenerate clean: `rm -rf styled-system && npm run panda` —
+   incremental codegen does not detect external preset changes.
 
 2. **Include this package's source** in `panda.config.ts` so Panda extracts
    the styles the components use:
@@ -40,10 +39,25 @@ npm run panda` — incremental codegen does not detect external preset
    importers, this package's source included — a `styled-system` alias in
    both `tsconfig.json` `paths` and the bundler config (see the
    `viteFinal` in `.storybook/main.ts`).
-4. **Cascade layers** (`src/layers.css`, imported first): declares the
-   document-wide layer order including the `vendor` layer for third-party
-   stylesheets — import any vendor CSS with `@import "..." layer(vendor)`
-   so it beats the preflight but loses to app styling.
+4. **Generate and load the CSS** with Panda's PostCSS plugin. Keep Vite's
+   default transformer — do **not** set `css.transformer: "lightningcss"`,
+   which disables PostCSS. Add a `postcss.config.cjs`:
+   ```js
+   module.exports = { plugins: { "@pandacss/dev/postcss": {} } };
+   ```
+   Run `panda codegen` as a `prepare`/`predev` step so the `styled-system/*`
+   helpers exist before `tsc`; the plugin generates the CSS during the bundle.
+   Import **one** entry stylesheet — first, before app styles — that declares
+   the cascade-layer order; the plugin injects the generated CSS into it (the
+   declaration must list all of Panda's layers, hence ≥5 names):
+   ```css
+   /* e.g. src/layers.css, imported once at the app root */
+   @layer reset, vendor, base, tokens, recipes, utilities;
+   ```
+   The `vendor` layer is for third-party stylesheets: import any vendor CSS
+   with `@import "..." layer(vendor)` so it beats the preflight reset but
+   loses to app styling. See `.storybook/{layers.css,preview.tsx,main.ts}` +
+   `postcss.config.cjs` for the worked example.
 5. **react-intl**: an `IntlProvider` above any shared-ui usage. English
    works with no setup (components carry inline `defaultMessage`); for
    other locales compile this package's `lang/ui.<locale>.json` into the
@@ -57,6 +71,64 @@ node_modules/@microbit/ui/lang/ui.fr.json --ast --out-file ...` (multiple
 7. Optionally **`SharedUIProvider`** with an overlay-close registrar so the
    app can dismiss open menus from outside the tree (e.g. the Android
    hardware back button). Apps without one can omit the provider.
+
+## Legacy browser support (Safari < 15) — temporary
+
+Panda's output uses two things Safari below 15 mishandles. If an app must
+support that far back (e.g. Safari 14.1 web views), add the app-side wiring
+below. **All of it is meant to be deleted once the app's support floor rises
+past these browsers** — it lives entirely in the consuming app's build config,
+never in shipped component source. This package's own Storybook does _not_ use
+any of it (it targets modern browsers, where these work natively).
+
+Two concerns:
+
+1. **`@layer`** — Safari < 15.4 drops `@layer` blocks wholesale, leaving the
+   app unstyled. Flatten them with `@csstools/postcss-cascade-layers` (which
+   rewrites layers into `:not(#\#)` specificity fallbacks; ~+8% gzipped CSS,
+   mostly compressible).
+2. **Logical shorthands + `var()`** — Safari 14.x silently drops
+   `padding-inline: var(--…)` and friends (a literal value, or the -start/-end
+   longhands, both work). Panda emits these shorthands for its px/py/mx/my
+   utilities, so most token spacing collapses. Expand them to longhands with
+   this package's `postcss-legacy-safari` plugin (kept logical, so RTL flips).
+
+```bash
+npm i -D @csstools/postcss-cascade-layers
+```
+
+```js
+// postcss.config.cjs — the two legacy plugins run AFTER Panda's (step 4), so
+// switch that config to array form:
+const {
+  expandLogicalShorthands,
+} = require("@microbit/ui/postcss-legacy-safari");
+
+module.exports = {
+  plugins: [
+    require("@pandacss/dev/postcss")(),
+    expandLogicalShorthands(),
+    require("@csstools/postcss-cascade-layers"),
+  ],
+};
+```
+
+```ts
+// vite.config.ts — pin the CSS/JS floor. Otherwise the lightningcss minifier
+// inherits build.target and downlevels logical longhands into fragile
+// :lang()-based physical rules. Keep in sync with package.json "browserslist".
+const BUILD_TARGETS = ["safari14.1", "ios14.5", "chrome90", "edge90", "firefox88"];
+// ...
+build: {
+  target: BUILD_TARGETS,
+  cssTarget: BUILD_TARGETS,
+  cssMinify: "lightningcss", // lightningcss as minifier only, not the transformer
+},
+```
+
+To drop it all: raise `BUILD_TARGETS`/`browserslist` past the affected
+browsers, then remove the two PostCSS plugins (and this package's
+`postcss-legacy-safari` export).
 
 ## The CSS-variable contract
 
