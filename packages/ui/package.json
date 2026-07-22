@@ -9,11 +9,13 @@
     "./base-preset": "./src/base-preset.ts",
     "./chakra-tokens": "./src/chakra-tokens.ts",
     "./messages": "./src/messages.ts",
+    "./postcss-legacy-safari": "./postcss-legacy-safari.cjs",
     "./lang/*": "./lang/*"
   },
   "files": [
     "src",
     "lang",
+    "postcss-legacy-safari.cjs",
     "README.md",
     "LICENSE.md"
   ],

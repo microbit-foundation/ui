@@ -58,6 +58,63 @@ node_modules/@microbit/ui/lang/ui.fr.json --ast --out-file ...` (multiple
    app can dismiss open menus from outside the tree (e.g. the Android
    hardware back button). Apps without one can omit the provider.
 
+## Legacy browser support (Safari < 15) — temporary
+
+Panda's output uses two things Safari below 15 mishandles. If an app must
+support that far back (e.g. Safari 14.1 web views), add the app-side wiring
+below. **All of it is meant to be deleted once the app's support floor rises
+past these browsers** — it lives entirely in the consuming app's build config,
+never in shipped component source. This package's own Storybook does _not_ use
+any of it (it targets modern browsers, where these work natively).
+
+Two concerns:
+
+1. **`@layer`** — Safari < 15.4 drops `@layer` blocks wholesale, leaving the
+   app unstyled. Flatten them with `@csstools/postcss-cascade-layers` (which
+   rewrites layers into `:not(#\#)` specificity fallbacks; ~+8% gzipped CSS,
+   mostly compressible).
+2. **Logical shorthands + `var()`** — Safari 14.x silently drops
+   `padding-inline: var(--…)` and friends (a literal value, or the -start/-end
+   longhands, both work). Panda emits these shorthands for its px/py/mx/my
+   utilities, so most token spacing collapses. Expand them to longhands with
+   this package's `postcss-legacy-safari` plugin (kept logical, so RTL flips).
+
+```bash
+npm i -D @csstools/postcss-cascade-layers
+```
+
+```js
+// postcss.config.cjs — Vite's default (PostCSS) transformer must be active, so
+// do NOT set css.transformer: "lightningcss" (that disables PostCSS).
+const {
+  expandLogicalShorthands,
+} = require("@microbit/ui/postcss-legacy-safari");
+
+module.exports = {
+  plugins: [
+    expandLogicalShorthands(),
+    require("@csstools/postcss-cascade-layers"),
+  ],
+};
+```
+
+```ts
+// vite.config.ts — pin the CSS/JS floor. Otherwise the lightningcss minifier
+// inherits build.target and downlevels logical longhands into fragile
+// :lang()-based physical rules. Keep in sync with package.json "browserslist".
+const BUILD_TARGETS = ["safari14.1", "ios14.5", "chrome90", "edge90", "firefox88"];
+// ...
+build: {
+  target: BUILD_TARGETS,
+  cssTarget: BUILD_TARGETS,
+  cssMinify: "lightningcss", // lightningcss as minifier only, not the transformer
+},
+```
+
+To drop it all: raise `BUILD_TARGETS`/`browserslist` past the affected
+browsers, then remove the two PostCSS plugins (and this package's
+`postcss-legacy-safari` export).
+
 ## The CSS-variable contract
 
 Panda emits every token as a CSS custom property with its default naming —
