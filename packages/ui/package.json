@@ -21,7 +21,7 @@
   ],
   "sideEffects": false,
   "scripts": {
-    "panda": "panda codegen && panda cssgen --outfile styled-system.css",
+    "panda": "panda codegen",
     "typecheck": "npm run panda && tsc --noEmit",
     "prestorybook": "npm run panda",
     "storybook": "storybook dev -p 6006 --no-open",

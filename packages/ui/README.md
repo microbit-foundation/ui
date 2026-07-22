@@ -5,8 +5,9 @@ the Micro:bit Educational Foundation apps' original Chakra UI v2 themes.
 
 The package **ships as source**: components import `styled-system/*`, which
 each consumer generates with its own Panda preset stack. There is no build
-step and no CSS shipped — the consumer's codegen produces exactly the styles
-its tree uses.
+step and no CSS shipped — the consumer's Panda run produces exactly the styles
+its tree uses (`panda codegen` for the `styled-system/*` helpers, the Panda
+PostCSS plugin for the CSS).
 
 ## App-side installation
 
@@ -16,17 +17,15 @@ an app must do:
 
 1. **Panda preset stack** (`panda.config.ts`): `@pandacss/preset-base`, then
    the **base preset** (`@microbit/ui/base-preset` — the complete micro:bit
-   design system , then optionally the app's own preset, then optionally a
-   **private brand preset** (these are used for Foundation colours, licensed
-   fonts).
+   design system), then optionally the app's own preset, then optionally a
+   **private brand preset** (Foundation colours, licensed fonts).
 
    Later presets override earlier ones token-by-token — the base recipes and
    semantic tokens reference the brand tokens, which is how a brand swap
    restyles everything without touching recipes. Set `eject: true` (the stack
    supplies the full token system). After changing an _external_ preset
-   dependency, regenerate clean: `rm -rf styled-system styled-system.css &&
-npm run panda` — incremental codegen does not detect external preset
-   changes.
+   dependency, regenerate clean: `rm -rf styled-system && npm run panda` —
+   incremental codegen does not detect external preset changes.
 
 2. **Include this package's source** in `panda.config.ts` so Panda extracts
    the styles the components use:
@@ -40,10 +39,25 @@ npm run panda` — incremental codegen does not detect external preset
    importers, this package's source included — a `styled-system` alias in
    both `tsconfig.json` `paths` and the bundler config (see the
    `viteFinal` in `.storybook/main.ts`).
-4. **Cascade layers** (`src/layers.css`, imported first): declares the
-   document-wide layer order including the `vendor` layer for third-party
-   stylesheets — import any vendor CSS with `@import "..." layer(vendor)`
-   so it beats the preflight but loses to app styling.
+4. **Generate and load the CSS** with Panda's PostCSS plugin. Keep Vite's
+   default transformer — do **not** set `css.transformer: "lightningcss"`,
+   which disables PostCSS. Add a `postcss.config.cjs`:
+   ```js
+   module.exports = { plugins: { "@pandacss/dev/postcss": {} } };
+   ```
+   Run `panda codegen` as a `prepare`/`predev` step so the `styled-system/*`
+   helpers exist before `tsc`; the plugin generates the CSS during the bundle.
+   Import **one** entry stylesheet — first, before app styles — that declares
+   the cascade-layer order; the plugin injects the generated CSS into it (the
+   declaration must list all of Panda's layers, hence ≥5 names):
+   ```css
+   /* e.g. src/layers.css, imported once at the app root */
+   @layer reset, vendor, base, tokens, recipes, utilities;
+   ```
+   The `vendor` layer is for third-party stylesheets: import any vendor CSS
+   with `@import "..." layer(vendor)` so it beats the preflight reset but
+   loses to app styling. See `.storybook/{layers.css,preview.tsx,main.ts}` +
+   `postcss.config.cjs` for the worked example.
 5. **react-intl**: an `IntlProvider` above any shared-ui usage. English
    works with no setup (components carry inline `defaultMessage`); for
    other locales compile this package's `lang/ui.<locale>.json` into the
@@ -84,14 +98,15 @@ npm i -D @csstools/postcss-cascade-layers
 ```
 
 ```js
-// postcss.config.cjs — Vite's default (PostCSS) transformer must be active, so
-// do NOT set css.transformer: "lightningcss" (that disables PostCSS).
+// postcss.config.cjs — the two legacy plugins run AFTER Panda's (step 4), so
+// switch that config to array form:
 const {
   expandLogicalShorthands,
 } = require("@microbit/ui/postcss-legacy-safari");
 
 module.exports = {
   plugins: [
+    require("@pandacss/dev/postcss")(),
     expandLogicalShorthands(),
     require("@csstools/postcss-cascade-layers"),
   ],
