@@ -1,7 +1,9 @@
 # @microbit/ui
 
 react-aria-components + Panda CSS primitives with a design language ported from
-the Micro:bit Educational Foundation apps' original Chakra UI v2 themes.
+the Micro:bit Educational Foundation apps' original
+[Chakra UI](https://chakra-ui.com/) v2 themes (see
+[Chakra UI heritage](#chakra-ui-heritage-and-license)).
 
 The package **ships as source**: components import `styled-system/*`, which
 each consumer generates with its own Panda preset stack. There is no build
@@ -188,3 +190,17 @@ Crowdin via the repo-root `npm run update-translations -- <path to extracted
 Crowdin ZIP>` (config-driven over packages in
 `bin/update-translations.cjs`), after which you run `npm run i18n:tidy`
 from the root.
+
+## Chakra UI heritage and license
+
+This package's design language began as a faithful port of
+[Chakra UI](https://chakra-ui.com/) v2's, done so the apps it serves could
+leave Chakra without a redesign: `src/base-tokens.ts` was snapshotted from
+`@chakra-ui/theme`'s default token scales, and the `*.recipe.ts` files were
+ported from Chakra's component styles onto Panda config recipes.
+However far it evolves from that starting point, it owes its foundations to
+Chakra. Thanks to Segun Adebayo and the Chakra UI contributors.
+
+The package is [MIT](LICENSE.md) © Micro:bit Educational Foundation and
+contributors; Chakra UI is MIT © Segun Adebayo, and its notice is carried
+in [LICENSE.md](LICENSE.md).

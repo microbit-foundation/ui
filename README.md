@@ -4,7 +4,8 @@
 
 Design-system monorepo for micro:bit web apps: react-aria-components for
 behaviour/accessibility and Panda CSS for styling, with a design language
-ported from the apps' Chakra UI v2 themes.
+ported from the apps' [Chakra UI](https://chakra-ui.com/) v2 themes (see
+[Chakra UI heritage](#chakra-ui-heritage)).
 
 Extracted from [ml-trainer](https://github.com/microbit-foundation/ml-trainer)
 (see its RAC-MIGRATION.md for the migration and extraction history).
@@ -44,9 +45,25 @@ npm run typecheck        # all workspaces
 npm run format
 ```
 
+## Chakra UI heritage
+
+The micro:bit apps this library serves were built on
+[Chakra UI](https://chakra-ui.com/) v2 for years, and this library began as
+a faithful port of their look and feel so they could move to
+react-aria-components + Panda CSS without a redesign: the token scales were
+snapshotted from `@chakra-ui/theme`'s defaults, and the component recipes
+ported from Chakra's component styles. However far the design system evolves
+from that starting point, it owes its foundations to Chakra. Thanks to
+Segun Adebayo and the Chakra UI contributors. Chakra UI is MIT-licensed; its
+notice is carried in [LICENSE.md](LICENSE.md).
+
 ## License
 
 [MIT](LICENSE.md) © Micro:bit Educational Foundation and contributors.
+
+Includes design tokens and component styling derived from Chakra UI v2,
+© Segun Adebayo, also MIT — see the third-party notice in
+[LICENSE.md](LICENSE.md).
 
 ## Code of Conduct
 

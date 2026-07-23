@@ -20,7 +20,7 @@ import {
   sizes,
   spacing,
   zIndex,
-} from "./chakra-tokens";
+} from "./base-tokens";
 // Config recipes are colocated with the shared-ui components they style; this
 // preset registers them so Panda merges them at codegen time.
 import { button } from "./Button.recipe";
@@ -37,8 +37,8 @@ import { field } from "./TextField.recipe";
 import { toast } from "./Toast.recipe";
 
 /**
- * The base preset: the complete, working micro:bit design system. Chakra v2's
- * default token scales (chakra-tokens.ts snapshot), the micro:bit house style
+ * The base preset: the complete, working micro:bit design system. The base
+ * token scales (base-tokens.ts), the micro:bit house style
  * (pill `radii.button`, `outline*` focus shadows, Helvetica fonts, the
  * `language`/`toolbar` button variants in Button.recipe.ts, the
  * `languageText`/`toast*Bg`/`statusBarBg` semantic tokens), the shared-ui

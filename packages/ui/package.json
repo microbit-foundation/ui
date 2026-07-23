@@ -1,13 +1,13 @@
 {
   "name": "@microbit/ui",
   "version": "0.0.0",
-  "description": "micro:bit design-system primitives: react-aria-components + Panda CSS with a Chakra v2 design language. Ships as source; see README for the consumption setup.",
+  "description": "micro:bit design-system primitives: react-aria-components + Panda CSS with a design language ported from Chakra UI v2. Ships as source; see README for the consumption setup.",
   "license": "MIT",
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
     "./base-preset": "./src/base-preset.ts",
-    "./chakra-tokens": "./src/chakra-tokens.ts",
+    "./base-tokens": "./src/base-tokens.ts",
     "./messages": "./src/messages.ts",
     "./postcss-legacy-safari": "./postcss-legacy-safari.cjs",
     "./lang/*": "./lang/*"
