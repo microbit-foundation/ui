@@ -24,8 +24,14 @@ One package for now:
   (preset stack, `styled-system` alias, cascade layers, react-intl
   messages).
 
-(The monorepo layout anticipates more packages later — see ml-trainer's
-RAC-MIGRATION.md extraction plan.)
+(The monorepo layout anticipates more packages later — see the roadmap in
+the [migration playbook](./docs/migration-playbook.md).)
+
+## Migrating an app to this library
+
+See the [migration playbook](./docs/migration-playbook.md): the
+Chakra → RAC/Panda migration method distilled from ml-trainer's run, the
+gotcha catalog, the kit scripts in [`bin/`](./bin), and the family roadmap.
 
 ## Storybook
 

@@ -156,8 +156,9 @@ the token is consumed.
 ## Runtime token lookups
 
 For values that feed _computation_ rather than stylesheets (canvas painting,
-colour math, inline `style` for data-driven values — see gotcha #9 in
-RAC-MIGRATION.md), import the runtime lookup:
+colour math, inline `style` for data-driven values — see gotcha #9 in the
+repo's [migration playbook](../../docs/migration-playbook.md)), import the
+runtime lookup:
 
 ```ts
 import { token } from "@microbit/ui"; // re-exports styled-system/tokens
