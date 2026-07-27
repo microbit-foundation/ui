@@ -18,7 +18,17 @@ import { defineSlotRecipe } from "@pandacss/dev";
  */
 export const menu = defineSlotRecipe({
   className: "menu",
-  slots: ["content", "list", "item", "icon", "label", "divider"],
+  slots: [
+    "content",
+    "list",
+    "item",
+    "icon",
+    "label",
+    "divider",
+    "group",
+    "groupTitle",
+    "itemIndicator",
+  ],
   base: {
     content: {
       bg: "white",
@@ -83,6 +93,27 @@ export const menu = defineSlotRecipe({
       borderColor: "gray.200",
       my: "2",
       opacity: 0.6,
+    },
+    group: {},
+    // Chakra's MenuGroup/MenuOptionGroup title.
+    groupTitle: {
+      display: "block",
+      mx: "4",
+      my: "2",
+      fontWeight: "semibold",
+      fontSize: "sm",
+    },
+    // Check glyph slot for MenuItemOption: space always reserved (as Chakra
+    // does), visible only on the selected item (RAC sets data-selected on it).
+    itemIndicator: {
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center",
+      flexShrink: 0,
+      marginEnd: "0.75rem",
+      fontSize: "0.8em",
+      opacity: 0,
+      "[data-selected] &": { opacity: 1 },
     },
   },
 });

@@ -5,17 +5,21 @@
  */
 import { ReactNode, useCallback, useState } from "react";
 import {
+  Header as RACHeader,
   Menu as RACMenu,
   MenuItem as RACMenuItem,
   MenuItemProps as RACMenuItemProps,
+  MenuSection as RACMenuSection,
   MenuTrigger as RACMenuTrigger,
   Popover,
   PopoverProps,
   Separator,
 } from "react-aria-components";
+import { RiCheckLine } from "react-icons/ri";
 import { css, cx } from "styled-system/css";
 import { menu } from "styled-system/recipes";
 import { SystemStyleObject } from "styled-system/types";
+import { Icon } from "./Icon";
 import { useOverlayCloseRegistrar } from "./SharedUIProvider";
 
 export interface MenuTriggerProps {
@@ -148,6 +152,91 @@ export const MenuItem = ({
       ) : (
         children
       )}
+    </RACMenuItem>
+  );
+};
+
+export interface MenuOptionGroupProps {
+  /** Group heading shown above the options (Chakra's `title`). */
+  title?: ReactNode;
+  /** The selected `MenuItemOption`'s value (radio semantics). */
+  value?: string;
+  /** Called with the newly selected option's value. */
+  onChange?: (value: string) => void;
+  /** `MenuItemOption` children. */
+  children: ReactNode;
+  css?: SystemStyleObject;
+  className?: string;
+}
+
+/**
+ * MenuOptionGroup — a single-select (radio) group of `MenuItemOption`s within
+ * a menu, replacing Chakra's `MenuOptionGroup type="radio"`. Selection is
+ * section-scoped (RAC MenuSection), so a menu can mix action items and option
+ * groups.
+ */
+export const MenuOptionGroup = ({
+  title,
+  value,
+  onChange,
+  children,
+  css: cssProp,
+  className,
+}: MenuOptionGroupProps) => {
+  const slots = menu();
+  return (
+    <RACMenuSection
+      className={cx(slots.group, cssProp ? css(cssProp) : undefined, className)}
+      selectionMode="single"
+      selectedKeys={value != null ? [value] : []}
+      onSelectionChange={(keys) => {
+        if (keys !== "all") {
+          const key = keys.values().next().value;
+          if (key != null) {
+            onChange?.(String(key));
+          }
+        }
+      }}
+    >
+      {title != null && (
+        <RACHeader className={slots.groupTitle}>{title}</RACHeader>
+      )}
+      {children}
+    </RACMenuSection>
+  );
+};
+
+export interface MenuItemOptionProps
+  extends Omit<RACMenuItemProps, "className" | "children" | "id" | "value"> {
+  /** This option's value within its `MenuOptionGroup`. */
+  value: string;
+  css?: SystemStyleObject;
+  className?: string;
+  children?: ReactNode;
+}
+
+/**
+ * MenuItemOption — a selectable option inside a `MenuOptionGroup`, with a
+ * check indicator on the selected item (Chakra's MenuItemOption).
+ */
+export const MenuItemOption = ({
+  value,
+  css: cssProp,
+  className,
+  children,
+  ...rest
+}: MenuItemOptionProps) => {
+  const slots = menu();
+  return (
+    <RACMenuItem
+      id={value}
+      className={cx(slots.item, cssProp ? css(cssProp) : undefined, className)}
+      {...rest}
+    >
+      <span className={slots.itemIndicator} aria-hidden>
+        <Icon as={RiCheckLine} />
+      </span>
+      <span className={slots.label}>{children}</span>
     </RACMenuItem>
   );
 };
