@@ -175,10 +175,41 @@ if (!existsSync(ossPresetPath) || !existsSync(privPresetPath)) {
 const ossPreset = await load(ossPresetPath, "oss-preset");
 const privPreset = await load(privPresetPath, "priv-preset");
 
-const pandaTokens = (preset) => ({
-  ...preset.theme?.tokens,
-  ...preset.theme?.extend?.tokens,
-});
+// The family's OSS ramp defaults live in @microbit/ui's base preset, which the
+// app/private presets only override token-by-token. Load and merge it so the
+// resolved OSS tokens are base ⊕ app, and private is base ⊕ app ⊕ private —
+// mirroring how Panda merges the preset stack at codegen. Without this, tokens
+// the base preset provides (gray/teal/purple ramps) read as `undefined` here
+// and every one false-mismatches. Resolved through the app repo so the version
+// matches what the app builds against.
+let basePreset;
+try {
+  const baseEntry = createRequire(
+    path.join(repo, "package.json"),
+  ).resolve("@microbit/ui/base-preset");
+  basePreset = await load(baseEntry, "base-preset");
+} catch {
+  basePreset = undefined;
+}
+
+// A token leaf is a `{ value }` object; anything else with children is a group.
+const isLeaf = (v) => isObj(v) && "value" in v;
+const deepMerge = (a, b) => {
+  if (b === undefined) return a;
+  if (a === undefined || isLeaf(a) || isLeaf(b) || !isObj(a) || !isObj(b)) {
+    return b;
+  }
+  const out = { ...a };
+  for (const k of Object.keys(b)) {
+    out[k] = deepMerge(a[k], b[k]);
+  }
+  return out;
+};
+const pandaTokens = (preset) =>
+  deepMerge(
+    { ...preset?.theme?.tokens },
+    { ...preset?.theme?.extend?.tokens },
+  );
 const unwrap = (node, segs) => {
   for (const s of segs) {
     node = node?.[s];
@@ -187,8 +218,9 @@ const unwrap = (node, segs) => {
   return isObj(node) && "value" in node ? node.value : node;
 };
 
-const ossTok = pandaTokens(ossPreset);
-const privTok = pandaTokens(privPreset);
+const baseTok = pandaTokens(basePreset);
+const ossTok = deepMerge(baseTok, pandaTokens(ossPreset));
+const privTok = deepMerge(ossTok, pandaTokens(privPreset));
 
 console.log(`\n== D. Panda preset cross-check ==`);
 let mismatches = 0;
