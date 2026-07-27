@@ -324,6 +324,20 @@ from the library extraction.
     hoisted package isn't under the app's `node_modules` — check the
     resolved path.
 
+19. **Dev-linking `@microbit/ui` as source gives you two Reacts.** When an
+    app consumes the package via a `file:`/symlink (rather than a published
+    tarball), the bundler follows the symlink to the real path and resolves
+    the package's bare `import "react"`/`react-dom`/`react-aria-components`
+    against the **ui monorepo's** own `node_modules`, not the app's. Two React
+    copies → invalid-hook crashes the moment a shared-ui component mounts
+    (`Cannot read properties of null (reading 'useContext')`). Typecheck and
+    production build pass — it's runtime-only, and only surfaces when a ported
+    component actually renders. Fix: `resolve.dedupe: ["react", "react-dom",
+    "react-aria-components", "react-aria", "react-stately"]` in the app's vite
+    config. A **published** package doesn't hit this (peers dedupe normally),
+    so it's specific to the source-linked dev workflow — but that's the
+    default while the library and app evolve together.
+
 Also remember (from the RAC component work, not numbered): RAC re-selects a
 pressed radio value against current state after any earlier handler runs —
 "click the selected option again to deselect" interactions need a native
