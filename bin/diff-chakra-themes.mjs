@@ -36,9 +36,44 @@ const privateRepo = path.resolve(
   repo,
   process.argv[2] ?? `../${path.basename(repo)}-microbit`,
 );
-// Resolve esbuild through the app repo, not this script's location.
-const require = createRequire(path.join(repo, "package.json"));
-const { build } = require("esbuild");
+// Resolve esbuild, preferring the app repo's copy so the bundle matches the
+// app's own toolchain version. Fall back to the kit's own esbuild when the
+// app's fails to launch — a wrong-platform native binary in the app's
+// node_modules (e.g. a macOS-populated tree run on Linux) is an environment
+// artifact the differ shouldn't be blocked by, and `packages: "external"`
+// keeps @chakra-ui/react resolving through the app regardless of which esbuild
+// bundles the theme entry points.
+const requireApp = createRequire(path.join(repo, "package.json"));
+const requireKit = createRequire(import.meta.url);
+async function resolveBuild() {
+  let lastErr;
+  for (const [req, where] of [
+    [requireApp, "app repo"],
+    [requireKit, "kit (../ui)"],
+  ]) {
+    try {
+      const esbuild = req("esbuild");
+      // Force the native binary to launch now, so a platform mismatch fails
+      // over here rather than mid-bundle.
+      await esbuild.transform("0");
+      if (where !== "app repo") {
+        console.warn(
+          `note: app repo's esbuild would not launch (${
+            lastErr?.message
+              ?.split("\n")
+              .map((l) => l.trim())
+              .find(Boolean) ?? "unknown error"
+          }); using ${where}'s esbuild instead.`,
+        );
+      }
+      return esbuild.build;
+    } catch (err) {
+      lastErr = err;
+    }
+  }
+  throw lastErr;
+}
+const build = await resolveBuild();
 
 const outDir = path.join(repo, "node_modules/.diff-chakra-themes");
 mkdirSync(outDir, { recursive: true });
