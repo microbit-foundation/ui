@@ -333,10 +333,24 @@ from the library extraction.
     (`Cannot read properties of null (reading 'useContext')`). Typecheck and
     production build pass — it's runtime-only, and only surfaces when a ported
     component actually renders. Fix: `resolve.dedupe: ["react", "react-dom",
-    "react-aria-components", "react-aria", "react-stately"]` in the app's vite
+"react-aria-components", "react-aria", "react-stately"]` in the app's vite
     config. A **published** package doesn't hit this (peers dedupe normally),
     so it's specific to the source-linked dev workflow — but that's the
     default while the library and app evolve together.
+
+20. **Tokens don't resolve inside multi-value CSS shorthands.** Panda
+    resolves a token name only when it is the _entire_ value:
+    `borderColor: "gray.700 transparent transparent transparent"` emits
+    verbatim — invalid CSS the browser silently drops (the classic
+    border-triangle arrow then renders in `currentColor`). Use per-side
+    longhands (`borderColor: "transparent", borderTopColor: "gray.700"`)
+    or interpolate explicitly (`{colors.gray.700}` in token _definitions_,
+    `token(colors.gray.700)` in values). Related python-editor findings:
+    template literals over imported constants and object-map lookups are
+    likewise not statically extractable — property values must be
+    literals or literal-branch ternaries, with runtime values on inline
+    `style`; and svgr components accept `className` but not `ref` (wrap
+    them when a ref is needed).
 
 Also remember (from the RAC component work, not numbered): RAC re-selects a
 pressed radio value against current state after any earlier handler runs —

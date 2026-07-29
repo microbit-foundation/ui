@@ -139,7 +139,11 @@ export const Slider = ({
               transform: "translateX(-50%)",
               borderWidth: "4px",
               borderStyle: "solid",
-              borderColor: "gray.700 transparent transparent transparent",
+              // Per-side: tokens don't resolve inside multi-value
+              // shorthands (they emit verbatim and the browser drops the
+              // invalid declaration).
+              borderColor: "transparent",
+              borderTopColor: "gray.700",
             },
           })}
           style={{ left: `${percent}%` }}
