@@ -19,6 +19,7 @@ export * from "./Input";
 export * from "./InputGroup";
 export * from "./LinkBox";
 export * from "./NativeSelect";
+export * from "./NumberField";
 export * from "./ProgressBar";
 export * from "./Slide";
 export * from "./Slider";
