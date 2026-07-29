@@ -352,6 +352,16 @@ from the library extraction.
     `style`; and svgr components accept `className` but not `ref` (wrap
     them when a ref is needed).
 
+21. **A flat utility override silences a variant's interaction states.**
+    Panda's `utilities` layer beats `recipes`, so `css={{ background:
+"#eaecf1" }}` on a `ghost` button wins in _every_ state — the
+    variant's `_hover`/`_active` backgrounds never show (Chakra's
+    cascade let pseudo-class variant rules beat style props). Whenever a
+    css override restyles a property the variant animates on hover/
+    press/focus, restate those states in the override — or fold the
+    whole look into an app-preset variant (python-editor's `sidebar`
+    variant did this for the same reason).
+
 Also remember (from the RAC component work, not numbered): RAC re-selects a
 pressed radio value against current state after any earlier handler runs —
 "click the selected option again to deselect" interactions need a native
