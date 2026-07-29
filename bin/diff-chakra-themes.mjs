@@ -184,9 +184,9 @@ const privPreset = await load(privPresetPath, "priv-preset");
 // matches what the app builds against.
 let basePreset;
 try {
-  const baseEntry = createRequire(
-    path.join(repo, "package.json"),
-  ).resolve("@microbit/ui/base-preset");
+  const baseEntry = createRequire(path.join(repo, "package.json")).resolve(
+    "@microbit/ui/base-preset",
+  );
   basePreset = await load(baseEntry, "base-preset");
 } catch {
   basePreset = undefined;
@@ -206,10 +206,7 @@ const deepMerge = (a, b) => {
   return out;
 };
 const pandaTokens = (preset) =>
-  deepMerge(
-    { ...preset?.theme?.tokens },
-    { ...preset?.theme?.extend?.tokens },
-  );
+  deepMerge({ ...preset?.theme?.tokens }, { ...preset?.theme?.extend?.tokens });
 const unwrap = (node, segs) => {
   for (const s of segs) {
     node = node?.[s];
