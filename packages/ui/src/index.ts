@@ -33,6 +33,8 @@ export * from "./Link";
 export * from "./Icon";
 export * from "./CloseButton";
 export * from "./CloseIcon";
+export * from "./Code";
+export * from "./Kbd";
 export * from "./Divider";
 export * from "./Drawer";
 export * from "./List";
