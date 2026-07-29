@@ -48,5 +48,6 @@ export * from "./Tooltip";
 export * from "./Toast";
 export * from "./VisuallyHidden";
 export { useBreakpointValue } from "./hooks/useBreakpointValue";
+export { useClipboard } from "./hooks/useClipboard";
 export { useMediaQuery } from "./hooks/useMediaQuery";
 export { usePrevious } from "./hooks/usePrevious";
