@@ -29,6 +29,7 @@ import { checkbox } from "./Checkbox.recipe";
 import { drawer } from "./Drawer.recipe";
 import { heading } from "./Heading.recipe";
 import { input } from "./Input.recipe";
+import { numberField } from "./NumberField.recipe";
 import { menu } from "./Menu.recipe";
 import { slider } from "./Slider.recipe";
 import { switchRecipe } from "./Switch.recipe";
@@ -175,6 +176,7 @@ export const basePreset = definePreset({
       drawer,
       field,
       menu,
+      numberField,
       slider,
       switchRecipe,
       toast,

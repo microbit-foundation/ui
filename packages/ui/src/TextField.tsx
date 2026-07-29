@@ -30,6 +30,8 @@ export interface TextFieldProps
   /** Per-instance style overrides for the helper text. */
   helperTextCss?: SystemStyleObject;
   onFocus?: (e: FocusEvent<HTMLInputElement>) => void;
+  /** Input autocapitalize attribute (react-aria's TextField omits it). */
+  autoCapitalize?: "off" | "none" | "on" | "sentences" | "words" | "characters";
 }
 
 /**
@@ -39,7 +41,15 @@ export interface TextFieldProps
  */
 export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
   function TextField(
-    { label, helperText, errorMessage, helperTextCss, onFocus, ...rest },
+    {
+      label,
+      helperText,
+      errorMessage,
+      helperTextCss,
+      onFocus,
+      autoCapitalize,
+      ...rest
+    },
     ref,
   ) {
     const slots = field();
@@ -53,7 +63,12 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
             </span>
           ) : null}
         </RACLabel>
-        <RACInput ref={ref} className={input()} onFocus={onFocus} />
+        <RACInput
+          ref={ref}
+          className={input()}
+          onFocus={onFocus}
+          autoCapitalize={autoCapitalize}
+        />
         {helperText && (
           <RACText
             slot="description"

@@ -37,6 +37,23 @@ export interface SliderProps {
    */
   mark?: ReactNode;
   markCss?: SystemStyleObject;
+  /**
+   * Additional positioned overlays rendered inside the slider root
+   * (always-visible value labels, threshold markers, ...). The root is
+   * position: relative; position children absolutely, typically with a
+   * percentage `left` for the track position.
+   */
+  children?: ReactNode;
+  /**
+   * Tooltip-styled bubble anchored above the thumb (Chakra's
+   * Tooltip-around-SliderThumb pattern). Rendered only while
+   * `isThumbTooltipOpen`; drive it from hover/focus, e.g. via
+   * `onThumbFocusChange` and mouse handlers on an enclosing element.
+   */
+  thumbTooltip?: ReactNode;
+  isThumbTooltipOpen?: boolean;
+  /** Thumb focus tracking (react-aria focus events). */
+  onThumbFocusChange?: (isFocused: boolean) => void;
 }
 
 /**
@@ -57,6 +74,10 @@ export const Slider = ({
   thumbCss,
   mark,
   markCss,
+  children,
+  thumbTooltip,
+  isThumbTooltipOpen,
+  onThumbFocusChange,
 }: SliderProps) => {
   const slots = slider();
   const percent = ((value - minValue) / (maxValue - minValue)) * 100;
@@ -91,9 +112,52 @@ export const Slider = ({
           style={{ width: `${percent}%` }}
         />
       </SliderTrack>
+      {thumbTooltip && isThumbTooltipOpen && (
+        // Matches the shared Tooltip's look (tooltipBase) with a bottom
+        // arrow, anchored above the thumb.
+        <div
+          role="presentation"
+          className={css({
+            position: "absolute",
+            bottom: "calc(50% + 14px)",
+            transform: "translateX(-50%)",
+            bg: "gray.700",
+            color: "white",
+            px: "2",
+            py: "1",
+            borderRadius: "md",
+            fontSize: "sm",
+            fontWeight: "medium",
+            boxShadow: "md",
+            zIndex: "tooltip",
+            whiteSpace: "nowrap",
+            _after: {
+              content: '""',
+              position: "absolute",
+              // 1px into the box so subpixel edges can't antialias into a
+              // hairline seam (see PopoverArrow).
+              top: "calc(100% - 1px)",
+              left: "50%",
+              transform: "translateX(-50%)",
+              borderWidth: "4px",
+              borderStyle: "solid",
+              // Per-side: tokens don't resolve inside multi-value
+              // shorthands (they emit verbatim and the browser drops the
+              // invalid declaration).
+              borderColor: "transparent",
+              borderTopColor: "gray.700",
+            },
+          })}
+          style={{ left: `${percent}%` }}
+        >
+          {thumbTooltip}
+        </div>
+      )}
       <SliderThumb
+        onFocusChange={onThumbFocusChange}
         className={cx(slots.thumb, thumbCss ? css(thumbCss) : undefined)}
       />
+      {children}
     </RACSlider>
   );
 };

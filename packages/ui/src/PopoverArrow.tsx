@@ -13,11 +13,26 @@ import { SystemStyleObject } from "styled-system/types";
 // rotating about the centre keeps it flush against the overlay on every side
 // — no translate fix-ups, whose signs depend on rotation direction and are
 // easy to get wrong (they detached the tooltip arrow from its box).
+//
+// "Flush" still antialiases to a hairline seam when the overlay's edge lands
+// on a subpixel boundary, so each placement also pulls the svg 1px into the
+// overlay with a negative margin on the overlay-facing side (margins move the
+// box before the rotate, so the bleed direction is unaffected by it).
 const arrowBase = css({
   "& svg": { display: "block" },
-  "&[data-placement='bottom'] svg": { transform: "rotate(180deg)" },
-  "&[data-placement='right'] svg": { transform: "rotate(90deg)" },
-  "&[data-placement='left'] svg": { transform: "rotate(-90deg)" },
+  "&[data-placement='top'] svg": { marginTop: "-1px" },
+  "&[data-placement='bottom'] svg": {
+    transform: "rotate(180deg)",
+    marginBottom: "-1px",
+  },
+  "&[data-placement='right'] svg": {
+    transform: "rotate(90deg)",
+    marginRight: "-1px",
+  },
+  "&[data-placement='left'] svg": {
+    transform: "rotate(-90deg)",
+    marginLeft: "-1px",
+  },
 });
 
 export interface PopoverArrowProps {

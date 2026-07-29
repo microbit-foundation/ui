@@ -26,6 +26,23 @@ const preview: Preview = {
   ],
   parameters: {
     controls: { expanded: true },
+    options: {
+      storySort: {
+        order: [
+          "Layout",
+          "Typography",
+          "Buttons",
+          "Forms",
+          "Overlays",
+          "Feedback",
+          "Surfaces",
+          "Media & icons",
+          "Transitions",
+          "Hooks",
+          "Utilities",
+        ],
+      },
+    },
   },
 };
 

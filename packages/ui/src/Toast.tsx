@@ -118,6 +118,8 @@ export interface ToastFn {
    * re-added, so unlike Chakra it re-animates and restarts any timeout.
    */
   update(id: string, options: ToastOptions): void;
+  /** Dismiss all visible toasts (Chakra's toast.closeAll). */
+  closeAll(): void;
 }
 
 /**
@@ -161,5 +163,9 @@ export const useToast = (): ToastFn =>
       }
       add({ ...options, id });
     };
-    return Object.assign(add, { isActive, update });
+    const closeAll = () => {
+      // Copy first: closing mutates visibleToasts as we iterate.
+      [...toastQueue.visibleToasts].forEach((t) => toastQueue.close(t.key));
+    };
+    return Object.assign(add, { isActive, update, closeAll });
   }, []);

@@ -3,7 +3,13 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { createContext, ReactNode, RefObject, useContext } from "react";
+import {
+  createContext,
+  CSSProperties,
+  ReactNode,
+  RefObject,
+  useContext,
+} from "react";
 import {
   Button as RACButton,
   Dialog,
@@ -55,6 +61,12 @@ export interface ModalProps {
   /** Style overrides for the dialog box (Chakra's ModalContent props). */
   contentCss?: SystemStyleObject;
   /**
+   * Inline styles for the dialog box, for runtime-computed positioning that
+   * Panda can't statically extract (e.g. a dialog aligned to a measured
+   * element). Prefer `contentCss` for static styles.
+   */
+  contentStyle?: CSSProperties;
+  /**
    * Style overrides for the backdrop (Chakra's ModalOverlay props), e.g. a
    * transparent backdrop when something else provides the dimming.
    */
@@ -99,6 +111,7 @@ export const Modal = ({
   motionless,
   isKeyboardDismissDisabled,
   contentCss,
+  contentStyle,
   overlayCss,
   role,
   isCentered,
@@ -141,6 +154,7 @@ export const Modal = ({
     >
       <UnmountCallback callback={handleUnmount} />
       <RACModal
+        style={contentStyle}
         className={cx(
           slots.content,
           motionlessClass,
