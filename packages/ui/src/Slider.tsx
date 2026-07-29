@@ -134,7 +134,9 @@ export const Slider = ({
             _after: {
               content: '""',
               position: "absolute",
-              top: "100%",
+              // 1px into the box so subpixel edges can't antialias into a
+              // hairline seam (see PopoverArrow).
+              top: "calc(100% - 1px)",
               left: "50%",
               transform: "translateX(-50%)",
               borderWidth: "4px",
