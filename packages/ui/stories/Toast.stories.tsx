@@ -4,33 +4,16 @@
  * SPDX-License-Identifier: MIT
  */
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Box, Button, HStack, ProgressBar, Spinner, useToast } from "../src";
+import { Button, HStack, useToast } from "../src";
 
 const meta = {
-  title: "Components/Feedback",
+  title: "Feedback/Toast",
 } satisfies Meta;
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Spinners: Story = {
-  render: () => (
-    <HStack gap={6} alignItems="center">
-      <Spinner aria-label="Loading" size="sm" />
-      <Spinner aria-label="Loading" size="md" />
-    </HStack>
-  ),
-};
-
-export const Progress: Story = {
-  render: () => (
-    <Box maxW="md">
-      <ProgressBar aria-label="Progress" value={60} />
-    </Box>
-  ),
-};
-
-export const Toasts: Story = {
+export const Statuses: Story = {
   render: () => {
     const toast = useToast();
     return (
@@ -50,17 +33,47 @@ export const Toasts: Story = {
             {status}
           </Button>
         ))}
+      </HStack>
+    );
+  },
+};
+
+export const Dismissal: Story = {
+  render: () => {
+    const toast = useToast();
+    return (
+      <HStack gap={4} flexWrap="wrap">
         <Button
           variant="secondary"
           onPress={() =>
             toast({
               title: "Persistent toast",
+              description: "Stays until closed.",
               status: "error",
+              isClosable: true,
               duration: null,
             })
           }
         >
-          persistent
+          Add persistent
+        </Button>
+        <Button
+          variant="secondary"
+          onPress={() =>
+            toast({
+              id: "unique",
+              title: "Deduplicated toast",
+              description: "Re-adding the same id while visible is a no-op.",
+              status: "info",
+              duration: null,
+              isClosable: true,
+            })
+          }
+        >
+          Add with id
+        </Button>
+        <Button variant="secondary" onPress={() => toast.closeAll()}>
+          Close all
         </Button>
       </HStack>
     );

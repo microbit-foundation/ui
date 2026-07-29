@@ -5,7 +5,7 @@
  */
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { RiDownload2Line } from "react-icons/ri";
-import { Button, HStack } from "../src";
+import { Button, ButtonGroup, HStack, Stack } from "../src";
 
 const variants = [
   "primary",
@@ -20,7 +20,7 @@ const variants = [
 ] as const;
 
 const meta = {
-  title: "Components/Button",
+  title: "Buttons/Button",
   component: Button,
   args: { children: "Button", variant: "secondary" },
   argTypes: {
@@ -69,4 +69,20 @@ export const WithIcon: Story = {
 
 export const Disabled: Story = {
   args: { variant: "primary", isDisabled: true },
+};
+
+export const Grouped: Story = {
+  render: () => (
+    <Stack gap={4} alignItems="start">
+      <ButtonGroup>
+        <Button variant="secondary">Cancel</Button>
+        <Button variant="primary">Save</Button>
+      </ButtonGroup>
+      <ButtonGroup isAttached>
+        <Button variant="secondary">Left</Button>
+        <Button variant="secondary">Middle</Button>
+        <Button variant="secondary">Right</Button>
+      </ButtonGroup>
+    </Stack>
+  ),
 };
