@@ -154,6 +154,11 @@ export const Collapse = ({
         transitionProperty: animating ? "height, opacity" : "none",
         height: displayOpen ? expanded : collapsed,
         opacity: displayOpen || !hideWhenCollapsed ? 1 : 0,
+        // At rest fully-collapsed, remove the content from the a11y tree
+        // and tab order, as Chakra did (kept visible while animating so
+        // the exit transition shows).
+        visibility:
+          displayOpen || animating || !hideWhenCollapsed ? undefined : "hidden",
         ...style,
       }}
     >
