@@ -40,6 +40,11 @@ const toCssSize = (v: number | string) =>
  * is measured and the wrapper's height (and opacity, when collapsing to zero)
  * transitions between the collapsed and expanded sizes. Content stays mounted
  * unless `unmountOnExit` is set.
+ *
+ * As with framer-motion, only `isOpen` changes animate: initial mounts render
+ * at rest, and height corrections (late measurement, content growth) snap —
+ * otherwise a collapse mounted inside an entering view morphs during the
+ * outer animation.
  */
 export const Collapse = ({
   isOpen,
@@ -55,9 +60,31 @@ export const Collapse = ({
   const [measuredHeight, setMeasuredHeight] = useState<number>();
   // For unmountOnExit: stay in the DOM until the exit transition ends.
   const [present, setPresent] = useState(isOpen);
-  if (isOpen && !present) {
-    setPresent(true);
-  }
+  // The state the DOM shows. It follows isOpen from a layout effect so the
+  // transition-enable and the height flip land in the same commit (a
+  // render-time flip detector is unreliable: React can discard renders,
+  // losing the state update while keeping ref mutations).
+  const [displayOpen, setDisplayOpen] = useState(isOpen);
+  const [animating, setAnimating] = useState(false);
+
+  useLayoutEffect(() => {
+    if (isOpen === displayOpen) {
+      return;
+    }
+    if (isOpen) {
+      // Opening: mount (collapsed) first, then flip on the next frame so
+      // the browser has a computed collapsed state to transition from.
+      setPresent(true);
+      const raf = requestAnimationFrame(() => {
+        setAnimating(true);
+        setDisplayOpen(true);
+      });
+      return () => cancelAnimationFrame(raf);
+    }
+    // Closing: enable the transition and flip together, pre-paint.
+    setAnimating(true);
+    setDisplayOpen(false);
+  }, [isOpen, displayOpen]);
 
   useLayoutEffect(() => {
     const el = contentRef.current;
@@ -74,11 +101,16 @@ export const Collapse = ({
 
   // Fallback for browsers/edge cases where transitionend doesn't fire.
   useEffect(() => {
-    if (!isOpen && unmountOnExit) {
-      const timeout = setTimeout(() => setPresent(false), 400);
+    if (animating) {
+      const timeout = setTimeout(() => {
+        setAnimating(false);
+        if (!isOpen && unmountOnExit) {
+          setPresent(false);
+        }
+      }, 400);
       return () => clearTimeout(timeout);
     }
-  }, [isOpen, unmountOnExit]);
+  }, [animating, isOpen, unmountOnExit]);
 
   if (unmountOnExit && !present) {
     return null;
@@ -96,13 +128,11 @@ export const Collapse = ({
   return (
     <div
       onTransitionEnd={(e) => {
-        if (
-          !isOpen &&
-          unmountOnExit &&
-          e.propertyName === "height" &&
-          e.target === e.currentTarget
-        ) {
-          setPresent(false);
+        if (e.propertyName === "height" && e.target === e.currentTarget) {
+          setAnimating(false);
+          if (!isOpen && unmountOnExit) {
+            setPresent(false);
+          }
         }
       }}
       className={cx(
@@ -110,7 +140,6 @@ export const Collapse = ({
           {
             overflow: "hidden",
             display: "block",
-            transitionProperty: "height, opacity",
             transitionDuration: "0.25s",
             transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
             _motionReduce: { transition: "none" },
@@ -119,10 +148,12 @@ export const Collapse = ({
         ),
         className,
       )}
-      // Runtime-measured/caller-supplied heights.
+      // Runtime-measured/caller-supplied heights; transitions enabled only
+      // while an isOpen change is in flight.
       style={{
-        height: isOpen ? expanded : collapsed,
-        opacity: isOpen || !hideWhenCollapsed ? 1 : 0,
+        transitionProperty: animating ? "height, opacity" : "none",
+        height: displayOpen ? expanded : collapsed,
+        opacity: displayOpen || !hideWhenCollapsed ? 1 : 0,
         ...style,
       }}
     >
