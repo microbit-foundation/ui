@@ -9,11 +9,15 @@ import {
   RiErrorWarningLine,
   RiHeartFill,
 } from "react-icons/ri";
-import { HStack, Icon, Image, Stack, Svg, Text } from "../src";
+import { HStack, Icon, Stack, Text } from "../src";
 
 const meta = {
-  title: "Media & icons",
-} satisfies Meta;
+  title: "Media & icons/Icon",
+  component: Icon,
+  // The render below supplies real icons; this just satisfies Icon's
+  // required `as` for the args type.
+  args: { as: RiDownload2Line },
+} satisfies Meta<typeof Icon>;
 export default meta;
 
 type Story = StoryObj<typeof meta>;
@@ -37,29 +41,5 @@ export const Icons: Story = {
         </Text>
       </HStack>
     </Stack>
-  ),
-};
-
-export const ImageStory: Story = {
-  name: "Image",
-  render: () => (
-    <Image
-      src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='%23343a40'/%3E%3Ccircle cx='120' cy='90' r='16' fill='%23fff'/%3E%3Ccircle cx='200' cy='90' r='16' fill='%23fff'/%3E%3C/svg%3E"
-      alt="Placeholder graphic"
-      borderRadius="lg"
-      maxW="xs"
-    />
-  ),
-};
-
-export const SvgStory: Story = {
-  name: "Svg",
-  render: () => (
-    <Svg viewBox="0 0 24 24" fontSize="4xl" color="blue.600" aria-hidden>
-      <path
-        fill="currentColor"
-        d="M12 21 4 13.5a5.5 5.5 0 1 1 8-7.6 5.5 5.5 0 1 1 8 7.6Z"
-      />
-    </Svg>
   ),
 };
