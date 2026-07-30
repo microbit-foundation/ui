@@ -54,7 +54,7 @@ export const CollapsePartial: Story = {
     const [isOpen, setOpen] = useState(false);
     return (
       <Stack gap={4} alignItems="start" maxW="md">
-        <Collapse isOpen={isOpen} startingHeight={44}>
+        <Collapse isOpen={isOpen} startingHeight={50}>
           <Text>
             This text starts partially visible and expands to full height.
             Collapse transitions between the starting height and the measured
