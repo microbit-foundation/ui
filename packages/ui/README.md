@@ -44,22 +44,35 @@ an app must do:
 4. **Generate and load the CSS** with Panda's PostCSS plugin. Keep Vite's
    default transformer — do **not** set `css.transformer: "lightningcss"`,
    which disables PostCSS. Add a `postcss.config.cjs`:
+
    ```js
    module.exports = { plugins: { "@pandacss/dev/postcss": {} } };
    ```
+
    Run `panda codegen` as a `prepare`/`predev` step so the `styled-system/*`
    helpers exist before `tsc`; the plugin generates the CSS during the bundle.
    Import **one** entry stylesheet — first, before app styles — that declares
    the cascade-layer order; the plugin injects the generated CSS into it (the
    declaration must list all of Panda's layers, hence ≥5 names):
+
    ```css
    /* e.g. src/layers.css, imported once at the app root */
    @layer reset, vendor, base, tokens, recipes, utilities;
+
+   @import "@microbit/ui/reset.css" layer(reset);
    ```
+
+   The `reset.css` import is **required**: it carries the Chakra-parity
+   `* { border-color; word-wrap }` defaults, which must sit in the bottom
+   layer (the legacy-Safari cascade-layer flattening specificity-boosts
+   higher layers above CSS it can't see — runtime-injected styles, other
+   files; playbook gotcha #28). Without it, elements that set a border
+   width but no colour render `currentColor` borders.
    The `vendor` layer is for third-party stylesheets: import any vendor CSS
    with `@import "..." layer(vendor)` so it beats the preflight reset but
    loses to app styling. See `.storybook/{layers.css,preview.tsx,main.ts}` +
    `postcss.config.cjs` for the worked example.
+
 5. **react-intl**: an `IntlProvider` above any shared-ui usage. English
    works with no setup (components carry inline `defaultMessage`); for
    other locales compile this package's `lang/ui.<locale>.json` into the
