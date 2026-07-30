@@ -498,6 +498,7 @@ from the library extraction.
     gray.200 editor caret this way (plus washed-out CM tooltip borders,
     structure-highlight lines, lint severity bars, docs code-chip
     borders). Two consequences:
+
     - **Broad defaults must live in the bottom (`reset`) layer**, which
       the flattening leaves unboosted: the Chakra-parity
       `* { border-color: gray.200 }` moved from the base preset's
