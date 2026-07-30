@@ -6,15 +6,16 @@
 import { defineSlotRecipe } from "@pandacss/dev";
 
 /**
- * Switch slot recipe — Chakra's md switch with the default blue colorScheme
- * (light mode). Track is 1.875rem x 1rem with a 2px inset; the thumb slides by
- * the track/thumb width difference when selected.
+ * Switch slot recipe — Chakra's switch with the default blue colorScheme
+ * (light mode) and its sm/md/lg size scale. The track has a 2px inset; the
+ * thumb matches the track height and slides by the track width/height
+ * difference when selected.
  *
  * State styling keys off data attributes stamped by the shared-ui Switch
  * (react-aria provides the state via render props).
  *
- * Registered in the base preset (base-preset.ts). No variants, so it
- * needs no `staticCss` entry.
+ * Registered in the base preset (base-preset.ts), which also has the
+ * `staticCss` entry that keeps the runtime-prop size variants generated.
  */
 export const switchRecipe = defineSlotRecipe({
   className: "switch",
@@ -35,8 +36,6 @@ export const switchRecipe = defineSlotRecipe({
       boxSizing: "content-box",
       borderRadius: "full",
       p: "0.5",
-      width: "1.875rem",
-      height: "4",
       transitionProperty: "background-color",
       transitionDuration: "fast",
       bg: "gray.300",
@@ -61,11 +60,6 @@ export const switchRecipe = defineSlotRecipe({
       transitionProperty: "transform",
       transitionDuration: "normal",
       borderRadius: "inherit",
-      width: "4",
-      height: "4",
-      "&[data-selected]": {
-        transform: "translateX(0.875rem)",
-      },
       _forcedColors: {
         bg: "ButtonText",
         "&[data-selected]": { bg: "SelectedItemText" },
@@ -76,5 +70,38 @@ export const switchRecipe = defineSlotRecipe({
       marginStart: "2",
       "&[data-disabled]": { opacity: 0.4 },
     },
+  },
+  variants: {
+    // Chakra's Switch size scale (track width x height; the selected-thumb
+    // translate is the difference between them).
+    size: {
+      sm: {
+        track: { width: "1.375rem", height: "3" },
+        thumb: {
+          width: "3",
+          height: "3",
+          "&[data-selected]": { transform: "translateX(0.625rem)" },
+        },
+      },
+      md: {
+        track: { width: "1.875rem", height: "4" },
+        thumb: {
+          width: "4",
+          height: "4",
+          "&[data-selected]": { transform: "translateX(0.875rem)" },
+        },
+      },
+      lg: {
+        track: { width: "2.875rem", height: "6" },
+        thumb: {
+          width: "6",
+          height: "6",
+          "&[data-selected]": { transform: "translateX(1.375rem)" },
+        },
+      },
+    },
+  },
+  defaultVariants: {
+    size: "md",
   },
 });

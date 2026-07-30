@@ -22,6 +22,7 @@ export * from "./LinkBox";
 export * from "./NativeSelect";
 export * from "./NumberField";
 export * from "./ProgressBar";
+export * from "./Radio";
 export * from "./Slide";
 export * from "./Slider";
 export * from "./Spinner";

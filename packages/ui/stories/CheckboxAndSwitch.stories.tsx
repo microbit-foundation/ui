@@ -35,3 +35,20 @@ export const Switches: Story = {
     </Stack>
   ),
 };
+
+export const Sizes: Story = {
+  render: () => (
+    <Stack gap={4}>
+      {(["sm", "md", "lg"] as const).map((size) => (
+        <Checkbox key={size} size={size} defaultSelected>
+          Checkbox {size}
+        </Checkbox>
+      ))}
+      {(["sm", "md", "lg"] as const).map((size) => (
+        <Switch key={size} size={size} defaultSelected>
+          Switch {size}
+        </Switch>
+      ))}
+    </Stack>
+  ),
+};

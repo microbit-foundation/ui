@@ -26,6 +26,7 @@ import {
 import { button } from "./Button.recipe";
 import { card } from "./Card.recipe";
 import { checkbox } from "./Checkbox.recipe";
+import { radio } from "./Radio.recipe";
 import { drawer } from "./Drawer.recipe";
 import { heading } from "./Heading.recipe";
 import { input } from "./Input.recipe";
@@ -180,6 +181,7 @@ export const basePreset = definePreset({
       field,
       menu,
       numberField,
+      radio,
       slider,
       switchRecipe,
       toast,
@@ -237,6 +239,7 @@ export const basePreset = definePreset({
   staticCss: {
     recipes: {
       button: ["*"],
+      checkbox: ["*"],
       heading: ["*"],
       card: ["*"],
       // Dialog size is chosen with responsive objects ({ base, md }) passed
@@ -244,6 +247,8 @@ export const basePreset = definePreset({
       dialog: [{ size: ["*"], responsive: true }, { centered: ["*"] }],
       drawer: ["*"],
       input: ["*"],
+      radio: ["*"],
+      switchRecipe: ["*"],
       // Toast status is chosen at runtime from the toast content.
       toast: ["*"],
     },
