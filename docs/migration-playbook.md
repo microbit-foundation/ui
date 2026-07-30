@@ -14,7 +14,11 @@ staticCss, globalCss reset parity and a11y work all come with the package.
 Each migrating app keeps its own `RAC-MIGRATION.md`-style status doc (the
 per-session handover log); this playbook holds the shared method. **When a
 migration teaches something new, PR it back into this doc** — the gotcha
-catalog grew throughout ml-trainer's run and will keep growing.
+catalog grew throughout ml-trainer's run and will keep growing. When a
+migration completes, its status doc retires: ml-trainer's is frozen as the
+archive; python-editor's (completed 2026-07-30) was folded into this doc
+and deleted — its remaining app-local follow-ups moved to the owner's
+tracking.
 
 ## The kit
 
@@ -26,8 +30,11 @@ catalog grew throughout ml-trainer's run and will keep growing.
 - `bin/gen-chakra-tokens.mjs` — snapshots Chakra v2 default scales in Panda
   token format; audit aid only (`base-tokens.ts` is hand-maintained — do not
   overwrite it). Delete once the family migration is done.
-- The fidelity harness pattern (see "Fidelity harness") — copy ml-trainer's
-  `bin/fidelity.mjs` + `src/e2e/fidelity.spec.ts` as starting points.
+- The fidelity harness pattern (see "Fidelity harness") — copy
+  **python-editor's** `bin/fidelity.mjs` + `src/e2e/fidelity.spec.ts` as
+  starting points (the newer generation: adds `--baseline-only`/
+  `--compare-only` halves for paired-package runs and an HTTPS_PROXY
+  passthrough for sandboxed environments; ml-trainer's was the original).
 - The consumption setup itself: [`packages/ui/README.md`](../packages/ui/README.md)
   (preset stack, `styled-system` alias, cascade layers, PostCSS wiring,
   react-intl, legacy-Safari support, the CSS-variable contract, runtime
@@ -152,8 +159,24 @@ Run the fidelity harness against the pre-flip commit; where a brand split
 exists, run it branded _and_ OSS. Cross-boundary runs need paired
 sibling-package versions — the baseline resolves the _current_ private dist
 through the shared node_modules, so rebuild the private package at the
-matching old commit for the baseline half (method in ml-trainer's
-RAC-MIGRATION.md, "Remaining work" #8).
+matching old commit for the baseline half. Worked method (python-editor,
+2026-07-30; ml-trainer's archive has the original):
+
+1. Private repo: detach at its pre-flip pair commit (the one just before
+   its own kill-switch lockstep change) and rebuild `dist/`. Its
+   node_modules may lack the since-removed Chakra deps —
+   `npm i --no-save --ignore-scripts` them at the old lockfile's versions.
+2. App repo: `npm i --no-save` the Chakra deps the kill-switch dropped
+   (exact pre-flip lockfile versions) so the baseline worktree's imports
+   resolve. Re-create the private-package symlink if the install pruned it.
+3. `fidelity.mjs --baseline-only <pre-flip-ref>`.
+4. Restore both repos (`git checkout` + rebuild private; plain
+   `npm install` in the app; symlink again), then `--compare-only`.
+5. OSS side: remove the private symlink for _both_ halves and repeat — no
+   private pairing needed.
+
+Both python-editor sides came back pixel-identical across 29 states after
+one real find (gotcha #22) — the harness pays for itself.
 
 ## Fidelity harness
 
@@ -183,6 +206,25 @@ implementation (~43 states). What made it reliable:
   tree.
 - Keep it on-demand, not CI-gating: image baselines are font-rendering
   sensitive. If CI-gating later, use the pinned Playwright container.
+- Run the servers on the app's **regular dev port**: CMS CORS allowlists
+  (Sanity) only permit the known origin — on any other port docs content
+  silently fails and the app renders its error state (python-editor's
+  first harness runs failed this way). The two servers run sequentially,
+  so sharing the port is fine.
+- Start the servers with the env the **deployed** app has. python-editor
+  needed `VITE_FOUNDATION_BUILD=true` or the consent framework never
+  loads, cookie consent never initialises, and the welcome dialog can't
+  open — an unreachable state, not a diff.
+- Coexistence-era baselines run the coexistence panda scripts, which may
+  shell out to `../ui/bin/*` — give the temp worktree a sibling `ui`
+  symlink.
+- Spec-writing: every test must request the fixture that performs the app
+  navigation (a `{ page }`-only test sits on `about:blank` and times out
+  confusingly); cap workers modestly (each page boots the whole app —
+  language-server workers included — against a cold-compiling dev
+  server); drive states the app actually reaches (e.g. python-editor's
+  Reset only confirms on a dirty project; a clean project fires a toast
+  instead).
 
 ## Visual comparison workflow (per-screen, during porting)
 
@@ -376,11 +418,76 @@ from the library extraction.
     container-set inheritable properties that preflight shorthands reset
     on descendants (`list-style`, `font`, `background`).
 
+23. **RAC Tabs, five lessons from python-editor's sidebar** (app-side RAC
+    Tabs over app tokens — see the roadmap's Tabs note):
+    (a) _Tabs cannot be selection-less_ — react-stately force-selects the
+    first tab (firing `onSelectionChange`) when the controlled
+    `selectedKey` is `null`; a collapsed-panel design must keep the last
+    real selection and drive "selected" styling separately. Clicking the
+    already-selected tab does _not_ fire `onSelectionChange` — use the
+    tab's own click handling for reactivate-to-expand.
+    (b) _Collections pre-render once without refs attached_ — effects
+    touching `ref.current` on items need null guards or they crash the
+    first render.
+    (c) _Native `:focus-visible` on a tabindex'd div matches pointer
+    clicks_ (unlike on a `<button>`), and react-aria marks the
+    programmatic refocus after click-selection as focus-visible in all
+    engines — keyboard-only styling (e.g. a focus underline) must require
+    native `:focus-visible` AND `[data-focus-visible]` together; clicks
+    fail one heuristic per engine, keyboard passes both.
+    (d) _TabList may only contain Tabs_ — chrome interleaved with the tab
+    strip (spacers, menus) needs a wrapper column with the TabList as one
+    flex child.
+    (e) _The panel's `tabIndex` belongs to react-aria_ — it re-renders
+    `tabIndex` from its has-tabbable-child check, stripping externally
+    set values (and `TabPanelProps` accepts none). Focus-the-panel
+    behaviour needs an inner `tabIndex={-1}` wrapper owned by React.
+    Also: `inert` panels drop `role="tabpanel"` — don't probe by role
+    alone in tests.
+
+24. **RAC buttons don't bubble clicks.** `usePress` handles the
+    interaction without a native click reaching ancestors, so a parent
+    container's `onClick` that a nested Chakra button used to trigger by
+    bubbling silently stops firing — wire the nested button's own
+    `onPress` explicitly (python-editor's docs-list forward arrows did
+    nothing until this).
+
+25. **Global scale overrides hide from every safeguard — diff the app
+    theme against Chakra _defaults_, not just OSS-vs-private.**
+    python-editor's theme shrank Chakra's whole spacing/sizes grid
+    (× 0.88) and fontSizes md+ (× 0.9) in _both_ themes, so: the differ
+    showed no OSS/private diff, the base preset (a snapshot of Chakra
+    defaults) silently un-shrank everything, colour cross-checks passed,
+    and per-component reviews compared colours/radii, not px. The result
+    was a ~12% roomier app that only a human eye caught. Before porting,
+    compare `space`/`sizes`/`fontSizes` (any global scale) against Chakra
+    defaults and replicate overrides in the OSS app preset (the private
+    preset stacks on top — no mirror needed).
+
+26. **Slider announced values: react-aria has no `aria-valuetext`
+    passthrough.** Chakra sliders often passed `aria-valuetext="20 °C"`;
+    RAC owns the hidden input's ARIA and offers only
+    `formatOptions: Intl.NumberFormatOptions`. Two traps: Intl's `unit`
+    style accepts only the ECMA-402 sanctioned list (no mg, nT, dB…), and
+    `@internationalized/number`'s fallback for engines without unit
+    support (Safari < 14.1 / iOS < 14.5 — inside some apps' support
+    floor) covers only degree/narrow and **throws at format time** for
+    anything else. Resolution that avoids all of it: a constant unit
+    belongs in the accessible _name_ ("Temperature (degrees Celsius)"),
+    announced once on focus, as a translated string — which also covers
+    unsanctioned units and reads uniformly across devices. Per-change
+    unit repetition would need a `getValueText`-style upstream addition.
+
 Also remember (from the RAC component work, not numbered): RAC re-selects a
 pressed radio value against current state after any earlier handler runs —
 "click the selected option again to deselect" interactions need a native
 capture listener that defers the write by a tick (see ml-trainer's
-`BluetoothPatternInput`).
+`BluetoothPatternInput`). And a behavioural delta to expect at owner
+review: **tooltips re-open after click** — Chakra's `closeOnClick` kept a
+clicked trigger's tooltip closed until re-hover; react-aria re-opens it
+under the still-hovering pointer (0ms delay). If a design can't live with
+it, the library Tooltip needs a closed-until-re-enter state machine
+(unbuilt; python-editor accepted the delta).
 
 ## Decisions to front-load
 
@@ -454,10 +561,17 @@ pieces stay app-side.
    fit the shared Toast as-is. `BoxProps` forwarding: 12 files. Dead
    tooling: `styleguide.config.js` (react-styleguidist) is stale prior art.
    Fonts declared without fallback stacks — minor fix at migration.
-2. **python-editor-v3** — largest; OSS/private split; census and
-   app-specific plan live in its own `RAC-MIGRATION.md`. Its
-   semantic-token pre-work can start any time while still on Chakra, in
-   parallel with classroom.
+2. **python-editor-v3** — **DONE (2026-07-30)**, second complete migration
+   and the first with an OSS/private split; went ahead of classroom. Its
+   status doc is retired (lessons folded into this playbook — gotchas
+   #19–#26, the fidelity worked method, the Tabs decision). Salient
+   outcomes for the family: RAC Tabs stayed **app-side** (special-purpose
+   sidebar chrome; a generic library Tabs waits for a second consumer —
+   the RAC markup and a generalised recipe extract cleanly), likewise
+   SplitView; the app's teal is a _code/content_ semantic, not `brand2`
+   (see Cross-app vocabulary); its bespoke density scale (spacing × 0.88,
+   fontSizes md+ × 0.9, see gotcha #25) is replicated in its app preset
+   pending a keep-vs-align-with-family-scale discussion.
 3. **data-microbit-org** — whenever convenient; by then the surface is
    covered. Census highlights: fully private repo, no theme-package split;
    brand assets committed in-repo. **Multi-root**: three apps in one repo,
@@ -498,6 +612,16 @@ The censuses established 4/4-app convergence on `radii.button: 2rem`, the
 component in three apps. Default button variant differs (`secondary` in
 ml-trainer/classroom/data, `outline` in python-editor) — recipes'
 `defaultVariants` must stay preset-overridable per app.
+
+**Same slot number ≠ same role — check usage semantics before mapping an
+app's second hue onto `brand2`.** python-editor's investigation:
+ml-trainer's `brand2` is a general secondary accent (LED/progress/toggle/
+status chrome), but python-editor's teal marks _code/machine-origin
+content_ (docs code embeds, drag handles, sensor icons) and is never
+chrome — mapping it to `brand2` would have crossed the two apps' chrome
+onto opposite tokens. Its teal stayed an app-specific semantic category
+(sibling of its `code.*` palette). Genuine family-wide holds: `toast*Bg`
+on teal, errors/destructive on red/`danger`.
 
 After the family migration completes, the Chakra token snapshot becomes a
 **malleable base** — it is a parity constraint only while Chakra apps
