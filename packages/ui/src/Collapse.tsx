@@ -162,7 +162,19 @@ export const Collapse = ({
         ...style,
       }}
     >
-      <div ref={contentRef}>{children}</div>
+      <div
+        ref={contentRef}
+        // flow-root: the measured element must be a block formatting
+        // context, or children's margins collapse through it and
+        // scrollHeight under-measures — the outer (overflow: hidden)
+        // wrapper IS a BFC and needs the full height, so the mismatch
+        // clips the last line of margined content (python-editor's API
+        // docs). Rendering is unchanged: the margins always displayed
+        // inside the outer BFC.
+        className={css({ display: "flow-root" })}
+      >
+        {children}
+      </div>
     </div>
   );
 };
