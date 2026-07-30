@@ -6,20 +6,21 @@
 import { defineSlotRecipe } from "@pandacss/dev";
 
 /**
- * Checkbox slot recipe — Chakra's checkbox with the default blue colorScheme
- * (light mode) and its sm/md/lg size scale. The control's
- * `borderColor: inherit` picks up a `borderColor` set on the root, matching
- * Chakra's convention for tinting the box from the call site.
+ * Radio slot recipe — Chakra's radio with the default blue colorScheme
+ * (light mode) and its sm/md/lg size scale: the checkbox control rounded
+ * fully, with a 50% `currentColor` dot when selected instead of the check
+ * glyph. As with the checkbox, `borderColor: inherit` picks up a
+ * `borderColor` set on the root.
  *
- * State styling keys off data attributes stamped on the control by the
- * shared-ui Checkbox (react-aria provides the state via render props).
+ * State styling keys off data attributes stamped by the shared-ui Radio
+ * (react-aria provides the state via render props).
  *
  * Registered in the base preset (base-preset.ts), which also has the
  * `staticCss` entry that keeps the runtime-prop size variants generated.
  */
-export const checkbox = defineSlotRecipe({
-  className: "checkbox",
-  slots: ["root", "control", "icon", "label"],
+export const radio = defineSlotRecipe({
+  className: "radio",
+  slots: ["root", "control", "label"],
   base: {
     root: {
       display: "inline-flex",
@@ -38,7 +39,7 @@ export const checkbox = defineSlotRecipe({
       transitionDuration: "normal",
       borderWidth: "2px",
       borderStyle: "solid",
-      borderRadius: "sm",
+      borderRadius: "full",
       borderColor: "inherit",
       color: "white",
       bg: "white",
@@ -49,6 +50,16 @@ export const checkbox = defineSlotRecipe({
         _hover: {
           bg: "controlCheckedHoverBg",
           borderColor: "controlCheckedHoverBg",
+        },
+        // Chakra's radio dot.
+        _before: {
+          content: '""',
+          display: "inline-block",
+          position: "relative",
+          width: "50%",
+          height: "50%",
+          borderRadius: "50%",
+          bg: "currentColor",
         },
       },
       // Chakra's disabled greys; the selected block restates _hover so the
@@ -67,10 +78,6 @@ export const checkbox = defineSlotRecipe({
         focusShadow: "outline",
       },
     },
-    icon: {
-      transitionProperty: "transform",
-      transitionDuration: "normal",
-    },
     label: {
       userSelect: "none",
       marginStart: "2",
@@ -78,23 +85,18 @@ export const checkbox = defineSlotRecipe({
     },
   },
   variants: {
-    // Chakra's Checkbox size scale. The icon dimensions are Chakra's
-    // 1.2em-wide check glyph at each size's icon fontSize (3xs/2xs/2xs),
-    // resolved to rem.
+    // Chakra's Radio size scale (the Checkbox control scale).
     size: {
       sm: {
         control: { width: "3", height: "3" },
-        icon: { width: "0.54rem", height: "0.54rem" },
         label: { fontSize: "sm" },
       },
       md: {
         control: { width: "4", height: "4" },
-        icon: { width: "0.75rem", height: "0.75rem" },
         label: { fontSize: "md" },
       },
       lg: {
         control: { width: "5", height: "5" },
-        icon: { width: "0.75rem", height: "0.75rem" },
         label: { fontSize: "lg" },
       },
     },

@@ -9,11 +9,12 @@ import {
   CheckboxProps as RACCheckboxProps,
 } from "react-aria-components";
 import { css, cx } from "styled-system/css";
-import { checkbox } from "styled-system/recipes";
+import { checkbox, CheckboxVariantProps } from "styled-system/recipes";
 import { SystemStyleObject } from "styled-system/types";
 
 export interface CheckboxProps
-  extends Omit<RACCheckboxProps, "className" | "children" | "style"> {
+  extends Omit<RACCheckboxProps, "className" | "children" | "style">,
+    CheckboxVariantProps {
   /** Per-instance style overrides for the root, merged after the recipe. */
   css?: SystemStyleObject;
   className?: string;
@@ -21,28 +22,30 @@ export interface CheckboxProps
 }
 
 /**
- * Checkbox — react-aria-components <Checkbox> styled like Chakra's md
- * checkbox. Children render as the label; wrap them in a visually-hidden
- * span for icon-less checkboxes.
+ * Checkbox — react-aria-components <Checkbox> styled like Chakra's checkbox.
+ * Children render as the label; wrap them in a visually-hidden span for
+ * icon-less checkboxes.
  */
 export const Checkbox = ({
+  size,
   css: cssProp,
   className,
   children,
   ...rest
 }: CheckboxProps) => {
-  const slots = checkbox();
+  const slots = checkbox({ size });
   return (
     <RACCheckbox
       className={cx(slots.root, cssProp ? css(cssProp) : undefined, className)}
       {...rest}
     >
-      {({ isSelected, isFocusVisible }) => (
+      {({ isSelected, isFocusVisible, isDisabled }) => (
         <>
           <span
             className={slots.control}
             data-selected={isSelected || undefined}
             data-focus-visible={isFocusVisible || undefined}
+            data-disabled={isDisabled || undefined}
             aria-hidden
           >
             {isSelected && (
@@ -58,7 +61,14 @@ export const Checkbox = ({
               </svg>
             )}
           </span>
-          {children != null && <span className={slots.label}>{children}</span>}
+          {children != null && (
+            <span
+              className={slots.label}
+              data-disabled={isDisabled || undefined}
+            >
+              {children}
+            </span>
+          )}
         </>
       )}
     </RACCheckbox>

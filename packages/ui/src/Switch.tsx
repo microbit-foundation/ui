@@ -9,11 +9,12 @@ import {
   SwitchProps as RACSwitchProps,
 } from "react-aria-components";
 import { css, cx } from "styled-system/css";
-import { switchRecipe } from "styled-system/recipes";
+import { switchRecipe, SwitchRecipeVariantProps } from "styled-system/recipes";
 import { SystemStyleObject } from "styled-system/types";
 
 export interface SwitchProps
-  extends Omit<RACSwitchProps, "className" | "children" | "style"> {
+  extends Omit<RACSwitchProps, "className" | "children" | "style">,
+    SwitchRecipeVariantProps {
   /** Per-instance style overrides for the root, merged after the recipe. */
   css?: SystemStyleObject;
   className?: string;
@@ -21,16 +22,17 @@ export interface SwitchProps
 }
 
 /**
- * Switch — react-aria-components <Switch> styled like Chakra's md switch.
+ * Switch — react-aria-components <Switch> styled like Chakra's switch.
  * Children render as the label; pass `aria-label` for label-less switches.
  */
 export const Switch = ({
+  size,
   css: cssProp,
   className,
   children,
   ...rest
 }: SwitchProps) => {
-  const slots = switchRecipe();
+  const slots = switchRecipe({ size });
   return (
     <RACSwitch
       className={cx(slots.root, cssProp ? css(cssProp) : undefined, className)}
