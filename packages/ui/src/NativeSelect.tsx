@@ -5,11 +5,14 @@
  */
 import { forwardRef, SelectHTMLAttributes } from "react";
 import { css, cx } from "styled-system/css";
-import { input } from "styled-system/recipes";
+import { input, InputVariantProps } from "styled-system/recipes";
 import { SystemStyleObject } from "styled-system/types";
 
 export interface NativeSelectProps
-  extends Omit<SelectHTMLAttributes<HTMLSelectElement>, "className"> {
+  // `size` is the recipe's size scale, as in Chakra; the native visible-rows
+  // attribute it shadows was unused.
+  extends Omit<SelectHTMLAttributes<HTMLSelectElement>, "className" | "size">,
+    InputVariantProps {
   /**
    * Suppress the dropdown chevron, e.g. when an adjacent control provides the
    * affordance. Without the chevron a bare <select> element is rendered (no
@@ -22,23 +25,24 @@ export interface NativeSelectProps
 }
 
 /**
- * NativeSelect — a native select styled like Chakra's Select field (md,
- * outline). The recipe's `appearance: none` removes the platform chevron, so
- * one is drawn back in by default (Chakra Select's glyph, `currentColor`).
+ * NativeSelect — a native select styled like Chakra's Select field (outline).
+ * The recipe's `appearance: none` removes the platform chevron, so one is
+ * drawn back in by default (Chakra Select's glyph, `currentColor`).
  */
 export const NativeSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(
   function NativeSelect(
-    { hideChevron = false, css: cssProp, className, ...rest },
+    { hideChevron = false, size, css: cssProp, className, ...rest },
     ref,
   ) {
     const select = (
       <select
         ref={ref}
         className={cx(
-          input(),
+          input({ size }),
           css(
             { cursor: "pointer" },
-            // Room for the chevron overlay.
+            // Room for the chevron overlay (Chakra Select's icon spacing,
+            // constant across sizes).
             hideChevron ? undefined : { paddingRight: "8" },
             cssProp,
           ),
@@ -53,13 +57,14 @@ export const NativeSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(
     return (
       <span className={css({ position: "relative", display: "inline-flex" })}>
         {select}
-        {/* Chakra Select's chevron. */}
+        {/* Chakra Select's chevron, fixed-size across field sizes (only xs
+            pulls it in tighter). */}
         <svg
           viewBox="0 0 24 24"
           aria-hidden
           className={css({
             position: "absolute",
-            right: "2",
+            right: size === "xs" ? "1" : "2",
             top: "50%",
             transform: "translateY(-50%)",
             width: "5",

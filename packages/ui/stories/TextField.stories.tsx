@@ -21,6 +21,7 @@ const meta = {
   component: TextField,
   args: { label: "Name" },
   argTypes: {
+    size: { control: "select", options: ["xs", "sm", "md", "lg"] },
     helperText: { control: "text" },
     errorMessage: { control: "text" },
     isRequired: { control: "boolean" },
@@ -33,6 +34,17 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {};
+
+/** The input recipe's size scale, shared with Input and NativeSelect. */
+export const Sizes: Story = {
+  render: () => (
+    <Stack gap={6} maxW="md">
+      {(["xs", "sm", "md", "lg"] as const).map((size) => (
+        <Input key={size} aria-label={size} placeholder={size} size={size} />
+      ))}
+    </Stack>
+  ),
+};
 
 export const States: Story = {
   render: () => (
@@ -51,7 +63,9 @@ export const States: Story = {
 
 /**
  * Input adornments use the raw Input + InputGroup parts (Chakra's
- * InputLeftElement/InputRightElement); pad the input to make room.
+ * InputLeftElement/InputRightElement); pad the input to make room. The
+ * elements take the same `size` as the input so the overlay box tracks the
+ * field height.
  */
 export const Adornments: Story = {
   render: () => (
@@ -75,6 +89,17 @@ export const Adornments: Story = {
         <InputRightElement>
           <Kbd>/</Kbd>
         </InputRightElement>
+      </InputGroup>
+      <InputGroup>
+        <InputLeftElement size="sm">
+          <Icon as={RiSearchLine} css={{ color: "gray.400" }} />
+        </InputLeftElement>
+        <Input
+          aria-label="Search"
+          placeholder="Search (sm)"
+          size="sm"
+          css={{ paddingStart: "8" }}
+        />
       </InputGroup>
     </Stack>
   ),

@@ -4,12 +4,13 @@
  * SPDX-License-Identifier: MIT
  */
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Box, NativeSelect } from "../src";
+import { Box, NativeSelect, Stack } from "../src";
 
 const meta = {
   title: "Forms/NativeSelect",
   component: NativeSelect,
   argTypes: {
+    size: { control: "select", options: ["xs", "sm", "md", "lg"] },
     hideChevron: { control: "boolean" },
     disabled: { control: "boolean" },
   },
@@ -27,5 +28,18 @@ export const Playground: Story = {
         <option>日本語</option>
       </NativeSelect>
     </Box>
+  ),
+};
+
+export const Sizes: Story = {
+  render: (args) => (
+    <Stack gap={4} maxW="md">
+      {(["xs", "sm", "md", "lg"] as const).map((size) => (
+        <NativeSelect key={size} aria-label={size} {...args} size={size}>
+          <option>{size}</option>
+          <option>Français</option>
+        </NativeSelect>
+      ))}
+    </Stack>
   ),
 };
