@@ -5,16 +5,16 @@
  */
 import { forwardRef, ReactNode } from "react";
 import {
-  Button as RACButton,
-  ButtonProps as RACButtonProps,
+  Link as RACLink,
+  LinkProps as RACLinkProps,
 } from "react-aria-components";
 import { css, cx } from "styled-system/css";
 import { button, ButtonVariantProps } from "styled-system/recipes";
 import { SystemStyleObject } from "styled-system/types";
 import { buttonIcon } from "./button-icon";
 
-export interface ButtonProps
-  extends Omit<RACButtonProps, "className" | "children">,
+export interface LinkButtonProps
+  extends Omit<RACLinkProps, "className" | "children">,
     ButtonVariantProps {
   /** Per-instance style overrides, merged after the recipe. */
   css?: SystemStyleObject;
@@ -26,14 +26,25 @@ export interface ButtonProps
   children?: ReactNode;
 }
 
+// Anchors pick up underline styling that buttons never have.
+const linkReset = css.raw({
+  textDecoration: "none",
+  _hover: { textDecoration: "none" },
+});
+
 /**
- * Button — react-aria-components <Button> styled with the `button` config
- * recipe. The recipe's interaction states are driven by RAC's data attributes
- * (see the preset's widened conditions), so disabled/hover/press/focus all work
- * without extra wiring.
+ * LinkButton — a navigation link that looks like a Button (Chakra's
+ * `Button as="a"`). react-aria-components <Link> renders a real anchor
+ * (`href`, `target`, new-tab/middle-click semantics preserved) with the same
+ * interaction data attributes as Button, so the `button` recipe's
+ * hover/press/focus/disabled states apply unchanged.
+ *
+ * Use for navigation that should read as a call to action (e.g. an external
+ * help page presented as a dialog's primary action); use Button for
+ * in-page actions.
  */
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  function Button(
+export const LinkButton = forwardRef<HTMLAnchorElement, LinkButtonProps>(
+  function LinkButton(
     {
       variant,
       size,
@@ -47,11 +58,11 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     ref,
   ) {
     return (
-      <RACButton
+      <RACLink
         ref={ref}
         className={cx(
           button({ variant, size }),
-          cssProp ? css(cssProp) : undefined,
+          css(linkReset, cssProp),
           className,
         )}
         {...rest}
@@ -63,7 +74,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {rightIcon ? (
           <span className={buttonIcon({ side: "right" })}>{rightIcon}</span>
         ) : null}
-      </RACButton>
+      </RACLink>
     );
   },
 );

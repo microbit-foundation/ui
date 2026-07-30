@@ -10,6 +10,7 @@
  */
 export * from "./system";
 export * from "./Button";
+export * from "./LinkButton";
 export * from "./ButtonGroup";
 export * from "./Card";
 export * from "./Checkbox";
