@@ -21,3 +21,15 @@
   border-color: var(--colors-gray-200);
   word-wrap: break-word;
 }
+
+/*
+ * Panda's preflight (base layer) beats the rule above with
+ * `border-color: var(--global-color-border, currentcolor)`. The currentcolor
+ * fallback poisons `border-color: inherit` chains (inherit copies the
+ * currentcolor KEYWORD, which then resolves against the child's own `color`
+ * — e.g. white on the checkbox/radio control). Defining the hook keeps the
+ * default border colour a real colour, as Chakra's global reset did.
+ */
+:root {
+  --global-color-border: var(--colors-gray-200);
+}
