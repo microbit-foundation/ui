@@ -10,7 +10,7 @@ const meta = {
   title: "Forms/NativeSelect",
   component: NativeSelect,
   argTypes: {
-    size: { control: "select", options: ["xs", "sm", "md", "lg"] },
+    size: { control: "select", options: ["sm", "md", "lg"] },
     hideChevron: { control: "boolean" },
     disabled: { control: "boolean" },
   },
@@ -34,7 +34,7 @@ export const Playground: Story = {
 export const Sizes: Story = {
   render: (args) => (
     <Stack gap={4} maxW="md">
-      {(["xs", "sm", "md", "lg"] as const).map((size) => (
+      {(["sm", "md", "lg"] as const).map((size) => (
         <NativeSelect key={size} aria-label={size} {...args} size={size}>
           <option>{size}</option>
           <option>Français</option>

@@ -57,14 +57,13 @@ export const NativeSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(
     return (
       <span className={css({ position: "relative", display: "inline-flex" })}>
         {select}
-        {/* Chakra Select's chevron, fixed-size across field sizes (only xs
-            pulls it in tighter). */}
+        {/* Chakra Select's chevron, fixed-size across field sizes. */}
         <svg
           viewBox="0 0 24 24"
           aria-hidden
           className={css({
             position: "absolute",
-            right: size === "xs" ? "1" : "2",
+            right: "2",
             top: "50%",
             transform: "translateY(-50%)",
             width: "5",

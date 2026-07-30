@@ -21,7 +21,7 @@ const meta = {
   component: TextField,
   args: { label: "Name" },
   argTypes: {
-    size: { control: "select", options: ["xs", "sm", "md", "lg"] },
+    size: { control: "select", options: ["sm", "md", "lg"] },
     helperText: { control: "text" },
     errorMessage: { control: "text" },
     isRequired: { control: "boolean" },
@@ -39,7 +39,7 @@ export const Playground: Story = {};
 export const Sizes: Story = {
   render: () => (
     <Stack gap={6} maxW="md">
-      {(["xs", "sm", "md", "lg"] as const).map((size) => (
+      {(["sm", "md", "lg"] as const).map((size) => (
         <Input key={size} aria-label={size} placeholder={size} size={size} />
       ))}
     </Stack>
