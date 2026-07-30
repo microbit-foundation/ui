@@ -243,6 +243,7 @@ export const basePreset = definePreset({
       // as a runtime prop, so generate the breakpoint-prefixed variants too.
       dialog: [{ size: ["*"], responsive: true }, { centered: ["*"] }],
       drawer: ["*"],
+      input: ["*"],
       // Toast status is chosen at runtime from the toast content.
       toast: ["*"],
     },

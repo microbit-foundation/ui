@@ -13,14 +13,15 @@ import {
   TextFieldProps as RACTextFieldProps,
 } from "react-aria-components";
 import { css, cx } from "styled-system/css";
-import { field, input } from "styled-system/recipes";
+import { field, input, InputVariantProps } from "styled-system/recipes";
 import { SystemStyleObject } from "styled-system/types";
 
 export interface TextFieldProps
   extends Omit<
-    RACTextFieldProps,
-    "className" | "children" | "style" | "onFocus" | "onBlur"
-  > {
+      RACTextFieldProps,
+      "className" | "children" | "style" | "onFocus" | "onBlur"
+    >,
+    InputVariantProps {
   /** Visible label (Chakra's FormLabel; asterisk added when `isRequired`). */
   label: ReactNode;
   /** Help text below the input (Chakra's FormHelperText). */
@@ -48,6 +49,7 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
       helperTextCss,
       onFocus,
       autoCapitalize,
+      size,
       ...rest
     },
     ref,
@@ -65,7 +67,7 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
         </RACLabel>
         <RACInput
           ref={ref}
-          className={input()}
+          className={input({ size })}
           onFocus={onFocus}
           autoCapitalize={autoCapitalize}
         />

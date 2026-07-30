@@ -11,15 +11,17 @@ const transitionCommon =
   "background-color, border-color, color, fill, stroke, opacity, box-shadow, transform";
 
 /**
- * Input recipe — Chakra's outline Input field at md size (light mode). Used by
- * the shared-ui Input and NativeSelect, and by TextField's input slot.
+ * Input recipe — Chakra's outline Input field (light mode) with its size
+ * scale. Used by the shared-ui Input and NativeSelect, and by TextField's
+ * input slot.
  *
  * Focus matches both native `:focus-visible` (plain inputs; browsers treat any
  * focus in a text field as focus-visible) and react-aria's `data-focused`
  * (inputs inside RAC TextField). Focus is declared after invalid so a focused
  * invalid field shows the focus ring, as in Chakra.
  *
- * Registered in the base preset (base-preset.ts).
+ * Registered in the base preset (base-preset.ts), which also has the
+ * `staticCss` entry that keeps the runtime-prop size variants generated.
  */
 export const input = defineRecipe({
   className: "input",
@@ -32,10 +34,6 @@ export const input = defineRecipe({
     font: "inherit",
     transitionProperty: transitionCommon,
     transitionDuration: "normal",
-    fontSize: "md",
-    px: "4",
-    h: "10",
-    borderRadius: "md",
     border: "1px solid",
     borderColor: "gray.200",
     bg: "inherit",
@@ -59,5 +57,17 @@ export const input = defineRecipe({
       opacity: 0.4,
       cursor: "not-allowed",
     },
+  },
+  variants: {
+    // Chakra's Input size scale.
+    size: {
+      lg: { fontSize: "lg", px: "4", h: "12", borderRadius: "md" },
+      md: { fontSize: "md", px: "4", h: "10", borderRadius: "md" },
+      sm: { fontSize: "sm", px: "3", h: "8", borderRadius: "sm" },
+      xs: { fontSize: "xs", px: "2", h: "6", borderRadius: "sm" },
+    },
+  },
+  defaultVariants: {
+    size: "md",
   },
 });
