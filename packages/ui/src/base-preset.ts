@@ -146,13 +146,16 @@ export const basePreset = definePreset({
           600: { value: "{colors.red.600}" },
           700: { value: "{colors.red.700}" },
         },
-        // The `language` button variant's text colour is the one place the
-        // brands diverge structurally (OSS uses the grey brand2 ramp, the
-        // CreateAI brand its blue brand ramp with no hover change). Driven by
-        // these semantic tokens so the recipe stays shared and a brand preset
-        // overrides only the values.
-        languageText: { value: "{colors.brand2.500}" },
-        languageTextHover: { value: "{colors.brand2.600}" },
+        // The `language` button variant's text colour follows the primary
+        // interactive brand: every consumer resolves it to its `brand` ramp
+        // (CreateAI privately to brand.600 with no hover change,
+        // python-editor to brand.500/600 — the default). Semantic tokens so
+        // the recipe stays shared and a brand preset overrides only values.
+        // (Was brand2.* — the grey ml-trainer OSS Chakra look — but both
+        // apps' final values sit on their primary brand, so the default
+        // follows; OSS language buttons are brand blue.)
+        languageText: { value: "{colors.brand.500}" },
+        languageTextHover: { value: "{colors.brand.600}" },
         // Toast status colours: the Chakra-era toast Alert restyle (teal for
         // every status except error) shared across the app family.
         toastInfoBg: { value: "{colors.teal.800}" },
