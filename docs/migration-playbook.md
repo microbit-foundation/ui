@@ -512,6 +512,21 @@ from the library extraction.
       focus the check on runtime-styled widgets (editor carets, tooltips,
       custom-drawn borders).
 
+29. **Panda's preflight poisons `border-color: inherit` chains with a
+    `currentcolor` keyword.** The preflight (base layer, above `reset`)
+    sets `border-color: var(--global-color-border, currentcolor)` on every
+    element; `currentcolor` stays a keyword at computed-value time, so a
+    child with `border-color: inherit` (the Chakra checkbox/radio control
+    convention) resolves it against its OWN `color` — a checked-style
+    `color: white` control renders an invisible white border, where Chakra
+    inherited the real gray.200 from its global reset. `getComputedStyle`
+    on the parent reports the resolved colour, not the keyword, so the
+    break is invisible to computed-style checks — probe with a child that
+    inherits. Fix: `@microbit/ui/reset.css` defines
+    `:root { --global-color-border: var(--colors-gray-200) }` (Panda's
+    supported hook), making the preflight itself carry the Chakra-parity
+    default.
+
 Also remember (from the RAC component work, not numbered): RAC re-selects a
 pressed radio value against current state after any earlier handler runs —
 "click the selected option again to deselect" interactions need a native
