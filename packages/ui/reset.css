@@ -1,0 +1,23 @@
+/**
+ * (c) 2026, Micro:bit Educational Foundation and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ *
+ * Chakra-reset parity that must live in the `reset` cascade layer: import
+ * from the app's layers.css with
+ *
+ *   @import "@microbit/ui/reset.css" layer(reset);
+ *
+ * Deliberately not in the preset's globalCss: globalCss emits into the
+ * `base` layer, and the legacy-Safari cascade-layer flattening
+ * specificity-boosts base+ rules above CSS it can't see (runtime-injected
+ * styles such as CodeMirror themes, and other per-file-processed app CSS).
+ * A reset must stay at the bottom of the cascade in production exactly as
+ * it is in dev — see playbook gotcha #28.
+ */
+*,
+*::before,
+*::after {
+  border-color: var(--colors-gray-200);
+  word-wrap: break-word;
+}

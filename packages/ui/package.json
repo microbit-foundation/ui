@@ -10,12 +10,14 @@
     "./base-tokens": "./src/base-tokens.ts",
     "./messages": "./src/messages.ts",
     "./postcss-legacy-safari": "./postcss-legacy-safari.cjs",
+    "./reset.css": "./reset.css",
     "./lang/*": "./lang/*"
   },
   "files": [
     "src",
     "lang",
     "postcss-legacy-safari.cjs",
+    "reset.css",
     "README.md",
     "LICENSE.md"
   ],

@@ -486,6 +486,32 @@ from the library extraction.
     (or `panda codegen --clean`), and restart the dev server too — the
     `theme-package` alias resolves at server start.
 
+28. **The production cascade-layer flattening specificity-boosts layered
+    rules above every rule it can't see.** The legacy-Safari fallback
+    (`@csstools/postcss-cascade-layers`, production builds only) emulates
+    `@layer` with `:not(#\#)` selector prefixes — but PostCSS runs
+    per-file, so the boosts trample (a) **runtime-injected CSS**
+    (CodeMirror base theme and `EditorView.theme` extensions) and (b)
+    **other app `.css` files**, both of which relied on "unlayered beats
+    layered". Dev (real `@layer`) renders correctly, so only a
+    production-build check catches it — python-editor shipped a
+    gray.200 editor caret this way (plus washed-out CM tooltip borders,
+    structure-highlight lines, lint severity bars, docs code-chip
+    borders). Two consequences:
+    - **Broad defaults must live in the bottom (`reset`) layer**, which
+      the flattening leaves unboosted: the Chakra-parity
+      `* { border-color: gray.200 }` moved from the base preset's
+      globalCss to `@microbit/ui/reset.css`, which every app's
+      layers.css must import with `layer(reset)` (see the README).
+    - A rule in unprocessed CSS that must beat a boosted layered rule
+      anyway needs `!important` — higher specificity cannot win against
+      the ID-level boosts.
+      At the kill-switch, spot-check a **production build**
+      (`build` + `preview`), not just dev: the fidelity harness compares
+      two dev servers and is blind to production-pipeline differences —
+      focus the check on runtime-styled widgets (editor carets, tooltips,
+      custom-drawn borders).
+
 Also remember (from the RAC component work, not numbered): RAC re-selects a
 pressed radio value against current state after any earlier handler runs —
 "click the selected option again to deselect" interactions need a native

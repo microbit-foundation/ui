@@ -211,10 +211,12 @@ export const basePreset = definePreset({
     "*::placeholder": {
       color: "gray.500",
     },
-    "*, *::before, *::after": {
-      borderColor: "gray.200",
-      wordWrap: "break-word",
-    },
+    // The `* { border-color; word-wrap }` Chakra-reset parity lives in
+    // ../reset.css, imported into the `reset` layer by consumers'
+    // layers.css — NOT here: globalCss emits into the `base` layer, which
+    // the legacy-Safari cascade-layer flattening specificity-boosts above
+    // runtime-injected CSS (CodeMirror themes) and other app CSS files.
+    // Resets must stay at the bottom (playbook gotcha #28).
     // Panda's preflight, unlike Chakra's reset, doesn't set the pointer
     // cursor on buttons. Recipes' disabled states (cursor: not-allowed)
     // override this from the higher recipes layer.

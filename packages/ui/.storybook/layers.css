@@ -10,3 +10,5 @@
  * styling; the other names are Panda's own layers.
  */
 @layer reset, vendor, base, tokens, recipes, utilities;
+
+@import "../reset.css" layer(reset);
