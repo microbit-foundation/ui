@@ -59,12 +59,11 @@ export const input = defineRecipe({
     },
   },
   variants: {
-    // Chakra's Input size scale.
+    // Chakra's Input size scale, minus the unused xs.
     size: {
       lg: { fontSize: "lg", px: "4", h: "12", borderRadius: "md" },
       md: { fontSize: "md", px: "4", h: "10", borderRadius: "md" },
       sm: { fontSize: "sm", px: "3", h: "8", borderRadius: "sm" },
-      xs: { fontSize: "xs", px: "2", h: "6", borderRadius: "sm" },
     },
   },
   defaultVariants: {
