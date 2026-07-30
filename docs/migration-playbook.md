@@ -362,6 +362,20 @@ from the library extraction.
     whole look into an app-preset variant (python-editor's `sidebar`
     variant did this for the same reason).
 
+22. **Preflight's shorthand resets beat inherited longhands — at the
+    kill-switch, styles that relied on inheritance silently stop
+    working.** Preflight sets `ul { list-style: none }`; the _shorthand_
+    resets `list-style-position` to `outside` _on the element_, which
+    wins over any value inherited from a container (inheritance only
+    fills in when no declaration targets the element). python-editor's
+    docs set `listStylePosition: inside` on the content wrapper and
+    re-added only `listStyleType: disc` on `& ul` — post-flip the
+    markers went `outside`, shifting bullets ~19px and changing text
+    wrap, unnoticed until the fidelity run (the sole diff in 29 states).
+    Re-assert such properties on the element itself, and audit other
+    container-set inheritable properties that preflight shorthands reset
+    on descendants (`list-style`, `font`, `background`).
+
 Also remember (from the RAC component work, not numbered): RAC re-selects a
 pressed radio value against current state after any earlier handler runs —
 "click the selected option again to deselect" interactions need a native
