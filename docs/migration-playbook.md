@@ -6,19 +6,19 @@ visual impact.
 
 This is the distilled method from ml-trainer's migration (July 2026), the
 first of the family and the one that _built_ the library while migrating.
-Its full history lives in ml-trainer's `RAC-MIGRATION.md` (frozen as an
-archive). Apps migrating now have a simpler job: they **consume**
-`@microbit/ui` rather than building it — the preset stack, recipes, tokens,
-staticCss, globalCss reset parity and a11y work all come with the package.
+Apps migrating now have a simpler job: they **consume** `@microbit/ui`
+rather than building it — the preset stack, recipes, tokens, staticCss,
+globalCss reset parity and a11y work all come with the package.
 
 Each migrating app keeps its own `RAC-MIGRATION.md`-style status doc (the
 per-session handover log); this playbook holds the shared method. **When a
 migration teaches something new, PR it back into this doc** — the gotcha
 catalog grew throughout ml-trainer's run and will keep growing. When a
-migration completes, its status doc retires: ml-trainer's is frozen as the
-archive; python-editor's (completed 2026-07-30) was folded into this doc
-and deleted — its remaining app-local follow-ups moved to the owner's
-tracking.
+migration completes, its status doc retires: everything transferable folds
+into this doc and the doc is deleted (full histories live in each repo's
+git history). ml-trainer's and python-editor's are both retired
+(2026-07-30); their remaining app-local follow-ups moved to the owner's
+tracking and each repo's `AGENTS.md` operational notes.
 
 ## The kit
 
@@ -478,16 +478,40 @@ from the library extraction.
     unsanctioned units and reads uniformly across devices. Per-change
     unit repetition would need a `getValueText`-style upstream addition.
 
+27. **Changing or (re)linking a sibling preset package needs a _clean_
+    Panda regen.** Incremental codegen does not detect changes in an
+    _external_ preset dependency (the private brand package, a re-linked
+    `@microbit/ui`) — brand token values silently stay stale. After
+    building/relinking a sibling: `rm -rf styled-system && npm run panda`
+    (or `panda codegen --clean`), and restart the dev server too — the
+    `theme-package` alias resolves at server start.
+
 Also remember (from the RAC component work, not numbered): RAC re-selects a
 pressed radio value against current state after any earlier handler runs —
 "click the selected option again to deselect" interactions need a native
 capture listener that defers the write by a tick (see ml-trainer's
-`BluetoothPatternInput`). And a behavioural delta to expect at owner
-review: **tooltips re-open after click** — Chakra's `closeOnClick` kept a
-clicked trigger's tooltip closed until re-hover; react-aria re-opens it
-under the still-hovering pointer (0ms delay). If a design can't live with
-it, the library Tooltip needs a closed-until-re-enter state machine
-(unbuilt; python-editor accepted the delta).
+`BluetoothPatternInput`).
+
+### Expected behavioural deltas (accept or flag at owner review)
+
+Deliberate react-aria/library differences both completed migrations
+accepted — expect them, don't chase them as bugs:
+
+- **Tooltips re-open after click** — Chakra's `closeOnClick` kept a
+  clicked trigger's tooltip closed until re-hover; react-aria re-opens it
+  under the still-hovering pointer (0ms delay). If a design can't live
+  with it, the library Tooltip needs a closed-until-re-enter state
+  machine (unbuilt).
+- **Focus rings show after mouse interaction** in places Chakra hid them
+  (auto-focused dialog buttons, slider thumbs).
+- **Dialogs open with focus on the dialog element itself** (announces the
+  title — an a11y improvement) unless something has `autoFocus`; Chakra
+  focused the first control (see gotcha #15 for when to add `autoFocus`
+  back).
+- **Toast semantics**: one top-centre region (no per-call `position`/
+  `variant`); a ~5s minimum display for accessibility (short Chakra
+  durations get longer); `toast.update()` re-adds (re-animates, restarts
+  timeout) rather than updating in place; id-dedup is native.
 
 ## Decisions to front-load
 
