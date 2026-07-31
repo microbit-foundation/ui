@@ -551,9 +551,11 @@ accepted — expect them, don't chase them as bugs:
   focused the first control (see gotcha #15 for when to add `autoFocus`
   back).
 - **Toast semantics**: one top-centre region (no per-call `position`/
-  `variant`); a ~5s minimum display for accessibility (short Chakra
-  durations get longer); `toast.update()` re-adds (re-animates, restarts
-  timeout) rather than updating in place; id-dedup is native.
+  `variant`); `duration` defaults to 5000ms and there is no
+  `duration: null` — use `persistent: true` (which forces the close
+  button on) for toasts that must not auto-dismiss; `toast.update()`
+  re-adds (re-animates, restarts timeout) rather than updating in place;
+  id-dedup is native.
 
 ## Decisions to front-load
 

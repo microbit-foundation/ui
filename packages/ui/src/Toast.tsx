@@ -102,11 +102,13 @@ export const ToastProvider = () => {
 };
 
 export interface ToastOptions extends ToastContent {
+  /** Auto-dismiss after this many ms. Default 5000. Ignored when `persistent`. */
+  duration?: number;
   /**
-   * Auto-dismiss after ms; null means no auto-dismiss (Chakra's semantics).
-   * RAC enforces a 5000ms minimum for accessibility.
+   * Never auto-dismiss. The close button is forced on so the toast is not
+   * permanent and unremovable.
    */
-  duration?: number | null;
+  persistent?: boolean;
 }
 
 export interface ToastFn {
@@ -123,8 +125,9 @@ export interface ToastFn {
 }
 
 /**
- * useToast — imperative toast trigger matching the shape of Chakra's
- * `useToast()` call sites: `toast({ title, description, status, duration })`.
+ * useToast — imperative toast trigger in the shape of Chakra's `useToast()`
+ * call sites: `toast({ title, description, status, duration })`. Unlike
+ * Chakra there is no `duration: null`; use `persistent: true` instead.
  */
 export const useToast = (): ToastFn =>
   useMemo(() => {
@@ -137,6 +140,7 @@ export const useToast = (): ToastFn =>
       status,
       isClosable,
       duration,
+      persistent,
     }: ToastOptions) => {
       if (id && isActive(id)) {
         return;
@@ -147,11 +151,9 @@ export const useToast = (): ToastFn =>
           title,
           description,
           status,
-          // A toast that never times out must be dismissable or it is
-          // permanent and unremovable; force the close button on.
-          isClosable: isClosable || duration == null,
+          isClosable: isClosable || persistent,
         },
-        { timeout: duration ?? undefined },
+        { timeout: persistent ? undefined : duration ?? 5000 },
       );
     };
     const update = (id: string, options: ToastOptions) => {

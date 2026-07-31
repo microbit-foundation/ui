@@ -50,8 +50,7 @@ export const Dismissal: Story = {
               title: "Persistent toast",
               description: "Stays until closed.",
               status: "error",
-              isClosable: true,
-              duration: null,
+              persistent: true,
             })
           }
         >
@@ -65,8 +64,7 @@ export const Dismissal: Story = {
               title: "Deduplicated toast",
               description: "Re-adding the same id while visible is a no-op.",
               status: "info",
-              duration: null,
-              isClosable: true,
+              persistent: true,
             })
           }
         >
