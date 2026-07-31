@@ -9,7 +9,10 @@ import { HStack, Spinner } from "../src";
 const meta = {
   title: "Feedback/Spinner",
   component: Spinner,
-  args: { "aria-label": "Loading" },
+  args: { "aria-label": "Loading", size: "md" },
+  argTypes: {
+    size: { control: "select", options: ["sm", "md"] },
+  },
 } satisfies Meta<typeof Spinner>;
 export default meta;
 
