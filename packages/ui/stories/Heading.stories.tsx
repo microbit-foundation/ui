@@ -6,17 +6,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Heading, VStack } from "../src";
 
-const meta = {
-  title: "Typography/Heading",
-  component: Heading,
-  args: { children: "The quick brown fox" },
-} satisfies Meta<typeof Heading>;
-export default meta;
-
-type Story = StoryObj<typeof meta>;
-
-export const Playground: Story = {};
-
 const headingSizes = [
   "4xl",
   "3xl",
@@ -27,6 +16,21 @@ const headingSizes = [
   "sm",
   "xs",
 ] as const;
+
+const meta = {
+  title: "Typography/Heading",
+  component: Heading,
+  args: { children: "The quick brown fox", size: "xl" },
+  argTypes: {
+    size: { control: "select", options: headingSizes },
+    variant: { control: "select", options: ["marketing"] },
+  },
+} satisfies Meta<typeof Heading>;
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+export const Playground: Story = {};
 
 export const Sizes: Story = {
   render: () => (
@@ -46,4 +50,6 @@ export const Marketing: Story = {
     variant: "marketing",
     children: "Marketing heading (display font)",
   },
+  // The variant is the point of this story; don't offer it as a control.
+  argTypes: { variant: { table: { disable: true } } },
 };

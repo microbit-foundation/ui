@@ -6,6 +6,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Text, VStack } from "../src";
 
+const textSizes = ["sm", "md", "lg"] as const;
+
 const meta = {
   title: "Typography/Text",
   component: Text,
@@ -13,14 +15,15 @@ const meta = {
     children:
       "Body text using the Chakra v2 design language on Panda CSS. Text takes Panda style props for one-off size and colour tweaks.",
   },
+  argTypes: {
+    size: { control: "select", options: textSizes },
+  },
 } satisfies Meta<typeof Text>;
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {};
-
-const textSizes = ["sm", "md", "lg"] as const;
 
 export const Sizes: Story = {
   render: () => (
