@@ -120,13 +120,17 @@ export const button = defineRecipe({
         _hover: { bg: "brand.600", _disabled: { bg: "brand.500" } },
         _active: { bg: "brand.700" },
       },
+      // 600/700, matching what python-editor's Chakra outline + red
+      // colorScheme resolved to. (Extracted from ml-trainer at 500/600, but
+      // its one warning button tolerates the darkening; python-editor's
+      // "Reset project" was visibly lighter than its Chakra self.)
       warning: {
         borderWidth: "2px",
-        borderColor: "danger.500",
-        color: "danger.500",
+        borderColor: "danger.600",
+        color: "danger.600",
         bg: "transparent",
-        _hover: { borderColor: "danger.600" },
-        _active: { bg: "danger.50", borderColor: "danger.500" },
+        _hover: { borderColor: "danger.700", color: "danger.700" },
+        _active: { bg: "danger.50" },
       },
       // Chakra's built-in solid + red colorScheme (destructive confirm
       // buttons). Same values as `record` today, but a separate variant so
