@@ -61,6 +61,8 @@ export const ThumbTooltip: Story = {
     return (
       <Box
         maxW="md"
+        // Headroom so the tooltip isn't clipped by the top of the canvas.
+        pt="10"
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
