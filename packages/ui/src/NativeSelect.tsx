@@ -19,8 +19,15 @@ export interface NativeSelectProps
    * wrapper), so it can participate directly in e.g. an attached ButtonGroup.
    */
   hideChevron?: boolean;
-  /** Per-instance style overrides, merged after the recipe. */
+  /** Per-instance style overrides for the select, merged after the recipe. */
   css?: SystemStyleObject;
+  /**
+   * Style overrides for the chevron wrapper, which is where width constraints
+   * belong (the select fills it). Chakra's Select worked the same way: layout
+   * props were split onto `.chakra-select__wrapper`, `width: 100%` otherwise.
+   * No wrapper is rendered with `hideChevron`; constrain the select directly.
+   */
+  wrapperCss?: SystemStyleObject;
   className?: string;
 }
 
@@ -31,7 +38,7 @@ export interface NativeSelectProps
  */
 export const NativeSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(
   function NativeSelect(
-    { hideChevron = false, size, css: cssProp, className, ...rest },
+    { hideChevron = false, size, css: cssProp, wrapperCss, className, ...rest },
     ref,
   ) {
     const select = (
@@ -55,7 +62,14 @@ export const NativeSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(
       return select;
     }
     return (
-      <span className={css({ position: "relative", display: "inline-flex" })}>
+      <span
+        className={css(
+          // Full-width like every other field (and Chakra's select wrapper);
+          // the select's own recipe width fills it. Constrain via wrapperCss.
+          { position: "relative", display: "inline-flex", width: "100%" },
+          wrapperCss,
+        )}
+      >
         {select}
         {/* Chakra Select's chevron, fixed-size across field sizes. */}
         <svg
