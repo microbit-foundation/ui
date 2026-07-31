@@ -16,8 +16,10 @@ module.exports = [
     crowdinDir: "new/packages/microbit-ui",
     languages: [
       "ca",
+      "cy",
       "es-ES",
       "fr",
+      "it",
       "ja",
       "ko",
       "nl",

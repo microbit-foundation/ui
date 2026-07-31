@@ -1,0 +1,22 @@
+{
+  "ui.close-action": {
+    "defaultMessage": "Chiudi",
+    "description": "Close button text or label"
+  },
+  "ui.toast-status-error": {
+    "defaultMessage": "Errore",
+    "description": "Announced by screen readers before an error notification"
+  },
+  "ui.toast-status-info": {
+    "defaultMessage": "Information",
+    "description": "Announced by screen readers before an informational notification"
+  },
+  "ui.toast-status-success": {
+    "defaultMessage": "Success",
+    "description": "Announced by screen readers before a success notification"
+  },
+  "ui.toast-status-warning": {
+    "defaultMessage": "Attenzione",
+    "description": "Announced by screen readers before a warning notification"
+  }
+}
