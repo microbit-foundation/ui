@@ -35,6 +35,7 @@ import { menu } from "./Menu.recipe";
 import { slider } from "./Slider.recipe";
 import { switchRecipe } from "./Switch.recipe";
 import { dialog } from "./Modal.recipe";
+import { text } from "./Text.recipe";
 import { field } from "./TextField.recipe";
 import { toast } from "./Toast.recipe";
 
@@ -172,6 +173,7 @@ export const basePreset = definePreset({
       button,
       heading,
       input,
+      text,
     },
     slotRecipes: {
       card,
@@ -249,6 +251,7 @@ export const basePreset = definePreset({
       input: ["*"],
       radio: ["*"],
       switchRecipe: ["*"],
+      text: ["*"],
       // Toast status is chosen at runtime from the toast content.
       toast: ["*"],
     },
