@@ -24,7 +24,7 @@ const transitionCommon =
  * Chakra variants plus the family-wide `language`/`toolbar` variants; a
  * consuming app's preset extends it with app vocabulary (e.g. ml-trainer's
  * `led`/`record*`/`secondary-disabled`). Brand divergence within a variant is
- * token-driven (see the `languageText` semantic tokens).
+ * token-driven (see the `button.*` and `languageText` semantic tokens).
  *
  * Registered in the base preset (base-preset.ts).
  */
@@ -92,13 +92,22 @@ export const button = defineRecipe({
           textDecoration: "underline",
         },
       },
+      // Colours come from the `button.*` semantic tokens so the family's two
+      // button idioms (brand-coloured vs black-on-white) share this recipe —
+      // see the token block in base-preset.ts.
       secondary: {
         borderWidth: "2px",
-        borderColor: "brand.500",
-        color: "brand.700",
+        borderColor: "button.secondaryBorder",
+        color: "button.secondaryText",
         bg: "transparent",
-        _hover: { borderColor: "brand.600" },
-        _active: { bg: "brand.50", borderColor: "brand.700" },
+        _hover: {
+          borderColor: "button.secondaryHoverBorder",
+          bg: "button.secondaryHoverBg",
+        },
+        _active: {
+          bg: "button.secondaryActiveBg",
+          borderColor: "button.secondaryActiveBorder",
+        },
       },
       ghost: {
         color: "black",
@@ -116,9 +125,12 @@ export const button = defineRecipe({
       },
       primary: {
         color: "white",
-        bg: "brand.500",
-        _hover: { bg: "brand.600", _disabled: { bg: "brand.500" } },
-        _active: { bg: "brand.700" },
+        bg: "button.primaryBg",
+        _hover: {
+          bg: "button.primaryHoverBg",
+          _disabled: { bg: "button.primaryBg" },
+        },
+        _active: { bg: "button.primaryActiveBg" },
       },
       // 600/700, matching what python-editor's Chakra outline + red
       // colorScheme resolved to. (Extracted from ml-trainer at 500/600, but
