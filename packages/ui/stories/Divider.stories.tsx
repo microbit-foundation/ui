@@ -14,7 +14,7 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Playground: Story = {
+export const Horizontal: Story = {
   render: () => (
     <Stack gap={4} maxW="md">
       <Text>Content above the divider.</Text>

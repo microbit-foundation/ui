@@ -14,7 +14,7 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Playground: Story = {
+export const Basic: Story = {
   render: () => (
     <Svg viewBox="0 0 24 24" fontSize="4xl" color="blue.600" aria-hidden>
       <path
