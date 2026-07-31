@@ -360,6 +360,15 @@ from the library extraction.
     wrapper-forwarding observation — extraction is per-prop-name, not
     per-component). A custom prop named like a utility (`content`) emits a
     broken CSS rule; avoid utility names for non-style props.
+    Confirmed from the other direction in classroom: `<MakeCodeIcon h={23}
+w={23} />` on a _plain_ wrapper that spreads onto a `styled()` svg
+    extracted fine and emitted `height: 23px` — Panda appends `px` to
+    unitless numbers for dimension properties, and resolves a number to a
+    token when one exists for that key, both exactly as Chakra did. So
+    #9's real scope is _non-literal_ values and non-utility prop names;
+    a literal utility prop survives a plain wrapper as long as the wrapper
+    forwards it to something styled. Verify in the generated CSS either way
+    — the class name may not be the one you guess (`h_23`, not `h_23px`).
 18. **An `include` glob that matches nothing fails silently**, and recipe
     styling still works via preset `staticCss`, so a wrong package-source
     path shows up only as broken non-recipe styling. In npm workspaces the
@@ -532,6 +541,26 @@ from the library extraction.
     `:root { --global-color-border: var(--colors-gray-200) }` (Panda's
     supported hook), making the preflight itself carry the Chakra-parity
     default.
+
+30. **`<hr>` changes box model at the kill-switch.** Chakra's reset carries
+    normalize's `hr { box-sizing: content-box }`; Panda's preflight sets
+    `box-sizing: border-box` on everything and has **no `hr` exception**. So
+    an `<hr>` with an explicit height _plus_ top/bottom borders is one height
+    before the flip and 2px shorter after it, with nothing in the diff to
+    show why (same family as #22 — a preflight difference that only bites at
+    the flip). Panda's preflight also gives `hr` a `border-top-width: 1px`
+    that Chakra's didn't; the library Divider's `border: 0` base covers it.
+    Watch for the **zero-size-`<hr>` double-edge trick** — `borderWidth: 1px`
+    on all four sides of a 0-width `<hr>`, the two side borders reading as a
+    single 2px rule. It was in three apps, and besides being obscure it makes
+    the rule's length depend on the box model. `Divider`'s
+    `thickness="thick"` draws 2px on the orientation's own edge with no
+    top/bottom borders, so its height is whatever it is told — identical
+    either side of the kill-switch. classroom's logo divider was 35px
+    (33 + 2 borders) under Chakra and is now the 33px its code asks for: a
+    deliberate 2px change, taken in exchange for being box-model-stable.
+    It was also the _only_ pixel difference across five screens when the
+    leaf primitives were ported.
 
 Also remember (from the RAC component work, not numbered): RAC re-selects a
 pressed radio value against current state after any earlier handler runs —
