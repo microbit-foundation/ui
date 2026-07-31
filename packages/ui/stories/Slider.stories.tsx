@@ -40,6 +40,17 @@ export const FocusMark: Story = {
           value={value}
           onChange={setValue}
           mark={value}
+          // The component only sets the mark's `left`; call sites position
+          // and style it (as with Chakra's SliderMark).
+          markCss={{
+            top: "5",
+            transform: "translateX(-50%)",
+            bg: "gray.600",
+            color: "white",
+            borderRadius: "sm",
+            fontSize: "xs",
+            px: "1",
+          }}
         />
         <Text fontSize="sm" color="gray.600">
           The mark tracks the value and shows while the slider has focus.
