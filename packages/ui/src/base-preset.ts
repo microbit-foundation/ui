@@ -158,6 +158,27 @@ export const basePreset = definePreset({
         // follows; OSS language buttons are brand blue.)
         languageText: { value: "{colors.brand.500}" },
         languageTextHover: { value: "{colors.brand.600}" },
+        // The `primary`/`secondary` button variants' colours. Two brand
+        // idioms exist in the family: brand-coloured buttons (ml-trainer,
+        // python-editor — the defaults below) and a black-on-white system
+        // (classroom, data-microbit-org: black solid, black outline, no
+        // border colour change on hover but a blackAlpha wash instead).
+        // Tokens rather than per-app recipe overrides so both idioms share
+        // one recipe — a `variant` fork would be duplicated by every app on
+        // the far side of it. `primary`'s text colour stays a literal
+        // `white`: every app in the family puts white on a dark solid.
+        // `ghost` needs no tokens (black + blackAlpha in all four apps).
+        button: {
+          primaryBg: { value: "{colors.brand.500}" },
+          primaryHoverBg: { value: "{colors.brand.600}" },
+          primaryActiveBg: { value: "{colors.brand.700}" },
+          secondaryText: { value: "{colors.brand.700}" },
+          secondaryBorder: { value: "{colors.brand.500}" },
+          secondaryHoverBorder: { value: "{colors.brand.600}" },
+          secondaryHoverBg: { value: "transparent" },
+          secondaryActiveBorder: { value: "{colors.brand.700}" },
+          secondaryActiveBg: { value: "{colors.brand.50}" },
+        },
         // Toast status colours: the Chakra-era toast Alert restyle (teal for
         // every status except error) shared across the app family.
         toastInfoBg: { value: "{colors.teal.800}" },

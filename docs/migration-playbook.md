@@ -463,6 +463,11 @@ from the library extraction.
     compare `space`/`sizes`/`fontSizes` (any global scale) against Chakra
     defaults and replicate overrides in the OSS app preset (the private
     preset stacks on top — no mirror needed).
+    **classroom then turned out to carry the identical scale** (the same
+    2022 theme change, byte-identical values), so it now lives in
+    `@microbit/ui/dense-preset`, stacked between the base and app presets
+    by both apps — one explicit, shared place for the override this gotcha
+    is about, and one place to answer the keep-vs-align question.
 
 26. **Slider announced values: react-aria has no `aria-valuetext`
     passthrough.** Chakra sliders often passed `aria-valuetext="20 °C"`;
@@ -585,27 +590,37 @@ a single current consumer — family-wide consistency is a goal; app-local
 builds recreate the divergence being retired. Only genuinely app-flavoured
 pieces stay app-side.
 
+Built since (check `packages/ui/src/index.ts` before assuming a gap — this
+list is what was outstanding when the censuses were taken): Collapse + Fade,
+Menu checkable items/sections/separator, Modal `role="alertdialog"`,
+Radio/RadioGroup, NumberField, Kbd/Code, `useMediaQuery`/`usePrevious`/
+`useClipboard`/`useBreakpointValue`.
+
+Still outstanding, in classroom's likely order of need:
+
 - **Select/ComboBox** — retires react-select family-wide (classroom's
   `SelectDropdown`/`SelectWithIcon` wrappers sketch the API; RAC ComboBox +
-  `useAsyncList` covers the async school-lookup case).
-- **Collapse + Fade** transition primitives (python-editor ~14 files;
-  classroom/data one-offs).
-- **Tabs** (recipe in the library; python-editor's branded sidebar variant
-  is preset-side styling).
-- Menu: checkable items (RAC has selection natively), sections, separator.
-- Modal: `role="alertdialog"` mode + least-destructive initial focus (every
-  app has a ConfirmDialog).
-- Radio/RadioGroup (promote from ml-trainer's raw RAC usage); **GridList**
-  (promote from classroom's hand-rolled react-aria hooks; also ml-trainer's
-  parked projects-page idea).
-- Table, TextField error slot, input adornments, Portal-as-primitive,
-  Skeleton/SkeletonText, Breadcrumb, Avatar, NumberInput; cheap typography
-  wrappers (Kbd/Code/Tag/Mark) as first needed.
-- Hooks: `useMediaQuery`, `usePrevious`, `useClipboard`,
-  `usePrefersReducedMotion`.
+  `useAsyncList` covers the async school-lookup case). 4 classroom sites,
+  1 data site.
+- **GridList** (promote from classroom's hand-rolled react-aria hooks; also
+  ml-trainer's parked projects-page idea).
+- **Avatar** (+ badge) — classroom's class-roster identity; data has one
+  site. classroom's theme adds a `2md` size.
+- Portal-as-primitive, TextField error slot, input adornments,
+  Skeleton/SkeletonText, Breadcrumb, NumberInput; cheap typography
+  wrappers (Tag/Mark) as first needed.
+- `usePrefersReducedMotion`.
+- **Tabs** — stayed app-side in python-editor (special-purpose sidebar
+  chrome); waits for a second consumer, at which point the RAC markup and a
+  generalised recipe extract cleanly.
 - Stays app-side: classroom's `active` button variant, Stepper, app-chrome
   compositions (ActionBar stays an app component over shared primitives +
   `statusBarBg`-family tokens).
+- **Table: decided against** a shared component. python-editor's one table
+  (the About dialog's version/dependency list) is a `styled.table` with
+  Panda styles at the site, and that reads better than a slot recipe
+  wrapping native table semantics. Both remaining apps have ~1 table site
+  each; do the same unless one grows a real data table.
 
 ### App order and notes
 
@@ -637,9 +652,10 @@ pieces stay app-side.
    sidebar chrome; a generic library Tabs waits for a second consumer —
    the RAC markup and a generalised recipe extract cleanly), likewise
    SplitView; the app's teal is a _code/content_ semantic, not `brand2`
-   (see Cross-app vocabulary); its bespoke density scale (spacing × 0.88,
-   fontSizes md+ × 0.9, see gotcha #25) is replicated in its app preset
-   pending a keep-vs-align-with-family-scale discussion.
+   (see Cross-app vocabulary); its density scale (spacing × 0.88, fontSizes
+   md+ × 0.9, see gotcha #25) turned out to be shared verbatim with
+   classroom and now comes from `@microbit/ui/dense-preset`, still pending a
+   keep-vs-align-with-family-scale discussion.
 3. **data-microbit-org** — whenever convenient; by then the surface is
    covered. Census highlights: fully private repo, no theme-package split;
    brand assets committed in-repo. **Multi-root**: three apps in one repo,
@@ -680,6 +696,18 @@ The censuses established 4/4-app convergence on `radii.button: 2rem`, the
 component in three apps. Default button variant differs (`secondary` in
 ml-trainer/classroom/data, `outline` in python-editor) — recipes'
 `defaultVariants` must stay preset-overridable per app.
+
+**Two button colour idioms, one recipe.** The `primary`/`secondary` variants
+split 2–2: brand-coloured (ml-trainer, python-editor) vs black-on-white
+(classroom, data-microbit-org — black solid, black outline, and a
+blackAlpha wash on hover/press instead of a border-colour change). Both
+resolve through `button.*` semantic tokens in the base preset
+(`primaryBg`/`primaryHoverBg`/`primaryActiveBg`,
+`secondaryText`/`secondaryBorder`/`secondaryHover*`/`secondaryActive*`), so
+the second idiom is nine token values in an app preset rather than a forked
+variant — which is what the two apps on that side would otherwise both
+write. `primary`'s text stays a literal `white` (4/4 apps) and `ghost`
+needs no tokens (black + blackAlpha in 4/4).
 
 **Same slot number ≠ same role — check usage semantics before mapping an
 app's second hue onto `brand2`.** python-editor's investigation:

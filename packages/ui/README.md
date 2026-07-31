@@ -164,9 +164,9 @@ keep them stable:
 - Brand/app presets may change token _values_, never token _names_.
 
 Semantic tokens (`languageText`, `statusBarBg`, `danger.*`, `toast*Bg`,
-`controlCheckedBg`, `focusBorder`, …) are the extension points brand presets
-override; they resolve through var indirection, so overrides apply wherever
-the token is consumed.
+`button.*`, `controlCheckedBg`, `focusBorder`, …) are the extension points
+brand presets override; they resolve through var indirection, so overrides
+apply wherever the token is consumed.
 
 ## Runtime token lookups
 
