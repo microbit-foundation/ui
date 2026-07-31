@@ -15,33 +15,66 @@ const StyledDivider = styled("hr", {
   variants: {
     orientation: {
       horizontal: {
-        borderBottomWidth: "1px",
         borderBottomStyle: "solid",
         width: "100%",
       },
       vertical: {
-        borderLeftWidth: "1px",
         borderLeftStyle: "solid",
         height: "100%",
       },
     },
+    // Rule weight, on the orientation's drawn edge (see compoundVariants).
+    // Semantic rather than a raw border width so call sites don't need to
+    // know which edge an orientation draws with.
+    thickness: {
+      thin: {},
+      thick: {},
+    },
   },
-  defaultVariants: { orientation: "horizontal" },
+  compoundVariants: [
+    {
+      orientation: "horizontal",
+      thickness: "thin",
+      css: { borderBottomWidth: "1px" },
+    },
+    {
+      orientation: "horizontal",
+      thickness: "thick",
+      css: { borderBottomWidth: "2px" },
+    },
+    {
+      orientation: "vertical",
+      thickness: "thin",
+      css: { borderLeftWidth: "1px" },
+    },
+    {
+      orientation: "vertical",
+      thickness: "thick",
+      css: { borderLeftWidth: "2px" },
+    },
+  ],
+  defaultVariants: { orientation: "horizontal", thickness: "thin" },
 });
 
 export interface DividerProps extends ComponentProps<typeof StyledDivider> {}
 
 /**
  * Divider — a hairline rule matching Chakra's <Divider> (60% opacity; set
- * `borderColor` to tint). `orientation="vertical"` needs a height from the
- * layout, e.g. a stretched flex row (Chakra's vertical divider likewise
- * relied on `height: 100%`).
+ * `borderColor` to tint, `thickness="thick"` for a 2px rule).
+ * `orientation="vertical"` needs a height from the layout, e.g. a stretched
+ * flex row (Chakra's vertical divider likewise relied on `height: 100%`).
+ *
+ * Decorative by default: hidden from assistive tech, since a visual rule
+ * between sections is noise as an announced separator (and every call site
+ * was opting out by hand). Pass `aria-hidden={false}` for a divider that
+ * should be exposed as a semantic separator.
  */
 export const Divider = forwardRef<HTMLHRElement, DividerProps>(
   function Divider(props, ref) {
     return (
       <StyledDivider
         ref={ref}
+        aria-hidden
         aria-orientation={
           props.orientation === "vertical" ? "vertical" : "horizontal"
         }
