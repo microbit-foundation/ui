@@ -52,10 +52,10 @@ export const States: Story = {
       <TextField label="Name" helperText="As shown on the certificate" />
       <TextField label="Project name" isRequired />
       <TextField
-        label="Project name"
-        isRequired
+        label="Slug"
         isInvalid
-        errorMessage="A project name is required"
+        defaultValue="my/project"
+        errorMessage="Slugs cannot contain '/'"
       />
       <TextField label="Serial number" isDisabled defaultValue="0x9904" />
     </Stack>
