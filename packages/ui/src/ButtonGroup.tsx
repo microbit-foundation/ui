@@ -42,11 +42,15 @@ export const ButtonGroup = forwardRef<HTMLDivElement, ButtonGroupProps>(
                 // :first-child/:last-child, not :first-of-type: attached
                 // groups can mix element types (e.g. select + button), and
                 // -of-type matches per element type.
+                // marginEnd -1px (Chakra parity): overlaps adjacent borders
+                // so two 1px inner edges read as a single 1px seam.
                 "& > *:first-child:not(:last-child)": {
                   borderEndRadius: 0,
+                  marginEnd: "-1px",
                 },
                 "& > *:not(:first-child):not(:last-child)": {
                   borderRadius: 0,
+                  marginEnd: "-1px",
                 },
                 "& > *:not(:first-child):last-child": {
                   borderStartRadius: 0,
