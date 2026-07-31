@@ -119,7 +119,7 @@ export const Slider = ({
           role="presentation"
           className={css({
             position: "absolute",
-            bottom: "calc(50% + 14px)",
+            bottom: "calc(50% + token(sizes.3.5))",
             transform: "translateX(-50%)",
             bg: "gray.700",
             color: "white",
