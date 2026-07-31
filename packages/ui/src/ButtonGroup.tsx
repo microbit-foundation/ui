@@ -32,9 +32,12 @@ export const ButtonGroup = forwardRef<HTMLDivElement, ButtonGroupProps>(
             display: "inline-flex",
             alignItems: "center",
             // Buttons are position: relative, so without this an attached
-            // sibling paints over the focused button's focus-ring shadow
-            // (Chakra's Button applied zIndex 1 on focus when grouped).
-            "& > *": { _focus: { zIndex: 1 } },
+            // sibling paints over the focused button's focus-ring shadow.
+            // Chakra raised on :focus, but with the attached -1px overlap a
+            // raised button also paints over a seam its neighbour draws
+            // (e.g. a solid split button's white borderLeft), so raise only
+            // when the ring is actually shown.
+            "& > *": { _focusVisible: { zIndex: 1 } },
           }),
           isAttached
             ? css({
