@@ -1,7 +1,5 @@
 # micro:bit UI
 
-**Experimental/WIP**
-
 Design-system monorepo for micro:bit web apps: react-aria-components for
 behaviour/accessibility and Panda CSS for styling, with a design language
 ported from the apps' [Chakra UI](https://chakra-ui.com/) v2 themes (see
@@ -9,6 +7,9 @@ ported from the apps' [Chakra UI](https://chakra-ui.com/) v2 themes (see
 
 Extracted from [ml-trainer](https://github.com/microbit-foundation/ml-trainer)
 (see its RAC-MIGRATION.md for the migration and extraction history).
+
+This is not really intended for wider adoption and will go through breaking
+changes as we better align its surface with the needs of the apps.
 
 ## Packages
 
