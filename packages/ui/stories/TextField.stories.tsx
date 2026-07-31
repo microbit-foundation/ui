@@ -53,6 +53,7 @@ export const States: Story = {
       <TextField label="Project name" isRequired />
       <TextField
         label="Project name"
+        isRequired
         isInvalid
         errorMessage="A project name is required"
       />
