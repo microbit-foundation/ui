@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: MIT
  */
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { RiDownload2Line } from "react-icons/ri";
-import { Button, ButtonGroup, HStack, Stack } from "../src";
+import { RiArrowDropDownLine, RiDownload2Line } from "react-icons/ri";
+import { Button, ButtonGroup, HStack, IconButton, Stack } from "../src";
 
 const variants = [
   "primary",
@@ -82,6 +82,22 @@ export const Grouped: Story = {
         <Button variant="secondary">Left</Button>
         <Button variant="secondary">Middle</Button>
         <Button variant="secondary">Right</Button>
+      </ButtonGroup>
+      {/* Split button: thin the joint's edges to 1px at the call site and
+          the group's -1px overlap merges them into a single 1px seam
+          (python-editor's Save/Send buttons). Full-width borders overlap
+          too, as above, but 2px+2px reads as a chunky 3px joint. */}
+      <ButtonGroup isAttached>
+        <Button variant="secondary" css={{ borderRightWidth: "1px" }}>
+          Save
+        </Button>
+        <IconButton
+          variant="secondary"
+          css={{ borderLeftWidth: "1px", fontSize: "2xl" }}
+          aria-label="More save options"
+        >
+          <RiArrowDropDownLine />
+        </IconButton>
       </ButtonGroup>
     </Stack>
   ),
