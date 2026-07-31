@@ -19,8 +19,10 @@ an app must do:
 
 1. **Panda preset stack** (`panda.config.ts`): `@pandacss/preset-base`, then
    the **base preset** (`@microbit/ui/base-preset` — the complete micro:bit
-   design system), then optionally the app's own preset, then optionally a
-   **private brand preset** (Foundation colours, licensed fonts).
+   design system), then optionally `@microbit/ui/dense-preset` (the × 0.88
+   spacing / × 0.9 font-size density the information-dense apps use), then
+   optionally the app's own preset, then optionally a **private brand
+   preset** (Foundation colours, licensed fonts).
 
    Later presets override earlier ones token-by-token — the base recipes and
    semantic tokens reference the brand tokens, which is how a brand swap

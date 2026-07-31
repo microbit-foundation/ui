@@ -8,6 +8,7 @@
     ".": "./src/index.ts",
     "./base-preset": "./src/base-preset.ts",
     "./base-tokens": "./src/base-tokens.ts",
+    "./dense-preset": "./src/dense-preset.ts",
     "./messages": "./src/messages.ts",
     "./postcss-legacy-safari": "./postcss-legacy-safari.cjs",
     "./reset.css": "./reset.css",
