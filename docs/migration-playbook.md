@@ -562,6 +562,33 @@ w={23} />` on a _plain_ wrapper that spreads onto a `styled()` svg
     It was also the _only_ pixel difference across five screens when the
     leaf primitives were ported.
 
+31. **A recipe variant's flat value cannot override another variant group's
+    responsive one.** Chakra merged `size` and `variant` in JS before emitting,
+    so `<Heading size="lg" variant="label">` got the variant's flat
+    `fontSize: 4xl` at every width. Panda emits each variant as its own class
+    and hoists **every** media query into a block after all the base rules, so
+    above `md` the _size_ variant's media rule wins on source order no matter
+    how the recipe declares them — classroom measured 26.99px where Chakra gave
+    32.4px. Nothing in the types or the generated class names hints at it; it
+    only shows above the breakpoint. Rules:
+
+    - An app-preset variant that sets a property the shared `size` variant sets
+      responsively must be paired with a **flat** size (`md`/`sm`/`xs`) or with
+      no size at all — check what `defaultVariants` then supplies, since it is
+      still in play (the `heading` recipe defaults to `size="xl"`, whose `md`
+      fontSize happens to be `4xl`, which is why dropping `size` reproduced
+      Chakra exactly).
+    - Do not reach for declaration order, `compoundVariants` ordering or a
+      matching responsive value in the variant: within the media block the
+      order is Panda's, not the recipe's.
+    - Distinct from #8: **a `styled()` factory's own props _do_ beat its recipe
+      base and variants**, because Panda merges base + variants + props before
+      emitting, so the element carries one class per property. #8's atomic race
+      is between separate `css()` calls cx'd together. Verified on Divider:
+      `borderLeftWidth={0}` over the recipe's `1px`, and a `borderColor` tint
+      over its `gray.200`, both take effect even though the recipe's classes
+      sit later in the stylesheet.
+
 Also remember (from the RAC component work, not numbered): RAC re-selects a
 pressed radio value against current state after any earlier handler runs —
 "click the selected option again to deselect" interactions need a native

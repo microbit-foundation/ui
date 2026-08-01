@@ -3,13 +3,27 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { IconType } from "react-icons/lib";
+import { ComponentType, SVGProps } from "react";
 import { css, cx } from "styled-system/css";
 import { SystemStyleObject } from "styled-system/types";
 
+/**
+ * Any component that renders an `<svg>` from svg props. Deliberately no
+ * narrower than the props `Icon` actually passes, so it accepts both
+ * react-icons' `IconType` and svgr components (`import X from "./x.svg?react"`,
+ * which the apps use for their custom-path icons — Chakra's `<Icon as={…}>`
+ * took either).
+ */
+export type IconComponent = ComponentType<
+  Pick<
+    SVGProps<SVGSVGElement>,
+    "className" | "focusable" | "role" | "aria-label" | "aria-hidden"
+  >
+>;
+
 export interface IconProps {
-  /** The react-icons component to render. */
-  as: IconType;
+  /** The icon component to render: a react-icons glyph or an svgr import. */
+  as: IconComponent;
   /** Panda style overrides (size via fontSize/boxSize, colour, etc.). */
   css?: SystemStyleObject;
   className?: string;
