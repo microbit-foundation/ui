@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { SVGProps } from "react";
 import {
   RiDownload2Line,
   RiErrorWarningLine,
@@ -40,6 +41,28 @@ export const Icons: Story = {
           Icons are aria-hidden unless given an aria-label.
         </Text>
       </HStack>
+      <HStack gap={2} alignItems="center">
+        <Icon
+          as={SvgrShapedIcon}
+          css={{ fontSize: "2xl", color: "brand.500" }}
+        />
+        <Text fontSize="sm" color="gray.600">
+          `as` also takes an svgr component (the shape of a <code>?react</code>{" "}
+          svg import), not just react-icons.
+        </Text>
+      </HStack>
     </Stack>
   ),
 };
+
+/**
+ * Stands in for `import X from "./x.svg?react"` — the same
+ * `ComponentType<SVGProps<SVGSVGElement>>` shape, without needing svgr wired
+ * into the library's own build. Its paths carry no `fill`, so they inherit
+ * Icon's `fill: currentColor`.
+ */
+const SvgrShapedIcon = (props: SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" {...props}>
+    <path d="M12 2 2 22h20L12 2Zm0 6 6 12H6l6-12Z" />
+  </svg>
+);
