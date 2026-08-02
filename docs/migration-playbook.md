@@ -261,67 +261,67 @@ Numbering is stable — ml-trainer's doc, commit messages and reviews
 reference these by number. #1–#16 are from ml-trainer's migration, #17–#18
 from the library extraction.
 
-1. **CSS layer conflict (the big one).** Unlayered CSS always beats layered
-   CSS regardless of specificity. During coexistence Chakra/Emotion are
-   unlayered — hence `bin/unlayer-panda.mjs`. After the kill-switch the rule
-   applies to **third-party stylesheets**: any unlayered vendor CSS beats
-   every Panda rule (Swiper's `.swiper-slide { width: 100% }` collapsed
-   ml-trainer's carousels). Import vendor stylesheets into the `vendor`
-   cascade layer (`@import "..." layer(vendor)`), which `layers.css` orders
-   between `reset` and `base` so vendor CSS beats the preflight but loses to
-   app styling. Runtime CSS-in-JS (react-select's Emotion) cannot be
-   layered — replace the component instead.
-2. **RAC interaction states.** The base preset widens Panda's `hover`/
-   `active`/`focusVisible`/`disabled` conditions to also match RAC's
-   `data-*` attributes, so Chakra-shaped `_hover`/`_active` style objects
-   work unchanged on RAC.
-3. **`staticCss` for recipe variants.** Components forward `variant`/`size`
-   as runtime props, invisible to Panda's static analysis. The base preset
-   carries `staticCss` for library recipes; if an **app preset** adds
-   recipes or variants selected at runtime, it must extend `staticCss` in
-   the preset too (never only in `panda.config.ts` — a consumer that drops
-   it silently loses variants; this migration's signature failure class).
-4. **Responsive recipe variants must be symmetric.** Panda applies the
-   base-breakpoint variant's CSS unconditionally; if `full` sets more props
-   than `4xl`, they leak into desktop. Every non-full dialog size restates
-   the box props so the larger breakpoint fully overrides `full`.
-5. **Know exactly which ramps the app's theme overrode.** ml-trainer's OSS
-   `brand2` is Chakra's _unmodified_ gray, not the locally overridden
-   `gray` — conflating them made card text near-invisible. Check ramp
-   provenance token-by-token (the differ helps).
-6. **OSS vs private divergence → semantic tokens.** Structural forks
-   (variant colours, fonts, gradients) are driven by semantic tokens the
-   private preset overrides (`languageText*`, the `display` font,
-   `statusBarBg`), keeping recipes shared. Recipe extension is the escape
-   hatch, not the plan.
-7. **Icons inherit `currentColor`.** Don't pass `fill` to react-icons (it
-   overrides their default `fill="currentColor"` → black). `Icon`/
-   `CloseIcon` set `fill: currentColor` in CSS.
-8. **Atomic overrides: same-property conflicts across separate `css()`
-   calls race on stylesheet order** — cx'ing a base class with an override
-   class does NOT mean the override wins; the winner is whichever atomic
-   rule is emitted later. Merge base + overrides into a _single_
-   `css(base, cssProp)` call so conflicts resolve at merge time. Related:
-   longhand beats shorthand across calls; and a border shorthand plus
-   separate `borderColor` in one object is order-dependent — use
-   width/style longhands with `borderColor`.
-9. **Styles must be literals at the JSX/`css()` site.** Panda's extractor
-   only reads `css` prop object literals and `css()` call literals where
-   they appear — not objects returned from helper functions, not computed
-   values (`rowSpan={n + 1}`, ``w={`${x}px`}``, ``w={`calc(...)`}``),
-   not style props forwarded through a _plain_ wrapper component. It fails
-   silently: classes are applied but no CSS exists, and a coincidental
-   identical class from another call site can mask the miss — verify
-   against the generated CSS, not the rendered page. What works: same-file
-   consts, ternaries of literals, literal arithmetic, custom-named
-   object-literal JSX props, and style props on `styled()`-factory
-   components (cross-file). Fixes: wrap shared styling in a component with
-   an inline `css` literal; give wrappers a `css` prop instead of
-   forwarding style props; prefer recipe variants for dimensions (generated
-   via `staticCss`, extraction-independent); use inline `style` (with
-   runtime `token()` lookups) for data-driven values. After porting a
-   file, grep it for non-literal style props. The `BoxProps`-forwarding
-   count in each census is this gotcha's per-app budget.
+1.  **CSS layer conflict (the big one).** Unlayered CSS always beats layered
+    CSS regardless of specificity. During coexistence Chakra/Emotion are
+    unlayered — hence `bin/unlayer-panda.mjs`. After the kill-switch the rule
+    applies to **third-party stylesheets**: any unlayered vendor CSS beats
+    every Panda rule (Swiper's `.swiper-slide { width: 100% }` collapsed
+    ml-trainer's carousels). Import vendor stylesheets into the `vendor`
+    cascade layer (`@import "..." layer(vendor)`), which `layers.css` orders
+    between `reset` and `base` so vendor CSS beats the preflight but loses to
+    app styling. Runtime CSS-in-JS (react-select's Emotion) cannot be
+    layered — replace the component instead.
+2.  **RAC interaction states.** The base preset widens Panda's `hover`/
+    `active`/`focusVisible`/`disabled` conditions to also match RAC's
+    `data-*` attributes, so Chakra-shaped `_hover`/`_active` style objects
+    work unchanged on RAC.
+3.  **`staticCss` for recipe variants.** Components forward `variant`/`size`
+    as runtime props, invisible to Panda's static analysis. The base preset
+    carries `staticCss` for library recipes; if an **app preset** adds
+    recipes or variants selected at runtime, it must extend `staticCss` in
+    the preset too (never only in `panda.config.ts` — a consumer that drops
+    it silently loses variants; this migration's signature failure class).
+4.  **Responsive recipe variants must be symmetric.** Panda applies the
+    base-breakpoint variant's CSS unconditionally; if `full` sets more props
+    than `4xl`, they leak into desktop. Every non-full dialog size restates
+    the box props so the larger breakpoint fully overrides `full`.
+5.  **Know exactly which ramps the app's theme overrode.** ml-trainer's OSS
+    `brand2` is Chakra's _unmodified_ gray, not the locally overridden
+    `gray` — conflating them made card text near-invisible. Check ramp
+    provenance token-by-token (the differ helps).
+6.  **OSS vs private divergence → semantic tokens.** Structural forks
+    (variant colours, fonts, gradients) are driven by semantic tokens the
+    private preset overrides (`languageText*`, the `display` font,
+    `statusBarBg`), keeping recipes shared. Recipe extension is the escape
+    hatch, not the plan.
+7.  **Icons inherit `currentColor`.** Don't pass `fill` to react-icons (it
+    overrides their default `fill="currentColor"` → black). `Icon`/
+    `CloseIcon` set `fill: currentColor` in CSS.
+8.  **Atomic overrides: same-property conflicts across separate `css()`
+    calls race on stylesheet order** — cx'ing a base class with an override
+    class does NOT mean the override wins; the winner is whichever atomic
+    rule is emitted later. Merge base + overrides into a _single_
+    `css(base, cssProp)` call so conflicts resolve at merge time. Related:
+    longhand beats shorthand across calls; and a border shorthand plus
+    separate `borderColor` in one object is order-dependent — use
+    width/style longhands with `borderColor`.
+9.  **Styles must be literals at the JSX/`css()` site.** Panda's extractor
+    only reads `css` prop object literals and `css()` call literals where
+    they appear — not objects returned from helper functions, not computed
+    values (`rowSpan={n + 1}`, ``w={`${x}px`}``, ``w={`calc(...)`}``),
+    not style props forwarded through a _plain_ wrapper component. It fails
+    silently: classes are applied but no CSS exists, and a coincidental
+    identical class from another call site can mask the miss — verify
+    against the generated CSS, not the rendered page. What works: same-file
+    consts, ternaries of literals, literal arithmetic, custom-named
+    object-literal JSX props, and style props on `styled()`-factory
+    components (cross-file). Fixes: wrap shared styling in a component with
+    an inline `css` literal; give wrappers a `css` prop instead of
+    forwarding style props; prefer recipe variants for dimensions (generated
+    via `staticCss`, extraction-independent); use inline `style` (with
+    runtime `token()` lookups) for data-driven values. After porting a
+    file, grep it for non-literal style props. The `BoxProps`-forwarding
+    count in each census is this gotcha's per-app budget.
 10. **Removing Chakra/Emotion from a file isn't enough — also remove it
     from `panda.config.ts`'s `exclude` list**, or Panda silently skips
     extraction for the whole file (classes applied, no rules generated).
@@ -588,6 +588,21 @@ w={23} />` on a _plain_ wrapper that spreads onto a `styled()` svg
       `borderLeftWidth={0}` over the recipe's `1px`, and a `borderColor` tint
       over its `gray.200`, both take effect even though the recipe's classes
       sit later in the stylesheet.
+
+32. **App code that reads Chakra's CSS variables breaks at the kill-switch, not
+    when you port the component.** `var(--chakra-colors-brand-500)` inside a
+    hand-written value — a gradient, a shadow, a border — keeps resolving for as
+    long as `ChakraProvider` is mounted, so it survives the port of its own
+    component and every screenshot comparison, then silently becomes an invalid
+    value when the provider goes. Gradients are the common case and they fail
+    to _nothing_, so the element just loses its background.
+
+        Audit it up front, not at the flip: `grep -rn -- "--chakra-" src/`. Panda
+        resolves `{colors.brand.500}` inside an arbitrary string value at build
+        time, which is the direct replacement (`background="linear-gradient(90deg,
+
+    {colors.brand.500} 0%, …)"`emits`var(--colors-brand-500)`). classroom had
+    one live instance, its homepage banner, plus one in a comment.
 
 Also remember (from the RAC component work, not numbered): RAC re-selects a
 pressed radio value against current state after any earlier handler runs —
