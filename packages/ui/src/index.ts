@@ -9,6 +9,7 @@
  * match the Chakra theme; behaviour follows react-aria patterns.
  */
 export * from "./system";
+export * from "./Avatar";
 export * from "./Button";
 export * from "./LinkButton";
 export * from "./ButtonGroup";
@@ -41,6 +42,7 @@ export * from "./Collapse";
 export * from "./Fade";
 export * from "./Kbd";
 export * from "./Divider";
+export * from "./GridList";
 export * from "./Drawer";
 export * from "./List";
 export * from "./ComboBox";
