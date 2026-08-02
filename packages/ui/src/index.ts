@@ -45,6 +45,7 @@ export * from "./Divider";
 export * from "./GridList";
 export * from "./Drawer";
 export * from "./List";
+export * from "./ListBox";
 export * from "./ComboBox";
 export * from "./Menu";
 export * from "./Modal";

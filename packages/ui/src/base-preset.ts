@@ -32,6 +32,7 @@ import { drawer } from "./Drawer.recipe";
 import { gridList } from "./GridList.recipe";
 import { heading } from "./Heading.recipe";
 import { input } from "./Input.recipe";
+import { listBox } from "./ListBox.recipe";
 import { numberField } from "./NumberField.recipe";
 import { menu } from "./Menu.recipe";
 import { select } from "./Select.recipe";
@@ -207,6 +208,7 @@ export const basePreset = definePreset({
       drawer,
       field,
       gridList,
+      listBox,
       menu,
       numberField,
       radio,
@@ -281,6 +283,7 @@ export const basePreset = definePreset({
       dialog: [{ size: ["*"], responsive: true }, { centered: ["*"] }],
       drawer: ["*"],
       gridList: ["*"],
+      listBox: ["*"],
       input: ["*"],
       radio: ["*"],
       select: ["*"],
