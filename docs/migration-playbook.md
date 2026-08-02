@@ -691,6 +691,23 @@ w={23} />` on a _plain_ wrapper that spreads onto a `styled()` svg
     generated CSS for the class before believing a measurement:
     `grep -o "md\\:fs_5xl" src/styled-system.css`.
 
+37. **A component that hand-picks recipe variants breaks the preset extension
+    point.** `Input` and `TextField` destructured `size` and passed `{ size }`
+    to the recipe, leaving anything else in the rest-spread — so an app preset
+    that _adds_ a variant group got no styling at all and the prop landed on
+    the DOM as an unknown attribute. Nothing caught it because the base recipes
+    only had `size`; classroom's `variant="classroom"` inputs had been
+    rendering as plain outline boxes. Library components should use the
+    recipe's generated `splitVariantProps` so later presets keep working:
+
+    ```tsx
+    const [variantProps, rest] = input.splitVariantProps(props);
+    <input className={input(variantProps)} {...rest} />;
+    ```
+
+    Worth grepping for when adding any component: a literal variant name inside
+    a recipe call is the smell.
+
 Also remember (from the RAC component work, not numbered): RAC re-selects a
 pressed radio value against current state after any earlier handler runs —
 "click the selected option again to deselect" interactions need a native
@@ -728,6 +745,14 @@ accepted — expect them, don't chase them as bugs:
   scrolling internally.
 - **`preserveScrollBarGap` and `blockScrollOnMount` have no equivalent**; RAC
   does its own scroll locking. Drop them.
+- **Toast padding is roomier than Chakra's** (measured in classroom: 14.08px
+  vertical against 10.56px, and 35.2px against 28.16px on the close-button
+  side, at the same width). Long descriptions that fitted on one line may wrap.
+- **Chakra's `Progress` `hasStripe`/`isAnimated` have no equivalent.** The
+  ProgressBar takes a percentage, not value+max, and needs an explicit
+  `aria-label` where Chakra's had none. If the stripes matter, restate them at
+  the call site with a `barCss` gradient over a keyframe in the app preset
+  (classroom's ProgressDialog does).
 - **Toast semantics**: one top-centre region (no per-call `position`/
   `variant`); `duration` defaults to 5000ms and there is no
   `duration: null` — use `persistent: true` (which forces the close
