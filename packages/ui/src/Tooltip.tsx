@@ -5,25 +5,10 @@
  */
 import { ReactElement, ReactNode, RefObject } from "react";
 import { Tooltip as RACTooltip, TooltipTrigger } from "react-aria-components";
-import { css } from "styled-system/css";
+import { css, cx } from "styled-system/css";
+import { tooltip } from "styled-system/recipes";
 import { SystemStyleObject } from "styled-system/types";
 import { PopoverArrow } from "./PopoverArrow";
-
-// Base as an object (not a precomputed class) so a caller's `css` override is
-// merged into a single css() call — Panda then dedupes conflicting utilities
-// (e.g. px/py) so overrides actually win.
-const tooltipBase: SystemStyleObject = {
-  bg: "gray.700",
-  color: "white",
-  px: "2",
-  py: "1",
-  borderRadius: "md",
-  fontSize: "sm",
-  fontWeight: "medium",
-  boxShadow: "md",
-  maxW: "xs",
-  zIndex: "tooltip",
-};
 
 export interface TooltipProps {
   /**
@@ -82,7 +67,7 @@ export const Tooltip = ({
       triggerRef={triggerRef}
       placement={placement}
       offset={hasArrow ? 8 : 4}
-      className={css({ ...tooltipBase, ...cssProp })}
+      className={cx(tooltip(), cssProp ? css(cssProp) : undefined)}
     >
       {hasArrow && <PopoverArrow css={{ "& svg": { fill: "gray.700" } }} />}
       {label}

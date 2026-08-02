@@ -40,6 +40,7 @@ import { slider } from "./Slider.recipe";
 import { switchRecipe } from "./Switch.recipe";
 import { dialog } from "./Modal.recipe";
 import { text } from "./Text.recipe";
+import { tooltip } from "./Tooltip.recipe";
 import { field } from "./TextField.recipe";
 import { toast } from "./Toast.recipe";
 
@@ -69,10 +70,22 @@ export const basePreset = definePreset({
   theme: {
     breakpoints,
     keyframes: {
-      // Spinner's revolution (the only keyframe a shared-ui component uses).
+      // Spinner's revolution.
       spin: {
         "0%": { transform: "rotate(0deg)" },
         "100%": { transform: "rotate(360deg)" },
+      },
+      // Skeleton's pulse, over the pair of custom properties the component
+      // sets, so a retinted skeleton animates between its own colours.
+      skeletonFade: {
+        from: {
+          borderColor: "var(--skeleton-start-color)",
+          background: "var(--skeleton-start-color)",
+        },
+        to: {
+          borderColor: "var(--skeleton-end-color)",
+          background: "var(--skeleton-end-color)",
+        },
       },
     },
     tokens: {
@@ -199,6 +212,7 @@ export const basePreset = definePreset({
       heading,
       input,
       text,
+      tooltip,
     },
     slotRecipes: {
       avatar,
@@ -289,6 +303,7 @@ export const basePreset = definePreset({
       select: ["*"],
       switchRecipe: ["*"],
       text: ["*"],
+      tooltip: ["*"],
       // Toast status is chosen at runtime from the toast content.
       toast: ["*"],
     },
