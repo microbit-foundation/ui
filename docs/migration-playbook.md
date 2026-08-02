@@ -731,8 +731,14 @@ w={23} />` on a _plain_ wrapper that spreads onto a `styled()` svg
     RAC measures the element it anchors to, which for a ComboBox is the text
     input inside the control — narrower than the field by its padding and
     border, so a card sized from the var comes out visibly narrow. `Select` is
-    fine (its trigger is the button). Size the card at the call site, or accept
-    `minWidth`.
+    fine (its trigger is the button). The library's ComboBox measures its own
+    control instead, so consumers need do nothing; the trap is worth knowing if
+    you build another popover on RAC.
+
+    The obvious fix — reading the trigger ref while rendering the popover —
+    quietly does nothing: RAC mounts the popover from the first render, before
+    the ref is set, and nothing re-renders it afterwards. It needs state set
+    from a layout effect.
 
 Also remember (from the RAC component work, not numbered): RAC re-selects a
 pressed radio value against current state after any earlier handler runs —
