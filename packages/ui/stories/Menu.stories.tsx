@@ -43,7 +43,7 @@ export const Basic: Story = {
 };
 
 /**
- * MenuOptionGroup gives radio semantics to a section of the menu; action
+ * MenuOptionGroup defaults to radio semantics for a section of the menu; action
  * items can sit alongside in the same menu.
  */
 export const OptionGroups: Story = {
@@ -60,6 +60,34 @@ export const OptionGroups: Story = {
           </MenuOptionGroup>
           <MenuDivider />
           <MenuItem onAction={() => undefined}>Refresh</MenuItem>
+        </MenuList>
+      </MenuTrigger>
+    );
+  },
+};
+
+/**
+ * `type="checkbox"` makes the options toggle independently, as
+ * `menuitemcheckbox`. A lone toggle can equally be driven by the option's own
+ * `onAction`, which fires on the press that unchecks it as well as the one that
+ * checks it.
+ */
+export const CheckboxOptionGroup: Story = {
+  render: () => {
+    const [shown, setShown] = useState<string[]>(["grid"]);
+    return (
+      <MenuTrigger>
+        <Button variant="secondary">View</Button>
+        <MenuList>
+          <MenuOptionGroup
+            type="checkbox"
+            title="Show"
+            value={shown}
+            onChange={setShown}
+          >
+            <MenuItemOption value="grid">Grid</MenuItemOption>
+            <MenuItemOption value="rulers">Rulers</MenuItemOption>
+          </MenuOptionGroup>
         </MenuList>
       </MenuTrigger>
     );

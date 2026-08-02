@@ -156,45 +156,75 @@ export const MenuItem = ({
   );
 };
 
-export interface MenuOptionGroupProps {
+interface MenuOptionGroupBaseProps {
   /** Group heading shown above the options (Chakra's `title`). */
   title?: ReactNode;
-  /** The selected `MenuItemOption`'s value (radio semantics). */
-  value?: string;
-  /** Called with the newly selected option's value. */
-  onChange?: (value: string) => void;
   /** `MenuItemOption` children. */
   children: ReactNode;
   css?: SystemStyleObject;
   className?: string;
 }
 
+export interface MenuOptionGroupRadioProps extends MenuOptionGroupBaseProps {
+  type?: "radio";
+  /** The selected `MenuItemOption`'s value. */
+  value?: string;
+  /** Called with the newly selected option's value. */
+  onChange?: (value: string) => void;
+}
+
+export interface MenuOptionGroupCheckboxProps extends MenuOptionGroupBaseProps {
+  type: "checkbox";
+  /** The checked `MenuItemOption`s' values. */
+  value?: string[];
+  /** Called with the full set of checked values after a toggle. */
+  onChange?: (value: string[]) => void;
+}
+
+export type MenuOptionGroupProps =
+  | MenuOptionGroupRadioProps
+  | MenuOptionGroupCheckboxProps;
+
 /**
- * MenuOptionGroup — a single-select (radio) group of `MenuItemOption`s within
- * a menu, replacing Chakra's `MenuOptionGroup type="radio"`. Selection is
- * section-scoped (RAC MenuSection), so a menu can mix action items and option
- * groups.
+ * MenuOptionGroup — a group of checkable `MenuItemOption`s within a menu,
+ * replacing Chakra's `MenuOptionGroup`. `type="radio"` (the default) is
+ * single-select and renders `menuitemradio`; `type="checkbox"` is multi-select
+ * and renders `menuitemcheckbox`, each option toggling independently.
+ *
+ * Selection is section-scoped (RAC MenuSection), so a menu can mix action items
+ * and option groups. An option's own `onAction` still fires on every press,
+ * including the press that deselects it — so a lone toggle can be driven either
+ * by the group's `onChange` or by the item's `onAction`.
+ *
+ * Choosing an option leaves the menu open (a plain `MenuItem` closes it), which
+ * is what Chakra's checkbox groups did. Chakra's *radio* groups closed on
+ * select, so a ported radio group is a deliberate behaviour change.
  */
-export const MenuOptionGroup = ({
-  title,
-  value,
-  onChange,
-  children,
-  css: cssProp,
-  className,
-}: MenuOptionGroupProps) => {
+export const MenuOptionGroup = (props: MenuOptionGroupProps) => {
+  const { title, children, css: cssProp, className } = props;
   const slots = menu();
+  const selectedKeys =
+    props.type === "checkbox"
+      ? props.value ?? []
+      : props.value != null
+        ? [props.value]
+        : [];
   return (
     <RACMenuSection
       className={cx(slots.group, cssProp ? css(cssProp) : undefined, className)}
-      selectionMode="single"
-      selectedKeys={value != null ? [value] : []}
+      selectionMode={props.type === "checkbox" ? "multiple" : "single"}
+      selectedKeys={selectedKeys}
       onSelectionChange={(keys) => {
-        if (keys !== "all") {
-          const key = keys.values().next().value;
-          if (key != null) {
-            onChange?.(String(key));
-          }
+        if (keys === "all") {
+          return;
+        }
+        const values = [...keys].map(String);
+        if (props.type === "checkbox") {
+          props.onChange?.(values);
+        } else if (values.length > 0) {
+          // Radio: a press that clears the selection reports nothing, matching
+          // Chakra, which had no way to express an empty radio group.
+          props.onChange?.(values[0]);
         }
       }}
     >

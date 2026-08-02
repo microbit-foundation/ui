@@ -35,7 +35,12 @@ export const menu = defineSlotRecipe({
       color: "inherit",
       minWidth: "3xs",
       py: "2",
-      zIndex: "dropdown",
+      // `popover` (1500), not `dropdown` (1000): a RAC Popover always portals
+      // to the body, so a menu opened from inside a Modal (zIndex `modal`,
+      // 1400) escapes the modal's stacking context and would paint behind it.
+      // Chakra never hit this — its MenuList rendered inline unless explicitly
+      // portalled. Nothing else lives between 1400 and the toast/tooltip layer.
+      zIndex: "popover",
       borderRadius: "md",
       borderWidth: "1px",
       borderColor: "gray.200",
