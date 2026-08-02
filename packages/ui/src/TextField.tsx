@@ -49,11 +49,13 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
       helperTextCss,
       onFocus,
       autoCapitalize,
-      size,
-      ...rest
+      ...props
     },
     ref,
   ) {
+    // As Input: forward every recipe variant group, not just `size`, so a
+    // preset that adds one keeps working.
+    const [variantProps, rest] = input.splitVariantProps(props);
     const slots = field();
     return (
       <RACTextField {...rest} className={slots.root}>
@@ -67,7 +69,7 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
         </RACLabel>
         <RACInput
           ref={ref}
-          className={input({ size })}
+          className={input(variantProps)}
           onFocus={onFocus}
           autoCapitalize={autoCapitalize}
         />
