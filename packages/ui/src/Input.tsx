@@ -23,14 +23,18 @@ export interface InputProps
  * labelled field with help/error text use TextField instead.
  */
 export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
-  { size, css: cssProp, className, ...rest },
+  { css: cssProp, className, ...props },
   ref,
 ) {
+  // splitVariantProps, not a hand-picked `size`: an app preset can add variant
+  // groups to the recipe (classroom adds `variant`), and cherry-picking would
+  // silently drop them onto the DOM as unknown attributes instead.
+  const [variantProps, rest] = input.splitVariantProps(props);
   return (
     <input
       ref={ref}
       className={cx(
-        input({ size }),
+        input(variantProps),
         cssProp ? css(cssProp) : undefined,
         className,
       )}
