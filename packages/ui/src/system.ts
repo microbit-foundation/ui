@@ -11,6 +11,8 @@
 export { css, cva, sva, cx } from "styled-system/css";
 export { token } from "styled-system/tokens";
 export type { SystemStyleObject } from "styled-system/types";
+// react-aria collection types call sites need for selection handlers.
+export type { Key, Selection } from "react-aria-components";
 export type {
   BoxProps,
   FlexProps,
