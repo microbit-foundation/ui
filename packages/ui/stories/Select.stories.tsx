@@ -5,7 +5,8 @@
  */
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { ComboBox, Select, SelectOption, Stack } from "../src";
+import { RiCloudLine, RiFireLine, RiSnowyLine } from "react-icons/ri";
+import { ComboBox, Icon, Select, SelectOption, Stack } from "../src";
 
 const meta = {
   title: "Forms/Select",
@@ -36,7 +37,13 @@ export const Basic: Story = {
   ),
 };
 
-/** Type to filter. `emptyState` is react-select's `noOptionsMessage`. */
+/**
+ * Type to filter. `emptyState` is react-select's `noOptionsMessage`.
+ *
+ * Note react-aria's default: the list opens when you *type*, not when you
+ * click the field — the chevron is the click affordance. Pass
+ * `menuTrigger="focus"` for react-select's behaviour, as the story below does.
+ */
 export const Combo: Story = {
   render: () => (
     <Stack gap={5} css={{ maxWidth: "16rem" }}>
@@ -75,4 +82,85 @@ export const GatedOnQueryLength: Story = {
       </Stack>
     );
   },
+};
+
+const WEATHER = [
+  { value: "cloudy", label: "Cloudy", icon: RiCloudLine },
+  { value: "hot", label: "Hot", icon: RiFireLine },
+  { value: "snowy", label: "Snowy", icon: RiSnowyLine },
+];
+
+/**
+ * `startContent` puts something before the input — an icon for the current
+ * value, say. A ComboBox's control is a text input, so unlike a Select it
+ * cannot otherwise show anything but text for what is chosen.
+ */
+export const WithAnIconForTheValue: Story = {
+  render: () => {
+    const [key, setKey] = useState<string | null>("cloudy");
+    const [query, setQuery] = useState("Cloudy");
+    const chosen = WEATHER.find((w) => w.value === key);
+    return (
+      <Stack gap={5} css={{ maxWidth: "16rem" }}>
+        <ComboBox
+          label="Weather"
+          placeholder="Select…"
+          menuTrigger="focus"
+          selectedKey={key}
+          inputValue={query}
+          onInputChange={setQuery}
+          onSelectionChange={(k) => {
+            setKey(k as string);
+            const w = WEATHER.find((x) => x.value === k);
+            if (w) {
+              setQuery(w.label);
+            }
+          }}
+          startContent={
+            chosen ? <Icon as={chosen.icon} aria-hidden /> : undefined
+          }
+        >
+          {WEATHER.map((w) => (
+            <SelectOption key={w.value} id={w.value} textValue={w.label}>
+              <Icon as={w.icon} aria-hidden />
+              {w.label}
+            </SelectOption>
+          ))}
+        </ComboBox>
+      </Stack>
+    );
+  },
+};
+
+/**
+ * `maxHeight` is react-select's `maxMenuHeight`. It has to be a prop rather
+ * than a style: RAC writes its own max-height inline while positioning, which
+ * beats any class.
+ */
+export const LongListWithACappedHeight: Story = {
+  render: () => (
+    <Stack gap={5} css={{ maxWidth: "16rem" }}>
+      <Select label="Number" placeholder="Select…" maxHeight={160}>
+        {Array.from({ length: 30 }, (_, i) => (
+          <SelectOption key={i} id={String(i)}>
+            Option {i + 1}
+          </SelectOption>
+        ))}
+      </Select>
+    </Stack>
+  ),
+};
+
+/** Invalid state, as a form would set it. */
+export const Invalid: Story = {
+  render: () => (
+    <Stack gap={5} css={{ maxWidth: "16rem" }}>
+      <Select label="Fruit" placeholder="Select…" isInvalid>
+        {options}
+      </Select>
+      <ComboBox label="Fruit" placeholder="Start typing…" isInvalid>
+        {options}
+      </ComboBox>
+    </Stack>
+  ),
 };

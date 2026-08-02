@@ -3,7 +3,14 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { ForwardedRef, forwardRef, ReactNode, useRef } from "react";
+import {
+  ForwardedRef,
+  forwardRef,
+  ReactNode,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   Button as RACButton,
   ComboBox as RACComboBox,
@@ -100,6 +107,26 @@ const ComboBoxInner = <T extends object>(
   // Anchor the card to the whole control, not to the bare input inside it —
   // otherwise it hangs off the text baseline and is as narrow as the input.
   const triggerRef = useRef<HTMLDivElement>(null);
+  // RAC's --trigger-width measures the input it anchors a ComboBox to, which
+  // is the control's content box — so a card sized from it is narrower than
+  // the field by the padding and border. Measure the control instead. State
+  // rather than reading the ref at render time: the popover is mounted from
+  // the first render, before the ref is set, and nothing would re-render it.
+  const [triggerWidth, setTriggerWidth] = useState<number>();
+  useLayoutEffect(() => {
+    const el = triggerRef.current;
+    if (!el) {
+      return;
+    }
+    const update = () => setTriggerWidth(el.offsetWidth);
+    update();
+    if (typeof ResizeObserver === "undefined") {
+      return;
+    }
+    const observer = new ResizeObserver(update);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
   return (
     <SelectSlotProvider value={slots}>
       <RACComboBox
@@ -129,6 +156,7 @@ const ComboBoxInner = <T extends object>(
             triggerRef={triggerRef}
             placement={placement}
             maxHeight={maxHeight}
+            style={triggerWidth ? { width: triggerWidth } : undefined}
             className={cx(
               slots.content,
               contentCss ? css(contentCss) : undefined,
