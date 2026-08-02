@@ -673,6 +673,24 @@ w={23} />` on a _plain_ wrapper that spreads onto a `styled()` svg
     `dropdown` (1000) for this reason; check any new overlay recipe against
     `modal` (1400) before assuming the default scale is right.
 
+35. **The library Modal inserts an element between the dialog box and its
+    children.** Chakra's ModalContent was their direct parent, so a call site
+    that laid out its content by styling the box — `display: flex` plus
+    centring, most often — silently stops working: `contentCss` styles the box,
+    but the children are inside a flex-column `inner` element within it. The
+    tell is nasty, because every box measurement stays identical and only the
+    content moves (classroom's loading spinner drifted 141px off centre). Put
+    the layout on a wrapper inside the dialog instead.
+
+36. **Run the Panda codegen before any verification pass.** `npx vite` and
+    friends skip the `prestart`/`prebuild` hook, so `styled-system.css` is
+    whatever the last codegen produced and every atomic class introduced since
+    is missing from it. The failure looks exactly like a botched port — a
+    heading rendering at the slot's default 18px instead of the 43.2px the
+    `css` prop asks for — and the code looks right, because it is. Check the
+    generated CSS for the class before believing a measurement:
+    `grep -o "md\\:fs_5xl" src/styled-system.css`.
+
 Also remember (from the RAC component work, not numbered): RAC re-selects a
 pressed radio value against current state after any earlier handler runs —
 "click the selected option again to deselect" interactions need a native
@@ -702,6 +720,14 @@ accepted — expect them, don't chase them as bugs:
   title — an a11y improvement) unless something has `autoFocus`; Chakra
   focused the first control (see gotcha #15 for when to add `autoFocus`
   back).
+- **`scrollBehavior` is gone.** Chakra defaulted to `inside` (the box capped
+  at the viewport, its body scrolling); the library always scrolls the
+  backdrop, which is Chakra's `outside`. Nothing in the family needed the
+  distinction — classroom's eight `outside` sites simply dropped the prop —
+  but a dialog taller than the viewport now grows the page rather than
+  scrolling internally.
+- **`preserveScrollBarGap` and `blockScrollOnMount` have no equivalent**; RAC
+  does its own scroll locking. Drop them.
 - **Toast semantics**: one top-centre region (no per-call `position`/
   `variant`); `duration` defaults to 5000ms and there is no
   `duration: null` — use `persistent: true` (which forces the close
