@@ -136,6 +136,17 @@ export const button = defineRecipe({
       // colorScheme resolved to. (Extracted from ml-trainer at 500/600, but
       // its one warning button tolerates the darkening; python-editor's
       // "Reset project" was visibly lighter than its Chakra self.)
+      // NOTE (2026-08-02, from classroom): two Chakra `outline` shapes have
+      // no home here and are currently restated per call site in that app —
+      // worth considering as variants once a second consumer wants them.
+      //   - a neutral outline (transparent, 1px gray.200, inherited text,
+      //     gray.50/gray.100 hover/press): Chakra's default-colorScheme
+      //     `outline`, and python-editor's *default* variant per the
+      //     playbook's cross-app vocabulary, so likely already a 2-app shape.
+      //   - an on-colour outline (white 2px + white text over a coloured bar,
+      //     whiteAlpha hover/press): Chakra's `outline` + `whiteAlpha`.
+      // `warning` below is the *destructive* outline and is not a substitute
+      // for either; `warningSolid` did map exactly onto Chakra solid+red.
       warning: {
         borderWidth: "2px",
         borderColor: "danger.600",
