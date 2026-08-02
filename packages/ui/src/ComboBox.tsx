@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { ForwardedRef, forwardRef, ReactNode } from "react";
+import { ForwardedRef, forwardRef, ReactNode, useRef } from "react";
 import {
   Button as RACButton,
   ComboBox as RACComboBox,
@@ -90,6 +90,9 @@ const ComboBoxInner = <T extends object>(
   // As Select: forward whatever variant groups the merged recipe has.
   const [variantProps, rest] = select.splitVariantProps(props);
   const slots = select(variantProps);
+  // Anchor the card to the whole control, not to the bare input inside it —
+  // otherwise it hangs off the text baseline and is as narrow as the input.
+  const triggerRef = useRef<HTMLDivElement>(null);
   return (
     <SelectSlotProvider value={slots}>
       <RACComboBox
@@ -98,7 +101,10 @@ const ComboBoxInner = <T extends object>(
         className={cx(slots.root, className)}
       >
         {label != null && <RACLabel className={slots.label}>{label}</RACLabel>}
-        <div className={cx(slots.trigger, cssProp ? css(cssProp) : undefined)}>
+        <div
+          ref={triggerRef}
+          className={cx(slots.trigger, cssProp ? css(cssProp) : undefined)}
+        >
           {startContent}
           <RACInput
             ref={ref}
@@ -121,6 +127,7 @@ const ComboBoxInner = <T extends object>(
         </div>
         {!isPopoverHidden && (
           <Popover
+            triggerRef={triggerRef}
             placement={placement}
             className={cx(
               slots.content,
