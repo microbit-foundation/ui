@@ -32,6 +32,7 @@ import { heading } from "./Heading.recipe";
 import { input } from "./Input.recipe";
 import { numberField } from "./NumberField.recipe";
 import { menu } from "./Menu.recipe";
+import { select } from "./Select.recipe";
 import { slider } from "./Slider.recipe";
 import { switchRecipe } from "./Switch.recipe";
 import { dialog } from "./Modal.recipe";
@@ -205,6 +206,7 @@ export const basePreset = definePreset({
       menu,
       numberField,
       radio,
+      select,
       slider,
       switchRecipe,
       toast,
