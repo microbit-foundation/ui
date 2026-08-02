@@ -127,9 +127,7 @@ export const Modal = ({
   children,
   ...rest
 }: ModalProps) => {
-  const dataProps = Object.fromEntries(
-    Object.entries(rest).filter(([key]) => key.startsWith("data-")),
-  );
+  const dataProps = dataAttrs(rest);
   const slots = dialog({ size, centered: isCentered });
   const motionlessClass = motionless
     ? css({
@@ -186,7 +184,14 @@ interface SlotProps {
   children?: ReactNode;
   css?: SystemStyleObject;
   className?: string;
+  /** `data-*` attributes land on the slot element, as they did on Chakra's. */
+  [key: `data-${string}`]: unknown;
 }
+
+const dataAttrs = (props: object) =>
+  Object.fromEntries(
+    Object.entries(props).filter(([key]) => key.startsWith("data-")),
+  );
 
 /** Modal title. Rendered as RAC's labelling heading for the dialog. */
 export const ModalHeader = ({
@@ -194,6 +199,7 @@ export const ModalHeader = ({
   css: cssProp,
   className,
   level,
+  ...rest
 }: SlotProps & {
   /**
    * Heading element level. Defaults to 2: RAC's Dialog supplies that through
@@ -204,6 +210,7 @@ export const ModalHeader = ({
   const { slots } = useDialog();
   return (
     <RACHeading
+      {...dataAttrs(rest)}
       slot="title"
       level={level}
       className={cx(
@@ -217,10 +224,16 @@ export const ModalHeader = ({
   );
 };
 
-export const ModalBody = ({ children, css: cssProp, className }: SlotProps) => {
+export const ModalBody = ({
+  children,
+  css: cssProp,
+  className,
+  ...rest
+}: SlotProps) => {
   const { slots } = useDialog();
   return (
     <div
+      {...dataAttrs(rest)}
       className={cx(slots.body, cssProp ? css(cssProp) : undefined, className)}
     >
       {children}
@@ -232,10 +245,12 @@ export const ModalFooter = ({
   children,
   css: cssProp,
   className,
+  ...rest
 }: SlotProps) => {
   const { slots } = useDialog();
   return (
     <div
+      {...dataAttrs(rest)}
       className={cx(
         slots.footer,
         cssProp ? css(cssProp) : undefined,
@@ -250,6 +265,8 @@ export const ModalFooter = ({
 export interface ModalCloseButtonProps {
   /** Accessible name; defaults to the localized close label. */
   "aria-label"?: string;
+  /** `data-*` attributes land on the button. */
+  [key: `data-${string}`]: unknown;
 }
 
 /**
@@ -258,11 +275,13 @@ export interface ModalCloseButtonProps {
  */
 export const ModalCloseButton = ({
   "aria-label": ariaLabel,
+  ...rest
 }: ModalCloseButtonProps) => {
   const intl = useIntl();
   const { slots, onClose } = useDialog();
   return (
     <RACButton
+      {...dataAttrs(rest)}
       aria-label={ariaLabel ?? intl.formatMessage(uiMessage("ui.close-action"))}
       onPress={onClose}
       className={cx(
