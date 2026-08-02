@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { ReactNode } from "react";
+import { ForwardedRef, forwardRef, ReactNode } from "react";
 import {
   Button as RACButton,
   ComboBox as RACComboBox,
@@ -70,20 +70,23 @@ export interface ComboBoxProps<T extends object>
  * `label` and kept the menu open on selection unless told otherwise, whereas
  * react-aria filters on each item's `textValue` and closes on selection.
  */
-export const ComboBox = <T extends object>({
-  label,
-  placeholder,
-  startContent,
-  children,
-  indicator,
-  emptyState,
-  isPopoverHidden,
-  placement = "bottom start",
-  css: cssProp,
-  contentCss,
-  className,
-  ...props
-}: ComboBoxProps<T>) => {
+const ComboBoxInner = <T extends object>(
+  {
+    label,
+    placeholder,
+    startContent,
+    children,
+    indicator,
+    emptyState,
+    isPopoverHidden,
+    placement = "bottom start",
+    css: cssProp,
+    contentCss,
+    className,
+    ...props
+  }: ComboBoxProps<T>,
+  ref: ForwardedRef<HTMLInputElement>,
+) => {
   // As Select: forward whatever variant groups the merged recipe has.
   const [variantProps, rest] = select.splitVariantProps(props);
   const slots = select(variantProps);
@@ -98,6 +101,7 @@ export const ComboBox = <T extends object>({
         <div className={cx(slots.trigger, cssProp ? css(cssProp) : undefined)}>
           {startContent}
           <RACInput
+            ref={ref}
             placeholder={placeholder}
             className={css({
               flex: "1",
@@ -139,3 +143,11 @@ export const ComboBox = <T extends object>({
     </SelectSlotProvider>
   );
 };
+
+/**
+ * forwardRef with generics needs the cast (React's types cannot express it),
+ * so the ref lands on the input — call sites focus it for validation.
+ */
+export const ComboBox = forwardRef(ComboBoxInner) as <T extends object>(
+  props: ComboBoxProps<T> & { ref?: ForwardedRef<HTMLInputElement> },
+) => ReturnType<typeof ComboBoxInner>;
