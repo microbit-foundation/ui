@@ -24,6 +24,7 @@ export type {
 export {
   AspectRatio,
   Box,
+  Container,
   Flex,
   Stack,
   HStack,
