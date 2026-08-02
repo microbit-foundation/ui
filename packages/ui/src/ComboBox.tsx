@@ -1,0 +1,132 @@
+/**
+ * (c) 2026, Micro:bit Educational Foundation and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+import { ReactNode } from "react";
+import {
+  Button as RACButton,
+  ComboBox as RACComboBox,
+  ComboBoxProps as RACComboBoxProps,
+  Input as RACInput,
+  Label as RACLabel,
+  ListBox as RACListBox,
+  Popover,
+  PopoverProps,
+} from "react-aria-components";
+import { RiArrowDownSLine } from "react-icons/ri";
+import { css, cx } from "styled-system/css";
+import { select, SelectVariantProps } from "styled-system/recipes";
+import { SystemStyleObject } from "styled-system/types";
+import { Icon } from "./Icon";
+import { SelectSlotProvider } from "./Select";
+
+export interface ComboBoxProps<T extends object>
+  extends Omit<RACComboBoxProps<T>, "className" | "children" | "style">,
+    SelectVariantProps {
+  /** Visible label. Use `aria-label` instead where the design has none. */
+  label?: ReactNode;
+  placeholder?: string;
+  /** `SelectOption`s. */
+  children: ReactNode;
+  /**
+   * Replaces the chevron; pass `null` for none, which is what a plain
+   * autocomplete wants (react-select's `dropdownIndicator: display none`).
+   */
+  indicator?: ReactNode | null;
+  /**
+   * Shown in place of the list when nothing matches (react-select's
+   * `noOptionsMessage`). Implies `allowsEmptyCollection`, since RAC otherwise
+   * closes the popover the moment the collection empties.
+   */
+  emptyState?: ReactNode;
+  /**
+   * Keep the dropdown shut until this prop is true. For gating on a minimum
+   * query length — react-aria has no `minLength`, and rendering an empty list
+   * still opens an empty card.
+   */
+  isPopoverHidden?: boolean;
+  placement?: PopoverProps["placement"];
+  /** Per-instance overrides for the input. */
+  css?: SystemStyleObject;
+  /** Per-instance overrides for the dropdown card. */
+  contentCss?: SystemStyleObject;
+  className?: string;
+}
+
+/**
+ * ComboBox — a text input that filters a listbox, for choosing one of a known
+ * set where typing to narrow it down is the point. Use Select where the list
+ * is short enough to just pick from.
+ *
+ * Note the react-select difference this replaces: react-select filtered on
+ * `label` and kept the menu open on selection unless told otherwise, whereas
+ * react-aria filters on each item's `textValue` and closes on selection.
+ */
+export const ComboBox = <T extends object>({
+  label,
+  placeholder,
+  children,
+  indicator,
+  emptyState,
+  isPopoverHidden,
+  placement = "bottom start",
+  css: cssProp,
+  contentCss,
+  className,
+  ...props
+}: ComboBoxProps<T>) => {
+  // As Select: forward whatever variant groups the merged recipe has.
+  const [variantProps, rest] = select.splitVariantProps(props);
+  const slots = select(variantProps);
+  return (
+    <SelectSlotProvider value={slots}>
+      <RACComboBox
+        allowsEmptyCollection={emptyState != null}
+        {...(rest as RACComboBoxProps<T>)}
+        className={cx(slots.root, className)}
+      >
+        {label != null && <RACLabel className={slots.label}>{label}</RACLabel>}
+        <div className={cx(slots.trigger, cssProp ? css(cssProp) : undefined)}>
+          <RACInput
+            placeholder={placeholder}
+            className={css({
+              flex: "1",
+              minWidth: 0,
+              outline: "none",
+              bg: "transparent",
+              color: "inherit",
+              font: "inherit",
+              _placeholder: { color: "gray.500" },
+            })}
+          />
+          {indicator !== null && (
+            <RACButton className={slots.indicator}>
+              {indicator ?? <Icon as={RiArrowDownSLine} />}
+            </RACButton>
+          )}
+        </div>
+        {!isPopoverHidden && (
+          <Popover
+            placement={placement}
+            className={cx(
+              slots.content,
+              contentCss ? css(contentCss) : undefined,
+            )}
+          >
+            <RACListBox
+              className={slots.list}
+              renderEmptyState={
+                emptyState
+                  ? () => <div className={slots.empty}>{emptyState}</div>
+                  : undefined
+              }
+            >
+              {children}
+            </RACListBox>
+          </Popover>
+        )}
+      </RACComboBox>
+    </SelectSlotProvider>
+  );
+};
