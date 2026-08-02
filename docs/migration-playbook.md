@@ -328,8 +328,30 @@ from the library extraction.
 11. **Panda's `AspectRatio` pattern positions its child via a `&>*`
     selector that a still-Chakra child's own `position` style beats**
     (Emotion injects later at equal specificity). Symptom: the `::before`
-    padding spacer stacks above the child. Use the native `aspectRatio`
-    CSS property instead — arguably the better permanent form anyway.
+    padding spacer stacks above the child.
+
+    **Check the support floor before reaching for the native `aspectRatio`
+    property, which this gotcha used to recommend outright.** Native
+    `aspect-ratio` needs Safari 15, iOS 15 and Firefox 89; the family's floor
+    is `safari >= 14.1`, `ios_saf >= 14.5`, `firefox >= 88`, so three of five
+    targets don't have it and the declaration is simply dropped — the box
+    collapses to content height, with no fallback and nothing for lightningcss
+    to downlevel. Panda's pattern is the padding-bottom hack, exactly like
+    Chakra's, so it works everywhere: classroom measured the two identical
+    (wrapper 185x151, `::before` padding-bottom 150.922px, child absolute with
+    `object-fit: cover`).
+
+    The conflict this gotcha is really about only arises when the child is a
+    **Chakra** component carrying its own `position`. A plain element or an
+    already-ported child is fine, so during coexistence order the child's port
+    before the wrapper's and the pattern is safe.
+
+    **Worth auditing in the completed migrations**: ml-trainer has the same
+    floor and uses native `aspectRatio` in `tours.tsx` (x2) and
+    `NativeBluetoothConnectBatteryDialog.tsx`; python-editor's floor is
+    `Safari >= 14`/`iOS >= 14` and it uses it in the docs content, the ideas
+    page and `YoutubeVideoEmbed`. Those may want the pattern instead.
+
 12. **RAC popovers unmount on close** (Chakra kept menu lists mounted), so
     a hidden file input must live _outside_ a menu or its change event is
     dropped mid-pick — render it as a sibling and call it via ref.
