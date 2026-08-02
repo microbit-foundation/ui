@@ -676,6 +676,20 @@ Priority: **python-editor-v3 and classroom are what matter**;
 data-microbit-org can trail by months. ml-trainer is done (the pilot).
 Censuses were taken July 2026 against Chakra v2.10 in all apps.
 
+### Open across the completed migrations
+
+- **Native `aspect-ratio` below the support floor** (see gotcha #11, corrected
+  2026-08-02 — it previously recommended exactly this). It needs Safari 15 /
+  iOS 15 / Firefox 89; where an app's floor is lower the declaration is dropped
+  and the box collapses to content height, silently and with no fallback.
+  Panda's `AspectRatio` pattern is the padding-bottom hack and works at any
+  floor. **To check**: ml-trainer (floor 14.1 / 14.5 / 88) at `tours.tsx` x2
+  and `NativeBluetoothConnectBatteryDialog.tsx`; python-editor (floor
+  `Safari >= 14`, `iOS >= 14`) in the docs content, the ideas page and
+  `YoutubeVideoEmbed`. Not verified as visibly broken on those browsers —
+  someone with a device or a Safari 14 VM should confirm before deciding
+  whether to swap them back to the pattern.
+
 ### v1 surface (build in the library, on demand)
 
 Policy: anything _clearly core_ design-system goes in the library even with
