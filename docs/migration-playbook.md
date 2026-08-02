@@ -354,7 +354,11 @@ from the library extraction.
 
 12. **RAC popovers unmount on close** (Chakra kept menu lists mounted), so
     a hidden file input must live _outside_ a menu or its change event is
-    dropped mid-pick — render it as a sibling and call it via ref.
+    dropped mid-pick — render it as a sibling and call it via ref. Putting one
+    inside is doubly wrong: see #33, where a non-collection child silently
+    deletes the rest of the menu. Chakra's keep-mounted behaviour also trips up
+    verification scripts — `document.querySelector('[role=menu]')` finds a
+    closed menu from an earlier step, so scope to the visible one.
 13. **RAC popovers have `role="dialog"`** (menus included, lingering
     briefly with `data-exiting` while animating out), so a bare Playwright
     `getByRole("dialog")` can hit strict-mode ambiguity when a dialog opens
@@ -626,6 +630,49 @@ w={23} />` on a _plain_ wrapper that spreads onto a `styled()` svg
     {colors.brand.500} 0%, …)"`emits`var(--colors-brand-500)`). classroom had
     one live instance, its homepage banner, plus one in a comment.
 
+33. **A non-collection child silently truncates a RAC collection.** A `Menu`,
+    `ListBox` or `GridList` builds its children into a collection, and anything
+    that is not a collection node — a `<div>`, a dialog, a plain element — ends
+    the collection at that point. Everything after it disappears. There is no
+    throw and no console warning, in dev or prod, so a typecheck and a unit test
+    that only asserts "renders" both pass.
+
+    Measured in classroom's port: `<MenuItem/><div/><MenuItem/>` renders one
+    item, and a component returning a fragment that _leads_ with a `<div>`
+    renders none at all — the whole menu comes back empty. The second shape is
+    the dangerous one, because it is what a "menu item that owns its dialog"
+    component looks like:
+
+    ```tsx
+    // Deletes every item in whatever menu renders it.
+    const LanguageMenuItem = () => (
+      <>
+        <LanguageDialog isOpen={…} onClose={…} />
+        <MenuItem onAction={…}>Language</MenuItem>
+      </>
+    );
+    ```
+
+    Fragments, `null`, `false`, arrays and custom components are all fine, so
+    long as everything they resolve to is a collection node. Hoist dialogs (and
+    file inputs, per #12) out of the menu: give the opener to the item through
+    context or a prop, and render the dialog beside the `MenuTrigger` or at the
+    app root. classroom added a `LanguageDialogProvider` for exactly this, since
+    the item is rendered by six different menus.
+
+    `@microbit/ui` has a regression test asserting the truncation, so if
+    react-aria ever starts reporting it we can drop the workarounds.
+
+34. **A RAC popover leaves the stacking context it was opened from.** It always
+    portals to the body, so a menu, tooltip or select opened from inside a modal
+    is no longer painted by the modal — it needs a `z-index` above it or it
+    disappears behind. Chakra never showed this because its MenuList rendered
+    inline unless explicitly portalled, so the bug appears exactly at the port
+    and, in a full-screen modal, the menu is invisible rather than merely
+    clipped. The `menu` recipe now sits at `popover` (1500) rather than
+    `dropdown` (1000) for this reason; check any new overlay recipe against
+    `modal` (1400) before assuming the default scale is right.
+
 Also remember (from the RAC component work, not numbered): RAC re-selects a
 pressed radio value against current state after any earlier handler runs —
 "click the selected option again to deselect" interactions need a native
@@ -644,6 +691,13 @@ accepted — expect them, don't chase them as bugs:
   machine (unbuilt).
 - **Focus rings show after mouse interaction** in places Chakra hid them
   (auto-focused dialog buttons, slider thumbs).
+- **A menu opened with the mouse focuses no item.** Chakra highlighted the
+  first one however the menu was opened; RAC highlights it only for a keyboard
+  open, and Escape still returns focus to the trigger (both verified in
+  classroom). It is the whole of the remaining screenshot diff on a faithful
+  menu port, so expect it and don't chase it.
+- **Choosing an option in a `MenuOptionGroup` leaves the menu open.** That
+  matches Chakra's checkbox groups; Chakra's radio groups closed.
 - **Dialogs open with focus on the dialog element itself** (announces the
   title — an a11y improvement) unless something has `autoFocus`; Chakra
   focused the first control (see gotcha #15 for when to add `autoFocus`
