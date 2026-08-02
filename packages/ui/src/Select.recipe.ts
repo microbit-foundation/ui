@@ -108,6 +108,9 @@ export const select = defineSlotRecipe({
       "&[data-focus-visible]": { focusShadow: "outline" },
     },
     content: {
+      // Line the card up with the control, as a select should and as
+      // react-select did. RAC measures the popover's trigger into this var.
+      width: "var(--trigger-width)",
       bg: "white",
       color: "inherit",
       py: "2",
