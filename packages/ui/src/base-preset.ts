@@ -261,7 +261,11 @@ export const basePreset = definePreset({
   // can silently lose runtime-prop variants.
   staticCss: {
     recipes: {
-      button: ["*"],
+      // Size is passed responsively at call sites ported from Chakra's
+      // `size={["md", "lg"]}`, so generate the breakpoint-prefixed variants
+      // too — otherwise the class lands on the element with no rule behind it
+      // and the button silently falls back to the base size.
+      button: [{ size: ["*"], responsive: true }, { variant: ["*"] }],
       checkbox: ["*"],
       heading: ["*"],
       card: ["*"],
