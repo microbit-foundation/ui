@@ -54,6 +54,12 @@ export interface ComboBoxProps<T extends object>
    */
   isPopoverHidden?: boolean;
   placement?: PopoverProps["placement"];
+  /**
+   * Cap the dropdown's height (react-select's `maxMenuHeight`). A prop rather
+   * than a `contentCss` rule because RAC writes its own max-height inline
+   * while positioning, which beats any class.
+   */
+  maxHeight?: number;
   /** Per-instance overrides for the input. */
   css?: SystemStyleObject;
   /** Per-instance overrides for the dropdown card. */
@@ -80,6 +86,7 @@ const ComboBoxInner = <T extends object>(
     emptyState,
     isPopoverHidden,
     placement = "bottom start",
+    maxHeight,
     css: cssProp,
     contentCss,
     className,
@@ -129,6 +136,7 @@ const ComboBoxInner = <T extends object>(
           <Popover
             triggerRef={triggerRef}
             placement={placement}
+            maxHeight={maxHeight}
             className={cx(
               slots.content,
               contentCss ? css(contentCss) : undefined,

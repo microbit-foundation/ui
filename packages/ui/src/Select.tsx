@@ -48,6 +48,12 @@ export interface SelectProps<T extends object>
   indicator?: ReactNode;
   /** Placement of the dropdown relative to the trigger. */
   placement?: PopoverProps["placement"];
+  /**
+   * Cap the dropdown's height (react-select's `maxMenuHeight`). A prop rather
+   * than a `contentCss` rule because RAC writes its own max-height inline
+   * while positioning, which beats any class.
+   */
+  maxHeight?: number;
   /** Per-instance overrides for the trigger. */
   css?: SystemStyleObject;
   /** Per-instance overrides for the dropdown card. */
@@ -66,6 +72,7 @@ export const Select = <T extends object>({
   children,
   indicator,
   placement = "bottom start",
+  maxHeight,
   css: cssProp,
   contentCss,
   className,
@@ -87,7 +94,7 @@ export const Select = <T extends object>({
         >
           <SelectValue className={slots.value}>
             {({ isPlaceholder, defaultChildren }) =>
-              isPlaceholder ? (placeholder ?? "") : defaultChildren
+              isPlaceholder ? placeholder ?? "" : defaultChildren
             }
           </SelectValue>
           <span className={slots.indicator} aria-hidden>
@@ -96,6 +103,7 @@ export const Select = <T extends object>({
         </RACButton>
         <Popover
           placement={placement}
+          maxHeight={maxHeight}
           className={cx(
             slots.content,
             contentCss ? css(contentCss) : undefined,
