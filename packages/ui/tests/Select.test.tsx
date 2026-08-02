@@ -3,7 +3,13 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
+import {
+  act,
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+} from "@testing-library/react";
 import { useState } from "react";
 import { afterEach, expect, it, vi } from "vitest";
 import { ComboBox, Select, SelectOption } from "../src";

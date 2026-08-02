@@ -1,0 +1,168 @@
+/**
+ * (c) 2026, Micro:bit Educational Foundation and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+import { defineSlotRecipe } from "@pandacss/dev";
+
+/**
+ * Avatar slot recipe — Chakra's avatar: a circle showing an image, the
+ * initials of a name, or a generic person glyph, optionally with a badge
+ * pinned to one corner.
+ *
+ * The background and text colour come from `var(--avatar-bg)` and
+ * `var(--avatar-color)` rather than being flat values, because the component
+ * derives them from the name (see Avatar.tsx) and writes them as inline custom
+ * properties — exactly as Chakra did. Two reasons, both about letting a call
+ * site win with a plain `css={{ bg: …, color: … }}`: an inline *property*
+ * would beat any class, where an inline *variable* only feeds this
+ * declaration; and both must stay single-class selectors, since a state
+ * selector like `&[data-light-bg]` outranks the call site's utility class on
+ * specificity wherever cascade layers aren't in play — which is every app
+ * still coexisting with Chakra (playbook gotcha #40).
+ *
+ * Sizes are Chakra's, with its `calc(size / 2.5)` font size resolved per size
+ * so an app preset can restate either independently (classroom's avatars are
+ * a grade larger than Chakra's).
+ *
+ * Registered in the base preset (base-preset.ts), which also has the
+ * `staticCss` entry that keeps the runtime-prop variants generated.
+ */
+export const avatar = defineSlotRecipe({
+  className: "avatar",
+  slots: ["root", "label", "image", "badge"],
+  base: {
+    root: {
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center",
+      flexShrink: 0,
+      position: "relative",
+      verticalAlign: "top",
+      textAlign: "center",
+      textTransform: "uppercase",
+      fontWeight: "medium",
+      borderRadius: "full",
+      // Chakra's no-name defaults; the name-derived pair arrives inline.
+      background: "var(--avatar-bg, token(colors.gray.400))",
+      color: "var(--avatar-color, token(colors.white))",
+      borderColor: "white",
+    },
+    label: {
+      lineHeight: "1",
+    },
+    image: {
+      width: "100%",
+      height: "100%",
+      objectFit: "cover",
+      borderRadius: "inherit",
+    },
+    badge: {
+      position: "absolute",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      borderRadius: "full",
+      // em-relative, so a badge keeps its proportions at every avatar size.
+      borderWidth: "0.2em",
+      borderStyle: "solid",
+      borderColor: "white",
+    },
+  },
+  variants: {
+    // Chakra's scale: the container size, and Chakra's `calc(size / 2.5)`
+    // font size kept as a calc over the same token so both track a preset
+    // that rescales `sizes` (the dense preset does, by 0.88).
+    //
+    // The font size lands on the root *and* the label, as Chakra's did
+    // (through one variable). They are separate declarations so an app can
+    // move one without the other: the root's is the em basis for a badge,
+    // the label's is how big the initials are, and the two are not always
+    // the same wish.
+    size: {
+      "2xs": {
+        root: {
+          width: "4",
+          height: "4",
+          fontSize: "calc(token(sizes.4) / 2.5)",
+        },
+        label: { fontSize: "calc(token(sizes.4) / 2.5)" },
+      },
+      xs: {
+        root: {
+          width: "6",
+          height: "6",
+          fontSize: "calc(token(sizes.6) / 2.5)",
+        },
+        label: { fontSize: "calc(token(sizes.6) / 2.5)" },
+      },
+      sm: {
+        root: {
+          width: "8",
+          height: "8",
+          fontSize: "calc(token(sizes.8) / 2.5)",
+        },
+        label: { fontSize: "calc(token(sizes.8) / 2.5)" },
+      },
+      md: {
+        root: {
+          width: "12",
+          height: "12",
+          fontSize: "calc(token(sizes.12) / 2.5)",
+        },
+        label: { fontSize: "calc(token(sizes.12) / 2.5)" },
+      },
+      lg: {
+        root: {
+          width: "16",
+          height: "16",
+          fontSize: "calc(token(sizes.16) / 2.5)",
+        },
+        label: { fontSize: "calc(token(sizes.16) / 2.5)" },
+      },
+      xl: {
+        root: {
+          width: "24",
+          height: "24",
+          fontSize: "calc(token(sizes.24) / 2.5)",
+        },
+        label: { fontSize: "calc(token(sizes.24) / 2.5)" },
+      },
+      "2xl": {
+        root: {
+          width: "32",
+          height: "32",
+          fontSize: "calc(token(sizes.32) / 2.5)",
+        },
+        label: { fontSize: "calc(token(sizes.32) / 2.5)" },
+      },
+    },
+    /** Which corner the badge sits in. Chakra's placements, same offsets. */
+    placement: {
+      "top-start": {
+        badge: {
+          top: "0",
+          insetStart: "0",
+          transform: "translate(-25%, -25%)",
+        },
+      },
+      "top-end": {
+        badge: { top: "0", insetEnd: "0", transform: "translate(25%, -25%)" },
+      },
+      "bottom-start": {
+        badge: {
+          bottom: "0",
+          insetStart: "0",
+          transform: "translate(-25%, 25%)",
+        },
+      },
+      "bottom-end": {
+        badge: { bottom: "0", insetEnd: "0", transform: "translate(25%, 25%)" },
+      },
+    },
+  },
+  defaultVariants: {
+    size: "md",
+    placement: "bottom-end",
+  },
+});

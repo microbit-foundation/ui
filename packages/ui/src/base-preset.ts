@@ -23,11 +23,13 @@ import {
 } from "./base-tokens";
 // Config recipes are colocated with the shared-ui components they style; this
 // preset registers them so Panda merges them at codegen time.
+import { avatar } from "./Avatar.recipe";
 import { button } from "./Button.recipe";
 import { card } from "./Card.recipe";
 import { checkbox } from "./Checkbox.recipe";
 import { radio } from "./Radio.recipe";
 import { drawer } from "./Drawer.recipe";
+import { gridList } from "./GridList.recipe";
 import { heading } from "./Heading.recipe";
 import { input } from "./Input.recipe";
 import { numberField } from "./NumberField.recipe";
@@ -198,11 +200,13 @@ export const basePreset = definePreset({
       text,
     },
     slotRecipes: {
+      avatar,
       card,
       checkbox,
       dialog,
       drawer,
       field,
+      gridList,
       menu,
       numberField,
       radio,
@@ -267,6 +271,7 @@ export const basePreset = definePreset({
       // `size={["md", "lg"]}`, so generate the breakpoint-prefixed variants
       // too — otherwise the class lands on the element with no rule behind it
       // and the button silently falls back to the base size.
+      avatar: ["*"],
       button: [{ size: ["*"], responsive: true }, { variant: ["*"] }],
       checkbox: ["*"],
       heading: ["*"],
@@ -275,6 +280,7 @@ export const basePreset = definePreset({
       // as a runtime prop, so generate the breakpoint-prefixed variants too.
       dialog: [{ size: ["*"], responsive: true }, { centered: ["*"] }],
       drawer: ["*"],
+      gridList: ["*"],
       input: ["*"],
       radio: ["*"],
       select: ["*"],
