@@ -27,6 +27,13 @@ export interface ComboBoxProps<T extends object>
   /** Visible label. Use `aria-label` instead where the design has none. */
   label?: ReactNode;
   placeholder?: string;
+  /**
+   * Rendered inside the control, before the input — an icon for the current
+   * value, say. A ComboBox's control is a text input, so unlike a Select it
+   * cannot show anything but text for what is chosen; this is the way round
+   * that (react-select did it with a custom `SingleValue`).
+   */
+  startContent?: ReactNode;
   /** `SelectOption`s. */
   children: ReactNode;
   /**
@@ -66,6 +73,7 @@ export interface ComboBoxProps<T extends object>
 export const ComboBox = <T extends object>({
   label,
   placeholder,
+  startContent,
   children,
   indicator,
   emptyState,
@@ -88,6 +96,7 @@ export const ComboBox = <T extends object>({
       >
         {label != null && <RACLabel className={slots.label}>{label}</RACLabel>}
         <div className={cx(slots.trigger, cssProp ? css(cssProp) : undefined)}>
+          {startContent}
           <RACInput
             placeholder={placeholder}
             className={css({
