@@ -109,8 +109,12 @@ export const select = defineSlotRecipe({
     },
     content: {
       // Line the card up with the control, as a select should and as
-      // react-select did. RAC measures the popover's trigger into this var.
-      width: "var(--trigger-width)",
+      // react-select did. Exact for `Select`, whose trigger is the button RAC
+      // measures; for `ComboBox` the var is the *input's* width, which is the
+      // control's content box — narrower than the field by its padding and
+      // border. Hence minWidth rather than width, so a wider card still fits
+      // its content, and `contentCss` where a call site needs it flush.
+      minWidth: "var(--trigger-width)",
       bg: "white",
       color: "inherit",
       py: "2",
