@@ -767,6 +767,16 @@ w={23} />` on a _plain_ wrapper that spreads onto a `styled()` svg
     they are wrong for the whole coexistence period, i.e. for every screenshot
     anyone compares.
 
+41. **`styled` must be imported from `styled-system/jsx` to use the
+    `styled.tag` form.** `@microbit/ui` re-exports it, and the re-export is
+    fine for `styled(Component)` — but not for `<styled.table>`: Panda decides
+    whether a member expression is its factory by looking at where the
+    identifier was imported from, and a re-export is not that module. The JSX
+    renders, the classes land on the element, and no CSS exists for them —
+    gotcha #9's silent failure with a new cause. classroom's About-dialog
+    table lost every style this way (`border-collapse`, the caption, the row
+    rules), and only a grep of the generated CSS showed it.
+
 Also remember (from the RAC component work, not numbered): RAC re-selects a
 pressed radio value against current state after any earlier handler runs —
 "click the selected option again to deselect" interactions need a native
