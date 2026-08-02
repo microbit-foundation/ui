@@ -708,6 +708,32 @@ w={23} />` on a _plain_ wrapper that spreads onto a `styled()` svg
     Worth grepping for when adding any component: a literal variant name inside
     a recipe call is the smell.
 
+38. **react-select's behaviours are props on a ComboBox, not styling.** Four
+    of them, all of which classroom's sites relied on and none of which comes
+    free:
+
+    - It **opened its menu on click**; react-aria waits for typing
+      (`menuTrigger="focus"` restores it), which otherwise leaves the chevron
+      as the only way in.
+    - It **filtered on `label`, with `matchFrom: "start"` available**;
+      react-aria filters static children on `textValue`, always substring, so
+      prefix matching means filtering the children yourself.
+    - Its **`noOptionsMessage`** needs `allowsEmptyCollection`, or the popover
+      closes the moment nothing matches and the message never shows.
+    - Sites that **hid the menu with `display: none`** to gate on a query
+      length need a real "don't render the popover" prop; an empty list still
+      opens an empty card.
+
+    Also: react-aria renders a listbox's empty state as a `role="option"` row,
+    so a test that counts options counts "no matches" as a match.
+
+39. **`--trigger-width` is the input's width in a ComboBox, not the control's.**
+    RAC measures the element it anchors to, which for a ComboBox is the text
+    input inside the control — narrower than the field by its padding and
+    border, so a card sized from the var comes out visibly narrow. `Select` is
+    fine (its trigger is the button). Size the card at the call site, or accept
+    `minWidth`.
+
 Also remember (from the RAC component work, not numbered): RAC re-selects a
 pressed radio value against current state after any earlier handler runs —
 "click the selected option again to deselect" interactions need a native
@@ -810,10 +836,10 @@ Radio/RadioGroup, NumberField, Kbd/Code, `useMediaQuery`/`usePrevious`/
 
 Still outstanding, in classroom's likely order of need:
 
-- **Select/ComboBox** — retires react-select family-wide (classroom's
-  `SelectDropdown`/`SelectWithIcon` wrappers sketch the API; RAC ComboBox +
-  `useAsyncList` covers the async school-lookup case). 4 classroom sites,
-  1 data site.
+- ~~**Select/ComboBox**~~ — **built** (classroom, area 6), retiring
+  react-select there; one `select` slot recipe behind both. Sections,
+  multi-select and async loading via `useAsyncList` are still unbuilt — the
+  data-microbit-org school lookup will want the last of those.
 - **GridList** (promote from classroom's hand-rolled react-aria hooks; also
   ml-trainer's parked projects-page idea).
 - **Avatar** (+ badge) — classroom's class-roster identity; data has one
