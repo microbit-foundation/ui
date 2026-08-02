@@ -96,6 +96,12 @@ export interface ModalProps {
    */
   "aria-label"?: string;
   children: ReactNode;
+  /**
+   * `data-*` attributes land on the dialog box (where Chakra's went, on
+   * ModalContent), so end-to-end tests can address a dialog. Shells that
+   * forward their caller's data attributes can spread them straight in.
+   */
+  [key: `data-${string}`]: unknown;
 }
 
 /**
@@ -119,7 +125,11 @@ export const Modal = ({
   finalFocusRef,
   "aria-label": ariaLabel,
   children,
+  ...rest
 }: ModalProps) => {
+  const dataProps = Object.fromEntries(
+    Object.entries(rest).filter(([key]) => key.startsWith("data-")),
+  );
   const slots = dialog({ size, centered: isCentered });
   const motionlessClass = motionless
     ? css({
@@ -154,6 +164,7 @@ export const Modal = ({
     >
       <UnmountCallback callback={handleUnmount} />
       <RACModal
+        {...dataProps}
         style={contentStyle}
         className={cx(
           slots.content,
@@ -184,7 +195,11 @@ export const ModalHeader = ({
   className,
   level,
 }: SlotProps & {
-  /** Heading element level (default 3, like RAC). */ level?: number;
+  /**
+   * Heading element level. Defaults to 2: RAC's Dialog supplies that through
+   * HeadingContext for the `title` slot, not the bare Heading default of 3.
+   */
+  level?: number;
 }) => {
   const { slots } = useDialog();
   return (
