@@ -82,14 +82,23 @@ export const select = defineSlotRecipe({
       "&[data-invalid]": { borderColor: "danger.500" },
       "&[data-disabled]": { opacity: 0.4, cursor: "not-allowed" },
     },
+    // Whatever shows the current value: Select's SelectValue, ComboBox's
+    // input. One slot for both, so an app restyling the placeholder (say)
+    // does not have to know which kind of control it is looking at.
     value: {
       flex: "1",
       minWidth: 0,
       overflow: "hidden",
       textOverflow: "ellipsis",
       whiteSpace: "nowrap",
-      // RAC sets this on SelectValue when nothing is chosen.
+      outline: "none",
+      bg: "transparent",
+      color: "inherit",
+      font: "inherit",
+      // RAC sets data-placeholder on SelectValue when nothing is chosen; the
+      // ComboBox input uses the real placeholder attribute.
       "&[data-placeholder]": { color: "gray.500" },
+      _placeholder: { color: "gray.500" },
     },
     indicator: {
       display: "inline-flex",

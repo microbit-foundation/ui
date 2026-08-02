@@ -116,15 +116,7 @@ const ComboBoxInner = <T extends object>(
           <RACInput
             ref={ref}
             placeholder={placeholder}
-            className={css({
-              flex: "1",
-              minWidth: 0,
-              outline: "none",
-              bg: "transparent",
-              color: "inherit",
-              font: "inherit",
-              _placeholder: { color: "gray.500" },
-            })}
+            className={slots.value}
           />
           {indicator !== null && (
             <RACButton className={slots.indicator}>
