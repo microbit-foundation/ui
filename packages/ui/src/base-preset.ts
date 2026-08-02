@@ -277,6 +277,7 @@ export const basePreset = definePreset({
       drawer: ["*"],
       input: ["*"],
       radio: ["*"],
+      select: ["*"],
       switchRecipe: ["*"],
       text: ["*"],
       // Toast status is chosen at runtime from the toast content.
