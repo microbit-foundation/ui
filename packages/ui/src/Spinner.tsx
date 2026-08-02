@@ -23,6 +23,8 @@ export interface SpinnerProps {
    * "Loading..." by default, so a nameless spinner would regress on it.
    */
   "aria-label": string;
+  /** `data-*` attributes land on the spinner, for tests that wait on it. */
+  [key: `data-${string}`]: unknown;
 }
 
 /**
@@ -35,8 +37,12 @@ export const Spinner = ({
   css: cssProp,
   className,
   "aria-label": ariaLabel,
+  ...rest
 }: SpinnerProps) => (
   <span
+    {...Object.fromEntries(
+      Object.entries(rest).filter(([key]) => key.startsWith("data-")),
+    )}
     role="status"
     aria-label={ariaLabel}
     style={speed ? ({ "--spinner-speed": speed } as CSSProperties) : undefined}
