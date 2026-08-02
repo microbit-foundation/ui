@@ -740,6 +740,33 @@ w={23} />` on a _plain_ wrapper that spreads onto a `styled()` svg
     the ref is set, and nothing re-renders it afterwards. It needs state set
     from a layout effect.
 
+40. **During coexistence a call site's `css` beats a recipe only on
+    specificity — there are no layers to settle it.** Gotcha #21 says a flat
+    utility override wins every state; that is true _after_ the kill-switch,
+    where `utilities` outranks `recipes` as a layer. While Chakra is still
+    mounted the layers are stripped (#1), so the two are ordinary rules and the
+    winner is the more specific one, or the later one at equal specificity
+    (utilities are emitted after recipes, so equal-specificity ties go to the
+    call site). Two consequences, both measured in classroom's roster port:
+
+    - **A recipe declaration a call site is expected to override must be a
+      single-class selector.** The Avatar's contrast rule was
+      `&[data-light-bg] { color: gray.800 }`, at (0,2,0), and it beat a call
+      site's `css={{ color: "gray.600" }}` at (0,1,0) — a greyed-out offline
+      student came out gray.800. State-derived values belong in a custom
+      property the base declaration reads (`color: var(--avatar-color, …)`),
+      which is also what Chakra did and what keeps an inline value from
+      beating the call site outright.
+    - **Restating a state is not enough if the recipe combines two of them.**
+      A ListBox option's `&[data-selected] { _hover: … }` is (0,3,0); an
+      override's `_hover` (0,2,0) and `&[data-selected]` (0,2,0) both lose to
+      it, so a selected _and_ hovered row keeps the recipe's background. Match
+      the combination: `"&[data-selected]": { bg: …, _hover: { bg: … } }`.
+
+    Both disappear at the kill-switch, which makes them easy to write off — but
+    they are wrong for the whole coexistence period, i.e. for every screenshot
+    anyone compares.
+
 Also remember (from the RAC component work, not numbered): RAC re-selects a
 pressed radio value against current state after any earlier handler runs —
 "click the selected option again to deselect" interactions need a native
@@ -846,10 +873,14 @@ Still outstanding, in classroom's likely order of need:
   react-select there; one `select` slot recipe behind both. Sections,
   multi-select and async loading via `useAsyncList` are still unbuilt — the
   data-microbit-org school lookup will want the last of those.
-- **GridList** (promote from classroom's hand-rolled react-aria hooks; also
-  ml-trainer's parked projects-page idea).
-- **Avatar** (+ badge) — classroom's class-roster identity; data has one
-  site. classroom's theme adds a `2md` size.
+- ~~**GridList**~~, ~~**Avatar** (+ badge)~~ and ~~**ListBox**~~ — **built**
+  (classroom, area 7), retiring the last of its hand-rolled react-aria v3
+  hooks. Avatar reproduces Chakra's name-hash colour and its contrast rule
+  exactly, so a migrating roster keeps its colours. ListBox arrived with the
+  GridList because the two are the halves of the same question: rows with
+  their own controls need the grid, leaf options the listbox. `Checkbox`
+  gained `control={false}` at the same time, for a checkbox whose children
+  draw the selected state (a selectable tile).
 - Portal-as-primitive, TextField error slot, input adornments,
   Skeleton/SkeletonText, Breadcrumb, NumberInput; cheap typography
   wrappers (Tag/Mark) as first needed.
