@@ -118,11 +118,9 @@ export const select = defineSlotRecipe({
     },
     content: {
       // Line the card up with the control, as a select should and as
-      // react-select did. Exact for `Select`, whose trigger is the button RAC
-      // measures; for `ComboBox` the var is the *input's* width, which is the
-      // control's content box — narrower than the field by its padding and
-      // border. Hence minWidth rather than width, so a wider card still fits
-      // its content, and `contentCss` where a call site needs it flush.
+      // react-select did. `Select` gets this from RAC, whose trigger is the
+      // button it measures; `ComboBox` measures its own control and sets the
+      // width inline, because RAC's var is the *input's* width there.
       minWidth: "var(--trigger-width)",
       bg: "white",
       color: "inherit",
