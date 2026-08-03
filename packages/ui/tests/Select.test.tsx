@@ -117,3 +117,12 @@ it("ComboBox shows an empty state and can drop the indicator", () => {
   fireEvent.change(input, { target: { value: "zzz" } });
   expect(screen.getByText("Nothing found")).toBeDefined();
 });
+
+it("drops the chevron when asked, rather than silently keeping it", () => {
+  const { container } = render(
+    <Select aria-label="Fruit" indicator={null}>
+      <SelectOption id="a">Apple</SelectOption>
+    </Select>,
+  );
+  expect(container.querySelector('[class*="select__indicator"]')).toBeNull();
+});

@@ -5,6 +5,7 @@
  */
 import { CSSProperties } from "react";
 import { css, cx } from "styled-system/css";
+import { dataAttrs } from "./data-attrs";
 import { SystemStyleObject } from "styled-system/types";
 
 export interface SpinnerProps {
@@ -40,9 +41,7 @@ export const Spinner = ({
   ...rest
 }: SpinnerProps) => (
   <span
-    {...Object.fromEntries(
-      Object.entries(rest).filter(([key]) => key.startsWith("data-")),
-    )}
+    {...dataAttrs(rest)}
     role="status"
     aria-label={ariaLabel}
     style={speed ? ({ "--spinner-speed": speed } as CSSProperties) : undefined}

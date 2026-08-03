@@ -67,7 +67,11 @@ export interface ComboBoxProps<T extends object>
    * while positioning, which beats any class.
    */
   maxHeight?: number;
-  /** Per-instance overrides for the input. */
+  /**
+   * Per-instance overrides for the control — the box around the input, its
+   * `startContent` and its indicator, which is what `Select`'s `css` styles
+   * too. Reach the input itself through the `select` recipe's `value` slot.
+   */
   css?: SystemStyleObject;
   /** Per-instance overrides for the dropdown card. */
   contentCss?: SystemStyleObject;
