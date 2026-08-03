@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { cleanup, render, screen } from "@testing-library/react";
+import { act, cleanup, render, screen } from "@testing-library/react";
 import { afterEach, expect, it } from "vitest";
 import { Avatar, AvatarBadge, avatarInitials, token } from "../src";
 
@@ -81,4 +81,107 @@ it("gives the badge the placement it asks for", () => {
 it("exports its initials helper under a name worth claiming globally", () => {
   expect(avatarInitials("Ada Lovelace")).toBe("AL");
   expect(avatarInitials("  Ada  ")).toBe("A");
+});
+
+// The photo is loaded out of band, so these drive that loader rather than a
+// DOM <img>: jsdom fetches nothing, and the element only mounts once loaded.
+const imageLoader = () => {
+  const instances: {
+    src?: string;
+    onload?: () => void;
+    onerror?: () => void;
+  }[] = [];
+  class FakeImage {
+    onload?: () => void;
+    onerror?: () => void;
+    srcset?: string;
+    #src?: string;
+    constructor() {
+      instances.push(this as never);
+    }
+    set src(value: string) {
+      this.#src = value;
+    }
+    get src() {
+      return this.#src!;
+    }
+  }
+  const original = globalThis.Image;
+  globalThis.Image = FakeImage as never;
+  return {
+    instances,
+    restore: () => {
+      globalThis.Image = original;
+    },
+  };
+};
+
+it("shows the initials until the photo loads, then the photo", async () => {
+  const loader = imageLoader();
+  try {
+    render(<Avatar name="Ada Lovelace" src="ada.png" />);
+    expect(screen.getByRole("img", { name: "Ada Lovelace" }).textContent).toBe(
+      "AL",
+    );
+    expect(document.querySelector("img")).toBeNull();
+
+    await act(async () => loader.instances[0].onload!());
+    const img = document.querySelector("img")!;
+    expect(img.getAttribute("src")).toBe("ada.png");
+    expect(img.getAttribute("alt")).toBe("Ada Lovelace");
+  } finally {
+    loader.restore();
+  }
+});
+
+it("keeps the fallback when the photo fails, rather than a broken image", async () => {
+  const loader = imageLoader();
+  try {
+    render(<Avatar name="Ada Lovelace" src="gone.png" />);
+    await act(async () => loader.instances[0].onerror!());
+    expect(document.querySelector("img")).toBeNull();
+    expect(screen.getByRole("img", { name: "Ada Lovelace" }).textContent).toBe(
+      "AL",
+    );
+  } finally {
+    loader.restore();
+  }
+});
+
+it("starts again when the src changes", async () => {
+  const loader = imageLoader();
+  try {
+    const { rerender } = render(<Avatar name="Ada Lovelace" src="ada.png" />);
+    await act(async () => loader.instances[0].onload!());
+    expect(document.querySelector("img")!.getAttribute("src")).toBe("ada.png");
+
+    // The next person's photo: the old one must not linger while it loads.
+    rerender(<Avatar name="Grace Hopper" src="grace.png" />);
+    expect(document.querySelector("img")).toBeNull();
+    expect(screen.getByRole("img", { name: "Grace Hopper" }).textContent).toBe(
+      "GH",
+    );
+
+    await act(async () => loader.instances[1].onload!());
+    expect(document.querySelector("img")!.getAttribute("src")).toBe(
+      "grace.png",
+    );
+  } finally {
+    loader.restore();
+  }
+});
+
+it("derives no background colour once the photo is showing", async () => {
+  const loader = imageLoader();
+  try {
+    const { container } = render(<Avatar name="Ada Lovelace" src="ada.png" />);
+    const root = container.firstElementChild as HTMLElement;
+    expect(root.style.getPropertyValue("--avatar-bg")).toBe("#8b409d");
+
+    await act(async () => loader.instances[0].onload!());
+    expect(root.style.getPropertyValue("--avatar-bg")).toBe("");
+    expect(root.hasAttribute("data-loaded")).toBe(true);
+  } finally {
+    loader.restore();
+  }
 });

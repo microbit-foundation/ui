@@ -11,6 +11,7 @@ import {
   ReactElement,
   ReactNode,
   SVGProps,
+  useEffect,
   useState,
 } from "react";
 import { css, cx } from "styled-system/css";
@@ -82,6 +83,56 @@ export const GenericAvatarIcon = (props: SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
+type ImageStatus = "pending" | "loading" | "loaded" | "failed";
+
+/**
+ * Chakra's `useImage`: load the photo out of band and report how it went, so
+ * the avatar can show the initials or the icon meanwhile and keep showing
+ * them if it never arrives.
+ *
+ * The <img> element is only mounted once this says "loaded", which is what
+ * keeps a broken URL from leaving the browser's broken-image glyph inside the
+ * circle — the failure mode a fallback exists to prevent.
+ */
+const useImageStatus = (src?: string, srcSet?: string): ImageStatus => {
+  const [status, setStatus] = useState<ImageStatus>(
+    src ? "loading" : "pending",
+  );
+  useEffect(() => {
+    if (!src) {
+      setStatus("pending");
+      return;
+    }
+    // A new src starts again: without this the avatar would keep showing the
+    // previous person's photo, or stay stuck on a fallback it has outgrown.
+    setStatus("loading");
+    const img = new Image();
+    let current = true;
+    img.onload = () => {
+      if (current) {
+        setStatus("loaded");
+      }
+    };
+    img.onerror = () => {
+      if (current) {
+        setStatus("failed");
+      }
+    };
+    // srcSet before src, so the browser has the candidates to choose from
+    // when the load starts.
+    if (srcSet) {
+      img.srcset = srcSet;
+    }
+    img.src = src;
+    return () => {
+      current = false;
+      img.onload = null;
+      img.onerror = null;
+    };
+  }, [src, srcSet]);
+  return status;
+};
+
 export interface AvatarProps
   extends Omit<HTMLAttributes<HTMLSpanElement>, "color" | "children">,
     Pick<AvatarVariantProps, "size"> {
@@ -90,7 +141,10 @@ export interface AvatarProps
    * two people are unlikely to share one.
    */
   name?: string;
-  /** Photo. Falls back to the initials or the icon until it loads. */
+  /**
+   * Photo. The initials (or the icon) show until it has loaded, and go on
+   * showing if it fails — the avatar never renders a broken image.
+   */
   src?: string;
   srcSet?: string;
   /** Shown when there is no name. Defaults to Chakra's person glyph. */
@@ -130,7 +184,8 @@ export const Avatar = ({
   style,
   ...rest
 }: AvatarProps) => {
-  const [isLoaded, setIsLoaded] = useState(false);
+  const status = useImageStatus(src, srcSet);
+  const isLoaded = status === "loaded";
   const slots = avatar({ size });
   // Only while the image isn't showing, matching Chakra's `:not([data-loaded])`.
   const bg = name && !isLoaded ? colorFromName(name) : undefined;
@@ -159,13 +214,12 @@ export const Avatar = ({
           : style
       }
     >
-      {src ? (
+      {isLoaded ? (
         <img
           src={src}
           srcSet={srcSet}
           alt={name ?? iconLabel}
           className={slots.image}
-          onLoad={() => setIsLoaded(true)}
         />
       ) : name ? (
         <span role="img" aria-label={name} className={slots.label}>
