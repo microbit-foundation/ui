@@ -7,6 +7,14 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { RiCheckLine, RiTeamLine } from "react-icons/ri";
 import { Avatar, AvatarBadge, HStack, Stack, Text } from "../src";
 
+// Inline so the story needs no network — the point is the loaded state, not
+// where the bytes came from.
+const photo =
+  "data:image/svg+xml;utf8," +
+  encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><rect width="40" height="40" fill="#4a7b75"/><circle cx="20" cy="16" r="7" fill="#fff"/><path d="M6 40c0-9 6-14 14-14s14 5 14 14z" fill="#fff"/></svg>`,
+  );
+
 const meta = {
   title: "Data display/Avatar",
   component: Avatar,
@@ -58,13 +66,18 @@ export const Names: Story = {
   ),
 };
 
-/** No name: the generic glyph, or one supplied by the call site. */
+/**
+ * No name: the generic glyph, or one supplied by the call site. A photo is
+ * loaded out of band, so the initials show until it arrives — and go on
+ * showing if it never does, rather than leaving a broken image in the circle.
+ */
 export const Fallbacks: Story = {
   render: () => (
     <HStack gap={4}>
       <Avatar />
       <Avatar icon={<RiTeamLine />} iconLabel="Everyone" />
-      <Avatar src="https://microbit.org/favicon.ico" name="micro:bit" />
+      <Avatar src={photo} name="micro:bit" />
+      <Avatar src="https://example.invalid/nope.png" name="Ada Lovelace" />
     </HStack>
   ),
 };
