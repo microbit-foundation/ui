@@ -31,12 +31,14 @@ export interface CheckboxProps
    */
   children?: ReactNode | ((state: CheckboxState) => ReactNode);
   /**
-   * `false` drops the box, for a checkbox whose children draw the selected
-   * state themselves — a selectable tile, or an avatar that grows a tick.
-   * The label wrapper goes with it, so the children own the whole row,
-   * including the focus ring the box would otherwise carry.
+   * Whether to draw the box. `false` is for a checkbox whose children draw
+   * the selected state themselves — a selectable tile, or an avatar that
+   * grows a tick. The label wrapper goes with it, so the children own the
+   * whole row, including the focus ring the box would otherwise carry.
+   *
+   * @default true
    */
-  control?: false;
+  control?: boolean;
 }
 
 /**

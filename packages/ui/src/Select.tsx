@@ -44,8 +44,13 @@ export interface SelectProps<T extends object>
   placeholder?: string;
   /** `SelectOption`s. */
   children: ReactNode;
-  /** Replaces the chevron. */
-  indicator?: ReactNode;
+  /**
+   * Replaces the chevron; `null` removes it. Rarely right on a Select — the
+   * chevron is the only thing marking its trigger as a dropdown rather than
+   * a label, where a ComboBox's text input speaks for itself (which is why
+   * classroom's chevron-less autocomplete is a ComboBox).
+   */
+  indicator?: ReactNode | null;
   /** Placement of the dropdown relative to the trigger. */
   placement?: PopoverProps["placement"];
   /**
@@ -97,9 +102,11 @@ export const Select = <T extends object>({
               isPlaceholder ? placeholder ?? "" : defaultChildren
             }
           </SelectValue>
-          <span className={slots.indicator} aria-hidden>
-            {indicator ?? <Icon as={RiArrowDownSLine} />}
-          </span>
+          {indicator !== null && (
+            <span className={slots.indicator} aria-hidden>
+              {indicator ?? <Icon as={RiArrowDownSLine} />}
+            </span>
+          )}
         </RACButton>
         <Popover
           placement={placement}

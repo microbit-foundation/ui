@@ -24,6 +24,7 @@ import { dialog } from "styled-system/recipes";
 import { ConditionalValue, SystemStyleObject } from "styled-system/types";
 import { useIntl } from "react-intl";
 import { CloseIcon } from "./CloseIcon";
+import { dataAttrs } from "./data-attrs";
 import { uiMessage } from "./messages";
 import { UnmountCallback } from "./UnmountCallback";
 
@@ -240,11 +241,6 @@ interface SlotProps {
   /** `data-*` attributes land on the slot element, as they did on Chakra's. */
   [key: `data-${string}`]: unknown;
 }
-
-const dataAttrs = (props: object) =>
-  Object.fromEntries(
-    Object.entries(props).filter(([key]) => key.startsWith("data-")),
-  );
 
 /** Modal title. Rendered as RAC's labelling heading for the dialog. */
 export const ModalHeader = ({

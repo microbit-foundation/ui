@@ -5,7 +5,7 @@
  */
 import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, expect, it } from "vitest";
-import { Avatar, AvatarBadge, token } from "../src";
+import { Avatar, AvatarBadge, avatarInitials, token } from "../src";
 
 afterEach(cleanup);
 
@@ -76,4 +76,9 @@ it("gives the badge the placement it asks for", () => {
   expect(screen.getByTestId("badge").className).toContain(
     "placement_top-start",
   );
+});
+
+it("exports its initials helper under a name worth claiming globally", () => {
+  expect(avatarInitials("Ada Lovelace")).toBe("AL");
+  expect(avatarInitials("  Ada  ")).toBe("A");
 });

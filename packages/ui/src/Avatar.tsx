@@ -50,8 +50,12 @@ const isLight = (hex: string): boolean => {
   return (r * 299 + g * 587 + b * 114) / 1000 >= 128;
 };
 
-/** Chakra's `initials`: first letter of the first and last words. */
-export const initials = (name: string): string => {
+/**
+ * Chakra's `initials`: first letter of the first and last words. Prefixed
+ * because it is exported from the package root, where a bare `initials`
+ * would be a broad name to claim.
+ */
+export const avatarInitials = (name: string): string => {
   const names = name.trim().split(" ");
   const firstName = names[0] ?? "";
   const lastName = names.length > 1 ? names[names.length - 1] : "";
@@ -117,7 +121,7 @@ export const Avatar = ({
   srcSet,
   icon,
   iconLabel = " avatar",
-  getInitials = initials,
+  getInitials = avatarInitials,
   showBorder,
   size,
   children,
