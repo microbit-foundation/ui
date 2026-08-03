@@ -8,6 +8,7 @@ import { ReactNode } from "react";
 import {
   AspectRatio,
   Center,
+  Container,
   Grid,
   GridItem,
   HStack,
@@ -72,6 +73,17 @@ export const WrapLayout: Story = {
         <Cell key={i}>Item {i + 1}</Cell>
       ))}
     </Wrap>
+  ),
+};
+
+/** Container centres itself and caps its width (Chakra's Container). */
+export const ContainerLayout: Story = {
+  render: () => (
+    <Container maxW="md" bg="gray.100" borderRadius="md" px={4} py={3}>
+      <Text fontSize="sm">
+        A centred column capped at <code>maxW</code>.
+      </Text>
+    </Container>
   ),
 };
 

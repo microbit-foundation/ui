@@ -10,10 +10,16 @@ import {
   Code,
   HStack,
   Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalFooter,
+  ModalHeader,
   Stack,
   Text,
   useBreakpointValue,
   useClipboard,
+  useDisclosure,
   useMediaQuery,
   usePrevious,
 } from "../src";
@@ -70,6 +76,40 @@ export const UseBreakpointValue: Story = {
         Active breakpoint: <Code>{breakpoint}</Code> — resize the viewport to
         see it change.
       </Text>
+    );
+  },
+};
+
+/**
+ * The controlled dialog shape every Chakra call site ports to, and the one a
+ * dialog with more than one opener needs. A dialog with a single trigger
+ * beside it can skip the hook entirely — see Overlays/Modal's "With Trigger".
+ */
+export const UseDisclosure: Story = {
+  name: "useDisclosure",
+  render: () => {
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    return (
+      <>
+        <Button variant="primary" onPress={onOpen}>
+          Open dialog
+        </Button>
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalHeader>Driven by useDisclosure</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>
+              The hook holds the open state; the dialog closes through{" "}
+              <Code>onClose</Code> however it is dismissed.
+            </Text>
+          </ModalBody>
+          <ModalFooter>
+            <Button variant="primary" onPress={onClose}>
+              Done
+            </Button>
+          </ModalFooter>
+        </Modal>
+      </>
     );
   },
 };

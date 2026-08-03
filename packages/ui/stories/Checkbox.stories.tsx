@@ -4,7 +4,8 @@
  * SPDX-License-Identifier: MIT
  */
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Checkbox, Stack } from "../src";
+import { RiCheckLine } from "react-icons/ri";
+import { Checkbox, HStack, Icon, Stack, Text } from "../src";
 
 const meta = {
   title: "Forms/Checkbox",
@@ -43,5 +44,42 @@ export const Sizes: Story = {
         </Checkbox>
       ))}
     </Stack>
+  ),
+};
+
+/**
+ * `control={false}` drops the box (and its label wrapper): the children draw
+ * the selected state themselves — a selectable tile here. The box carried the
+ * focus ring, so the root has to restate one; render-prop children receive
+ * the state to draw with. ListBox's "custom selected state" story shows the
+ * same idea on an avatar.
+ */
+export const WithoutTheBox: Story = {
+  render: () => (
+    <HStack gap={3}>
+      {["Blocks", "Python"].map((name) => (
+        <Checkbox
+          key={name}
+          control={false}
+          defaultSelected={name === "Blocks"}
+          css={{
+            px: 6,
+            py: 4,
+            borderRadius: "md",
+            borderWidth: "2px",
+            borderColor: "gray.200",
+            "&[data-selected]": { borderColor: "brand.500", bg: "brand.50" },
+            "&[data-focus-visible]": { focusShadow: "outline" },
+          }}
+        >
+          {({ isSelected }) => (
+            <HStack gap={2}>
+              <Text fontWeight="semibold">{name}</Text>
+              {isSelected && <Icon as={RiCheckLine} aria-hidden />}
+            </HStack>
+          )}
+        </Checkbox>
+      ))}
+    </HStack>
   ),
 };
