@@ -16,9 +16,10 @@ migration teaches something new, PR it back into this doc** — the gotcha
 catalog grew throughout ml-trainer's run and will keep growing. When a
 migration completes, its status doc retires: everything transferable folds
 into this doc and the doc is deleted (full histories live in each repo's
-git history). ml-trainer's and python-editor's are both retired
-(2026-07-30); their remaining app-local follow-ups moved to the owner's
-tracking and each repo's `AGENTS.md` operational notes.
+git history). All three completed migrations' docs are retired — ml-trainer's
+and python-editor's on 2026-07-30, classroom's on 2026-08-03 — with their
+remaining app-local follow-ups moved to the owner's tracking and each repo's
+`AGENTS.md` operational notes.
 
 ## The kit
 
@@ -30,11 +31,13 @@ tracking and each repo's `AGENTS.md` operational notes.
 - `bin/gen-chakra-tokens.mjs` — snapshots Chakra v2 default scales in Panda
   token format; audit aid only (`base-tokens.ts` is hand-maintained — do not
   overwrite it). Delete once the family migration is done.
-- The fidelity harness pattern (see "Fidelity harness") — copy
-  **python-editor's** `bin/fidelity.mjs` + `src/e2e/fidelity.spec.ts` as
-  starting points (the newer generation: adds `--baseline-only`/
-  `--compare-only` halves for paired-package runs and an HTTPS_PROXY
-  passthrough for sandboxed environments; ml-trainer's was the original).
+- The fidelity harness pattern (see "Fidelity harness") — built per migration
+  and deleted after it, so copy from git rather than a live path:
+  **python-editor's** `bin/fidelity.mjs` + `src/e2e/fidelity.spec.ts` at
+  `f322b68e` is the newer generation (adds `--baseline-only`/`--compare-only`
+  halves for paired-package runs and an HTTPS_PROXY passthrough for sandboxed
+  environments); ml-trainer's at `043e5bd1` was the original and has the most
+  states.
 - The consumption setup itself: [`packages/ui/README.md`](../packages/ui/README.md)
   (preset stack, `styled-system` alias, cascade layers, PostCSS wiring,
   react-intl, legacy-Safari support, the CSS-variable contract, runtime
@@ -176,15 +179,41 @@ matching old commit for the baseline half. Worked method (python-editor,
    private pairing needed.
 
 Both python-editor sides came back pixel-identical across 29 states after
-one real find (gotcha #22) — the harness pays for itself.
+one real find (gotcha #22) — the harness pays for itself. Then delete it: see
+the next section.
 
 ## Fidelity harness
 
 Screenshot-diffs a list of app states between a baseline ref (temp detached
 worktree, node_modules symlinked, own Panda regen, dev server on a second
-port) and the working tree, via a dedicated Playwright project. ml-trainer's
-`bin/fidelity.mjs` + `src/e2e/fidelity.spec.ts` are the reference
-implementation (~43 states). What made it reliable:
+port) and the working tree, via a dedicated Playwright project.
+
+**Build it for the migration; delete it when the migration ends** (decided
+2026-08-03). Its value comes from a baseline that differs by construction — the
+pre-flip Chakra build. Once Chakra is gone the baseline is merely the previous
+commit, which makes it a general visual-regression suite: a different
+proposition, with font-rendering-sensitive image baselines and per-app
+determinism to maintain. Two things settled it. The harness symlinks one
+`node_modules` into the baseline worktree, so it **cannot see a dependency
+change** — the alpha.14 → alpha.15 bump altered Tooltip, Icon and Avatar
+rendering in two apps and no run would have flagged any of it — and masking a
+non-deterministic region once hid two pills losing their dashed border for a
+whole commit. What actually caught bugs was asserting computed styles on named
+properties, not diffing images. Visual coverage of the library's own components
+is the better place for the standing check, and is a library job rather than
+four app jobs.
+
+Reference implementations, recoverable from git rather than live in the apps:
+
+- ml-trainer `bin/fidelity.mjs` + `src/e2e/fidelity.spec.ts` at **`043e5bd1`** —
+  the fuller one, ~43 states.
+- python-editor `bin/fidelity.mjs` + `src/e2e/fidelity.spec.ts` at
+  **`f322b68e`** — adds the OSS/private split and the paired-package baseline
+  above.
+- classroom never had one: its migration was verified with two throwaway
+  harnesses and per-screen measurement, and step 6 was closed rather than built.
+
+What made it reliable, for whoever rebuilds it:
 
 - **Determinism requires stubbing in-page randomness** via
   `context.addInitScript`: seed `Math.random`, and make
@@ -885,6 +914,40 @@ Censuses were taken July 2026 against Chakra v2.10 in all apps.
   someone with a device or a Safari 14 VM should confirm before deciding
   whether to swap them back to the pattern.
 
+- **Token versus literal in component spacing — one decision, every app on the
+  dense preset.** The library's button-icon gap is the token `2`, which the
+  dense preset scales to 7.04px, where Chakra's `iconSpacing` was a literal
+  `0.5rem`: every button with a `leftIcon`/`rightIcon` is ~0.97px narrower than
+  its Chakra original. A Radio's ring-to-label gap is the same story, 1px
+  narrower. Both are defensible — the token respects the density scale, the
+  literal preserves the Chakra rendering — but it wants deciding once in the
+  library rather than rediscovering per app. It is also the reason a
+  "pixel-identical" claim needs a caveat.
+
+- **The density scale itself**: keep the × 0.88 spacing / × 0.9 fontSizes grid
+  or align the family on one scale (gotcha #25). Now a one-line change in the
+  two apps that stack `dense-preset`, and visible either way, so it wants
+  sign-off rather than a quiet choice.
+
+- **The brand ramp review.** classroom and python-editor ship
+  byte-identical `brand` ramps, ported verbatim with two long-standing quirks
+  (the 600/700 lightness inversion; the light end a grade off), and their
+  `brand.50`/`brand.900` are **placeholders** clamped to the nearest real stop
+  purely so nothing resolves to the base preset's blue (presets deep-merge).
+  Real values need the brand team, with the question of whether `brand` becomes
+  a monotonic ramp. `../python-editor-v3-microbit/docs/brand-ramp-review.md` is
+  the live document and any answer should land in both apps. One correction due
+  there: it records `brand.50` as unreferenced, but the base preset's
+  `button.secondaryActiveBg` resolves to it, so a python-editor `secondary`
+  button would show a light-blue active wash — it uses none today, so nothing
+  is broken, but that app should either set the token or fill its ramp.
+
+- **`Information` and `Success` are English in the library's Welsh and Italian
+  catalogs.** They were backfilled from classroom's translations, but these two
+  had no source string anywhere in the family. `Error` is translated yet
+  **derived** from the noun inside longer sentences (`Gwall`, `Errore`) rather
+  than reviewed, so it wants a translator's eye at the same time.
+
 ### v1 surface (build in the library, on demand)
 
 Policy: anything _clearly core_ design-system goes in the library even with
@@ -930,26 +993,44 @@ Still outstanding, in classroom's likely order of need:
 
 ### App order and notes
 
-1. **classroom** — first (moderate size, no OSS split, heaviest Modal user
-   = good packaging stress test; exercises Select/ComboBox, GridList, Menu
-   checkable items early). Census highlights: theme is the ancestor/sibling
-   of data-microbit-org's (same Heading `label`/`subtitle` variants with
-   hardcoded `#cd0365`, Avatar `2md`, `radii.button: 2rem`,
-   `withDefaultVariant(secondary)`, `outline`/`outlineDark` shadows, the
-   family button vocabulary + a classroom-only `active`). `brand` is
-   python-editor's legacy purple scale + `blimpTeal` — the ramp-generation
-   decision lands here first. Biggest colour-audit surface: ~40 loose named
-   rgba constants in `theme/constants/colors.ts` used in components and
-   even inside theme variants — prime semantic-token conversion. **Latent
-   bug**: the Alert `toast` variant references `bg: "code.error"` but
-   classroom defines no `code` colours — fix in migration.
-   Already-half-migrated: react-aria v3 hooks power the class-roster
-   GridList and a SendCodeDialog listbox — these become straight RAC
-   components. **react-select is load-bearing** (4 sites incl. the two
-   common wrappers). Toasts all `position: "top"`, `variant: "toast"` —
-   fit the shared Toast as-is. `BoxProps` forwarding: 12 files. Dead
-   tooling: `styleguide.config.js` (react-styleguidist) is stale prior art.
-   Fonts declared without fallback stacks — minor fix at migration.
+1. **classroom** — **DONE (2026-08-03)**, third complete migration and the
+   heaviest Modal user (19, the packaging stress test). Its status doc is
+   retired; the operational notes live in the app's `AGENTS.md` and the
+   transferable lessons are in this playbook (gotchas #31–#42, the fidelity
+   decision above). Salient outcomes for the family:
+   - **Its theme is the ancestor/sibling of data-microbit-org's**, so that
+     migration inherits most of this work: the black-on-white button system
+     now resolves through `button.*` semantic tokens (see Cross-app
+     vocabulary), the density scale comes from `@microbit/ui/dense-preset`,
+     and the Heading `label`/`subtitle` variants with their hardcoded
+     `#cd0365` are still app-side in both — a convergence candidate, with the
+     pink named semantically, when data-microbit-org ports them.
+   - **Built in the library on the way**: Select/ComboBox, GridList, ListBox,
+     Avatar (+ badge), `Checkbox control={false}`, `MenuOptionGroup type`, the
+     Modal/Spinner `data-*` passthrough, and the Input/TextField variant
+     forwarding fix (gotcha #37). Tooltip became a config recipe with Chakra's
+     exact colour, padding and radius — the values had drifted while they were
+     inline in the component.
+   - **Its link buttons are semibold** where the library's `link` variant is
+     normal; restated at the three call sites rather than changed in the
+     library, since the other two apps already ship on the library's value.
+     Another convergence candidate.
+   - **`@vitejs/plugin-legacy` removed.** Every browser at its floor has native
+     ESM, so the SystemJS fallback duplicated every chunk — including each
+     locale catalog — for nobody, and the plugin was overriding `build.target`.
+     Production build went ~22s → ~6s. Check the same before assuming another
+     app needs it; data-microbit-org is the exception (its MY_DATA page is
+     served over `file:`, where the SystemJS path is always taken).
+   - **~40 loose rgba constants** in `theme/constants/colors.ts` were the
+     biggest colour-audit surface. Most are now dead: 6 of 37 exports are still
+     referenced, the rest await deletion. The named ones that earned a home
+     became app-preset tokens or inline literals per value — a plain neutral
+     serving two unrelated roles has no semantic name to give it.
+   - The census's **latent `code.error` toast bug was unreachable**: all four
+     toasts are `status: "info"`, so that branch of the Alert variant never
+     rendered. Its `size="lg"` Texts, by contrast, were a real inert bug at 5
+     sites (see gotcha #31's neighbourhood) — the library recipe has the `lg`
+     the Chakra theme lacked, so they now render at the size the code asked for.
 2. **python-editor-v3** — **DONE (2026-07-30)**, second complete migration
    and the first with an OSS/private split; went ahead of classroom. Its
    status doc is retired (lessons folded into this playbook — gotchas
