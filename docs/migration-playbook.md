@@ -777,6 +777,27 @@ w={23} />` on a _plain_ wrapper that spreads onto a `styled()` svg
     table lost every style this way (`border-collapse`, the caption, the row
     rules), and only a grep of the generated CSS showed it.
 
+42. **An app preset's `globalCss` entry REPLACES the base preset's for the
+    same selector — it does not merge into it.** Everywhere else in a Panda
+    preset stack, later presets deep-merge; `globalCss` keys do not. So an app
+    that adds, say, `body: { WebkitFontSmoothing: "antialiased" }` silently
+    drops the base preset's whole `body` block — its colour, font family,
+    kerning, line height and background — because the base preset also keys on
+    `body`.
+
+    It is invisible in the source (both files look like additions), invisible
+    to a typecheck, and page-wide when it lands: classroom's text went from
+    gray.800 to black at its kill-switch, and would have lost `font-feature-
+settings: "kern"` too, which shifts every glyph on every screen.
+
+    Rules: an app preset's `globalCss` must not use a selector the base preset
+    uses (currently `html`, `body`, `*::placeholder`, `button, [role='button']`
+    and `h1, h2, h3, h4, h5, h6`), or must restate what it is replacing. Group
+    selectors count as distinct keys, so `"html, body, #root"` is safe where
+    `body` is not — and an inherited property (font smoothing, colour) can
+    simply ride on a group selector that includes `html`. Check the generated
+    CSS for the base preset's body block after adding anything.
+
 Also remember (from the RAC component work, not numbered): RAC re-selects a
 pressed radio value against current state after any earlier handler runs —
 "click the selected option again to deselect" interactions need a native
