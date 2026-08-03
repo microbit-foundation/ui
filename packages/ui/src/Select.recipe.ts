@@ -77,8 +77,6 @@ export const select = defineSlotRecipe({
         focusShadow: "outline",
         borderColor: "focusBorder",
       },
-      // A ComboBox's control is an input, which is focused whenever it is open.
-      "&[data-focused]": { focusShadow: "outline", borderColor: "focusBorder" },
       "&[data-invalid]": { borderColor: "danger.500" },
       "&[data-disabled]": { opacity: 0.4, cursor: "not-allowed" },
     },
