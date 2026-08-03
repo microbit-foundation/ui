@@ -57,6 +57,12 @@ export const Icon = ({
         lineHeight: "1em",
         flexShrink: 0,
         fill: "currentColor",
+        // Chakra's Icon set this on the element itself, and an inline-block
+        // icon sits ~3px off without it. Panda's preflight happens to set it
+        // on every svg, which hid the omission in apps that had already
+        // flipped — classroom measured the difference at its kill-switch,
+        // where the preflight arrived and moved every icon back.
+        verticalAlign: "middle",
         ...cssProp,
       }),
       className,
