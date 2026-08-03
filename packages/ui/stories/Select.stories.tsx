@@ -10,7 +10,19 @@ import { ComboBox, Icon, Select, SelectOption, Stack } from "../src";
 
 const meta = {
   title: "Forms/Select",
-} satisfies Meta;
+  component: Select,
+  // Children come from the render functions; `null` just satisfies the type.
+  args: { label: "Fruit", placeholder: "Select…", children: null },
+  argTypes: {
+    isDisabled: { control: "boolean" },
+    isInvalid: { control: "boolean" },
+    maxHeight: { control: "number" },
+    placement: {
+      control: "select",
+      options: ["bottom start", "bottom end", "top start", "top end"],
+    },
+  },
+} satisfies Meta<typeof Select>;
 export default meta;
 
 type Story = StoryObj<typeof meta>;
@@ -22,6 +34,14 @@ const options = FRUIT.map((f) => (
     {f}
   </SelectOption>
 ));
+
+export const Playground: Story = {
+  render: (args) => (
+    <Stack gap={5} css={{ maxWidth: "16rem" }}>
+      <Select {...args}>{options}</Select>
+    </Stack>
+  ),
+};
 
 /** A listbox behind a button: pick one of a known set, no typing. */
 export const Basic: Story = {
@@ -146,6 +166,26 @@ export const LongListWithACappedHeight: Story = {
             Option {i + 1}
           </SelectOption>
         ))}
+      </Select>
+    </Stack>
+  ),
+};
+
+/**
+ * Per-instance overrides: `css` styles the control, `contentCss` the dropdown
+ * card. An app-wide restyle belongs in an app-preset recipe variant instead
+ * (classroom's rounded `classroom` variant is one).
+ */
+export const Overridden: Story = {
+  render: () => (
+    <Stack gap={5} css={{ maxWidth: "16rem" }}>
+      <Select
+        label="Fruit"
+        placeholder="Select…"
+        css={{ borderRadius: "full", px: 5 }}
+        contentCss={{ borderRadius: "xl" }}
+      >
+        {options}
       </Select>
     </Stack>
   ),
