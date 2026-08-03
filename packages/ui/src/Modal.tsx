@@ -13,9 +13,11 @@ import {
 import {
   Button as RACButton,
   Dialog,
+  DialogTrigger as RACDialogTrigger,
   Heading as RACHeading,
   Modal as RACModal,
   ModalOverlay,
+  OverlayTriggerStateContext,
 } from "react-aria-components";
 import { css, cx } from "styled-system/css";
 import { dialog } from "styled-system/recipes";
@@ -49,8 +51,14 @@ export type ModalSize = ConditionalValue<
 >;
 
 export interface ModalProps {
-  isOpen: boolean;
-  onClose: () => void;
+  /**
+   * Whether the dialog is showing. Required unless the Modal is inside a
+   * `DialogTrigger`, which owns the state itself — pass both this and
+   * `onClose`, or neither.
+   */
+  isOpen?: boolean;
+  /** Called when the dialog asks to close. Pairs with `isOpen`. */
+  onClose?: () => void;
   size?: ModalSize;
   /** Allow closing by clicking the backdrop (default true; Escape always closes). */
   isDismissable?: boolean;
@@ -108,6 +116,18 @@ export interface ModalProps {
  * Modal — a focus-trapping dialog. Collapses Chakra's
  * Modal/ModalOverlay/ModalContent into a single shell; place ModalHeader,
  * ModalBody and ModalFooter inside.
+ *
+ * Two ways to drive it:
+ *
+ * - **Controlled** (`isOpen` + `onClose`), which is what a Chakra app ports
+ *   to, and what any dialog with more than one opener needs — a menu item and
+ *   a toolbar button opening the same dialog, or one opened from a handler
+ *   after an async result.
+ * - **Inside a `DialogTrigger`**, with neither prop: react-aria holds the
+ *   open state, the trigger opens it, and `ModalCloseButton` and the footer's
+ *   `useDialogClose()` still close it. Prefer this where a dialog has exactly
+ *   one trigger sitting next to it — there is no state to hold, and none to
+ *   get out of step.
  */
 export const Modal = ({
   isOpen,
@@ -127,6 +147,11 @@ export const Modal = ({
   children,
   ...rest
 }: ModalProps) => {
+  // Set by a DialogTrigger (or any react-aria overlay trigger) above us. When
+  // `isOpen` is given it is ignored: RAC's ModalOverlay prefers an explicit
+  // prop over the context, and so do we for the close function.
+  const triggerState = useContext(OverlayTriggerStateContext);
+  const close = onClose ?? (() => triggerState?.close());
   const dataProps = dataAttrs(rest);
   const slots = dialog({ size, centered: isCentered });
   const motionlessClass = motionless
@@ -149,7 +174,7 @@ export const Modal = ({
       isOpen={isOpen}
       onOpenChange={(open) => {
         if (!open) {
-          onClose();
+          close();
         }
       }}
       isDismissable={isDismissable}
@@ -171,7 +196,7 @@ export const Modal = ({
         )}
       >
         <Dialog role={role} aria-label={ariaLabel} className={slots.inner}>
-          <SlotContext.Provider value={{ slots, onClose }}>
+          <SlotContext.Provider value={{ slots, onClose: close }}>
             {children}
           </SlotContext.Provider>
         </Dialog>
@@ -179,6 +204,34 @@ export const Modal = ({
     </ModalOverlay>
   );
 };
+
+/**
+ * DialogTrigger — react-aria-components' <DialogTrigger>: wrap a trigger
+ * element and a `Modal`, and the open state is theirs rather than yours.
+ *
+ * ```tsx
+ * <DialogTrigger>
+ *   <Button>Settings</Button>
+ *   <Modal size="lg">
+ *     <ModalHeader>Settings</ModalHeader>
+ *     …
+ *   </Modal>
+ * </DialogTrigger>
+ * ```
+ *
+ * Only for a dialog with a single trigger beside it. A dialog opened from
+ * more than one place, from a menu item (which cannot hold a dialog — a
+ * non-collection child truncates the menu), or from a handler, wants the
+ * controlled `Modal` instead.
+ */
+export const DialogTrigger = RACDialogTrigger;
+
+/**
+ * The current dialog's close function — the same one `ModalCloseButton` uses,
+ * for a footer's own Cancel/Done buttons. Works in both modes, so a dialog's
+ * content need not know which is driving it.
+ */
+export const useDialogClose = () => useDialog().onClose;
 
 interface SlotProps {
   children?: ReactNode;
