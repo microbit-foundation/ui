@@ -51,15 +51,7 @@ export type ModalSize = ConditionalValue<
   | "full"
 >;
 
-export interface ModalProps {
-  /**
-   * Whether the dialog is showing. Required unless the Modal is inside a
-   * `DialogTrigger`, which owns the state itself — pass both this and
-   * `onClose`, or neither.
-   */
-  isOpen?: boolean;
-  /** Called when the dialog asks to close. Pairs with `isOpen`. */
-  onClose?: () => void;
+export interface ModalOwnProps {
   size?: ModalSize;
   /** Allow closing by clicking the backdrop (default true; Escape always closes). */
   isDismissable?: boolean;
@@ -112,6 +104,29 @@ export interface ModalProps {
    */
   [key: `data-${string}`]: unknown;
 }
+
+/**
+ * A Modal you drive yourself. Also the type for a component that *forwards*
+ * modal props — `Omit<ControlledModalProps, "children">` — because a spread
+ * cannot be matched against the union `ModalProps` is: TypeScript has no way
+ * to know which half of it an object with `isOpen?: boolean` satisfies.
+ */
+export type ControlledModalProps = ModalOwnProps & {
+  /** Whether the dialog is showing. */
+  isOpen: boolean;
+  /** Called when the dialog asks to close. */
+  onClose: () => void;
+};
+
+/**
+ * The props of a `Modal`: its own, plus an open state that is either entirely
+ * yours or entirely a `DialogTrigger`'s. Never half of each — `isOpen`
+ * without `onClose` leaves the close button and Escape with nothing to call,
+ * so the pair is enforced rather than merely documented.
+ */
+export type ModalProps =
+  | ControlledModalProps
+  | (ModalOwnProps & { isOpen?: never; onClose?: never });
 
 /**
  * Modal — a focus-trapping dialog. Collapses Chakra's
