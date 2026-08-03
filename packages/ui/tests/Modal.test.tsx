@@ -3,10 +3,23 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { cleanup, render, screen } from "@testing-library/react";
+import {
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/react";
 import { IntlProvider } from "react-intl";
-import { afterEach, expect, it } from "vitest";
-import { Modal, ModalBody, ModalHeader } from "../src";
+import { afterEach, expect, it, vi } from "vitest";
+import {
+  Button,
+  DialogTrigger,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalHeader,
+} from "../src";
 
 afterEach(cleanup);
 
@@ -43,4 +56,48 @@ it("labels the dialog from the header, at h2 by default", () => {
     </IntlProvider>,
   );
   expect(screen.getByRole("heading", { name: "Title" }).tagName).toBe("H3");
+});
+
+// The uncontrolled mode: a DialogTrigger holds the state, so the call site
+// holds none.
+it("opens from a DialogTrigger and closes from inside, with no app state", async () => {
+  render(
+    <IntlProvider locale="en">
+      <DialogTrigger>
+        <Button>Open</Button>
+        <Modal aria-label="Settings">
+          <ModalBody>Body</ModalBody>
+          <ModalCloseButton />
+        </Modal>
+      </DialogTrigger>
+    </IntlProvider>,
+  );
+  expect(screen.queryByRole("dialog")).toBeNull();
+
+  fireEvent.click(screen.getByRole("button", { name: "Open" }));
+  expect(screen.getByRole("dialog")).toBeTruthy();
+
+  fireEvent.click(screen.getByRole("button", { name: /close/i }));
+  await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
+  // Focus restoration to the trigger is react-aria's, and doesn't settle
+  // under jsdom — it is asserted in a browser, not here.
+});
+
+it("a controlled Modal ignores an ambient trigger state", () => {
+  const onClose = vi.fn();
+  render(
+    <IntlProvider locale="en">
+      <DialogTrigger>
+        <Button>Open</Button>
+        <Modal aria-label="Settings" isOpen onClose={onClose}>
+          <ModalBody>Body</ModalBody>
+          <ModalCloseButton />
+        </Modal>
+      </DialogTrigger>
+    </IntlProvider>,
+  );
+  // Open despite the trigger never being pressed, and closing calls the prop.
+  expect(screen.getByRole("dialog")).toBeTruthy();
+  fireEvent.click(screen.getByRole("button", { name: /close/i }));
+  expect(onClose).toHaveBeenCalledTimes(1);
 });

@@ -8,12 +8,14 @@ import { useState } from "react";
 import {
   Button,
   ButtonGroup,
+  DialogTrigger,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalFooter,
   ModalHeader,
   Text,
+  useDialogClose,
 } from "../src";
 
 const sizes = [
@@ -71,6 +73,43 @@ export const Basic: Story = {
 };
 
 /** Chakra's AlertDialog: role="alertdialog" for interrupting confirmations. */
+/**
+ * With a single trigger beside it, a dialog needs no state at all: wrap the
+ * two in a `DialogTrigger` and react-aria holds it. A dialog opened from more
+ * than one place — or from a menu item, or from a handler — wants the
+ * controlled form above instead.
+ */
+export const WithTrigger: Story = {
+  render: (args) => (
+    <DialogTrigger>
+      <Button variant="primary">Open</Button>
+      <Modal {...args}>
+        <ModalHeader>No state required</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>
+          <Text>
+            The trigger owns whether this is showing, and returns focus to
+            itself when it closes.
+          </Text>
+        </ModalBody>
+        <ModalFooter>
+          <DoneButton />
+        </ModalFooter>
+      </Modal>
+    </DialogTrigger>
+  ),
+};
+
+/** A footer button closes the dialog it is in, either way it is driven. */
+const DoneButton = () => {
+  const close = useDialogClose();
+  return (
+    <Button variant="primary" onPress={close}>
+      Done
+    </Button>
+  );
+};
+
 export const AlertDialog: Story = {
   render: () => {
     const [isOpen, setOpen] = useState(false);

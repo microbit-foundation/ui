@@ -787,8 +787,8 @@ w={23} />` on a _plain_ wrapper that spreads onto a `styled()` svg
 
     It is invisible in the source (both files look like additions), invisible
     to a typecheck, and page-wide when it lands: classroom's text went from
-    gray.800 to black at its kill-switch, and would have lost `font-feature-
-settings: "kern"` too, which shifts every glyph on every screen.
+    gray.800 to black at its kill-switch, and lost the kerning
+    (`fontFeatureSettings`) with it, which shifts every glyph on every screen.
 
     Rules: an app preset's `globalCss` must not use a selector the base preset
     uses (currently `html`, `body`, `*::placeholder`, `button, [role='button']`
