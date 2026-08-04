@@ -120,6 +120,8 @@ export const select = defineSlotRecipe({
       // button it measures; `ComboBox` measures its own control and sets the
       // width inline, because RAC's var is the *input's* width there.
       minWidth: "var(--trigger-width)",
+      display: "flex",
+      flexDirection: "column",
       bg: "white",
       color: "inherit",
       py: "2",
@@ -139,7 +141,6 @@ export const select = defineSlotRecipe({
     },
     list: {
       outline: "none",
-      maxHeight: "inherit",
       overflowY: "auto",
     },
     option: {
