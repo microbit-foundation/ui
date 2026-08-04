@@ -86,16 +86,36 @@ against the branded values:
 - `gray.600` (`#6b7280`, secondary text) → `gray.500` (`#767676`, near-exact
   in lightness, and now text-safe by design)
 
+## Outline coverage
+
+Form-control boundaries on the accessible stops (rest `400`, hover `500`
+where hover applies):
+
+- **Input** (and via its recipe: TextField, NativeSelect, NumberField's
+  field) — done.
+- **Select/ComboBox trigger** — done.
+- **Checkbox/Radio** — done, via the root slot: the control's
+  `borderColor: inherit` reads the root, which used to fall through to the
+  reset's `gray.200`; call sites can still tint at the root.
+
+Fills that identify a control but aren't outlines (judgement calls, not
+done):
+
+- **Switch** unchecked track is `gray.300` (1.53:1) with a white thumb —
+  the classic 1.4.11 argument; a `gray.400` track (or a 1px `gray.400`
+  border) would settle it.
+- **Slider** unfilled track is `gray.200`; the filled part carries the
+  colour. Review with design.
+- **NumberField** stepper hairlines stay `gray.200` deliberately (internal
+  separators inside the now-darker field outline) — check the look.
+
 ## Follow-ups (not in the spike)
 
 - **`brand2`** still aliases Chakra's unmodified gray as its OSS default
   (the brand contract's second ramp). Whether it should follow the neutral
   stance is a separate brand decision.
-- **Checkbox/Radio** borders use `borderColor: inherit`, a different
-  mechanism from the input/select outlines; they're ~1.3:1 too and need
-  their own pass.
-- **Placeholder/helper text** (`gray.500`/`gray.600` in recipes) becomes
-  text-safe on the new ramp for OSS apps and *darker* than branded python's
-  current faint rendering — flag in visual review.
+- **Placeholder text** (`*::placeholder` and recipes at `gray.500`) is now
+  4.54:1 — text-safe for free, but *darker* than branded python's faint
+  rendering; flag in visual review.
 - If a between stop is missed in practice (Chakra's old 2.26:1 weight), add
   a `350` (~`#b4b4b4`) rather than bending 300 or 400.

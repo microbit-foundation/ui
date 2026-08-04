@@ -27,6 +27,12 @@ export const checkbox = defineSlotRecipe({
       verticalAlign: "top",
       cursor: "pointer",
       position: "relative",
+      // The control's `borderColor: inherit` reads this. Stated here rather
+      // than on the control so a call site can still tint the whole control
+      // by setting borderColor on the root. Without it, inherit fell through
+      // to the reset's gray.200 (~1.3:1) — the accessible outline stop, as
+      // the input recipe (docs/gray-ramp.md).
+      borderColor: "gray.400",
       "&[data-disabled]": { cursor: "not-allowed" },
     },
     control: {

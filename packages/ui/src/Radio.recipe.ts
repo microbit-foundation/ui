@@ -28,6 +28,11 @@ export const radio = defineSlotRecipe({
       verticalAlign: "top",
       cursor: "pointer",
       position: "relative",
+      // As the checkbox: the control's `borderColor: inherit` reads this
+      // (call sites can still tint at the root); the reset's gray.200
+      // fallback was ~1.3:1. The accessible outline stop, as the input
+      // recipe (docs/gray-ramp.md).
+      borderColor: "gray.400",
       "&[data-disabled]": { cursor: "not-allowed" },
     },
     control: {
