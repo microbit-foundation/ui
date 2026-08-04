@@ -72,12 +72,18 @@ export const select = defineSlotRecipe({
       color: "inherit",
       h: "10",
       px: "4",
-      "&[data-invalid]": { borderColor: "danger.500" },
+      // Two focus cases. `data-focus-visible` is Select's button on keyboard
+      // focus only (RAC leaves it unset for mouse, matching the react-aria
+      // docs' Select). The `:has()` arm is ComboBox: its control is a plain
+      // div wrapping an input, so it gets no RAC attributes itself — we watch
+      // the input, which as a text field shows focus on any modality. Select's
+      // trigger contains no input, so the arm can't match it.
       "&[data-focus-visible], &:has(input[data-focused])": {
         borderColor: "focusBorder",
         outline: "2px solid transparent",
         outlineOffset: "2px",
       },
+      "&[data-invalid]": { borderColor: "danger.500" },
       "&[data-disabled]": { opacity: 0.4, cursor: "not-allowed" },
     },
     // Whatever shows the current value: Select's SelectValue, ComboBox's
