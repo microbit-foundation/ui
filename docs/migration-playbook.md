@@ -617,7 +617,7 @@ w={23} />` on a _plain_ wrapper that spreads onto a `styled()` svg
     a visible 2px shortening — the only pixel difference across five screens
     when the leaf primitives were ported, and one that was noticed. It now
     asks for 35px. Read the old number as `height + top border + bottom
-    border` and carry the total across.
+border` and carry the total across.
 
 31. **A recipe variant's flat value cannot override another variant group's
     responsive one.** Chakra merged `size` and `variant` in JS before emitting,
@@ -828,6 +828,30 @@ w={23} />` on a _plain_ wrapper that spreads onto a `styled()` svg
     `body` is not — and an inherited property (font smoothing, colour) can
     simply ride on a group selector that includes `html`. Check the generated
     CSS for the base preset's body block after adding anything.
+
+43. **An open Popover takes hover off everything behind it.** RAC's `Popover`
+    renders a `position: fixed; inset: 0` underlay whenever it is not
+    `isNonModal` — the default, and what `MenuList` uses. The pointer is then
+    over the underlay rather than the page, so the browser fires
+    `pointerleave` and hover state on whatever is behind it drops the instant
+    the overlay opens. `_hover` and RAC's `data-hovered` both go: the base
+    preset's hover condition covers both, and both are downstream of the same
+    `pointerleave`. Chakra's Menu was a Popper with `useOutsideClick` and no
+    underlay, so hover survived — which makes this a kill-switch-only
+    difference in any app where a hover-highlighted container holds a menu.
+
+    It shows up as a container losing its highlight the moment you open a menu
+    inside it (classroom's class roster: click a student's action menu and the
+    row went flat). The fix is not a different hover state but a different
+    question — does this container hold an open overlay? A trigger carries
+    `aria-expanded` from `useOverlayTrigger`, so
+    `"&:has([aria-expanded=true])": { bg: … }` on the container answers it with
+    no state plumbing across the component boundary. It is in the `gridList`
+    recipe's item; any container with both a hover look and a menu inside
+    wants it. Repeat it inside a selected/active rule rather than trusting
+    emit order — `:has()` takes the specificity of its argument, so a bare
+    `:has([aria-expanded=true])` and a `[data-selected]` are equal and source
+    order decides.
 
 Also remember (from the RAC component work, not numbered): RAC re-selects a
 pressed radio value against current state after any earlier handler runs —
