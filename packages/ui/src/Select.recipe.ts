@@ -137,8 +137,11 @@ export const select = defineSlotRecipe({
       background: "transparent",
       border: "none",
       cursor: "pointer",
+      // No focus styling, deliberately: react-aria keeps a ComboBox's toggle
+      // button out of the tab order (the input owns the keyboard), so a ring
+      // here would only ever be reachable programmatically, and would suggest
+      // the chevron is a tab stop. The whole control shows focus instead.
       outline: "none",
-      "&[data-focus-visible]": { focusShadow: "outline" },
     },
     content: {
       // Line the card up with the control, as a select should and as
