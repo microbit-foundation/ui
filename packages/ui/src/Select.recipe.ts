@@ -72,12 +72,12 @@ export const select = defineSlotRecipe({
       color: "inherit",
       h: "10",
       px: "4",
-      _hover: { borderColor: "gray.300" },
-      "&[data-focus-visible]": {
-        focusShadow: "outline",
-        borderColor: "focusBorder",
-      },
       "&[data-invalid]": { borderColor: "danger.500" },
+      "&[data-focus-visible], &:has(input[data-focused])": {
+        borderColor: "focusBorder",
+        outline: "2px solid transparent",
+        outlineOffset: "2px",
+      },
       "&[data-disabled]": { opacity: 0.4, cursor: "not-allowed" },
     },
     // Whatever shows the current value: Select's SelectValue, ComboBox's
