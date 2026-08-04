@@ -35,10 +35,13 @@ export const input = defineRecipe({
     transitionProperty: transitionCommon,
     transitionDuration: "normal",
     border: "1px solid",
-    borderColor: "gray.200",
+    // The accessible outline stops: gray.400 is the ramp's 3:1-on-white
+    // boundary grey (WCAG 1.4.11), hover steps darker, never lighter.
+    // Chakra used 200/300 (~1.3:1), which read as barely-there.
+    borderColor: "gray.400",
     bg: "inherit",
     color: "inherit",
-    _hover: { borderColor: "gray.300" },
+    _hover: { borderColor: "gray.500" },
     "&[data-invalid], &:user-invalid": {
       borderColor: "danger.500",
       boxShadow: "0 0 0 1px token(colors.danger.500)",
