@@ -79,6 +79,7 @@ export const select = defineSlotRecipe({
       // the input, which as a text field shows focus on any modality. Select's
       // trigger contains no input, so the arm can't match it.
       "&[data-focus-visible], &:has(input[data-focused])": {
+        boxShadow: "0 0 0 1px token(colors.focusBorder)",
         borderColor: "focusBorder",
         outline: "2px solid transparent",
         outlineOffset: "2px",
