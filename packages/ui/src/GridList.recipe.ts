@@ -38,7 +38,19 @@ export const gridList = defineSlotRecipe({
       transitionDuration: "ultra-fast",
       transitionTimingFunction: "ease-in",
       _hover: { bg: "gray.50" },
-      "&[data-selected]": { bg: "gray.100", _hover: { bg: "gray.100" } },
+      // A row holding an open menu (or any other popover) keeps the hover
+      // grey, so the row an open menu belongs to stays visible. Hover state
+      // cannot do this on its own: a Popover lays a fixed full-viewport
+      // underlay over the page while open, which takes the pointer off the
+      // row — `:hover` and RAC's own `data-hovered` both drop the moment the
+      // menu appears. A trigger carries `aria-expanded` (useOverlayTrigger),
+      // so the row can see its own open overlay.
+      "&:has([aria-expanded=true])": { bg: "gray.50" },
+      "&[data-selected]": {
+        bg: "gray.100",
+        _hover: { bg: "gray.100" },
+        "&:has([aria-expanded=true])": { bg: "gray.100" },
+      },
       "&[data-focus-visible]": { focusShadow: "outline" },
       "&[data-disabled]": { opacity: 0.4, cursor: "not-allowed" },
     },
