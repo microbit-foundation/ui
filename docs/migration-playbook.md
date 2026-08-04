@@ -611,11 +611,13 @@ w={23} />` on a _plain_ wrapper that spreads onto a `styled()` svg
     the rule's length depend on the box model. `Divider`'s
     `thickness="thick"` draws 2px on the orientation's own edge with no
     top/bottom borders, so its height is whatever it is told — identical
-    either side of the kill-switch. classroom's logo divider was 35px
-    (33 + 2 borders) under Chakra and is now the 33px its code asks for: a
-    deliberate 2px change, taken in exchange for being box-model-stable.
-    It was also the _only_ pixel difference across five screens when the
-    leaf primitives were ported.
+    either side of the kill-switch. But do **restate the rendered height at
+    the call site**, not the old content height: classroom's logo divider
+    asked for 33px and drew 35px under Chakra, and porting it as 33px shipped
+    a visible 2px shortening — the only pixel difference across five screens
+    when the leaf primitives were ported, and one that was noticed. It now
+    asks for 35px. Read the old number as `height + top border + bottom
+    border` and carry the total across.
 
 31. **A recipe variant's flat value cannot override another variant group's
     responsive one.** Chakra merged `size` and `variant` in JS before emitting,
