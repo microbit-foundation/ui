@@ -91,11 +91,32 @@ export const basePreset = definePreset({
     tokens: {
       colors: {
         ...colors,
+        // The family gray ramp: pure neutrals (r=g=b throughout), replacing
+        // the Chakra scale this inherited, whose blue tint was never chosen
+        // and fought the brand hues (see docs/gray-ramp.md for the full
+        // rationale and the per-stop mapping). Stops keep Chakra's names and,
+        // for 50–300 and 500–900, its lightness roles — each new value sits
+        // within ~10% of the Chakra stop's contrast on white. Two deliberate
+        // departures:
+        //   - 400 is re-graded darker to 3.05:1 on white, the accessible
+        //     form-outline stop; Chakra's 400 (2.26:1) sat uselessly between
+        //     roles and the ramp had nothing in the 3:1–4.5:1 band.
+        //   - 10/25 (the family's sub-50 panel tints, used by python-editor
+        //     and ml-trainer) are now monotonic; the old 25 (#f5f5f5) was
+        //     darker than 50 (#F7FAFC).
         gray: {
-          ...colors.gray,
-          // Very light grays the family's designs use below Chakra's 50.
           10: { value: "#fcfcfc" },
-          25: { value: "#f5f5f5" },
+          25: { value: "#f6f6f6" },
+          50: { value: "#f2f2f2" },
+          100: { value: "#ececec" },
+          200: { value: "#e0e0e0" },
+          300: { value: "#d0d0d0" },
+          400: { value: "#949494" }, // 3.05:1 — accessible outline stop
+          500: { value: "#767676" }, // 4.54:1 — text-safe secondary
+          600: { value: "#575757" },
+          700: { value: "#404040" },
+          800: { value: "#262626" },
+          900: { value: "#1a1a1a" },
         },
         // OSS default brand ramps (see the brand contract above). `brand`
         // aliases Chakra blue; `brand2` Chakra's *unmodified* gray (not the
