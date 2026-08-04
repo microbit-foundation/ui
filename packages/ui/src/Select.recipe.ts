@@ -82,9 +82,12 @@ export const select = defineSlotRecipe({
       // `> &` rather than a descendant selector, so an app's own invalid form
       // wrapper cannot paint every control inside it red.
       //
-      // Declared after hover and before focus so red beats a hover tint and
-      // the focus ring beats red, as in the input recipe.
-      "[data-invalid] > &": {
+      // Doubled `&` for the same reason as the input recipe: hover, invalid and
+      // focus all set `borderColor`, and Panda sorts state rules by its own
+      // pseudo-class table rather than declaration order, so hover would win
+      // these ties. The repeated `&` makes the hover < invalid < focus ladder a
+      // matter of specificity instead.
+      "[data-invalid] > &&": {
         borderColor: "danger.500",
         boxShadow: "0 0 0 1px token(colors.danger.500)",
       },
@@ -98,7 +101,7 @@ export const select = defineSlotRecipe({
       // focus moves to an option (aria-activedescendant) — which strips RAC's
       // attribute for as long as the list has an active option, real focus
       // never having left. Select's trigger holds no input, so it can't match.
-      "&[data-focus-visible], &:has(input:focus)": {
+      "&&&[data-focus-visible], &&&:has(input:focus)": {
         boxShadow: "0 0 0 1px token(colors.focusBorder)",
         borderColor: "focusBorder",
         outline: "2px solid transparent",
