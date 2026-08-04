@@ -178,12 +178,10 @@ export const button = defineRecipe({
         borderWidth: "2px",
         borderColor: "gray.200",
         color: "languageText",
-        // `hoverTint`, not a gray stop: hover is a highlight, and on the
-        // neutral ramp an achromatic wash reads as drab where the old
-        // blue-cast gray.100 read as a tint. The semantic token keeps that
-        // cool highlight (and lets a brand tint it toward its own hue)
-        // without it living in the gray vocabulary.
-        _hover: { color: "languageTextHover", bg: "hoverTint" },
+        // The hover wash reads as a highlight because the app's gray ramp
+        // carries its brand undertone (per-app tinted ramps) — an
+        // achromatic gray.100 here goes drab, a tinted one doesn't.
+        _hover: { color: "languageTextHover", bg: "gray.100" },
       },
     },
   },

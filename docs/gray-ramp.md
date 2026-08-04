@@ -109,31 +109,38 @@ done):
 - **NumberField** stepper hairlines stay `gray.200` deliberately (internal
   separators inside the now-darker field outline) — check the look.
 
-## Backgrounds: greys are for things, highlights get colour
+## Per-app tinted ramps
 
-The ramp swap exposed a category error: several *interactive* backgrounds
-used light gray stops as hover/press washes. Under the blue-tinted Chakra
-scale those read as a cool *highlight*; as pure neutrals the same lightness
-reads as *drab* — a grey smudge, not a tint. (First noticed on classroom's
-language buttons.)
+The pure-neutral experiment produced a clean verdict: undertone is
+load-bearing in the *light* half of the ramp (hover washes went drab on
+classroom's language buttons; the teacher page's panel surfaces lost their
+look) and inert in the ink half — while branded python demonstrates that a
+purple-heavy app is right to keep its greys near-neutral. Neither "neutral
+for everyone" nor "slate for everyone" fits the family.
 
-The stance: neutral greys are for things — text, outlines, surfaces.
-Interaction washes are meaning, so they get colour: the semantic
-`hoverTint` token (default `#EDF2F7`, Chakra's old cool gray.100 kept as a
-named highlight colour; brands may tint it toward their own hue). The
-`language` button variant uses it now.
+So: **per-app gray ramps over the shared grading.** Each app picks a hue
+(and chroma curve); every stop is luminance-matched to the family grading,
+so the contrast table above and the accessible outline stops hold
+identically in every app. The base preset's neutral ramp is the OSS
+default and the template.
 
-Candidates for the same review (grey-as-interactive-background):
+- **classroom**: brand-blue tint (hue 203° from `#2a94d6`, Chakra's chroma
+  curve) — see its app preset.
+- **python-editor**: near-neutral, per its designed branded ramp.
+- **ml-trainer**: undecided — its brand ramp is blue, so classroom's tint
+  is the obvious candidate.
 
-- Select/ComboBox/ListBox option focus `gray.100` / press `gray.200`
-- Menu item hover (`gray.100` family)
-- GridList row hover (classroom's roster)
-- NumberField stepper hover `gray.100` / press `gray.200`
-- classroom's `zoom` variant (`gray.100` bg, hover `gray.400` — now much
-  darker — press `gray.500`) and python's zoom pills (`300`/`400`)
+Because the light stops carry the app's undertone, interactive washes
+(option/menu/row hovers, steppers, the `language` button hover) can stay
+on plain `gray.100`/`gray.200` — no semantic highlight token needed. A
+`hoverTint` token was tried and dropped: with tinted ramps it was
+`gray.100` with extra indirection. Role tokens (surface/ink/outline) are a
+separate, larger conversation — deferred deliberately, revisit alongside
+dark mode.
 
-Non-interactive grey *fills* (disabled states, meter tracks, avatar
-placeholders) are things, not highlights — they stay grey.
+Still to review visually: classroom's `zoom` variant hovers to `gray.400`,
+which the re-grade made genuinely darker; python's zoom pills sit on
+`300`/`400` after re-pointing.
 
 ## Follow-ups (not in the spike)
 

@@ -196,13 +196,6 @@ export const basePreset = definePreset({
         // follows; OSS language buttons are brand blue.)
         languageText: { value: "{colors.brand.500}" },
         languageTextHover: { value: "{colors.brand.600}" },
-        // The hover highlight for light surfaces. Defaults to the app's own
-        // gray.100 — with per-app tinted gray ramps, each app's hover wash
-        // carries its own undertone automatically (a chromatic default here
-        // once leaked a blue wash into the purple python editor). Brands may
-        // still override it away from the ramp (a whisper of the brand hue,
-        // not a saturated fill).
-        hoverTint: { value: "{colors.gray.100}" },
         // The `primary`/`secondary` button variants' colours. Two brand
         // idioms exist in the family: brand-coloured buttons (ml-trainer,
         // python-editor — the defaults below) and a black-on-white system
