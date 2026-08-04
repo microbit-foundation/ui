@@ -55,9 +55,13 @@ that darkened 50 for tidier numbering). 400 and 500 are the deliberate
 re-grades: 400 fills the empty 3:1 band and is what the input/select
 recipes use for outlines (rest `400`, hover `500`).
 
-Quirk, kept: 10/25 are panel *tints* that sit between 50 and 100 by
-luminance; the sub-50 names are historical. Don't re-order them — the
-rendered surfaces are what matter. A rename is a role-tokens-era cleanup.
+Quirk, kept for now: 10/25 are panel *tints* that sit between 50 and 100
+by luminance; the sub-50 names are historical. Don't re-order the values —
+the rendered surfaces are what matter. Decision: rename by position
+(`25` → `75`; check `10` against final values) as its own step *before*
+the role-tokens work — ~15 call sites (python-editor's panels and
+sidebar-text uses, ml-trainer ×2, one private semantic token), no rendered
+change. Not scheduled yet.
 
 ## Mappings
 

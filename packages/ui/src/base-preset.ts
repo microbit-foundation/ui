@@ -106,7 +106,8 @@ export const basePreset = definePreset({
         // Quirk, kept deliberately: 10/25 are the family's *panel tints*,
         // which by luminance sit between 50 and 100 — the sub-50 names are
         // historical. Do not "fix" the ordering; the rendered surfaces are
-        // what matter. (A rename is a role-tokens-era cleanup.)
+        // what matter. (Decided: rename by position — 25 -> 75 — as its own
+        // step before the role-tokens work; see docs/gray-ramp.md.)
         gray: {
           10: { value: "#fcfcfc" },
           25: { value: "#f5f5f5" },
