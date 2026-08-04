@@ -138,12 +138,11 @@ default and the template.
   curve) — see its app preset. Its tinted `gray.50` (`#f6f9fc`) renders the
   teacher-page panels byte-identically to production's Chakra `gray.50`.
 - **python-editor**: near-neutral, per its designed branded ramp.
-- **ml-trainer**: the same brand-blue tint as classroom (its own brand
-  ramp is blue, so the undertone fits), except `25` stays the family's
-  neutral `#f5f5f5` — its inset panel fills (action bar, name-input fill,
-  footer) were designed untinted and read as stained with the blue.
-  Versus production this replaces Chakra's slate plus its Windi-era
-  500/600 patches.
+- **ml-trainer**: the family neutral ramp, no override — like python, a
+  colour-heavy app with quiet chrome. The brand-blue tint was trialled
+  and rejected: the whitesmoke backdrop wanted to stay neutral, and
+  pinning one stop broke the ramp's hue coherence. Versus production
+  this replaces Chakra's slate plus its Windi-era 500/600 patches.
 
 Because the light stops carry the app's undertone, interactive washes
 (option/menu/row hovers, steppers, the `language` button hover) can stay
