@@ -739,6 +739,15 @@ border` and carry the total across.
     Worth grepping for when adding any component: a literal variant name inside
     a recipe call is the smell.
 
+    The other shape of this is a component that calls its recipe with **no**
+    arguments at all: `GridList`, `ListBox` and `Menu` all do
+    (`const slots = gridList()`), so an app preset that adds a variant group to
+    them gets nothing applied and the prop lands on the DOM. Nothing has hit it
+    because those three recipes have no variants yet — but it means they are not
+    extensible today, and a slot recipe needs the variant props to reach each
+    slot's call (a context from the root, since the item renders separately).
+    `splitVariantProps` is only in `Input`, `TextField`, `Select` and `ComboBox`.
+
 38. **react-select's behaviours are props on a ComboBox, not styling.** Four
     of them, all of which classroom's sites relied on and none of which comes
     free:
@@ -966,7 +975,54 @@ Censuses were taken July 2026 against Chakra v2.10 in all apps.
   there: it records `brand.50` as unreferenced, but the base preset's
   `button.secondaryActiveBg` resolves to it, so a python-editor `secondary`
   button would show a light-blue active wash — it uses none today, so nothing
-  is broken, but that app should either set the token or fill its ramp.
+  is broken, but that app should either set the token or fill its ramp. The
+  `colorPalette` question below waits on this answer, and raises the stakes on
+  ramp _completeness_ rather than only correctness.
+
+- **`colorPalette` instead of per-component colour tokens — a question for
+  after the ramp review, not before.** Where an app's only divergence from a
+  recipe is which colours its states use, Panda's `colorPalette` expresses that
+  as one prop on the container rather than a named token per surface. classroom's
+  class roster is the clearest case: the `gridList` item's greys are already
+  `gray.50` (hover) and `gray.100` (selected) — the same two stops a palette
+  swap would use — and the app wants `#efedf5`/`brand.100`, plausibly the real
+  `brand.50`/`brand.100` once the ramp review lands. A `colorPalette: "brand"`
+  on the list would be the whole change, with no token names to invent, agree
+  and document per component. It also sidesteps the slot plumbing:
+  `colorPalette` resolves through CSS custom properties, so it inherits to the
+  item slot where a recipe variant cannot reach (see #37's tail).
+
+  The same question is open for the `button.*` tokens, and the two idioms answer
+  it differently. The brand-coloured one is palette-shaped — `primaryBg`/
+  `HoverBg`/`ActiveBg` default to `brand.500`/`600`/`700`, three consecutive
+  stops of one ramp — but the black-on-white one is not: `black` plus
+  `blackAlpha.800`/`700` draws from two token groups, which no single palette
+  produces. So a palette would complement the `button.*` tokens rather than
+  replace them, and the nine-token decision recorded under "Cross-app
+  vocabulary" stays right for the app that needed it. Note also that the
+  brand-shaped idiom relies on 500 → 600 → 700 getting steadily darker, which
+  the recorded 600/700 lightness inversion means is not true today.
+
+  What the ramp review needs to settle before any of this:
+
+  - **Complete, not just correct.** A ramp used as a palette needs every stop
+    the recipes reference. `blimpTeal` is documented as "not a scale" (no 200,
+    no 800/900), so pointing a palette at it resolves the gaps to the base
+    preset's blue — the same leak the `brand.50`/`brand.900` clamps exist to
+    prevent, but component-wide rather than local.
+  - **It asserts a relationship, not a pair.** A named token pair means _these
+    two surfaces_; a palette means _this 50/100 relationship holds across every
+    ramp it is pointed at_. Only the second is worth having if the ramps are
+    built to make it true.
+  - **Contrast is per palette.** Row and button text colours are not
+    palette-driven, so a swap moves the background under fixed-colour text.
+    Low risk at the light end, but it is a check per palette, where a named pair
+    at least records that the two were checked together.
+
+  Nothing in the family uses `colorPalette` yet. A two-background slot recipe
+  is about the smallest safe place to try the first one, so the roster is a
+  reasonable pilot. Until then classroom restates the row states by hand and
+  carries the cost in gotcha #43.
 
 - **`Information` and `Success` are English in the library's Welsh and Italian
   catalogs.** They were backfilled from classroom's translations, but these two
