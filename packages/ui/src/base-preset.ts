@@ -196,6 +196,14 @@ export const basePreset = definePreset({
         // follows; OSS language buttons are brand blue.)
         languageText: { value: "{colors.brand.500}" },
         languageTextHover: { value: "{colors.brand.600}" },
+        // The hover highlight for light surfaces. Deliberately *not* a gray
+        // stop: hover reads as a tint, and on the neutral ramp an achromatic
+        // wash goes drab. The default is Chakra's old cool gray.100 — the
+        // blue-cast wash the family's hovers always had, kept as a named
+        // highlight colour now the gray vocabulary is neutral. Brands may
+        // tint it toward their own hue (a whisper of the brand colour at
+        // this lightness, not a saturated fill).
+        hoverTint: { value: "#EDF2F7" },
         // The `primary`/`secondary` button variants' colours. Two brand
         // idioms exist in the family: brand-coloured buttons (ml-trainer,
         // python-editor — the defaults below) and a black-on-white system

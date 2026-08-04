@@ -109,6 +109,32 @@ done):
 - **NumberField** stepper hairlines stay `gray.200` deliberately (internal
   separators inside the now-darker field outline) — check the look.
 
+## Backgrounds: greys are for things, highlights get colour
+
+The ramp swap exposed a category error: several *interactive* backgrounds
+used light gray stops as hover/press washes. Under the blue-tinted Chakra
+scale those read as a cool *highlight*; as pure neutrals the same lightness
+reads as *drab* — a grey smudge, not a tint. (First noticed on classroom's
+language buttons.)
+
+The stance: neutral greys are for things — text, outlines, surfaces.
+Interaction washes are meaning, so they get colour: the semantic
+`hoverTint` token (default `#EDF2F7`, Chakra's old cool gray.100 kept as a
+named highlight colour; brands may tint it toward their own hue). The
+`language` button variant uses it now.
+
+Candidates for the same review (grey-as-interactive-background):
+
+- Select/ComboBox/ListBox option focus `gray.100` / press `gray.200`
+- Menu item hover (`gray.100` family)
+- GridList row hover (classroom's roster)
+- NumberField stepper hover `gray.100` / press `gray.200`
+- classroom's `zoom` variant (`gray.100` bg, hover `gray.400` — now much
+  darker — press `gray.500`) and python's zoom pills (`300`/`400`)
+
+Non-interactive grey *fills* (disabled states, meter tracks, avatar
+placeholders) are things, not highlights — they stay grey.
+
 ## Follow-ups (not in the spike)
 
 - **`brand2`** still aliases Chakra's unmodified gray as its OSS default
