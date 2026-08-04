@@ -36,22 +36,28 @@ Stops keep Chakra's names. Contrast is against white.
 | Stop | Value     | Contrast | Role |
 | ---- | --------- | -------- | ---- |
 | 10   | `#fcfcfc` | 1.02     | editor surface tint (python) |
-| 25   | `#f6f6f6` | 1.05     | panel tint (python sidebar, ml-trainer) — now monotonic (old `#f5f5f5` was darker than 50) |
-| 50   | `#f2f2f2` | 1.09     | subtle fills |
-| 100  | `#ececec` | 1.18     | option hover, subtle fills |
-| 200  | `#e0e0e0` | 1.32     | surface edges: dividers, cards, dropdown cards |
-| 300  | `#d0d0d0` | 1.53     | stronger surface edges, switch track |
+| 25   | `#f5f5f5` | 1.09     | panel tint (python sidebar, ml-trainer) |
+| 50   | `#f9f9f9` | 1.05     | large panel surfaces (classroom's teacher page) |
+| 100  | `#f1f1f1` | 1.13     | option hover, subtle fills |
+| 200  | `#e7e7e7` | 1.24     | surface edges: dividers, cards, dropdown cards |
+| 300  | `#d4d4d4` | 1.48     | stronger surface edges, switch track |
 | 400  | `#949494` | **3.05** | **accessible form-control outline** (re-graded: Chakra's 400 was 2.26:1 and role-less) |
-| 500  | `#767676` | **4.54** | text-safe secondary: placeholders, muted icons |
+| 500  | `#767676` | **4.54** | text-safe secondary: placeholders, muted icons (Chakra's was 4.0:1 — an AA fail) |
 | 600  | `#575757` | 7.2      | secondary text |
 | 700  | `#404040` | 10.4     | strong text/icons |
 | 800  | `#262626` | 15.3     | near-black text |
 | 900  | `#1a1a1a` | 16.7     | darkest |
 
-Every stop except 400 sits within ~10% of the Chakra stop's contrast, so the
-swap is visually a de-blue, not a re-grade. 400 is the deliberate exception:
-it fills the empty 3:1 band and is what the input/select recipes now use for
-outlines (rest `400`, hover `500`).
+The light stops (50–300) match Chakra's *luminance* exactly — big surfaces
+are made of these, and even a few bits of darkening at the near-white end
+shows across a viewport (classroom's teacher page caught an earlier draft
+that darkened 50 for tidier numbering). 400 and 500 are the deliberate
+re-grades: 400 fills the empty 3:1 band and is what the input/select
+recipes use for outlines (rest `400`, hover `500`).
+
+Quirk, kept: 10/25 are panel *tints* that sit between 50 and 100 by
+luminance; the sub-50 names are historical. Don't re-order them — the
+rendered surfaces are what matter. A rename is a role-tokens-era cleanup.
 
 ## Mappings
 
@@ -125,7 +131,8 @@ identically in every app. The base preset's neutral ramp is the OSS
 default and the template.
 
 - **classroom**: brand-blue tint (hue 203° from `#2a94d6`, Chakra's chroma
-  curve) — see its app preset.
+  curve) — see its app preset. Its tinted `gray.50` (`#f6f9fc`) renders the
+  teacher-page panels byte-identically to production's Chakra `gray.50`.
 - **python-editor**: near-neutral, per its designed branded ramp.
 - **ml-trainer**: undecided — its brand ramp is blue, so classroom's tint
   is the obvious candidate.
