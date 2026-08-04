@@ -10,9 +10,10 @@ import {
   render,
   screen,
 } from "@testing-library/react";
-import { useState } from "react";
+import { ReactElement, useState } from "react";
 import { afterEach, expect, it, vi } from "vitest";
 import { ComboBox, Select, SelectOption } from "../src";
+import { select } from "../src/Select.recipe";
 
 afterEach(cleanup);
 
@@ -116,6 +117,153 @@ it("ComboBox shows an empty state and can drop the indicator", () => {
   act(() => input.focus());
   fireEvent.change(input, { target: { value: "zzz" } });
   expect(screen.getByText("Nothing found")).toBeDefined();
+});
+
+/**
+ * The trigger slot's rules, keyed by the border colour each one sets, so these
+ * tests exercise the recipe's own selectors rather than copies of them. Panda's
+ * `&` is the element the rule lands on, which is what `matches` compares
+ * against.
+ */
+const triggerRules = () =>
+  select.base?.trigger as Record<string, { borderColor?: string } | undefined>;
+
+const ruleFor = (borderColor: string) => {
+  const rules = triggerRules();
+  const selector = Object.keys(rules).find(
+    (k) => rules[k]?.borderColor === borderColor,
+  );
+  expect(selector).toBeDefined();
+  return selector!;
+};
+
+/**
+ * Fails if the focus rule goes back to keying off RAC's `data-focused`. That
+ * attribute is unusable while a ComboBox's list is open: react-aria dispatches
+ * a synthetic blur at the input when virtual focus moves to an option, so RAC
+ * drops it even though real focus never left.
+ */
+const isTriggerFocusStyled = (el: Element) =>
+  el.matches(ruleFor("focusBorder").replaceAll("&", "*"));
+
+/** Fails if the invalid rule goes back to a `data-invalid` RAC never sets. */
+const isTriggerInvalidStyled = (el: Element) =>
+  el.matches(ruleFor("danger.500").replaceAll("&", "*"));
+
+it("ComboBox keeps its focus styling while an option is active", () => {
+  render(
+    <ComboBox
+      aria-label="Fruit"
+      // The shape of the stories that regressed: opening on focus with
+      // something already chosen means an option is active from the first tab.
+      menuTrigger="focus"
+      defaultSelectedKey="Banana"
+      defaultInputValue="Banana"
+    >
+      {FRUIT.map((f) => (
+        <SelectOption key={f} id={f}>
+          {f}
+        </SelectOption>
+      ))}
+    </ComboBox>,
+  );
+  const input = screen.getByRole("combobox") as HTMLInputElement;
+  act(() => input.focus());
+  expect(input.getAttribute("aria-expanded")).toBe("true");
+  expect(input.getAttribute("aria-activedescendant")).toBeTruthy();
+  expect(input.getAttribute("data-focused")).toBeNull();
+
+  expect(isTriggerFocusStyled(input.parentElement!)).toBe(true);
+});
+
+it("ComboBox keeps its focus styling across opening, choosing and reopening", () => {
+  render(
+    <ComboBox aria-label="Fruit">
+      {FRUIT.map((f) => (
+        <SelectOption key={f} id={f}>
+          {f}
+        </SelectOption>
+      ))}
+    </ComboBox>,
+  );
+  const input = screen.getByRole("combobox") as HTMLInputElement;
+  const trigger = input.parentElement!;
+  const toggle = screen.getByRole("button");
+  act(() => input.focus());
+  expect(isTriggerFocusStyled(trigger)).toBe(true);
+
+  fireEvent.click(toggle);
+  expect(isTriggerFocusStyled(trigger)).toBe(true);
+
+  fireEvent.click(screen.getByRole("option", { name: "Cherry" }));
+  expect(isTriggerFocusStyled(trigger)).toBe(true);
+
+  // Reopening with a selection is the other way an option starts out active.
+  fireEvent.click(toggle);
+  expect(input.getAttribute("data-focused")).toBeNull();
+  expect(isTriggerFocusStyled(trigger)).toBe(true);
+});
+
+it("Select's trigger takes focus styling from the keyboard only", () => {
+  renderSelect();
+  const trigger = screen.getByRole("button");
+  act(() => trigger.focus());
+  // RAC sets data-focused for either modality, so the recipe keys off
+  // data-focus-visible; jsdom has no pointer, hence keyboard here.
+  expect(trigger.getAttribute("data-focus-visible")).toBe("true");
+  expect(isTriggerFocusStyled(trigger)).toBe(true);
+  // The ComboBox arm must not reach a Select: no input inside the trigger.
+  expect(trigger.matches(":has(input)")).toBe(false);
+});
+
+const invalidCases: [string, ReactElement][] = [
+  [
+    "Select",
+    <Select aria-label="Fruit" isInvalid>
+      <SelectOption id="a">Apple</SelectOption>
+    </Select>,
+  ],
+  [
+    "ComboBox",
+    <ComboBox aria-label="Fruit" isInvalid>
+      <SelectOption id="a">Apple</SelectOption>
+    </ComboBox>,
+  ],
+];
+
+it.each(invalidCases)(
+  "an invalid %s paints its trigger from the root",
+  (_name, control) => {
+    const { container } = render(control);
+    // RAC marks the root, not the trigger, which is why the rule reaches down.
+    const root = container.querySelector('[class*="select__root"]')!;
+    const trigger = container.querySelector('[class*="select__trigger"]')!;
+    expect(root.getAttribute("data-invalid")).toBe("true");
+    expect(trigger.getAttribute("data-invalid")).toBeNull();
+    expect(isTriggerInvalidStyled(trigger)).toBe(true);
+  },
+);
+
+it("a valid control is not painted red", () => {
+  const { container } = render(
+    <Select aria-label="Fruit">
+      <SelectOption id="a">Apple</SelectOption>
+    </Select>,
+  );
+  const trigger = container.querySelector('[class*="select__trigger"]')!;
+  expect(isTriggerInvalidStyled(trigger)).toBe(false);
+});
+
+// jsdom applies no CSS, so the cascade can only be checked as declaration
+// order: equal-specificity rules, so the last one wins. Chakra's behaviour,
+// which the input recipe documents: red beats hover, the focus ring beats red.
+it("orders the trigger's state rules hover, invalid, focus", () => {
+  const keys = Object.keys(triggerRules());
+  const hover = keys.indexOf(ruleFor("gray.300"));
+  const invalid = keys.indexOf(ruleFor("danger.500"));
+  const focus = keys.indexOf(ruleFor("focusBorder"));
+  expect(hover).toBeLessThan(invalid);
+  expect(invalid).toBeLessThan(focus);
 });
 
 it("drops the chevron when asked, rather than silently keeping it", () => {
