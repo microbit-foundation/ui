@@ -81,7 +81,13 @@ const Swatch = ({ ramp, stop }: { ramp: string; stop: number | string }) => {
   );
 };
 
-const Ramp = ({ ramp, stops }: { ramp: string; stops: (number | string)[] }) => (
+const Ramp = ({
+  ramp,
+  stops,
+}: {
+  ramp: string;
+  stops: (number | string)[];
+}) => (
   <VStack alignItems="stretch" gap={2}>
     {stops.map((stop) => (
       <Swatch key={stop} ramp={ramp} stop={stop} />
