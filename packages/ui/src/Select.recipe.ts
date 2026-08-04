@@ -72,14 +72,38 @@ export const select = defineSlotRecipe({
       color: "inherit",
       h: "10",
       px: "4",
+      // As the input recipe, so a Select, a NativeSelect and a TextField in one
+      // form all tint together on hover. (react-aria's TextField has no hover
+      // effect, but matching the family beats matching their docs.)
       _hover: { borderColor: "gray.300" },
-      "&[data-focus-visible]": {
-        focusShadow: "outline",
-        borderColor: "focusBorder",
+      // `data-invalid` lands on the root — and, in a ComboBox, on the input —
+      // but never on the trigger: a RAC Button has no validity state, and our
+      // ComboBox control is a plain div. So it comes down from the parent.
+      // `> &` rather than a descendant selector, so an app's own invalid form
+      // wrapper cannot paint every control inside it red.
+      //
+      // Declared after hover and before focus so red beats a hover tint and
+      // the focus ring beats red, as in the input recipe.
+      "[data-invalid] > &": {
+        borderColor: "danger.500",
+        boxShadow: "0 0 0 1px token(colors.danger.500)",
       },
-      // A ComboBox's control is an input, which is focused whenever it is open.
-      "&[data-focused]": { focusShadow: "outline", borderColor: "focusBorder" },
-      "&[data-invalid]": { borderColor: "danger.500" },
+      // Two focus cases. `data-focus-visible` is Select's button on keyboard
+      // focus only (RAC leaves it unset for mouse, matching the react-aria
+      // docs' Select). The `:has()` arm is ComboBox: its control is a plain
+      // div wrapping an input, so it gets no RAC attributes itself, and as a
+      // text field it should show focus on any modality. That arm watches
+      // native `:focus` rather than the input's `data-focused`, because
+      // react-aria dispatches a synthetic blur at the input whenever virtual
+      // focus moves to an option (aria-activedescendant) — which strips RAC's
+      // attribute for as long as the list has an active option, real focus
+      // never having left. Select's trigger holds no input, so it can't match.
+      "&[data-focus-visible], &:has(input:focus)": {
+        boxShadow: "0 0 0 1px token(colors.focusBorder)",
+        borderColor: "focusBorder",
+        outline: "2px solid transparent",
+        outlineOffset: "2px",
+      },
       "&[data-disabled]": { opacity: 0.4, cursor: "not-allowed" },
     },
     // Whatever shows the current value: Select's SelectValue, ComboBox's
@@ -113,8 +137,11 @@ export const select = defineSlotRecipe({
       background: "transparent",
       border: "none",
       cursor: "pointer",
+      // No focus styling, deliberately: react-aria keeps a ComboBox's toggle
+      // button out of the tab order (the input owns the keyboard), so a ring
+      // here would only ever be reachable programmatically, and would suggest
+      // the chevron is a tab stop. The whole control shows focus instead.
       outline: "none",
-      "&[data-focus-visible]": { focusShadow: "outline" },
     },
     content: {
       // Line the card up with the control, as a select should and as

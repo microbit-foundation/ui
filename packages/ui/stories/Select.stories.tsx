@@ -6,7 +6,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { RiCloudLine, RiFireLine, RiSnowyLine } from "react-icons/ri";
-import { ComboBox, Icon, Select, SelectOption, Stack } from "../src";
+import { Button, ComboBox, Icon, Select, SelectOption, Stack } from "../src";
 
 const meta = {
   title: "Forms/Select",
@@ -191,16 +191,55 @@ export const Overridden: Story = {
   ),
 };
 
-/** Invalid state, as a form would set it. */
+/**
+ * Invalid state. `isInvalid` sets it directly; `isRequired` inside a form sets
+ * it on submit — the bottom pair here, which start clean, go red when you press
+ * Check with nothing chosen, and clear as soon as you choose something.
+ *
+ * Tab through them: the focus ring beats the red border while a control is
+ * focused, and hovering tints the border only while neither applies, both as a
+ * TextField or NativeSelect does. Note that red is the *only* signal a Select
+ * gives — unlike TextField it has no `errorMessage`, so anything explaining the
+ * error has to come from the app for now (#41).
+ */
 export const Invalid: Story = {
   render: () => (
     <Stack gap={5} css={{ maxWidth: "16rem" }}>
-      <Select label="Fruit" placeholder="Select…" isInvalid>
+      <Select label="Fruit (invalid)" placeholder="Select…" isInvalid>
         {options}
       </Select>
-      <ComboBox label="Fruit" placeholder="Start typing…" isInvalid>
+      <ComboBox label="Fruit (invalid)" placeholder="Start typing…" isInvalid>
         {options}
       </ComboBox>
+      {/* Submitting empty marks both controls. They need a `name` to take part
+          in form validation at all. */}
+      <form onSubmit={(e) => e.preventDefault()}>
+        <Stack gap={5}>
+          <Select
+            label="Fruit (required)"
+            placeholder="Select…"
+            name="a"
+            isRequired
+          >
+            {options}
+          </Select>
+          {/* `isRequired`, not a `validate` rule: react-aria displays a
+              ComboBox's custom validation a step behind, so it goes red while
+              you are still typing and stays red after you have picked
+              something, until blur. */}
+          <ComboBox
+            label="Fruit (required)"
+            placeholder="Start typing…"
+            name="b"
+            isRequired
+          >
+            {options}
+          </ComboBox>
+          <Button type="submit" variant="secondary">
+            Check
+          </Button>
+        </Stack>
+      </form>
     </Stack>
   ),
 };
