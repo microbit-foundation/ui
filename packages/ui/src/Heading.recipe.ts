@@ -44,6 +44,24 @@ export const heading = defineRecipe({
     // GT Walsheim in the private preset.
     variant: {
       marketing: { fontFamily: "display" },
+      // Page-title chrome in the accent colour (`headingAccent` — see
+      // base-preset.ts). Converged from classroom and data-microbit-org,
+      // which carried these two byte-identically app-side.
+      //
+      // These set `fontSize` flat, and the `size` variant sets it
+      // responsively: Panda hoists every media query below all base rules,
+      // so above `md` a responsive size's rule would beat these whatever
+      // the declaration order (playbook gotcha #31). Pair them with a flat
+      // size (`md`, `sm`, `xs`) or no size at all — never `lg` and up.
+      label: {
+        fontSize: "4xl",
+        color: "headingAccent",
+      },
+      subtitle: {
+        fontSize: "xl",
+        fontWeight: "normal",
+        color: "headingAccent",
+      },
     },
   },
   defaultVariants: {

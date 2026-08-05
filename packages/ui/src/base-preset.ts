@@ -175,6 +175,12 @@ export const basePreset = definePreset({
         // follows; OSS language buttons are brand blue.)
         languageText: { value: "{colors.brand.500}" },
         languageTextHover: { value: "{colors.brand.600}" },
+        // The `label`/`subtitle` heading variants' colour (page-title chrome).
+        // classroom and data-microbit-org carried byte-identical variants with
+        // a hardcoded #cd0365 — the brand deep pink, which is data's
+        // `pink.500`; both override this to it. The OSS default follows the
+        // languageText precedent: the primary interactive brand.
+        headingAccent: { value: "{colors.brand.500}" },
         // The `primary`/`secondary` button variants' colours. Two brand
         // idioms exist in the family: brand-coloured buttons (ml-trainer,
         // python-editor — the defaults below) and a black-on-white system
