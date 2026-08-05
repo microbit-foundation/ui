@@ -5,12 +5,7 @@
  */
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { RiArrowRightSLine } from "react-icons/ri";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  Icon,
-} from "../src";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, Icon } from "../src";
 
 const meta = {
   title: "Navigation/Breadcrumb",
