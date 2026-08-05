@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 import { forwardRef, ReactNode } from "react";
+import { useIntl } from "react-intl";
 import {
   Button as RACButton,
   ButtonProps as RACButtonProps,
@@ -12,6 +13,22 @@ import { css, cx } from "styled-system/css";
 import { button, ButtonVariantProps } from "styled-system/recipes";
 import { SystemStyleObject } from "styled-system/types";
 import { buttonIcon } from "./button-icon";
+import { uiMessage } from "./messages";
+import { Spinner } from "./Spinner";
+
+// Chakra's ButtonSpinner: a 1em spinner in the label's place. Its own
+// component so useIntl runs only while a button is actually loading —
+// a bare Button must keep working without an IntlProvider (test renders
+// commonly lack one).
+const ButtonSpinner = () => {
+  const intl = useIntl();
+  return (
+    <Spinner
+      aria-label={intl.formatMessage(uiMessage("ui.loading"))}
+      css={{ width: "1em", height: "1em" }}
+    />
+  );
+};
 
 export interface ButtonProps
   extends Omit<RACButtonProps, "className" | "children">,
@@ -23,6 +40,12 @@ export interface ButtonProps
   leftIcon?: ReactNode;
   /** Icon rendered after the label, matching Chakra's `rightIcon`. */
   rightIcon?: ReactNode;
+  /**
+   * Replace the label with a spinner and disable interaction, matching
+   * Chakra's `isLoading` (including its dimmed disabled look; the button
+   * shrinks to the spinner, as Chakra's did without an explicit width).
+   */
+  isLoading?: boolean;
   children?: ReactNode;
 }
 
@@ -41,6 +64,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       className,
       leftIcon,
       rightIcon,
+      isLoading,
       children,
       ...rest
     },
@@ -54,15 +78,23 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           cssProp ? css(cssProp) : undefined,
           className,
         )}
+        data-loading={isLoading || undefined}
         {...rest}
+        isDisabled={isLoading || rest.isDisabled}
       >
-        {leftIcon ? (
-          <span className={buttonIcon({ side: "left" })}>{leftIcon}</span>
-        ) : null}
-        {children}
-        {rightIcon ? (
-          <span className={buttonIcon({ side: "right" })}>{rightIcon}</span>
-        ) : null}
+        {isLoading ? (
+          <ButtonSpinner />
+        ) : (
+          <>
+            {leftIcon ? (
+              <span className={buttonIcon({ side: "left" })}>{leftIcon}</span>
+            ) : null}
+            {children}
+            {rightIcon ? (
+              <span className={buttonIcon({ side: "right" })}>{rightIcon}</span>
+            ) : null}
+          </>
+        )}
       </RACButton>
     );
   },
