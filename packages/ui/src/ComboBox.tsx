@@ -25,12 +25,18 @@ import { RiArrowDownSLine } from "react-icons/ri";
 import { css, cx } from "styled-system/css";
 import { select, SelectVariantProps } from "styled-system/recipes";
 import { SystemStyleObject } from "styled-system/types";
+import {
+  FieldRequiredIndicator,
+  FieldSupport,
+  FieldSupportProps,
+} from "./FieldSupport";
 import { Icon } from "./Icon";
 import { SelectSlotProvider } from "./Select";
 
 export interface ComboBoxProps<T extends object>
   extends Omit<RACComboBoxProps<T>, "className" | "children" | "style">,
-    SelectVariantProps {
+    SelectVariantProps,
+    FieldSupportProps {
   /** Visible label. Use `aria-label` instead where the design has none. */
   label?: ReactNode;
   placeholder?: string;
@@ -98,6 +104,9 @@ const ComboBoxInner = <T extends object>(
     isPopoverHidden,
     placement = "bottom start",
     maxHeight,
+    helperText,
+    errorMessage,
+    helperTextCss,
     css: cssProp,
     contentCss,
     className,
@@ -138,7 +147,12 @@ const ComboBoxInner = <T extends object>(
         {...(rest as RACComboBoxProps<T>)}
         className={cx(slots.root, className)}
       >
-        {label != null && <RACLabel className={slots.label}>{label}</RACLabel>}
+        {label != null && (
+          <RACLabel className={slots.label}>
+            {label}
+            {props.isRequired ? <FieldRequiredIndicator /> : null}
+          </RACLabel>
+        )}
         <div
           ref={triggerRef}
           className={cx(slots.trigger, cssProp ? css(cssProp) : undefined)}
@@ -178,6 +192,11 @@ const ComboBoxInner = <T extends object>(
             </RACListBox>
           </Popover>
         )}
+        <FieldSupport
+          helperText={helperText}
+          errorMessage={errorMessage}
+          helperTextCss={helperTextCss}
+        />
       </RACComboBox>
     </SelectSlotProvider>
   );

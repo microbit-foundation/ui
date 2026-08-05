@@ -16,6 +16,8 @@ export * from "./LinkButton";
 export * from "./ButtonGroup";
 export * from "./Card";
 export * from "./Checkbox";
+export * from "./CheckboxGroup";
+export * from "./FieldSupport";
 export * from "./IconButton";
 export * from "./Image";
 export * from "./Input";

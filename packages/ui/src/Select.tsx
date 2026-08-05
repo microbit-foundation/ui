@@ -20,6 +20,11 @@ import { RiArrowDownSLine } from "react-icons/ri";
 import { css, cx } from "styled-system/css";
 import { select, SelectVariantProps } from "styled-system/recipes";
 import { SystemStyleObject } from "styled-system/types";
+import {
+  FieldRequiredIndicator,
+  FieldSupport,
+  FieldSupportProps,
+} from "./FieldSupport";
 import { Icon } from "./Icon";
 
 export type SelectSlots = ReturnType<typeof select>;
@@ -37,7 +42,8 @@ export interface SelectProps<T extends object>
       RACSelectProps<T>,
       "className" | "children" | "style" | "placeholder"
     >,
-    SelectVariantProps {
+    SelectVariantProps,
+    FieldSupportProps {
   /** Visible label. Use `aria-label` instead where the design has none. */
   label?: ReactNode;
   /** Shown in the trigger while nothing is chosen (Chakra's placeholder). */
@@ -78,6 +84,9 @@ export const Select = <T extends object>({
   indicator,
   placement = "bottom start",
   maxHeight,
+  helperText,
+  errorMessage,
+  helperTextCss,
   css: cssProp,
   contentCss,
   className,
@@ -93,7 +102,12 @@ export const Select = <T extends object>({
         {...(rest as RACSelectProps<T>)}
         className={cx(slots.root, className)}
       >
-        {label != null && <RACLabel className={slots.label}>{label}</RACLabel>}
+        {label != null && (
+          <RACLabel className={slots.label}>
+            {label}
+            {props.isRequired ? <FieldRequiredIndicator /> : null}
+          </RACLabel>
+        )}
         <RACButton
           className={cx(slots.trigger, cssProp ? css(cssProp) : undefined)}
         >
@@ -118,6 +132,11 @@ export const Select = <T extends object>({
         >
           <RACListBox className={slots.list}>{children}</RACListBox>
         </Popover>
+        <FieldSupport
+          helperText={helperText}
+          errorMessage={errorMessage}
+          helperTextCss={helperTextCss}
+        />
       </RACSelect>
     </SelectSlotProvider>
   );

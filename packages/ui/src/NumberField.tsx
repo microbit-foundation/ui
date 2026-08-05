@@ -16,10 +16,16 @@ import { RiArrowDownSFill, RiArrowUpSFill } from "react-icons/ri";
 import { css, cx } from "styled-system/css";
 import { field, input, numberField } from "styled-system/recipes";
 import { SystemStyleObject } from "styled-system/types";
+import {
+  FieldRequiredIndicator,
+  FieldSupport,
+  FieldSupportProps,
+} from "./FieldSupport";
 import { Icon } from "./Icon";
 
 export interface NumberFieldProps
-  extends Omit<RACNumberFieldProps, "className" | "children" | "style"> {
+  extends Omit<RACNumberFieldProps, "className" | "children" | "style">,
+    FieldSupportProps {
   /** Visible label (optional; otherwise pass `aria-label`). */
   label?: ReactNode;
   /** Root style overrides (e.g. row layout for label-beside-field forms). */
@@ -40,7 +46,17 @@ export interface NumberFieldProps
  */
 export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(
   function NumberField(
-    { label, css: cssProp, labelCss, groupCss, inputCss, ...rest },
+    {
+      label,
+      helperText,
+      errorMessage,
+      helperTextCss,
+      css: cssProp,
+      labelCss,
+      groupCss,
+      inputCss,
+      ...rest
+    },
     ref,
   ) {
     const slots = numberField();
@@ -58,6 +74,7 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(
             )}
           >
             {label}
+            {rest.isRequired ? <FieldRequiredIndicator /> : null}
           </RACLabel>
         )}
         <RACGroup
@@ -80,6 +97,11 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(
             </RACButton>
           </div>
         </RACGroup>
+        <FieldSupport
+          helperText={helperText}
+          errorMessage={errorMessage}
+          helperTextCss={helperTextCss}
+        />
       </RACNumberField>
     );
   },
