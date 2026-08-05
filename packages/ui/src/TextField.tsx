@@ -5,31 +5,27 @@
  */
 import { FocusEvent, forwardRef, ReactNode } from "react";
 import {
-  FieldError,
   Input as RACInput,
   Label as RACLabel,
-  Text as RACText,
   TextField as RACTextField,
   TextFieldProps as RACTextFieldProps,
 } from "react-aria-components";
-import { css, cx } from "styled-system/css";
 import { field, input, InputVariantProps } from "styled-system/recipes";
-import { SystemStyleObject } from "styled-system/types";
+import {
+  FieldRequiredIndicator,
+  FieldSupport,
+  FieldSupportProps,
+} from "./FieldSupport";
 
 export interface TextFieldProps
   extends Omit<
       RACTextFieldProps,
       "className" | "children" | "style" | "onFocus" | "onBlur"
     >,
-    InputVariantProps {
+    InputVariantProps,
+    FieldSupportProps {
   /** Visible label (Chakra's FormLabel; asterisk added when `isRequired`). */
   label: ReactNode;
-  /** Help text below the input (Chakra's FormHelperText). */
-  helperText?: ReactNode;
-  /** Shown below the input when `isInvalid` (Chakra's FormErrorMessage). */
-  errorMessage?: ReactNode;
-  /** Per-instance style overrides for the helper text. */
-  helperTextCss?: SystemStyleObject;
   onFocus?: (e: FocusEvent<HTMLInputElement>) => void;
   /** Input autocapitalize attribute (react-aria's TextField omits it). */
   autoCapitalize?: "off" | "none" | "on" | "sentences" | "words" | "characters";
@@ -61,11 +57,7 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
       <RACTextField {...rest} className={slots.root}>
         <RACLabel className={slots.label}>
           {label}
-          {rest.isRequired ? (
-            <span aria-hidden className={slots.requiredIndicator}>
-              *
-            </span>
-          ) : null}
+          {rest.isRequired ? <FieldRequiredIndicator /> : null}
         </RACLabel>
         <RACInput
           ref={ref}
@@ -73,18 +65,11 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
           onFocus={onFocus}
           autoCapitalize={autoCapitalize}
         />
-        {helperText && (
-          <RACText
-            slot="description"
-            className={cx(
-              slots.helperText,
-              helperTextCss ? css(helperTextCss) : undefined,
-            )}
-          >
-            {helperText}
-          </RACText>
-        )}
-        <FieldError className={slots.errorMessage}>{errorMessage}</FieldError>
+        <FieldSupport
+          helperText={helperText}
+          errorMessage={errorMessage}
+          helperTextCss={helperTextCss}
+        />
       </RACTextField>
     );
   },
