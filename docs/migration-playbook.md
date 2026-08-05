@@ -283,6 +283,17 @@ Process rules learned the hard way:
 - Rerun a failing spec in isolation before suspecting the migration; some
   suites have known load-sensitive flakes.
 - The per-screen loop catches real bugs constantly — don't skip it.
+- **Existing e2e suites break in two react-aria-shaped ways when dialogs
+  port** (data-microbit-org, 2026-08-05). react-aria hides the page behind a
+  modal with `inert` where Chakra used `aria-hidden`, and Playwright's role
+  queries do not exclude inert subtrees — so unscoped `getByRole` locators
+  that used to resolve uniquely go ambiguous (or click the wrong thing) the
+  moment dialogs port. Scope dialog interactions to the modal `<section>`
+  (see #13) or use `exact` names. Relatedly, the library `Icon` marks
+  unlabelled icons decorative (`aria-hidden`), so a spec that clicked an icon
+  via `getByRole("img")` finds nothing — click the real interactive surface
+  instead. And `FieldRequiredIndicator`'s asterisk is aria-hidden, so
+  `getByLabel("Class name*")`-style locators stop matching; drop the `*`.
 
 ## Gotcha catalog (READ before porting)
 
