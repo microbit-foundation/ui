@@ -84,6 +84,9 @@ export const NativeSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(
             height: "5",
             pointerEvents: "none",
             fill: "currentColor",
+            // The chevron sits outside the select so it doesn't inherit its
+            // disabled dimming; Chakra's Select icon dimmed to 0.5.
+            "select:disabled + &": { opacity: 0.5 },
           })}
         >
           <path d="M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z" />
