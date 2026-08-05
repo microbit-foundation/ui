@@ -10,6 +10,7 @@
  */
 export * from "./system";
 export * from "./Avatar";
+export * from "./Breadcrumb";
 export * from "./Button";
 export * from "./LinkButton";
 export * from "./ButtonGroup";
