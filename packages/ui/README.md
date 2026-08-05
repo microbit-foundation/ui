@@ -179,7 +179,7 @@ runtime lookup:
 import { token } from "@microbit/ui"; // re-exports styled-system/tokens
 
 token("colors.brand.500"); // "#007dbc" — raw value, safe for colour math
-token("colors.statusBarBg"); // "var(--colors-brand2-500)" — CSS contexts only
+token("colors.statusBarBg"); // "var(--colors-gray-500)" — CSS contexts only
 ```
 
 Base tokens resolve to raw values; **semantic tokens resolve to `var()`

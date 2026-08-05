@@ -36,7 +36,7 @@ Stops keep Chakra's names. Contrast is against white.
 | Stop | Value     | Contrast | Role                                                                                   |
 | ---- | --------- | -------- | -------------------------------------------------------------------------------------- |
 | 10   | `#fcfcfc` | 1.02     | editor surface tint (python)                                                           |
-| 25   | `#f5f5f5` | 1.09     | panel tint (python sidebar, ml-trainer)                                                |
+| 25   | `#f5f5f5` | 1.09     | panel tint (python sidebar, ml-trainer **note non-monotonic**)                         |
 | 50   | `#f9f9f9` | 1.05     | large panel surfaces (classroom's teacher page)                                        |
 | 100  | `#f1f1f1` | 1.13     | option hover, subtle fills                                                             |
 | 200  | `#e7e7e7` | 1.24     | surface edges: dividers, cards, dropdown cards                                         |
@@ -158,9 +158,16 @@ which the re-grade made genuinely darker; python's zoom pills sit on
 
 ## Follow-ups (not in the spike)
 
-- **`brand2`** still aliases Chakra's unmodified gray as its OSS default
-  (the brand contract's second ramp). Whether it should follow the neutral
-  stance is a separate brand decision.
+- ~~**`brand2`** still aliases Chakra's unmodified gray~~ Done, and
+  further: Chakra's slate gray is deleted from `base-tokens.ts` (one grey
+  system, nothing to mix) and **`brand2` is removed from the library
+  entirely** — ml-trainer was its only consumer, so the ramp is now that
+  app's own token (OSS default: aliases of the family gray, the bland
+  "replace me" signal; its private preset supplies the green as before).
+  The library's brand contract is just `brand` + `display`. `statusBarBg`
+  defaults to `{colors.gray.500}` (`#718096` → `#767676` on the way
+  through, same lightness, blue cast gone); ml-trainer re-points it at its
+  `brand2.500`, classroom at black, as before.
 - **Placeholder text** (`*::placeholder` and recipes at `gray.500`) is now
   4.54:1 — text-safe for free, but _darker_ than branded python's faint
   rendering; flag in visual review.

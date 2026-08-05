@@ -88,38 +88,9 @@ export const colors = {
       value: "rgba(0, 0, 0, 0.92)",
     },
   },
-  gray: {
-    "50": {
-      value: "#F7FAFC",
-    },
-    "100": {
-      value: "#EDF2F7",
-    },
-    "200": {
-      value: "#E2E8F0",
-    },
-    "300": {
-      value: "#CBD5E0",
-    },
-    "400": {
-      value: "#A0AEC0",
-    },
-    "500": {
-      value: "#718096",
-    },
-    "600": {
-      value: "#4A5568",
-    },
-    "700": {
-      value: "#2D3748",
-    },
-    "800": {
-      value: "#1A202C",
-    },
-    "900": {
-      value: "#171923",
-    },
-  },
+  // Chakra's blue-slate `gray` is deliberately not here: the family gray is
+  // the neutral ramp in base-preset.ts, and keeping the slate around invited
+  // mixing the two. See docs/gray-ramp.md.
   red: {
     "50": {
       value: "#FFF5F5",

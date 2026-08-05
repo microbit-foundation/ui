@@ -20,7 +20,7 @@ One package for now:
   complete micro:bit design system (Chakra scales, recipes, the micro:bit
   house vocabulary, and OSS default brand values). Used alone it renders in
   the OSS default look; a private brand preset (a sibling repo) merged after
-  it overrides the `brand`/`brand2` ramps and `display` font for branded
+  it overrides the `brand` ramp and `display` font for branded
   builds. Ships as source; see the package README for the consumption setup
   (preset stack, `styled-system` alias, cascade layers, react-intl
   messages).

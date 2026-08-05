@@ -315,9 +315,11 @@ from the library extraction.
     than `4xl`, they leak into desktop. Every non-full dialog size restates
     the box props so the larger breakpoint fully overrides `full`.
 5.  **Know exactly which ramps the app's theme overrode.** ml-trainer's OSS
-    `brand2` is Chakra's _unmodified_ gray, not the locally overridden
+    `brand2` was Chakra's _unmodified_ gray, not the locally overridden
     `gray` — conflating them made card text near-invisible. Check ramp
-    provenance token-by-token (the differ helps).
+    provenance token-by-token (the differ helps). (`brand2` has since moved
+    out of the library into ml-trainer's app preset — see the gray-ramp
+    doc.)
 6.  **OSS vs private divergence → semantic tokens.** Structural forks
     (variant colours, fonts, gradients) are driven by semantic tokens the
     private preset overrides (`languageText*`, the `display` font,
@@ -1186,7 +1188,9 @@ content_ (docs code embeds, drag handles, sensor icons) and is never
 chrome — mapping it to `brand2` would have crossed the two apps' chrome
 onto opposite tokens. Its teal stayed an app-specific semantic category
 (sibling of its `code.*` palette). Genuine family-wide holds: `toast*Bg`
-on teal, errors/destructive on red/`danger`.
+on teal, errors/destructive on red/`danger`. (Since resolved structurally:
+`brand2` is no longer a library slot at all — it lives in ml-trainer's app
+preset, so there is nothing to map a second hue onto.)
 
 After the family migration completes, the Chakra token snapshot becomes a
 **malleable base** — it is a parity constraint only while Chakra apps

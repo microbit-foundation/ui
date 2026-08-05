@@ -44,6 +44,37 @@ import { tooltip } from "./Tooltip.recipe";
 import { field } from "./TextField.recipe";
 import { toast } from "./Toast.recipe";
 
+// The family gray ramp: pure neutrals (r=g=b throughout) as the OSS default
+// of the per-app tinted ramps (see docs/gray-ramp.md). Stops keep Chakra's
+// names, and 50–300 match Chakra's *luminance* exactly — big panel surfaces
+// are made of these, and even a few bits of darkening at the near-white end
+// is visible across a viewport (classroom's teacher page caught an earlier
+// draft that darkened 50 for tidier numbering). Departures from Chakra:
+//   - 400 is re-graded darker to 3.05:1 on white, the accessible
+//     form-outline stop; Chakra's 400 (2.26:1) sat uselessly between
+//     roles and the ramp had nothing in the 3:1–4.5:1 band.
+//   - 500 is #767676 (4.54:1) rather than Chakra's 4.0:1, so
+//     placeholders and secondary text pass AA.
+// Quirk, kept deliberately: 10/25 are the family's *panel tints*, which by
+// luminance sit between 50 and 100 — the sub-50 names are historical. Do not
+// "fix" the ordering; the rendered surfaces are what matter. (Decided: rename
+// by position — 25 -> 75 — as its own step before the role-tokens work; see
+// docs/gray-ramp.md.)
+const gray = {
+  10: { value: "#fcfcfc" },
+  25: { value: "#f5f5f5" },
+  50: { value: "#f9f9f9" },
+  100: { value: "#f1f1f1" },
+  200: { value: "#e7e7e7" },
+  300: { value: "#d4d4d4" },
+  400: { value: "#949494" }, // 3.05:1 — accessible outline stop
+  500: { value: "#767676" }, // 4.54:1 — text-safe secondary
+  600: { value: "#575757" },
+  700: { value: "#404040" },
+  800: { value: "#262626" },
+  900: { value: "#1a1a1a" },
+};
+
 /**
  * The base preset: the complete, working micro:bit design system. The base
  * token scales (base-tokens.ts), the micro:bit house style
@@ -58,9 +89,11 @@ import { toast } from "./Toast.recipe";
  * A private brand preset (a sibling repo, e.g. CreateAI) is merged AFTER this
  * one to restyle everything by overriding just these token *values* (never
  * their names — see the CSS-var contract in the README):
- *   - colours: the `brand` and `brand2` ramps (OSS defaults: Chakra
- *     blue / Chakra's unmodified gray). Other ramps a brand tweaks
- *     (teal/purple/pink/…) already exist in the Chakra scales below.
+ *   - colours: the `brand` ramp (OSS default: Chakra blue). Other ramps a
+ *     brand tweaks (teal/purple/pink/…) already exist in the Chakra scales
+ *     below. (There is deliberately no `brand2`: a second accent is an app
+ *     decision, not a library slot — ml-trainer, its only user, defines it
+ *     in its app preset.)
  *   - font: `display` (OSS default: Helvetica; e.g. GT Walsheim privately).
  * The recipes and semantic tokens here reference those, so a brand swap needs
  * no recipe changes. With no private preset, these OSS defaults stand.
@@ -91,43 +124,11 @@ export const basePreset = definePreset({
     tokens: {
       colors: {
         ...colors,
-        // The family gray ramp: pure neutrals (r=g=b throughout) as the OSS
-        // default of the per-app tinted ramps (see docs/gray-ramp.md).
-        // Stops keep Chakra's names, and 50–300 match Chakra's *luminance*
-        // exactly — big panel surfaces are made of these, and even a few
-        // bits of darkening at the near-white end is visible across a
-        // viewport (classroom's teacher page caught an earlier draft that
-        // darkened 50 for tidier numbering). Departures from Chakra:
-        //   - 400 is re-graded darker to 3.05:1 on white, the accessible
-        //     form-outline stop; Chakra's 400 (2.26:1) sat uselessly between
-        //     roles and the ramp had nothing in the 3:1–4.5:1 band.
-        //   - 500 is #767676 (4.54:1) rather than Chakra's 4.0:1, so
-        //     placeholders and secondary text pass AA.
-        // Quirk, kept deliberately: 10/25 are the family's *panel tints*,
-        // which by luminance sit between 50 and 100 — the sub-50 names are
-        // historical. Do not "fix" the ordering; the rendered surfaces are
-        // what matter. (Decided: rename by position — 25 -> 75 — as its own
-        // step before the role-tokens work; see docs/gray-ramp.md.)
-        gray: {
-          10: { value: "#fcfcfc" },
-          25: { value: "#f5f5f5" },
-          50: { value: "#f9f9f9" },
-          100: { value: "#f1f1f1" },
-          200: { value: "#e7e7e7" },
-          300: { value: "#d4d4d4" },
-          400: { value: "#949494" }, // 3.05:1 — accessible outline stop
-          500: { value: "#767676" }, // 4.54:1 — text-safe secondary
-          600: { value: "#575757" },
-          700: { value: "#404040" },
-          800: { value: "#262626" },
-          900: { value: "#1a1a1a" },
-        },
-        // OSS default brand ramps (see the brand contract above). `brand`
-        // aliases Chakra blue; `brand2` Chakra's *unmodified* gray (not the
-        // `gray` above, whose 10/25 additions are lighter — getting this
-        // wrong once made card text near-invisible).
+        gray,
+        // OSS default brand ramp (see the brand contract above): Chakra
+        // blue. (Chakra's slate gray is gone from base-tokens.ts — the
+        // family gray above is the one grey system.)
         brand: colors.blue,
-        brand2: colors.gray,
       },
       spacing,
       sizes,
@@ -227,9 +228,12 @@ export const basePreset = definePreset({
         toastSuccessBg: { value: "{colors.teal.800}" },
         toastWarningBg: { value: "{colors.teal.800}" },
         toastErrorBg: { value: "{colors.danger.600}" },
-        // The native app's status-bar area colour, shared by the ActionBar
-        // and the full-size dialog's safe-area gradient.
-        statusBarBg: { value: "{colors.brand2.500}" },
+        // The native app's status-bar area colour, shared by the apps'
+        // ActionBars and the full-size dialog's safe-area gradient. The
+        // default is a deliberately bland grey — it only ever renders on a
+        // notched device, and every native app re-points it (classroom to
+        // black, ml-trainer to its brand2).
+        statusBarBg: { value: "{colors.gray.500}" },
       },
     },
     recipes: {
