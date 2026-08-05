@@ -47,7 +47,9 @@ export const NativeSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(
         className={cx(
           input({ size }),
           css(
-            { cursor: "pointer" },
+            // Chakra's Select field carried a 1px bottom padding its Input
+            // didn't (its option text sits a hair higher than input text).
+            { cursor: "pointer", paddingBottom: "1px" },
             // Room for the chevron overlay (Chakra Select's icon spacing,
             // constant across sizes).
             hideChevron ? undefined : { paddingRight: "8" },
