@@ -54,17 +54,21 @@ export const Marketing: Story = {
   argTypes: { variant: { table: { disable: true } } },
 };
 
+/**
+ * The page-title pair, in the `headingAccent` colour. Both carry their own font
+ * size and hold it against whatever `size` is in play, at every width — a
+ * call-site `fontSize` style prop still wins if you need a different one.
+ */
 export const PageTitle: Story = {
   render: () => (
     <VStack alignItems="stretch" gap={3}>
-      {/* Size discipline (gotcha #31): `label`/`subtitle` set fontSize flat,
-          so a responsive size's media rule would beat them above md. `label`
-          rides the default size="xl", whose md fontSize happens to equal its
-          own 4xl; `subtitle` pairs with the flat size="md", as classroom's
-          call sites do. */}
       <Heading variant="label">Label heading (headingAccent)</Heading>
-      <Heading as="h2" size="md" variant="subtitle">
+      <Heading as="h2" variant="subtitle">
         Subtitle heading (headingAccent)
+      </Heading>
+      {/* The size prop no longer fights the variant, so this stays 4xl. */}
+      <Heading size="4xl" variant="label">
+        Label heading, size=&quot;4xl&quot;
       </Heading>
     </VStack>
   ),
