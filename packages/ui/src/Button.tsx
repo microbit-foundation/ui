@@ -16,17 +16,28 @@ import { buttonIcon } from "./button-icon";
 import { uiMessage } from "./messages";
 import { Spinner } from "./Spinner";
 
-// Chakra's ButtonSpinner: a 1em spinner in the label's place. Its own
-// component so useIntl runs only while a button is actually loading —
-// a bare Button must keep working without an IntlProvider (test renders
-// commonly lack one).
+// Chakra's ButtonSpinner: a 1em spinner centred over the hidden label. Out of
+// flow, so the label alone sets the button's size; the recipe's base
+// `position: relative` is what it anchors to. Its own component so useIntl runs
+// only while a button is actually loading — a bare Button must keep working
+// without an IntlProvider (test renders commonly lack one).
 const ButtonSpinner = () => {
   const intl = useIntl();
   return (
-    <Spinner
-      aria-label={intl.formatMessage(uiMessage("ui.loading"))}
-      css={{ width: "1em", height: "1em" }}
-    />
+    <span
+      className={css({
+        position: "absolute",
+        inset: 0,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      })}
+    >
+      <Spinner
+        aria-label={intl.formatMessage(uiMessage("ui.loading"))}
+        css={{ width: "1em", height: "1em" }}
+      />
+    </span>
   );
 };
 
@@ -41,9 +52,11 @@ export interface ButtonProps
   /** Icon rendered after the label, matching Chakra's `rightIcon`. */
   rightIcon?: ReactNode;
   /**
-   * Replace the label with a spinner and disable interaction, matching
-   * Chakra's `isLoading` (including its dimmed disabled look; the button
-   * shrinks to the spinner, as Chakra's did without an explicit width).
+   * Show a spinner in place of the label and disable interaction, matching
+   * Chakra's `isLoading`: the label stays in the layout but invisible, so the
+   * button keeps its size, and the dimmed disabled look applies. Chakra's
+   * `loadingText`/`spinnerPlacement` (a visible label beside the spinner) are
+   * unported — no app in the family used them.
    */
   isLoading?: boolean;
   children?: ReactNode;
@@ -70,6 +83,17 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref,
   ) {
+    const label = (
+      <>
+        {leftIcon ? (
+          <span className={buttonIcon({ side: "left" })}>{leftIcon}</span>
+        ) : null}
+        {children}
+        {rightIcon ? (
+          <span className={buttonIcon({ side: "right" })}>{rightIcon}</span>
+        ) : null}
+      </>
+    );
     return (
       <RACButton
         ref={ref}
@@ -78,22 +102,20 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           cssProp ? css(cssProp) : undefined,
           className,
         )}
-        data-loading={isLoading || undefined}
+        data-loading={isLoading ? "" : undefined}
         {...rest}
         isDisabled={isLoading || rest.isDisabled}
       >
         {isLoading ? (
-          <ButtonSpinner />
-        ) : (
           <>
-            {leftIcon ? (
-              <span className={buttonIcon({ side: "left" })}>{leftIcon}</span>
-            ) : null}
-            {children}
-            {rightIcon ? (
-              <span className={buttonIcon({ side: "right" })}>{rightIcon}</span>
-            ) : null}
+            <ButtonSpinner />
+            {/* Hidden with opacity, not removed: it keeps the button the size
+                it is when idle, so a row of buttons doesn't reflow. Still in
+                the accessibility tree, so the button keeps its name. */}
+            <span className={css({ opacity: 0 })}>{label}</span>
           </>
+        ) : (
+          label
         )}
       </RACButton>
     );
