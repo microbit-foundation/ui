@@ -48,17 +48,18 @@ export const heading = defineRecipe({
       // base-preset.ts). Converged from classroom and data-microbit-org,
       // which carried these two byte-identically app-side.
       //
-      // These set `fontSize` flat, and the `size` variant sets it
-      // responsively: Panda hoists every media query below all base rules,
-      // so above `md` a responsive size's rule would beat these whatever
-      // the declaration order (playbook gotcha #31). Pair them with a flat
-      // size (`md`, `sm`, `xs`) or no size at all — never `lg` and up.
+      // `fontSize` goes through a doubled selector because `size` sets it too,
+      // responsively. Source order can't settle that: Panda hoists media
+      // queries below the base rules (gotcha #31) and emits variant rules in
+      // the order it meets them, so which of the two wins would depend on the
+      // breakpoint and on what other call sites exist. Two classes beat one at
+      // every width instead.
       label: {
-        fontSize: "4xl",
+        "&&": { fontSize: "4xl" },
         color: "headingAccent",
       },
       subtitle: {
-        fontSize: "xl",
+        "&&": { fontSize: "xl" },
         fontWeight: "normal",
         color: "headingAccent",
       },
