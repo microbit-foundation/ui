@@ -23,7 +23,7 @@ const meta = {
   args: { children: "The quick brown fox", size: "xl" },
   argTypes: {
     size: { control: "select", options: headingSizes },
-    variant: { control: "select", options: ["marketing"] },
+    variant: { control: "select", options: ["marketing", "label", "subtitle"] },
   },
 } satisfies Meta<typeof Heading>;
 export default meta;
@@ -52,4 +52,20 @@ export const Marketing: Story = {
   },
   // The variant is the point of this story; don't offer it as a control.
   argTypes: { variant: { table: { disable: true } } },
+};
+
+export const PageTitle: Story = {
+  render: () => (
+    <VStack alignItems="stretch" gap={3}>
+      {/* Size discipline (gotcha #31): `label`/`subtitle` set fontSize flat,
+          so a responsive size's media rule would beat them above md. `label`
+          rides the default size="xl", whose md fontSize happens to equal its
+          own 4xl; `subtitle` pairs with the flat size="md", as classroom's
+          call sites do. */}
+      <Heading variant="label">Label heading (headingAccent)</Heading>
+      <Heading as="h2" size="md" variant="subtitle">
+        Subtitle heading (headingAccent)
+      </Heading>
+    </VStack>
+  ),
 };
