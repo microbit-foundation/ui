@@ -47,8 +47,15 @@ export interface ComboBoxProps<T extends object>
    * that (react-select did it with a custom `SingleValue`).
    */
   startContent?: ReactNode;
-  /** `SelectOption`s. */
-  children: ReactNode;
+  /**
+   * `SelectOption`s, or a render function over the `items` prop for a
+   * dynamic collection — which is how an async lookup works: drive `items`
+   * from loaded results (e.g. react-stately's useAsyncList) and filter
+   * server-side; react-aria skips its own text filtering when `items` is
+   * controlled. Pair with `emptyState` (swap its content while loading) and
+   * `isPopoverHidden` for a minimum query length.
+   */
+  children: ReactNode | ((item: T) => ReactNode);
   /**
    * Replaces the chevron; pass `null` for none, which is what a plain
    * autocomplete wants (react-select's `dropdownIndicator: display none`).
