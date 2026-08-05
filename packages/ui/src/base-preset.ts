@@ -220,11 +220,17 @@ export const basePreset = definePreset({
           secondaryActiveBorder: { value: "{colors.brand.700}" },
           secondaryActiveBg: { value: "{colors.brand.50}" },
         },
-        // Toast status colours: the Chakra-era toast Alert restyle (teal for
-        // every status except error) shared across the app family.
-        toastInfoBg: { value: "{colors.teal.800}" },
-        toastSuccessBg: { value: "{colors.teal.800}" },
-        toastWarningBg: { value: "{colors.teal.800}" },
+        // Toast status colours. Unconventional, and worth a design review:
+        // the family's Chakra-era restyle painted every status except error
+        // the same teal, so success/warning/info are indistinguishable by
+        // colour. Kept as-is for now; each brand re-points these values
+        // (blimp teals privately). The OSS literal is Chakra's teal.700 —
+        // the ramp value nearest the brands' teals (white text 7.3:1); the
+        // teal ramp itself is gone from base-tokens.ts (this was its only
+        // consumer).
+        toastInfoBg: { value: "#285E61" },
+        toastSuccessBg: { value: "#285E61" },
+        toastWarningBg: { value: "#285E61" },
         toastErrorBg: { value: "{colors.danger.600}" },
         // The native app's status-bar area colour, shared by the apps'
         // ActionBars and the full-size dialog's safe-area gradient. The
