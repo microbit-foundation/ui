@@ -36,8 +36,8 @@ Stops keep Chakra's names. Contrast is against white.
 | Stop | Value     | Contrast | Role                                                                                   |
 | ---- | --------- | -------- | -------------------------------------------------------------------------------------- |
 | 10   | `#fcfcfc` | 1.02     | editor surface tint (python)                                                           |
-| 25   | `#f5f5f5` | 1.09     | panel tint (python sidebar, ml-trainer **note non-monotonic**)                         |
 | 50   | `#f9f9f9` | 1.05     | large panel surfaces (classroom's teacher page)                                        |
+| 75   | `#f5f5f5` | 1.09     | panel tint (python sidebar, ml-trainer; renamed from a historical `25`)                |
 | 100  | `#f1f1f1` | 1.13     | option hover, subtle fills                                                             |
 | 200  | `#e7e7e7` | 1.24     | surface edges: dividers, cards, dropdown cards                                         |
 | 300  | `#d4d4d4` | 1.48     | stronger surface edges, switch track                                                   |
@@ -55,13 +55,12 @@ that darkened 50 for tidier numbering). 400 and 500 are the deliberate
 re-grades: 400 fills the empty 3:1 band and is what the input/select
 recipes use for outlines (rest `400`, hover `500`).
 
-Quirk, kept for now: 10/25 are panel _tints_ that sit between 50 and 100
-by luminance; the sub-50 names are historical. Don't re-order the values —
-the rendered surfaces are what matter. Decision: rename by position
-(`25` → `75`; check `10` against final values) as its own step _before_
-the role-tokens work — ~15 call sites (python-editor's panels and
-sidebar-text uses, ml-trainer ×2, one private semantic token), no rendered
-change. Not scheduled yet.
+The 10 and 75 stops are panel _tints_ added by the family (Chakra had
+neither). 75 was historically named `25`, which sat non-monotonically
+between 50 and 100 by luminance; it was renamed by position as its own
+step (call sites in python-editor, ml-trainer and one private semantic
+token — no rendered change). `10` was checked against the final values
+and keeps its name: `#fcfcfc` genuinely is lighter than 50.
 
 ## Mappings
 

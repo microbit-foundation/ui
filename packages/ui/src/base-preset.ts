@@ -55,15 +55,13 @@ import { toast } from "./Toast.recipe";
 //     roles and the ramp had nothing in the 3:1–4.5:1 band.
 //   - 500 is #767676 (4.54:1) rather than Chakra's 4.0:1, so
 //     placeholders and secondary text pass AA.
-// Quirk, kept deliberately: 10/25 are the family's *panel tints*, which by
-// luminance sit between 50 and 100 — the sub-50 names are historical. Do not
-// "fix" the ordering; the rendered surfaces are what matter. (Decided: rename
-// by position — 25 -> 75 — as its own step before the role-tokens work; see
-// docs/gray-ramp.md.)
+// The sub-100 stops are the family's *panel tints*, named by position:
+// 10 (lighter than 50) and 75 (between 50 and 100 — renamed from a
+// historical "25"; see docs/gray-ramp.md).
 const gray = {
   10: { value: "#fcfcfc" },
-  25: { value: "#f5f5f5" },
   50: { value: "#f9f9f9" },
+  75: { value: "#f5f5f5" },
   100: { value: "#f1f1f1" },
   200: { value: "#e7e7e7" },
   300: { value: "#d4d4d4" },
