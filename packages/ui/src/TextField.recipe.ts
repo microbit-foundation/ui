@@ -37,6 +37,10 @@ export const field = defineSlotRecipe({
       color: "danger.500",
     },
     helperText: {
+      // RAC's Text renders a span, and RadioGroup/CheckboxGroup roots are not
+      // flex containers to blockify it, where an inline box would drop the
+      // margin below (gotcha #44).
+      display: "block",
       mt: "2",
       fontSize: "sm",
       lineHeight: "normal",
