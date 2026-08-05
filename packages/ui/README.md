@@ -84,10 +84,13 @@ node_modules/@microbit/ui/lang/ui.fr.json --ast --out-file ...` (multiple
    input files merge; ids are `ui.`-namespaced so they can't collide). This
    keeps the strings in the app's lazily loaded locale chunks rather than
    an eagerly bundled catalog-of-all-locales.
-6. **`ToastProvider`** once near the root, inside the `IntlProvider`.
-7. Optionally **`SharedUIProvider`** with an overlay-close registrar so the
-   app can dismiss open menus from outside the tree (e.g. the Android
-   hardware back button). Apps without one can omit the provider.
+6. **`SharedUIProvider`** inside the `IntlProvider`, wrapping the app. It
+   passes the locale on to react-aria, which translates its own built-in
+   strings (see [Strings](#strings)); without it those follow the browser
+   rather than the app's language setting. Also takes an optional
+   overlay-close registrar, so the app can dismiss open menus from outside
+   the tree (e.g. the Android hardware back button).
+7. **`ToastProvider`** once near the root, inside the two providers above.
 
 ## Legacy browser support (Safari < 15) — temporary
 
@@ -206,6 +209,20 @@ Crowdin via the repo-root `npm run update-translations -- <path to extracted
 Crowdin ZIP>` (config-driven over packages in
 `bin/update-translations.cjs`), after which you run `npm run i18n:tidy`
 from the root.
+
+### react-aria's own strings
+
+Separately from all of the above, react-aria has built-in strings of its own —
+stepper button labels, the toast region's landmark label, hidden dismiss
+buttons, listbox and selection announcements — and translates them from
+catalogs it bundles, nothing to do with react-intl. `SharedUIProvider` hands it
+the app's locale so the two agree.
+
+It covers 32 locales. Of ours, ca, cy and ga-IE (and the `lol` pseudo-locale)
+are not among them and fall back to English; the rest resolve, including where
+our id is less specific than react-aria's (`fr` finds its fr-FR). There is no
+supported way to supply translations for the locales it misses, so where one of
+its strings matters we pass our own text in as a label instead.
 
 ## Chakra UI heritage and license
 
