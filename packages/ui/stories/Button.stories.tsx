@@ -71,6 +71,27 @@ export const Disabled: Story = {
   args: { variant: "primary", isDisabled: true },
 };
 
+/**
+ * `isLoading` puts a spinner where the label was and disables the button, so
+ * it takes the dimmed disabled look too. The button shrinks to the spinner:
+ * where that shifts the layout around it, give it a width.
+ */
+export const Loading: Story = {
+  render: () => (
+    <HStack gap={4} alignItems="center">
+      <Button variant="primary" isLoading>
+        Save
+      </Button>
+      <Button variant="secondary" isLoading css={{ width: "5rem" }}>
+        Save
+      </Button>
+      <Button variant="primary" leftIcon={<RiDownload2Line />} isLoading>
+        Download
+      </Button>
+    </HStack>
+  ),
+};
+
 export const Grouped: Story = {
   render: () => (
     <Stack gap={4} alignItems="start">

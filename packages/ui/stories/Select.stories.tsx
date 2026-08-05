@@ -4,10 +4,14 @@
  * SPDX-License-Identifier: MIT
  */
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useState } from "react";
-import { RiCloudLine, RiFireLine, RiSnowyLine } from "react-icons/ri";
-import { Button, ComboBox, Icon, Select, SelectOption, Stack } from "../src";
+import { Button, Select, SelectOption, Stack } from "../src";
 
+/**
+ * Select — a listbox behind a button: pick one of a known set, no typing.
+ * Forms/ComboBox is the same `select` slot recipe with a text input instead of
+ * the button, for lists long enough to want filtering. One recipe behind both
+ * is what stops a searchable and a non-searchable picker drifting apart.
+ */
 const meta = {
   title: "Forms/Select",
   component: Select,
@@ -16,6 +20,9 @@ const meta = {
   argTypes: {
     isDisabled: { control: "boolean" },
     isInvalid: { control: "boolean" },
+    isRequired: { control: "boolean" },
+    helperText: { control: "text" },
+    errorMessage: { control: "text" },
     maxHeight: { control: "number" },
     placement: {
       control: "select",
@@ -43,7 +50,6 @@ export const Playground: Story = {
   ),
 };
 
-/** A listbox behind a button: pick one of a known set, no typing. */
 export const Basic: Story = {
   render: () => (
     <Stack gap={5} css={{ maxWidth: "16rem" }}>
@@ -55,101 +61,6 @@ export const Basic: Story = {
       </Select>
     </Stack>
   ),
-};
-
-/**
- * Type to filter. `emptyState` is react-select's `noOptionsMessage`.
- *
- * Note react-aria's default: the list opens when you *type*, not when you
- * click the field — the chevron is the click affordance. Pass
- * `menuTrigger="focus"` for react-select's behaviour, as the story below does.
- */
-export const Combo: Story = {
-  render: () => (
-    <Stack gap={5} css={{ maxWidth: "16rem" }}>
-      <ComboBox
-        label="Fruit"
-        placeholder="Start typing…"
-        emptyState="No matches"
-      >
-        {options}
-      </ComboBox>
-    </Stack>
-  ),
-};
-
-/**
- * `isPopoverHidden` withholds the list entirely — for gating on a minimum
- * query length, which react-aria has no prop for. classroom uses it to make
- * students type two characters before it offers names.
- */
-export const GatedOnQueryLength: Story = {
-  render: () => {
-    const [query, setQuery] = useState("");
-    return (
-      <Stack gap={5} css={{ maxWidth: "16rem" }}>
-        <ComboBox
-          label="Fruit (two characters first)"
-          placeholder="Start typing…"
-          inputValue={query}
-          onInputChange={setQuery}
-          isPopoverHidden={query.length < 2}
-          indicator={null}
-          emptyState="No matches"
-        >
-          {options}
-        </ComboBox>
-      </Stack>
-    );
-  },
-};
-
-const WEATHER = [
-  { value: "cloudy", label: "Cloudy", icon: RiCloudLine },
-  { value: "hot", label: "Hot", icon: RiFireLine },
-  { value: "snowy", label: "Snowy", icon: RiSnowyLine },
-];
-
-/**
- * `startContent` puts something before the input — an icon for the current
- * value, say. A ComboBox's control is a text input, so unlike a Select it
- * cannot otherwise show anything but text for what is chosen.
- */
-export const WithAnIconForTheValue: Story = {
-  render: () => {
-    const [key, setKey] = useState<string | null>("cloudy");
-    const [query, setQuery] = useState("Cloudy");
-    const chosen = WEATHER.find((w) => w.value === key);
-    return (
-      <Stack gap={5} css={{ maxWidth: "16rem" }}>
-        <ComboBox
-          label="Weather"
-          placeholder="Select…"
-          menuTrigger="focus"
-          selectedKey={key}
-          inputValue={query}
-          onInputChange={setQuery}
-          onSelectionChange={(k) => {
-            setKey(k as string);
-            const w = WEATHER.find((x) => x.value === k);
-            if (w) {
-              setQuery(w.label);
-            }
-          }}
-          startContent={
-            chosen ? <Icon as={chosen.icon} aria-hidden /> : undefined
-          }
-        >
-          {WEATHER.map((w) => (
-            <SelectOption key={w.value} id={w.value} textValue={w.label}>
-              <Icon as={w.icon} aria-hidden />
-              {w.label}
-            </SelectOption>
-          ))}
-        </ComboBox>
-      </Stack>
-    );
-  },
 };
 
 /**
@@ -193,14 +104,13 @@ export const Overridden: Story = {
 
 /**
  * Invalid state. `isInvalid` sets it directly; `isRequired` inside a form sets
- * it on submit — the bottom pair here, which start clean, go red when you press
- * Check with nothing chosen, and clear as soon as you choose something.
+ * it on submit — the second field here starts clean, goes red when you press
+ * Check with nothing chosen, and clears as soon as you choose something.
  *
- * Tab through them: the focus ring beats the red border while a control is
+ * Tab through it: the focus ring beats the red border while the control is
  * focused, and hovering tints the border only while neither applies, both as a
- * TextField or NativeSelect does. Note that red is the *only* signal a Select
- * gives — unlike TextField it has no `errorMessage`, so anything explaining the
- * error has to come from the app for now (#41).
+ * TextField or NativeSelect does. Forms/Field chrome covers `errorMessage`
+ * across the fields.
  */
 export const Invalid: Story = {
   render: () => (
@@ -208,33 +118,19 @@ export const Invalid: Story = {
       <Select label="Fruit (invalid)" placeholder="Select…" isInvalid>
         {options}
       </Select>
-      <ComboBox label="Fruit (invalid)" placeholder="Start typing…" isInvalid>
-        {options}
-      </ComboBox>
-      {/* Submitting empty marks both controls. They need a `name` to take part
-          in form validation at all. */}
+      {/* Submitting empty marks the control. It needs a `name` to take part in
+          form validation at all. */}
       <form onSubmit={(e) => e.preventDefault()}>
         <Stack gap={5}>
           <Select
             label="Fruit (required)"
             placeholder="Select…"
-            name="a"
+            name="fruit"
             isRequired
+            errorMessage="Choose a fruit"
           >
             {options}
           </Select>
-          {/* `isRequired`, not a `validate` rule: react-aria displays a
-              ComboBox's custom validation a step behind, so it goes red while
-              you are still typing and stays red after you have picked
-              something, until blur. */}
-          <ComboBox
-            label="Fruit (required)"
-            placeholder="Start typing…"
-            name="b"
-            isRequired
-          >
-            {options}
-          </ComboBox>
           <Button type="submit" variant="secondary">
             Check
           </Button>

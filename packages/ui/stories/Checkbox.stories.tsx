@@ -4,8 +4,9 @@
  * SPDX-License-Identifier: MIT
  */
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { useState } from "react";
 import { RiCheckLine } from "react-icons/ri";
-import { Checkbox, HStack, Icon, Stack, Text } from "../src";
+import { Checkbox, CheckboxGroup, HStack, Icon, Stack, Text } from "../src";
 
 const meta = {
   title: "Forms/Checkbox",
@@ -45,6 +46,37 @@ export const Sizes: Story = {
       ))}
     </Stack>
   ),
+};
+
+/**
+ * CheckboxGroup holds one value array for the set — each Checkbox's `value` is
+ * its entry — and takes the field chrome the other fields take (label, helper
+ * text, errors: see Forms/Field chrome). It brings no layout of its own, so
+ * compose a Stack inside as RadioGroup does.
+ */
+export const Group: Story = {
+  render: () => {
+    const [value, setValue] = useState(["temperature"]);
+    return (
+      <Stack gap={4} maxW="sm">
+        <CheckboxGroup
+          label="Sensors to log"
+          value={value}
+          onChange={setValue}
+          helperText="Each one adds a column to the CSV"
+        >
+          <Stack gap={3}>
+            <Checkbox value="temperature">Temperature</Checkbox>
+            <Checkbox value="light">Light level</Checkbox>
+            <Checkbox value="sound">Sound level</Checkbox>
+          </Stack>
+        </CheckboxGroup>
+        <Text fontSize="sm" color="gray.600">
+          Selected: {value.length > 0 ? value.join(", ") : "none"}
+        </Text>
+      </Stack>
+    );
+  },
 };
 
 /**
