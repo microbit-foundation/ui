@@ -640,12 +640,24 @@ border` and carry the total across.
     32.4px. Nothing in the types or the generated class names hints at it; it
     only shows above the breakpoint. Rules:
 
-    - An app-preset variant that sets a property the shared `size` variant sets
-      responsively must be paired with a **flat** size (`md`/`sm`/`xs`) or with
-      no size at all — check what `defaultVariants` then supplies, since it is
-      still in play (the `heading` recipe defaults to `size="xl"`, whose `md`
-      fontSize happens to be `4xl`, which is why dropping `size` reproduced
-      Chakra exactly).
+    - **The fix is a doubled selector** (library recipe, 2026-08-05):
+      `label: { "&&": { fontSize: "4xl" } }` emits
+      `.heading--variant_label.heading--variant_label`, two classes against the
+      size variant's one, so it wins at every width in both the base and media
+      blocks — and still loses to a call-site `fontSize` style prop, because
+      the `utilities` layer sits after `recipes`. `Heading`'s `label`/`subtitle`
+      no longer constrain `size`.
+    - Earlier advice here was to pair such a variant with a **flat** size
+      (`md`/`sm`/`xs`) instead. Don't: it only worked by luck. Panda emits
+      variant rules in the order it _meets_ them, which tracks the call sites it
+      extracted rather than the recipe, so in the generated CSS
+      `.heading--size_md` and `.heading--size_xl` landed before the variants
+      (variant won) while `size_sm`, `size_xs` and `size_lg` landed after them
+      (size won). Read the order out of `npx panda cssgen --outfile <file>`;
+      don't reason about it.
+    - `defaultVariants` is still in play whatever you pass — the `heading`
+      recipe defaults to `size="xl"`, whose `md` fontSize happens to be `4xl`,
+      which is why dropping `size` used to reproduce Chakra exactly.
     - Do not reach for declaration order, `compoundVariants` ordering or a
       matching responsive value in the variant: within the media block the
       order is Panda's, not the recipe's.
@@ -873,6 +885,19 @@ border` and carry the total across.
     `:has([aria-expanded=true])` and a `[data-selected]` are equal and source
     order decides.
 
+44. **A recipe slot's vertical margin does nothing on an inline box.** RAC's
+    `Text` renders a `<span>`, so the `field` recipe's `helperText` slot
+    (`mt: 2`) worked under TextField, Select and NumberField — whose roots are
+    flex containers, which blockify their children — and did nothing under
+    RadioGroup and CheckboxGroup, which deliberately carry no layout so call
+    sites compose a Stack. `margin-top` doesn't apply to a non-replaced inline
+    box, so the helper text sat flush against the last option. `errorMessage`
+    escaped it only because it also sets `display: flex`. Give any slot that
+    depends on vertical margin an explicit `display` (that slot now sets
+    `display: block`) instead of trusting the container to blockify it. The
+    trap is specific to components whose whole premise is bringing no layout of
+    their own: every other consumer hides it.
+
 Also remember (from the RAC component work, not numbered): RAC re-selects a
 pressed radio value against current state after any earlier handler runs —
 "click the selected option again to deselect" interactions need a native
@@ -1073,10 +1098,26 @@ Still outstanding, in classroom's likely order of need:
   draw the selected state (a selectable tile).
 - Portal-as-primitive, input adornments beyond InputGroup's overlay
   elements, Skeleton/SkeletonText, NumberInput; Tag as first needed.
-  Done 2026-08-05 (data-microbit-org kickoff): ~~Breadcrumb~~, ~~Mark~~,
-  and ~~TextField error slot~~ — the field chrome
+  Done 2026-08-05 (data-microbit-org kickoff): ~~Breadcrumb~~ and
+  ~~TextField error slot~~ — the field chrome
   (label/helper/error) generalised into `FieldSupport`, carried by
   Select/ComboBox/NumberField/RadioGroup and the new CheckboxGroup.
+  Closes #41.
+- **Mark: built and reverted the same day (2026-08-05). Don't port it
+  again.** Chakra's Mark is `bg: transparent; whiteSpace: nowrap` and exists
+  to serve Chakra's `Highlight` — it is the search-match element
+  (`chakra-ui/packages/components/src/highlight/mark.tsx`). The only family
+  use was data-microbit-org bolding a run-in label inside a translated
+  sentence (`<mark>Chart types:</mark> Use the dropdown…`), which is
+  `<strong>`: emphasis, bold for free, and no `nowrap` to overflow a long
+  translation. ml-trainer's message tag is already called `mark` and renders
+  `<strong>`; a chunk name is only a key, so no translations change.
+  The real search-match case is python-editor's documentation search, which
+  wraps matches in a span with a background wash — precisely the background
+  Chakra's Mark strips, and wrapping prose that `nowrap` would break. If a
+  highlight primitive is ever wanted, it is that treatment over a `<mark>`
+  with a background token, not Chakra's Mark; one consumer, so it stays
+  app-side for now.
 - `usePrefersReducedMotion`.
 - **Tabs** — stayed app-side in python-editor (special-purpose sidebar
   chrome); waits for a second consumer, at which point the RAC markup and a
