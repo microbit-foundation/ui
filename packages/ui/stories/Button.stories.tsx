@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { useState } from "react";
 import { RiDownload2Line } from "react-icons/ri";
 import { Button, ButtonGroup, HStack, Stack } from "../src";
 
@@ -72,24 +73,40 @@ export const Disabled: Story = {
 };
 
 /**
- * `isLoading` puts a spinner where the label was and disables the button, so
- * it takes the dimmed disabled look too. The button shrinks to the spinner:
- * where that shifts the layout around it, give it a width.
+ * `isLoading` centres a spinner over the label and disables the button, so it
+ * takes the dimmed disabled look too. The label is hidden rather than removed,
+ * so each button keeps the size it has when idle — compare the pairs below,
+ * which stay put as you toggle.
  */
 export const Loading: Story = {
-  render: () => (
-    <HStack gap={4} alignItems="center">
-      <Button variant="primary" isLoading>
-        Save
-      </Button>
-      <Button variant="secondary" isLoading css={{ width: "5rem" }}>
-        Save
-      </Button>
-      <Button variant="primary" leftIcon={<RiDownload2Line />} isLoading>
-        Download
-      </Button>
-    </HStack>
-  ),
+  render: () => {
+    const [isLoading, setLoading] = useState(true);
+    return (
+      <Stack gap={6} alignItems="start">
+        <Button variant="secondary" onPress={() => setLoading(!isLoading)}>
+          {isLoading ? "Stop loading" : "Start loading"}
+        </Button>
+        <HStack gap={4} alignItems="center">
+          <Button variant="primary" isLoading={isLoading}>
+            Save
+          </Button>
+          <Button variant="primary" isLoading={isLoading}>
+            Save and close
+          </Button>
+          <Button
+            variant="secondary"
+            leftIcon={<RiDownload2Line />}
+            isLoading={isLoading}
+          >
+            Download
+          </Button>
+          <Button variant="primary" size="sm" isLoading={isLoading}>
+            Small
+          </Button>
+        </HStack>
+      </Stack>
+    );
+  },
 };
 
 export const Grouped: Story = {
