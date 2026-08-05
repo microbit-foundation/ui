@@ -42,6 +42,7 @@ export * from "./Code";
 export * from "./Collapse";
 export * from "./Fade";
 export * from "./Kbd";
+export * from "./Mark";
 export * from "./Divider";
 export * from "./GridList";
 export * from "./Drawer";
