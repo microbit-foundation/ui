@@ -85,6 +85,28 @@ export const FadeStory: Story = {
   },
 };
 
+/**
+ * Per-direction durations (Chakra's `transition.enter`/`transition.exit`): a
+ * slow fade in and a quick fade out here. The duration rides an inline custom
+ * property that switches with the opacity, so each direction gets its own.
+ */
+export const FadeDurations: Story = {
+  name: "Fade (per-direction durations)",
+  render: () => {
+    const [isOpen, setOpen] = useState(true);
+    return (
+      <Stack gap={4} alignItems="start">
+        <Button variant="secondary" onPress={() => setOpen(!isOpen)}>
+          Toggle
+        </Button>
+        <Fade isOpen={isOpen} enterDuration={1.5} exitDuration={0.15}>
+          {paragraph}
+        </Fade>
+      </Stack>
+    );
+  },
+};
+
 export const SlideStory: Story = {
   name: "Slide",
   render: () => {
