@@ -24,6 +24,7 @@ import {
 // Config recipes are colocated with the shared-ui components they style; this
 // preset registers them so Panda merges them at codegen time.
 import { avatar } from "./Avatar.recipe";
+import { breadcrumb } from "./Breadcrumb.recipe";
 import { button } from "./Button.recipe";
 import { card } from "./Card.recipe";
 import { checkbox } from "./Checkbox.recipe";
@@ -222,6 +223,7 @@ export const basePreset = definePreset({
     },
     slotRecipes: {
       avatar,
+      breadcrumb,
       card,
       checkbox,
       dialog,
