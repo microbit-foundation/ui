@@ -1046,9 +1046,12 @@ Radio/RadioGroup, NumberField, Kbd/Code, `useMediaQuery`/`usePrevious`/
 Still outstanding, in classroom's likely order of need:
 
 - ~~**Select/ComboBox**~~ — **built** (classroom, area 6), retiring
-  react-select there; one `select` slot recipe behind both. Sections,
-  multi-select and async loading via `useAsyncList` are still unbuilt — the
-  data-microbit-org school lookup will want the last of those.
+  react-select there; one `select` slot recipe behind both. Async lookups
+  now work via dynamic collections (`items` + render-function children,
+  2026-08-05, for the data-microbit-org school lookup — drive `items` from
+  loaded results, `emptyState` doubles as the loading message,
+  `isPopoverHidden` gates on query length). Sections and multi-select are
+  still unbuilt.
 - ~~**GridList**~~, ~~**Avatar** (+ badge)~~ and ~~**ListBox**~~ — **built**
   (classroom, area 7), retiring the last of its hand-rolled react-aria v3
   hooks. Avatar reproduces Chakra's name-hash colour and its contrast rule
@@ -1057,9 +1060,12 @@ Still outstanding, in classroom's likely order of need:
   their own controls need the grid, leaf options the listbox. `Checkbox`
   gained `control={false}` at the same time, for a checkbox whose children
   draw the selected state (a selectable tile).
-- Portal-as-primitive, TextField error slot, input adornments,
-  Skeleton/SkeletonText, Breadcrumb, NumberInput; cheap typography
-  wrappers (Tag/Mark) as first needed.
+- Portal-as-primitive, input adornments beyond InputGroup's overlay
+  elements, Skeleton/SkeletonText, NumberInput; Tag as first needed.
+  Done 2026-08-05 (data-microbit-org kickoff): ~~Breadcrumb~~, ~~Mark~~,
+  and ~~TextField error slot~~ — the field chrome
+  (label/helper/error) generalised into `FieldSupport`, carried by
+  Select/ComboBox/NumberField/RadioGroup and the new CheckboxGroup.
 - `usePrefersReducedMotion`.
 - **Tabs** — stayed app-side in python-editor (special-purpose sidebar
   chrome); waits for a second consumer, at which point the RAC markup and a
@@ -1084,9 +1090,12 @@ Still outstanding, in classroom's likely order of need:
      migration inherits most of this work: the black-on-white button system
      now resolves through `button.*` semantic tokens (see Cross-app
      vocabulary), the density scale comes from `@microbit/ui/dense-preset`,
-     and the Heading `label`/`subtitle` variants with their hardcoded
-     `#cd0365` are still app-side in both — a convergence candidate, with the
-     pink named semantically, when data-microbit-org ports them.
+     and the Heading `label`/`subtitle` variants converged into the library
+     recipe over a `headingAccent` token at data-microbit-org's kickoff
+     (2026-08-05) — where data's copies turned out to be dead config, so
+     classroom is the one real consumer. classroom still carries its
+     app-side pair until it bumps past alpha.16; then it deletes them, sets
+     `headingAccent: "#cd0365"` and retires `brandDeepPink`.
    - **Built in the library on the way**: Select/ComboBox, GridList, ListBox,
      Avatar (+ badge), `Checkbox control={false}`, `MenuOptionGroup type`, the
      Modal/Spinner `data-*` passthrough, and the Input/TextField variant
@@ -1125,8 +1134,16 @@ Still outstanding, in classroom's likely order of need:
    md+ × 0.9, see gotcha #25) turned out to be shared verbatim with
    classroom and now comes from `@microbit/ui/dense-preset`, still pending a
    keep-vs-align-with-family-scale discussion.
-3. **data-microbit-org** — whenever convenient; by then the surface is
-   covered. Census highlights: fully private repo, no theme-package split;
+3. **data-microbit-org** — **started 2026-08-05** (steps 0–3 done:
+   foundation on its `experiment-rai`, browser floor aligned with the
+   family, both entry checks below passed — `@layer` never ships thanks to
+   coexistence unlayering now and the production flattening later, and
+   `file:` font loading is untouched by the migration). Status doc:
+   `RAC-MIGRATION.md` in the app. Census refinement from call-site
+   verification: the theme's Avatar `2md`, Button `zoom`/`sidebar`/
+   `unstyled` and Heading `label`/`subtitle` config was all **dead** — check
+   call sites, not just the theme, before porting theme config. Original
+   census highlights: fully private repo, no theme-package split;
    brand assets committed in-repo. **Multi-root**: three apps in one repo,
    one shared theme — including MY_DATA.HTML served from the micro:bit's
    USB mass storage over `file:` (vite-plugin-legacy SystemJS path is
