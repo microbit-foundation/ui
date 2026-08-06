@@ -7,9 +7,11 @@ import { defineSlotRecipe } from "@pandacss/dev";
 
 /**
  * Field slot recipe — Chakra's FormControl parts (FormLabel/FormHelperText/
- * FormErrorMessage, light mode). Consumed by the shared-ui TextField, which
- * maps the slots onto react-aria-components' TextField/Label/Text/FieldError;
- * the input itself is styled by the `input` recipe (Input.recipe.ts).
+ * FormErrorMessage, light mode), mapped onto react-aria-components'
+ * Label/Text/FieldError by `FieldLabel` and `FieldSupport`. Every labelled
+ * field in the library draws its chrome from here, including Select and
+ * ComboBox, whose own recipe styles only the dropdown pair; the input itself is
+ * styled by the `input` recipe (Input.recipe.ts).
  *
  * Registered in the base preset (base-preset.ts). No variants, so it
  * needs no `staticCss` entry.
@@ -30,7 +32,14 @@ export const field = defineSlotRecipe({
       fontWeight: "medium",
       marginEnd: "3",
       mb: "2",
-      "&[data-disabled]": { opacity: 0.4 },
+      transitionProperty: "opacity",
+      transitionDuration: "normal",
+      // RAC stamps `data-disabled` on the field root and on the control, never
+      // on the label, so an `&[data-disabled]` rule here matches nothing — it
+      // has to come down from the root (gotcha #45). Direct child rather than a
+      // descendant selector, as the select recipe's invalid rule: an app's own
+      // disabled form wrapper must not be able to dim every label inside it.
+      "[data-disabled] > &": { opacity: 0.4 },
     },
     requiredIndicator: {
       marginStart: "1",

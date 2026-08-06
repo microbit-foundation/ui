@@ -4,7 +4,12 @@
  * SPDX-License-Identifier: MIT
  */
 import { ReactNode } from "react";
-import { FieldError, Text as RACText } from "react-aria-components";
+import {
+  FieldError,
+  Label as RACLabel,
+  LabelProps as RACLabelProps,
+  Text as RACText,
+} from "react-aria-components";
 import { css, cx } from "styled-system/css";
 import { field } from "styled-system/recipes";
 import { SystemStyleObject } from "styled-system/types";
@@ -65,4 +70,39 @@ export const FieldRequiredIndicator = () => (
   <span aria-hidden className={field().requiredIndicator}>
     *
   </span>
+);
+
+export interface FieldLabelProps
+  extends Omit<RACLabelProps, "className" | "children" | "style"> {
+  children: ReactNode;
+  /** Adds the required asterisk; pass the field's `isRequired`. */
+  isRequired?: boolean;
+  /** Per-instance style overrides (e.g. label-beside-field forms). */
+  css?: SystemStyleObject;
+}
+
+/**
+ * A field's visible label (Chakra's FormLabel), asterisk included. Every
+ * labelled field in the library renders its label through this, so the `field`
+ * recipe is the single answer to what a label looks like — Select and ComboBox
+ * previously carried a near-identical `label` slot on the `select` recipe,
+ * which is how the two drifted.
+ *
+ * Also exported for app-side composites: inside a RAC field container the
+ * association is automatic, and outside one (a masked or native input) pass
+ * `id` and `htmlFor` yourself.
+ */
+export const FieldLabel = ({
+  children,
+  isRequired,
+  css: cssProp,
+  ...rest
+}: FieldLabelProps) => (
+  <RACLabel
+    {...rest}
+    className={cx(field().label, cssProp ? css(cssProp) : undefined)}
+  >
+    {children}
+    {isRequired ? <FieldRequiredIndicator /> : null}
+  </RACLabel>
 );

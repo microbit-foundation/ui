@@ -898,6 +898,30 @@ border` and carry the total across.
     trap is specific to components whose whole premise is bringing no layout of
     their own: every other consumer hides it.
 
+45. **RAC never puts state attributes on a `Label`, so `&[data-disabled]` on a
+    label slot matches nothing.** `Label` renders
+    `<label className="react-aria-Label" {...labelProps}>` and `labelProps` is
+    `{id, htmlFor}` — the state lands on the field _root_ (and on the control),
+    which every RAC field container does stamp. So the `field` recipe's
+    `label: { "&[data-disabled]": { opacity: 0.4 } }` was dead from the day it
+    was written, and no field's label dimmed where Chakra's FormLabel did
+    (`_disabled: { opacity: 0.4 }`). Fixed as `"[data-disabled] > &"` — the
+    direct-child form, for the reason the `select` recipe's invalid rule gives:
+    a descendant selector lets an app's own disabled form wrapper dim every
+    label inside it. Two general points. First, this is the same shape as #44:
+    a rule in shared code that no consumer exercised, which deduping does not
+    catch — what catches it is a story rendering the whole set in the state,
+    which is why `Forms/Field chrome` now has one. Second, a `_disabled`
+    Chakra style does not port to `&[data-disabled]` by reflex: check which
+    element RAC actually marks.
+
+    Landed with it: **Select and ComboBox no longer have a `label` slot** on the
+    `select` recipe. It duplicated `field`'s label and had drifted (no
+    `display: block`, no disabled rule), and every labelled field now renders
+    through the exported `FieldLabel`. The cost is per-`variant` label styling
+    on a Select — classroom's `classroom` variant styles only the control and
+    card, so nothing paid it.
+
 Also remember (from the RAC component work, not numbered): RAC re-selects a
 pressed radio value against current state after any earlier handler runs —
 "click the selected option again to deselect" interactions need a native
@@ -1059,6 +1083,59 @@ Censuses were taken July 2026 against Chakra v2.10 in all apps.
   is about the smallest safe place to try the first one, so the roster is a
   reasonable pilot. Until then classroom restates the row states by hand and
   carries the cost in gotcha #43.
+
+- **Hand-composed field chrome, three app-side copies — and every one
+  overrides the label weight.** The six RAC field components cover a labelled
+  control; nothing covers labelling a control react-aria isn't wiring, so
+  `NativeSelect` and masked inputs get hand-rolled labels.
+  `data-microbit-org`'s `FormField.tsx` builds one from `field()` slots plus
+  `FieldRequiredIndicator`, and `python-editor-v3`'s and `ml-trainer`'s
+  `SelectFormControl.tsx` each build a settings row (label beside a
+  28ch NativeSelect). `FieldLabel` is now the supported answer for all three —
+  it takes `id`/`htmlFor` for a control with no RAC context — but they can only
+  adopt it after a release.
+
+  Three things to carry into that work:
+
+  - **The two `SelectFormControl`s are the same component, ported twice and
+    diverged.** Both Chakra originals were byte-identical
+    (`<FormControl display="flex" alignItems="center">` +
+    `<FormLabel htmlFor mb="0" fontWeight="normal" flex="1 1 auto">`).
+    python-editor's port keeps FormLabel's `fontSize: md` and `marginEnd: 3`;
+    ml-trainer's (the pilot, so the rougher port) keeps only `flex`. The
+    `fontSize` omission is invisible there — ml-trainer is off the dense preset,
+    where `md` is the 1rem the label inherits anyway, which is also why
+    python-editor _had_ to keep it at dense's 0.9rem. The dropped `marginEnd: 3`
+    is a latent one: the label has `flex: 1 1 auto`, so a long enough
+    translation butts against the select. `createOptions` is duplicated too.
+  - **`field.label`'s `fontWeight: medium` is right, and the overrides are a
+    category rather than a drift.** Eight app call sites pass a visible `label`
+    to a library field; seven take the default (dialog fields — name a project,
+    student name, file name, the sign-up checkbox groups). Only
+    python-editor's font-size NumberField overrides it, to `normal`, and it does
+    so to match the two `SelectFormControl` rows either side of it in the same
+    dialog — all three being _settings rows_, where the label is a preference
+    name beside its control rather than a form field's label, and where the
+    Chakra original overrode FormLabel the same way (`mb="0" fontWeight="normal"`).
+    data-microbit-org's dialogs are the third case, wanting `bold` at `lg`.
+    So don't align the default down: the question is whether a settings row is
+    a distinct thing the library should name (alongside `orientation`), which
+    would also retire the five hand-rolled labels. A `weight` variant on the
+    recipe would serve that better than five `css` escape hatches.
+  - **The escape hatch is symmetric for labels, not for helper and error
+    text.** `FieldLabel` works outside a RAC field container; `FieldSupport`
+    cannot, because RAC's `Text slot="description"` and `FieldError` need the
+    validation context. So `FormField` hand-rolls a `<div>` with
+    `field().helperText` and `FormErrorMsg` hand-rolls `field().errorMessage`.
+    Either bless that (document the slot classes as the non-RAC path) or give
+    the two parts a context-free mode.
+
+  Unrelated but adjacent: `data-microbit-org`'s `FormError.tsx` — the
+  form-level alert, not to be confused with the field-level `FormErrorMsg.tsx`
+  beside it — colours itself `red.500` where field errors use `danger.500`.
+  Identical pixels today (`danger.500` resolves to `{colors.red.500}`) and
+  divergent vocabulary: the ramp comment above reserves `red.*` for the
+  recording vocabulary, so an app that ever re-points `danger` would split them.
 
 - **`Information` and `Success` are English in the library's Welsh and Italian
   catalogs.** They were backfilled from classroom's translations, but these two

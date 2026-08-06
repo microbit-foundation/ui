@@ -7,16 +7,10 @@ import { ReactNode } from "react";
 import {
   CheckboxGroup as RACCheckboxGroup,
   CheckboxGroupProps as RACCheckboxGroupProps,
-  Label as RACLabel,
 } from "react-aria-components";
 import { css, cx } from "styled-system/css";
-import { field } from "styled-system/recipes";
 import { SystemStyleObject } from "styled-system/types";
-import {
-  FieldRequiredIndicator,
-  FieldSupport,
-  FieldSupportProps,
-} from "./FieldSupport";
+import { FieldLabel, FieldSupport, FieldSupportProps } from "./FieldSupport";
 
 export interface CheckboxGroupProps
   extends Omit<RACCheckboxGroupProps, "className" | "style">,
@@ -58,10 +52,7 @@ export const CheckboxGroup = ({
       {(renderProps) => (
         <>
           {label != null && (
-            <RACLabel className={field().label}>
-              {label}
-              {rest.isRequired ? <FieldRequiredIndicator /> : null}
-            </RACLabel>
+            <FieldLabel isRequired={rest.isRequired}>{label}</FieldLabel>
           )}
           {typeof children === "function" ? children(renderProps) : children}
           <FieldSupport

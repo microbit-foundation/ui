@@ -6,7 +6,6 @@
 import { createContext, ReactNode, useContext } from "react";
 import {
   Button as RACButton,
-  Label as RACLabel,
   ListBox as RACListBox,
   ListBoxItem as RACListBoxItem,
   ListBoxItemProps as RACListBoxItemProps,
@@ -20,11 +19,7 @@ import { RiArrowDownSLine } from "react-icons/ri";
 import { css, cx } from "styled-system/css";
 import { select, SelectVariantProps } from "styled-system/recipes";
 import { SystemStyleObject } from "styled-system/types";
-import {
-  FieldRequiredIndicator,
-  FieldSupport,
-  FieldSupportProps,
-} from "./FieldSupport";
+import { FieldLabel, FieldSupport, FieldSupportProps } from "./FieldSupport";
 import { Icon } from "./Icon";
 
 export type SelectSlots = ReturnType<typeof select>;
@@ -103,10 +98,7 @@ export const Select = <T extends object>({
         className={cx(slots.root, className)}
       >
         {label != null && (
-          <RACLabel className={slots.label}>
-            {label}
-            {props.isRequired ? <FieldRequiredIndicator /> : null}
-          </RACLabel>
+          <FieldLabel isRequired={props.isRequired}>{label}</FieldLabel>
         )}
         <RACButton
           className={cx(slots.trigger, cssProp ? css(cssProp) : undefined)}
