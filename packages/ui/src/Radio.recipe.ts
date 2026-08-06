@@ -28,6 +28,10 @@ export const radio = defineSlotRecipe({
       verticalAlign: "top",
       cursor: "pointer",
       position: "relative",
+      // As the checkbox: the accessible outline stop (WCAG 1.4.11), on the
+      // root so the control's `borderColor: inherit` reads it and call
+      // sites can still tint at the root.
+      borderColor: "gray.400",
       "&[data-disabled]": { cursor: "not-allowed" },
     },
     control: {

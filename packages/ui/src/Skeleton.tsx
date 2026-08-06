@@ -12,12 +12,14 @@ import { SystemStyleObject } from "styled-system/types";
  * caller's `css` is merged into one `css()` call and its overrides win
  * (playbook gotcha #8).
  *
- * The colours are Chakra's, through the same pair of custom properties, so a
- * call site can retint one skeleton without knowing how the animation works.
+ * The colours flow through the same pair of custom properties Chakra used,
+ * so a call site can retint one skeleton without knowing how the animation
+ * works.
  */
 const skeletonBase: SystemStyleObject = {
   "--skeleton-start-color": "token(colors.gray.100)",
-  "--skeleton-end-color": "token(colors.gray.400)",
+  // gray.350, the decorative-fill stop, as the Avatar default.
+  "--skeleton-end-color": "token(colors.gray.350)",
   background: "var(--skeleton-start-color)",
   borderColor: "var(--skeleton-end-color)",
   opacity: 0.7,

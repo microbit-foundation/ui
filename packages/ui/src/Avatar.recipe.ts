@@ -44,7 +44,9 @@ export const avatar = defineSlotRecipe({
       fontWeight: "medium",
       borderRadius: "full",
       // Chakra's no-name defaults; the name-derived pair arrives inline.
-      background: "var(--avatar-bg, token(colors.gray.400))",
+      // gray.350 is the decorative-fill stop — 400+ are reserved for
+      // accessible outlines and text (see the ramp in base-preset.ts).
+      background: "var(--avatar-bg, token(colors.gray.350))",
       color: "var(--avatar-color, token(colors.white))",
       borderColor: "white",
     },
