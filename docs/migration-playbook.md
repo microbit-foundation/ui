@@ -1189,8 +1189,17 @@ Censuses were taken July 2026 against Chakra v2.10 in all apps.
     form-builder). **Postponed to the next upgrade**: its two plain-`Input`
     sites (sign-up, login email) become library TextFields — `labelCss` now
     exists on every labelled field for the bold-`lg` labels (added
-    post-alpha.18). Revisit lifting FormField only if a second app grows a
-    masked or copy-group field. `GraphSelector` is a
+    post-alpha.18). FormField itself has no second-app demand — but **the
+    masked class-code control inside it is duplicated today**:
+    `data-microbit-org`'s `ClassCodeInput.tsx` and classroom's
+    `ClassroomDetailsJoinStep.tsx:46-65` carry byte-identical
+    react-formatted-input-hook config (`"## - ## - ## - ##"`, uppercase
+    8-char `onInsert`), one wrapped in a component, one inlined. A library
+    `ClassCodeInput` (bare control, chrome from its surroundings — the two
+    apps label it differently by design) is the candidate; it would take a
+    react-formatted-input-hook dependency into the library. Classroom's
+    second mask (`"##"`, the classroom-name number part) is single-site and
+    stays put. `GraphSelector` is a
     seventh hand-rolled horizontal label but bespoke enough (pill variant,
     `lg` sizes, explicit `medium` weight) to be an optional later adopter.
     Unrelated but adjacent: `FormError.tsx` — the form-level alert, not the
