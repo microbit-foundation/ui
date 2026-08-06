@@ -64,11 +64,8 @@ export const select = defineSlotRecipe({
       transitionDuration: "normal",
       border: "1px solid",
       borderColor: "gray.200",
-      borderRadius: "md",
       bg: "white",
       color: "inherit",
-      h: "10",
-      px: "4",
       // As the input recipe, so a Select, a NativeSelect and a TextField in one
       // form all tint together on hover. (react-aria's TextField has no hover
       // effect, but matching the family beats matching their docs.)
@@ -203,5 +200,18 @@ export const select = defineSlotRecipe({
       py: "2",
       color: "gray.600",
     },
+  },
+  variants: {
+    // The `input` recipe's size ladder, step for step, so a Select sits level
+    // with a TextField beside it at every size. The indicator is em-sized and
+    // scales free; the dropdown card keeps one density across sizes.
+    size: {
+      lg: { trigger: { fontSize: "lg", px: "4", h: "12", borderRadius: "md" } },
+      md: { trigger: { fontSize: "md", px: "4", h: "10", borderRadius: "md" } },
+      sm: { trigger: { fontSize: "sm", px: "3", h: "8", borderRadius: "sm" } },
+    },
+  },
+  defaultVariants: {
+    size: "md",
   },
 });

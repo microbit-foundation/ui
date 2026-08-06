@@ -304,9 +304,11 @@ export const basePreset = definePreset({
       // as a runtime prop, so generate the breakpoint-prefixed variants too.
       dialog: [{ size: ["*"], responsive: true }, { centered: ["*"] }],
       drawer: ["*"],
+      field: ["*"],
       gridList: ["*"],
       listBox: ["*"],
       input: ["*"],
+      numberField: ["*"],
       radio: ["*"],
       select: ["*"],
       switchRecipe: ["*"],

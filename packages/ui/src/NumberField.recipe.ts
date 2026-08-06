@@ -11,8 +11,8 @@ import { defineSlotRecipe } from "@pandacss/dev";
  * two stacked buttons. Consumed by the shared-ui NumberField
  * (react-aria-components NumberField).
  *
- * Registered in the base preset (base-preset.ts). No variants, so it needs
- * no `staticCss` entry.
+ * Registered in the base preset (base-preset.ts), which also has the
+ * `staticCss` entry that keeps the runtime-prop size variants generated.
  */
 export const numberField = defineSlotRecipe({
   className: "numberField",
@@ -63,5 +63,23 @@ export const numberField = defineSlotRecipe({
       "&[data-pressed]": { bg: "gray.200" },
       "&[data-disabled]": { opacity: 0.4, cursor: "not-allowed" },
     },
+  },
+  variants: {
+    // Chakra's NumberInput: the stepper column stays 24px wide at every size
+    // (as does the input padding paired with it in NumberField.tsx); only the
+    // arrow glyphs scale, at 0.75 × the field's font size. The base's `xs` is
+    // exactly md × 0.75, so md adds nothing.
+    size: {
+      lg: {
+        stepperButton: { fontSize: "calc(token(fontSizes.lg) * 0.75)" },
+      },
+      md: {},
+      sm: {
+        stepperButton: { fontSize: "calc(token(fontSizes.sm) * 0.75)" },
+      },
+    },
+  },
+  defaultVariants: {
+    size: "md",
   },
 });

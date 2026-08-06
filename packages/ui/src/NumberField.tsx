@@ -13,13 +13,14 @@ import {
 } from "react-aria-components";
 import { RiArrowDownSFill, RiArrowUpSFill } from "react-icons/ri";
 import { css, cx } from "styled-system/css";
-import { input, numberField } from "styled-system/recipes";
+import { input, InputVariantProps, numberField } from "styled-system/recipes";
 import { SystemStyleObject } from "styled-system/types";
 import { FieldLabel, FieldSupport, FieldSupportProps } from "./FieldSupport";
 import { Icon } from "./Icon";
 
 export interface NumberFieldProps
   extends Omit<RACNumberFieldProps, "className" | "children" | "style">,
+    InputVariantProps,
     FieldSupportProps {
   /** Visible label (optional; otherwise pass `aria-label`). */
   label?: ReactNode;
@@ -29,7 +30,7 @@ export interface NumberFieldProps
   labelCss?: SystemStyleObject;
   /** Group (input + steppers) style overrides — set `width` here. */
   groupCss?: SystemStyleObject;
-  /** Input style overrides (e.g. a smaller size than the recipe's md). */
+  /** Input style overrides (for sizing, prefer the `size` prop). */
   inputCss?: SystemStyleObject;
 }
 
@@ -50,18 +51,25 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(
       labelCss,
       groupCss,
       inputCss,
-      ...rest
+      ...props
     },
     ref,
   ) {
-    const slots = numberField();
+    // As Input: forward every recipe variant group, not just `size`, so a
+    // preset that adds one keeps working.
+    const [variantProps, rest] = input.splitVariantProps(props);
+    const slots = numberField({ size: variantProps.size });
     return (
       <RACNumberField
         {...rest}
         className={cx(slots.root, cssProp ? css(cssProp) : undefined)}
       >
         {label != null && (
-          <FieldLabel isRequired={rest.isRequired} css={labelCss}>
+          <FieldLabel
+            size={variantProps.size}
+            isRequired={rest.isRequired}
+            css={labelCss}
+          >
             {label}
           </FieldLabel>
         )}
@@ -71,8 +79,9 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(
           <RACInput
             ref={ref}
             className={cx(
-              input(),
-              // Room for the stepper column.
+              input(variantProps),
+              // Room for the stepper column (constant across sizes, as the
+              // stepper's width is).
               css({ paddingEnd: "6" }, inputCss),
             )}
           />

@@ -13,8 +13,8 @@ import { defineSlotRecipe } from "@pandacss/dev";
  * ComboBox, whose own recipe styles only the dropdown pair; the input itself is
  * styled by the `input` recipe (Input.recipe.ts).
  *
- * Registered in the base preset (base-preset.ts). No variants, so it
- * needs no `staticCss` entry.
+ * Registered in the base preset (base-preset.ts), which also has the
+ * `staticCss` entry that keeps the runtime-prop size variants generated.
  */
 export const field = defineSlotRecipe({
   className: "field",
@@ -67,5 +67,20 @@ export const field = defineSlotRecipe({
       lineHeight: "normal",
       color: "danger.500",
     },
+  },
+  variants: {
+    // The label follows its control's size (the control itself is sized by
+    // the `input`/`select` recipes), so one `size` prop scales the whole row.
+    // Chakra's FormLabel never scaled — a deliberate delta, decided in
+    // docs/form-controls.md. Helper and error text stay `sm` at every size,
+    // as Chakra's did.
+    size: {
+      lg: { label: { fontSize: "lg" } },
+      md: { label: { fontSize: "md" } },
+      sm: { label: { fontSize: "sm" } },
+    },
+  },
+  defaultVariants: {
+    size: "md",
   },
 });
