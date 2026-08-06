@@ -5,36 +5,33 @@
  */
 import { ReactNode } from "react";
 import {
-  CheckboxGroup as RACCheckboxGroup,
-  CheckboxGroupProps as RACCheckboxGroupProps,
+  RadioGroup as RACRadioGroup,
+  RadioGroupProps as RACRadioGroupProps,
 } from "react-aria-components";
 import { css, cx } from "styled-system/css";
 import { SystemStyleObject } from "styled-system/types";
 import { FieldLabel, FieldSupport, FieldSupportProps } from "./Field";
 
-export interface CheckboxGroupProps
-  extends Omit<RACCheckboxGroupProps, "className" | "style">,
+export interface RadioGroupProps
+  extends Omit<RACRadioGroupProps, "className" | "style">,
     FieldSupportProps {
   /**
    * Visible label for the group (Chakra's FormLabel above it). Use
    * `aria-label` instead where the design has none.
    */
   label?: ReactNode;
-  /** Per-instance style overrides. */
+  /** Per-instance style overrides, merged after the recipe. */
   css?: SystemStyleObject;
   className?: string;
 }
 
 /**
- * CheckboxGroup — react-aria-components <CheckboxGroup> for a set of
- * Checkboxes sharing one value array (each Checkbox's `value` marks its
- * entry). Beyond the optional field chrome (label/helperText/errorMessage —
- * Chakra's FormControl parts) it carries no styling of its own: compose with
- * Stack for layout, as RadioGroup does. Chakra's CheckboxGroup was a bare
- * context provider, so ported call sites gain the chrome rather than
- * restating it around the group.
+ * RadioGroup — react-aria-components <RadioGroup> for a set of Radios. Beyond
+ * the optional field chrome (label/helperText/errorMessage — Chakra's
+ * FormControl parts) it carries no styling of its own: compose with Stack for
+ * layout, as Chakra call sites did.
  */
-export const CheckboxGroup = ({
+export const RadioGroup = ({
   label,
   helperText,
   errorMessage,
@@ -43,9 +40,9 @@ export const CheckboxGroup = ({
   className,
   children,
   ...rest
-}: CheckboxGroupProps) => {
+}: RadioGroupProps) => {
   return (
-    <RACCheckboxGroup
+    <RACRadioGroup
       className={cx(cssProp ? css(cssProp) : undefined, className)}
       {...rest}
     >
@@ -62,6 +59,6 @@ export const CheckboxGroup = ({
           />
         </>
       )}
-    </RACCheckboxGroup>
+    </RACRadioGroup>
   );
 };

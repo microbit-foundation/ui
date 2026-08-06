@@ -7,7 +7,7 @@ import { forwardRef, ReactNode, useId } from "react";
 import { css, cx } from "styled-system/css";
 import { field } from "styled-system/recipes";
 import { SystemStyleObject } from "styled-system/types";
-import { FieldHelperText, FieldLabel, FieldLayoutProps } from "./FieldSupport";
+import { FieldHelperText, FieldLabel, FieldLayoutProps } from "./Field";
 import { NativeSelect, NativeSelectProps } from "./NativeSelect";
 
 export interface NativeSelectFieldProps

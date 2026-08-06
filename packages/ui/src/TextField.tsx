@@ -15,7 +15,7 @@ import {
   FieldLayoutProps,
   FieldSupport,
   FieldSupportProps,
-} from "./FieldSupport";
+} from "./Field";
 
 export interface TextFieldProps
   extends Omit<

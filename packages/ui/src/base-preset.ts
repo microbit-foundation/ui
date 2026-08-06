@@ -42,7 +42,7 @@ import { switchRecipe } from "./Switch.recipe";
 import { dialog } from "./Modal.recipe";
 import { text } from "./Text.recipe";
 import { tooltip } from "./Tooltip.recipe";
-import { field } from "./TextField.recipe";
+import { field } from "./Field.recipe";
 import { toast } from "./Toast.recipe";
 
 /**

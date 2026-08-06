@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { ReactNode } from "react";
+import { ReactNode, useId } from "react";
 import {
   Switch as RACSwitch,
   SwitchProps as RACSwitchProps,
@@ -11,6 +11,7 @@ import {
 import { css, cx } from "styled-system/css";
 import { switchRecipe, SwitchRecipeVariantProps } from "styled-system/recipes";
 import { SystemStyleObject } from "styled-system/types";
+import { FieldHelperText } from "./Field";
 
 export interface SwitchProps
   extends Omit<RACSwitchProps, "className" | "children" | "style">,
@@ -19,24 +20,43 @@ export interface SwitchProps
   css?: SystemStyleObject;
   className?: string;
   children?: ReactNode;
+  /**
+   * Help text below the switch, wired to its `aria-describedby` — the same
+   * chrome the labelled fields' `helperText` renders. With it the component
+   * gains a wrapping `<div>`, so the switch-plus-text moves as one block.
+   */
+  helperText?: ReactNode;
+  /** Per-instance style overrides for the helper text. */
+  helperTextCss?: SystemStyleObject;
 }
 
 /**
  * Switch — react-aria-components <Switch> styled like Chakra's switch.
  * Children render as the label; pass `aria-label` for label-less switches.
+ * `labelPosition="start"` is the settings-row layout: label first, switch at
+ * the row's end.
  */
 export const Switch = ({
   size,
+  labelPosition,
   css: cssProp,
   className,
   children,
+  helperText,
+  helperTextCss,
   ...rest
 }: SwitchProps) => {
-  const slots = switchRecipe({ size });
-  return (
+  const slots = switchRecipe({ size, labelPosition });
+  const helperId = useId();
+  const describedBy =
+    [rest["aria-describedby"], helperText != null ? helperId : undefined]
+      .filter(Boolean)
+      .join(" ") || undefined;
+  const switchElement = (
     <RACSwitch
       className={cx(slots.root, cssProp ? css(cssProp) : undefined, className)}
       {...rest}
+      aria-describedby={describedBy}
     >
       {({ isSelected, isFocusVisible, isDisabled }) => {
         const state = {
@@ -58,5 +78,16 @@ export const Switch = ({
         );
       }}
     </RACSwitch>
+  );
+  if (helperText == null) {
+    return switchElement;
+  }
+  return (
+    <div>
+      {switchElement}
+      <FieldHelperText id={helperId} css={helperTextCss}>
+        {helperText}
+      </FieldHelperText>
+    </div>
   );
 };

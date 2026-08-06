@@ -39,8 +39,8 @@ export interface FieldLayoutProps {
   /**
    * `side` puts the label beside the control — the settings-row pattern. The
    * label absorbs the free space; the control keeps its own width, so give it
-   * one (`groupCss`, `wrapperCss` or `css` depending on the field). Helper
-   * and error text drop to a full-width line below the pair.
+   * one (`groupCss`, `wrapperCss` or `triggerCss` depending on the field).
+   * Helper and error text drop to a full-width line below the pair.
    */
   labelPosition?: FieldVariantProps["labelPosition"];
 }

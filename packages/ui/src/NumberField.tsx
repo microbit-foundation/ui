@@ -25,7 +25,7 @@ import {
   FieldLayoutProps,
   FieldSupport,
   FieldSupportProps,
-} from "./FieldSupport";
+} from "./Field";
 import { Icon } from "./Icon";
 
 export interface NumberFieldProps
@@ -35,8 +35,9 @@ export interface NumberFieldProps
     FieldLayoutProps {
   /** Visible label (optional; otherwise pass `aria-label`). */
   label?: ReactNode;
-  /** Root style overrides (e.g. row layout for label-beside-field forms). */
-  css?: SystemStyleObject;
+  /** Root style overrides (for a label-beside-field row, prefer
+   * `labelPosition="side"`). */
+  rootCss?: SystemStyleObject;
   /** Label style overrides. */
   labelCss?: SystemStyleObject;
   /** Group (input + steppers) style overrides — set `width` here. */
@@ -58,7 +59,7 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(
       helperText,
       errorMessage,
       helperTextCss,
-      css: cssProp,
+      rootCss,
       labelCss,
       groupCss,
       inputCss,
@@ -78,7 +79,7 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(
         className={cx(
           fieldSlots.root,
           slots.root,
-          cssProp ? css(cssProp) : undefined,
+          rootCss ? css(rootCss) : undefined,
         )}
       >
         {label != null && (

@@ -5,7 +5,7 @@
  */
 import { cleanup, render, screen } from "@testing-library/react";
 import { ReactElement } from "react";
-import { field, input } from "styled-system/recipes";
+import { field, input, switchRecipe } from "styled-system/recipes";
 import { afterEach, expect, it } from "vitest";
 import {
   Checkbox,
@@ -16,6 +16,7 @@ import {
   RadioGroup,
   Select,
   SelectOption,
+  Switch,
   TextField,
 } from "../src";
 
@@ -232,3 +233,38 @@ it.each(sideFields)(
     expect(screen.getByText("H").className).toContain(side.helperText);
   },
 );
+
+// The standalone toggles carry the same helper-text chrome, wired by hand —
+// both settings dialogs used to hand-roll a Text underneath, which never
+// reached aria-describedby.
+const toggles: [string, ReactElement, string][] = [
+  ["Checkbox", <Checkbox helperText="H">L</Checkbox>, "checkbox"],
+  ["Switch", <Switch helperText="H">L</Switch>, "switch"],
+];
+
+it.each(toggles)(
+  "%s wires helperText to aria-describedby",
+  (_name, el, role) => {
+    render(el);
+    const describedBy =
+      screen.getByRole(role).getAttribute("aria-describedby") ?? "";
+    const texts = describedBy
+      .split(/\s+/)
+      .filter(Boolean)
+      .map((id) => document.getElementById(id)?.textContent);
+    expect(texts).toContain("H");
+    expect(screen.getByText("H").className).toContain(field().helperText);
+  },
+);
+
+it("Switch labelPosition=start reaches root and label", () => {
+  render(
+    <Switch labelPosition="start" helperText="H">
+      L
+    </Switch>,
+  );
+  const start = switchRecipe({ labelPosition: "start" });
+  const root = screen.getByText("L").closest("label");
+  expect(root?.className).toContain(start.root);
+  expect(screen.getByText("L").className).toContain(start.label);
+});
