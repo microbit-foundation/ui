@@ -20,6 +20,8 @@ export interface CheckboxGroupProps
    * `aria-label` instead where the design has none.
    */
   label?: ReactNode;
+  /** Label style overrides. */
+  labelCss?: SystemStyleObject;
   /** Per-instance style overrides. */
   css?: SystemStyleObject;
   className?: string;
@@ -36,6 +38,7 @@ export interface CheckboxGroupProps
  */
 export const CheckboxGroup = ({
   label,
+  labelCss,
   helperText,
   errorMessage,
   helperTextCss,
@@ -52,7 +55,9 @@ export const CheckboxGroup = ({
       {(renderProps) => (
         <>
           {label != null && (
-            <FieldLabel isRequired={rest.isRequired}>{label}</FieldLabel>
+            <FieldLabel isRequired={rest.isRequired} css={labelCss}>
+              {label}
+            </FieldLabel>
           )}
           {typeof children === "function" ? children(renderProps) : children}
           <FieldSupport

@@ -1181,7 +1181,16 @@ Censuses were taken July 2026 against Chakra v2.10 in all apps.
     `labelPosition="start" helperText={…}`, and its local `helperTextCss`
     constant goes.
   - **data-microbit-org**: `FormField` adopts
-    `FieldLabel`/`FieldHelperText`/`FieldErrorMessage`; `GraphSelector` is a
+    `FieldLabel`/`FieldHelperText`/`FieldErrorMessage`. FormField itself
+    stays app-side deliberately (2026-08-06): it is now a thin adapter for
+    app policy — the bold-`lg` label brand, the `errorMsgId` intl
+    convention, `helperTextAbove`, and the render-prop wiring for five
+    bespoke controls (masked class code, copy groups, a date input, the
+    form-builder). **Postponed to the next upgrade**: its two plain-`Input`
+    sites (sign-up, login email) become library TextFields — `labelCss` now
+    exists on every labelled field for the bold-`lg` labels (added
+    post-alpha.18). Revisit lifting FormField only if a second app grows a
+    masked or copy-group field. `GraphSelector` is a
     seventh hand-rolled horizontal label but bespoke enough (pill variant,
     `lg` sizes, explicit `medium` weight) to be an optional later adopter.
     Unrelated but adjacent: `FormError.tsx` — the form-level alert, not the

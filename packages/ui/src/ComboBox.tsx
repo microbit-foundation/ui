@@ -40,6 +40,8 @@ export interface ComboBoxProps<T extends object>
     FieldLayoutProps {
   /** Visible label. Use `aria-label` instead where the design has none. */
   label?: ReactNode;
+  /** Label style overrides. */
+  labelCss?: SystemStyleObject;
   placeholder?: string;
   /**
    * Rendered inside the control, before the input — an icon for the current
@@ -105,6 +107,7 @@ export interface ComboBoxProps<T extends object>
 const ComboBoxInner = <T extends object>(
   {
     label,
+    labelCss,
     placeholder,
     startContent,
     children,
@@ -163,6 +166,7 @@ const ComboBoxInner = <T extends object>(
             size={variantProps.size}
             labelPosition={labelPosition}
             isRequired={props.isRequired}
+            css={labelCss}
           >
             {label}
           </FieldLabel>

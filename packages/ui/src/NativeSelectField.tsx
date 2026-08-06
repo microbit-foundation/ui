@@ -15,6 +15,8 @@ export interface NativeSelectFieldProps
     FieldLayoutProps {
   /** Visible label, associated with the select via `htmlFor`. */
   label: ReactNode;
+  /** Label style overrides. */
+  labelCss?: SystemStyleObject;
   /** Help text below the field, wired to the select's `aria-describedby`. */
   helperText?: ReactNode;
   /** Per-instance style overrides for the field root. */
@@ -37,7 +39,7 @@ export const NativeSelectField = forwardRef<
   HTMLSelectElement,
   NativeSelectFieldProps
 >(function NativeSelectField(
-  { label, helperText, labelPosition, rootCss, id, ...rest },
+  { label, labelCss, helperText, labelPosition, rootCss, id, ...rest },
   ref,
 ) {
   const generatedId = useId();
@@ -62,6 +64,7 @@ export const NativeSelectField = forwardRef<
         size={rest.size}
         labelPosition={labelPosition}
         isRequired={rest.required}
+        css={labelCss}
       >
         {label}
       </FieldLabel>

@@ -10,6 +10,7 @@ import {
   TextFieldProps as RACTextFieldProps,
 } from "react-aria-components";
 import { field, input, InputVariantProps } from "styled-system/recipes";
+import { SystemStyleObject } from "styled-system/types";
 import {
   FieldLabel,
   FieldLayoutProps,
@@ -27,6 +28,8 @@ export interface TextFieldProps
     FieldLayoutProps {
   /** Visible label (Chakra's FormLabel; asterisk added when `isRequired`). */
   label: ReactNode;
+  /** Label style overrides. */
+  labelCss?: SystemStyleObject;
   onFocus?: (e: FocusEvent<HTMLInputElement>) => void;
   /** Input autocapitalize attribute (react-aria's TextField omits it). */
   autoCapitalize?: "off" | "none" | "on" | "sentences" | "words" | "characters";
@@ -41,6 +44,7 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
   function TextField(
     {
       label,
+      labelCss,
       helperText,
       errorMessage,
       helperTextCss,
@@ -61,6 +65,7 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
           size={variantProps.size}
           labelPosition={labelPosition}
           isRequired={rest.isRequired}
+          css={labelCss}
         >
           {label}
         </FieldLabel>

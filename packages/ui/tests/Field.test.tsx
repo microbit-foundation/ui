@@ -5,12 +5,14 @@
  */
 import { cleanup, render, screen } from "@testing-library/react";
 import { ReactElement } from "react";
+import { css } from "styled-system/css";
 import { field, input, switchRecipe } from "styled-system/recipes";
 import { afterEach, expect, it } from "vitest";
 import {
   Checkbox,
   CheckboxGroup,
   ComboBox,
+  NativeSelectField,
   NumberField,
   Radio,
   RadioGroup,
@@ -233,6 +235,49 @@ it.each(sideFields)(
     expect(screen.getByText("H").className).toContain(side.helperText);
   },
 );
+
+// Every labelled field takes labelCss (data-microbit-org's bold-lg dialog
+// labels are the motivating override).
+const bold = { fontWeight: "bold" } as const;
+const labelCssFields: [string, ReactElement][] = [
+  ["TextField", <TextField label="L" labelCss={bold} />],
+  [
+    "Select",
+    <Select label="L" labelCss={bold}>
+      <SelectOption id="a">A</SelectOption>
+    </Select>,
+  ],
+  [
+    "ComboBox",
+    <ComboBox label="L" labelCss={bold}>
+      <SelectOption id="a">A</SelectOption>
+    </ComboBox>,
+  ],
+  ["NumberField", <NumberField label="L" labelCss={bold} />],
+  [
+    "NativeSelectField",
+    <NativeSelectField label="L" labelCss={bold}>
+      <option value="a">A</option>
+    </NativeSelectField>,
+  ],
+  [
+    "RadioGroup",
+    <RadioGroup label="L" labelCss={bold}>
+      <Radio value="s">Small</Radio>
+    </RadioGroup>,
+  ],
+  [
+    "CheckboxGroup",
+    <CheckboxGroup label="L" labelCss={bold}>
+      <Checkbox value="a">A</Checkbox>
+    </CheckboxGroup>,
+  ],
+];
+
+it.each(labelCssFields)("%s's labelCss reaches its label", (_name, el) => {
+  render(el);
+  expect(screen.getByText("L").className).toContain(css(bold));
+});
 
 // The standalone toggles carry the same helper-text chrome, wired by hand —
 // both settings dialogs used to hand-roll a Text underneath, which never

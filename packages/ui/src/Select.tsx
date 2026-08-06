@@ -47,6 +47,8 @@ export interface SelectProps<T extends object>
     FieldLayoutProps {
   /** Visible label. Use `aria-label` instead where the design has none. */
   label?: ReactNode;
+  /** Label style overrides. */
+  labelCss?: SystemStyleObject;
   /** Shown in the trigger while nothing is chosen (Chakra's placeholder). */
   placeholder?: string;
   /** `SelectOption`s. */
@@ -80,6 +82,7 @@ export interface SelectProps<T extends object>
  */
 export const Select = <T extends object>({
   label,
+  labelCss,
   placeholder,
   children,
   indicator,
@@ -110,6 +113,7 @@ export const Select = <T extends object>({
             size={variantProps.size}
             labelPosition={labelPosition}
             isRequired={props.isRequired}
+            css={labelCss}
           >
             {label}
           </FieldLabel>
