@@ -1145,7 +1145,7 @@ Censuses were taken July 2026 against Chakra v2.10 in all apps.
     means a different element per field — Select/ComboBox `css` →
     `triggerCss` (matching `contentCss`), NumberField `css` → `rootCss`
     (matching NativeSelectField); on bare controls (Input, NativeSelect,
-    Checkbox, Switch, Slider) `css` still styles the root, which *is* the
+    Checkbox, Switch, Slider) `css` still styles the root, which _is_ the
     control there. Migration is a TS-guided prop rename — classroom's four
     `Select`/`ComboBox` `css` sites are the ones outside the PRs below.
     File-level, invisible to apps: the `field` recipe moved out of
