@@ -16,6 +16,7 @@ import {
   Select,
   SelectOption,
   Stack,
+  Text,
   TextField,
 } from "../src";
 
@@ -112,41 +113,69 @@ export const HelperText: Story = {
   ),
 };
 
+const YEARS = ["Year 7", "Year 8", "Year 9"];
+const SCHOOLS = [
+  "Abbey Road Primary",
+  "Bishops Park High",
+  "Castle Hill Academy",
+];
+const LANGUAGES = ["English", "Cymraeg", "Français", "Deutsch"];
+
 /**
- * The `size` scale across the four single-control fields. One `size` prop
- * sizes the control (via the `input`/`select` recipes) *and* its label (via
- * the `field` recipe), so the whole row scales together — Chakra's FormLabel
- * never scaled, a deliberate delta (see the playbook). A TextField and a
- * Select on the same row should sit level at every size; helper text stays
- * `sm` throughout, as Chakra's did. Radio/Checkbox groups have their own
- * control scale and are deliberately absent.
+ * The `size` scale, the same small form at each step. One `size` prop sizes
+ * the control (via the `input`/`select` recipes) *and* its label (via the
+ * `field` recipe), so the whole form scales together — Chakra's FormLabel
+ * never scaled, a deliberate delta (see the playbook). The first row pairs a
+ * TextField with a Select because the two are sized by different recipes: if
+ * the ladders drift, they stop sitting level. Helper text stays `sm`
+ * throughout, as Chakra's did. Radio/Checkbox groups have their own control
+ * scale and are deliberately absent.
  */
 export const Sizes: Story = {
   render: () => (
-    <Stack gap={10} maxW="2xl">
+    <Stack direction="row" gap={8} alignItems="flex-start">
       {(["sm", "md", "lg"] as const).map((size) => (
-        <Stack key={size} gap={4} direction="row" alignItems="flex-start">
-          <TextField label={`Name (${size})`} size={size} />
-          <Select label="Fruit" placeholder="Select…" size={size}>
-            {options}
-          </Select>
+        <Stack key={size} gap={5} width="64">
+          <Text fontWeight="semibold" color="gray.600">
+            size="{size}"
+          </Text>
+          <Stack direction="row" gap={3}>
+            <TextField label="First name" size={size} />
+            <Select label="Year" placeholder="Year" size={size}>
+              {YEARS.map((y) => (
+                <SelectOption key={y} id={y}>
+                  {y}
+                </SelectOption>
+              ))}
+            </Select>
+          </Stack>
           <ComboBox
-            label="Fruit"
+            label="School"
             placeholder="Start typing…"
             emptyState="No matches"
             size={size}
           >
-            {options}
+            {SCHOOLS.map((s) => (
+              <SelectOption key={s} id={s}>
+                {s}
+              </SelectOption>
+            ))}
           </ComboBox>
-          <NumberField
-            label="Quantity"
-            defaultValue={3}
-            size={size}
-            helperText="Up to a dozen"
-          />
-          <NativeSelectField label="Fruit" size={size}>
-            {nativeOptions}
+          <NativeSelectField label="Language" size={size}>
+            {LANGUAGES.map((l) => (
+              <option key={l} value={l}>
+                {l}
+              </option>
+            ))}
           </NativeSelectField>
+          <NumberField
+            label="Students in class"
+            defaultValue={24}
+            minValue={1}
+            maxValue={30}
+            helperText="Up to 30"
+            size={size}
+          />
         </Stack>
       ))}
     </Stack>
