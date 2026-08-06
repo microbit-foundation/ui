@@ -11,7 +11,7 @@ import {
   Text as RACText,
 } from "react-aria-components";
 import { css, cx } from "styled-system/css";
-import { field } from "styled-system/recipes";
+import { field, FieldVariantProps } from "styled-system/recipes";
 import { SystemStyleObject } from "styled-system/types";
 
 /**
@@ -77,6 +77,8 @@ export interface FieldLabelProps
   children: ReactNode;
   /** Adds the required asterisk; pass the field's `isRequired`. */
   isRequired?: boolean;
+  /** The field's `size`, so the label scales with its control. */
+  size?: FieldVariantProps["size"];
   /** Per-instance style overrides (e.g. label-beside-field forms). */
   css?: SystemStyleObject;
 }
@@ -95,12 +97,13 @@ export interface FieldLabelProps
 export const FieldLabel = ({
   children,
   isRequired,
+  size,
   css: cssProp,
   ...rest
 }: FieldLabelProps) => (
   <RACLabel
     {...rest}
-    className={cx(field().label, cssProp ? css(cssProp) : undefined)}
+    className={cx(field({ size }).label, cssProp ? css(cssProp) : undefined)}
   >
     {children}
     {isRequired ? <FieldRequiredIndicator /> : null}

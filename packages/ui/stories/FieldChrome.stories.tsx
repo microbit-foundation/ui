@@ -94,6 +94,44 @@ export const HelperText: Story = {
 };
 
 /**
+ * The `size` scale across the four single-control fields. One `size` prop
+ * sizes the control (via the `input`/`select` recipes) *and* its label (via
+ * the `field` recipe), so the whole row scales together — Chakra's FormLabel
+ * never scaled, a deliberate delta (docs/form-controls.md). A TextField and a
+ * Select on the same row should sit level at every size; helper text stays
+ * `sm` throughout, as Chakra's did. Radio/Checkbox groups have their own
+ * control scale and are deliberately absent.
+ */
+export const Sizes: Story = {
+  render: () => (
+    <Stack gap={10} maxW="2xl">
+      {(["sm", "md", "lg"] as const).map((size) => (
+        <Stack key={size} gap={4} direction="row" alignItems="flex-start">
+          <TextField label={`Name (${size})`} size={size} />
+          <Select label="Fruit" placeholder="Select…" size={size}>
+            {options}
+          </Select>
+          <ComboBox
+            label="Fruit"
+            placeholder="Start typing…"
+            emptyState="No matches"
+            size={size}
+          >
+            {options}
+          </ComboBox>
+          <NumberField
+            label="Quantity"
+            defaultValue={3}
+            size={size}
+            helperText="Up to a dozen"
+          />
+        </Stack>
+      ))}
+    </Stack>
+  ),
+};
+
+/**
  * `isDisabled` across the set. The label dims with the control (Chakra's
  * FormLabel `_disabled`) because the `field` recipe's label reads
  * `data-disabled` off the field root — react-aria never puts it on the label

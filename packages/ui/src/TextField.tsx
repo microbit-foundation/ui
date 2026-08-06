@@ -47,10 +47,12 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
     // As Input: forward every recipe variant group, not just `size`, so a
     // preset that adds one keeps working.
     const [variantProps, rest] = input.splitVariantProps(props);
-    const slots = field();
+    const slots = field({ size: variantProps.size });
     return (
       <RACTextField {...rest} className={slots.root}>
-        <FieldLabel isRequired={rest.isRequired}>{label}</FieldLabel>
+        <FieldLabel size={variantProps.size} isRequired={rest.isRequired}>
+          {label}
+        </FieldLabel>
         <RACInput
           ref={ref}
           className={input(variantProps)}

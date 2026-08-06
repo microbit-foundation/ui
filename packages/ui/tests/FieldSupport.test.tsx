@@ -5,7 +5,7 @@
  */
 import { cleanup, render, screen } from "@testing-library/react";
 import { ReactElement } from "react";
-import { field } from "styled-system/recipes";
+import { field, input } from "styled-system/recipes";
 import { afterEach, expect, it } from "vitest";
 import {
   Checkbox,
@@ -163,4 +163,36 @@ const fields: [string, ReactElement][] = [
 it.each(fields)("%s styles its label from the field recipe", (_name, el) => {
   render(el);
   expect(screen.getByText("L").className).toContain(field().label);
+});
+
+// The four fields with a `size` prop, for the label-follows-control assertion.
+const sizedFields: [string, ReactElement][] = [
+  ["TextField", <TextField label="L" size="sm" />],
+  [
+    "Select",
+    <Select label="L" size="sm">
+      <SelectOption id="a">A</SelectOption>
+    </Select>,
+  ],
+  [
+    "ComboBox",
+    <ComboBox label="L" size="sm">
+      <SelectOption id="a">A</SelectOption>
+    </ComboBox>,
+  ],
+  ["NumberField", <NumberField label="L" size="sm" />],
+];
+
+it.each(sizedFields)("%s's size reaches its label", (_name, el) => {
+  render(el);
+  expect(screen.getByText("L").className).toContain(
+    field({ size: "sm" }).label,
+  );
+});
+
+it("NumberField's size reaches its input", () => {
+  render(<NumberField label="L" size="sm" />);
+  expect(screen.getByRole("textbox").className).toContain(
+    input({ size: "sm" }),
+  );
 });

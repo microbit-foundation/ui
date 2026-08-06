@@ -98,7 +98,9 @@ export const Select = <T extends object>({
         className={cx(slots.root, className)}
       >
         {label != null && (
-          <FieldLabel isRequired={props.isRequired}>{label}</FieldLabel>
+          <FieldLabel size={variantProps.size} isRequired={props.isRequired}>
+            {label}
+          </FieldLabel>
         )}
         <RACButton
           className={cx(slots.trigger, cssProp ? css(cssProp) : undefined)}

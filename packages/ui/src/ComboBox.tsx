@@ -150,7 +150,9 @@ const ComboBoxInner = <T extends object>(
         className={cx(slots.root, className)}
       >
         {label != null && (
-          <FieldLabel isRequired={props.isRequired}>{label}</FieldLabel>
+          <FieldLabel size={variantProps.size} isRequired={props.isRequired}>
+            {label}
+          </FieldLabel>
         )}
         <div
           ref={triggerRef}
