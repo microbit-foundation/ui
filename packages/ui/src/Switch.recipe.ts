@@ -72,6 +72,24 @@ export const switchRecipe = defineSlotRecipe({
     },
   },
   variants: {
+    // `start` puts the label first and the control at the row's end — the
+    // settings-row pattern (a preference name beside its switch), the toggle
+    // counterpart of the field recipe's `labelPosition="side"`. Values are
+    // start/end rather than top/side because the default label is already
+    // beside the control, after it. The label keeps an end margin so a long
+    // translation can't butt against the track (the SelectFormControl
+    // lesson — see the field-chrome roadmap bullet).
+    labelPosition: {
+      end: {},
+      start: {
+        root: {
+          flexDirection: "row-reverse",
+          justifyContent: "space-between",
+          width: "100%",
+        },
+        label: { marginStart: "0", marginEnd: "3" },
+      },
+    },
     // Chakra's Switch size scale (track width x height; the selected-thumb
     // translate is the difference between them).
     size: {
@@ -103,5 +121,6 @@ export const switchRecipe = defineSlotRecipe({
   },
   defaultVariants: {
     size: "md",
+    labelPosition: "end",
   },
 });

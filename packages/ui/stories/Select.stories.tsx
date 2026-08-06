@@ -93,7 +93,7 @@ export const Overridden: Story = {
       <Select
         label="Fruit"
         placeholder="Select…"
-        css={{ borderRadius: "full", px: 5 }}
+        triggerCss={{ borderRadius: "full", px: 5 }}
         contentCss={{ borderRadius: "xl" }}
       >
         {options}

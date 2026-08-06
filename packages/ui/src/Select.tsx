@@ -24,7 +24,7 @@ import {
   FieldLayoutProps,
   FieldSupport,
   FieldSupportProps,
-} from "./FieldSupport";
+} from "./Field";
 import { Icon } from "./Icon";
 
 export type SelectSlots = ReturnType<typeof select>;
@@ -66,8 +66,8 @@ export interface SelectProps<T extends object>
    * while positioning, which beats any class.
    */
   maxHeight?: number;
-  /** Per-instance overrides for the trigger. */
-  css?: SystemStyleObject;
+  /** Per-instance overrides for the trigger (the button the value sits in). */
+  triggerCss?: SystemStyleObject;
   /** Per-instance overrides for the dropdown card. */
   contentCss?: SystemStyleObject;
   className?: string;
@@ -89,7 +89,7 @@ export const Select = <T extends object>({
   errorMessage,
   helperTextCss,
   labelPosition,
-  css: cssProp,
+  triggerCss,
   contentCss,
   className,
   ...props
@@ -115,7 +115,10 @@ export const Select = <T extends object>({
           </FieldLabel>
         )}
         <RACButton
-          className={cx(slots.trigger, cssProp ? css(cssProp) : undefined)}
+          className={cx(
+            slots.trigger,
+            triggerCss ? css(triggerCss) : undefined,
+          )}
         >
           <SelectValue className={slots.value}>
             {({ isPlaceholder, defaultChildren }) =>

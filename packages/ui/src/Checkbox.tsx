@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { ReactNode } from "react";
+import { ReactNode, useId } from "react";
 import {
   Checkbox as RACCheckbox,
   CheckboxProps as RACCheckboxProps,
@@ -11,6 +11,7 @@ import {
 import { css, cx } from "styled-system/css";
 import { checkbox, CheckboxVariantProps } from "styled-system/recipes";
 import { SystemStyleObject } from "styled-system/types";
+import { FieldHelperText } from "./Field";
 
 /** What a render-prop child is told about the checkbox. */
 export interface CheckboxState {
@@ -39,6 +40,14 @@ export interface CheckboxProps
    * @default true
    */
   control?: boolean;
+  /**
+   * Help text below the checkbox, wired to its `aria-describedby` — the same
+   * chrome the labelled fields' `helperText` renders. With it the component
+   * gains a wrapping `<div>`, so the checkbox-plus-text moves as one block.
+   */
+  helperText?: ReactNode;
+  /** Per-instance style overrides for the helper text. */
+  helperTextCss?: SystemStyleObject;
 }
 
 /**
@@ -52,13 +61,21 @@ export const Checkbox = ({
   className,
   children,
   control,
+  helperText,
+  helperTextCss,
   ...rest
 }: CheckboxProps) => {
   const slots = checkbox({ size });
-  return (
+  const helperId = useId();
+  const describedBy =
+    [rest["aria-describedby"], helperText != null ? helperId : undefined]
+      .filter(Boolean)
+      .join(" ") || undefined;
+  const checkboxElement = (
     <RACCheckbox
       className={cx(slots.root, cssProp ? css(cssProp) : undefined, className)}
       {...rest}
+      aria-describedby={describedBy}
     >
       {({ isSelected, isFocusVisible, isDisabled }) => {
         const content =
@@ -102,5 +119,16 @@ export const Checkbox = ({
         );
       }}
     </RACCheckbox>
+  );
+  if (helperText == null) {
+    return checkboxElement;
+  }
+  return (
+    <div>
+      {checkboxElement}
+      <FieldHelperText id={helperId} css={helperTextCss}>
+        {helperText}
+      </FieldHelperText>
+    </div>
   );
 };

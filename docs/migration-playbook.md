@@ -1130,6 +1130,29 @@ Censuses were taken July 2026 against Chakra v2.10 in all apps.
     way — `FieldSupport` still can't work outside a RAC field container
     (RAC's `Text slot="description"` and `FieldError` need the validation
     context).
+  - **Standalone toggles carry the same helper text** (2026-08-06, the
+    "tier 2" pass): `helperText` on Checkbox and Switch, wired to
+    `aria-describedby` — which the hand-rolled `Text`-underneath in both
+    settings dialogs never was. With it the component gains a wrapping
+    `<div>`. Switch also takes `labelPosition="start"` (label first, switch
+    at the row's end — ml-trainer's analytics row, which reached into
+    `.switch__label` by hand); values are start/end, not the field's
+    top/side, because a toggle's label is already beside it. Radio stays
+    helper-less (always in a group) and Slider/Textarea are **parked
+    deliberately** — no visible-label Slider or any Textarea exists in the
+    family, so nothing is built until a design wants one.
+  - **Naming aligned while breaking is cheap** (same pass): `css` no longer
+    means a different element per field — Select/ComboBox `css` →
+    `triggerCss` (matching `contentCss`), NumberField `css` → `rootCss`
+    (matching NativeSelectField); on bare controls (Input, NativeSelect,
+    Checkbox, Switch, Slider) `css` still styles the root, which *is* the
+    control there. Migration is a TS-guided prop rename — classroom's four
+    `Select`/`ComboBox` `css` sites are the ones outside the PRs below.
+    File-level, invisible to apps: the `field` recipe moved out of
+    `TextField.recipe.ts` into `Field.recipe.ts`, `FieldSupport.tsx` became
+    `Field.tsx` (it holds the whole chrome family), and RadioGroup got its
+    own file mirroring CheckboxGroup. (`switchRecipe` keeps its awkward
+    export name — `switch` is a JS reserved word.)
 
   The app PRs, once an alpha ships:
 
@@ -1147,6 +1170,13 @@ Censuses were taken July 2026 against Chakra v2.10 in all apps.
     select; deletion fixes it, verify in those locales. `createOptions` (intl
     glue, duplicated between them) stays app-side; export it from the library
     if a third copy appears (needs only a type import of `IntlShape`).
+  - **The toggle rows adopt the same chrome**: python-editor's two settings
+    checkboxes swap their hand-rolled `Text` for `helperText` (expected tiny
+    delta: the text goes `gray.700` → the chrome's `gray.600`, and gains the
+    `aria-describedby` it never had); ml-trainer's analytics Switch drops its
+    `row-reverse`/`.switch__label` css for
+    `labelPosition="start" helperText={…}`, and its local `helperTextCss`
+    constant goes.
   - **data-microbit-org**: `FormField` adopts
     `FieldLabel`/`FieldHelperText`/`FieldErrorMessage`; `GraphSelector` is a
     seventh hand-rolled horizontal label but bespoke enough (pill variant,

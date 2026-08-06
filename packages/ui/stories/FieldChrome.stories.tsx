@@ -16,6 +16,7 @@ import {
   Select,
   SelectOption,
   Stack,
+  Switch,
   Text,
   TextField,
 } from "../src";
@@ -109,6 +110,15 @@ export const HelperText: Story = {
           <Checkbox value="light">Light level</Checkbox>
         </Stack>
       </CheckboxGroup>
+      {/* Standalone toggles take helperText too — the settings-dialog
+          pattern both apps hand-rolled with a Text underneath, which never
+          reached aria-describedby. */}
+      <Checkbox helperText="Warnings appear as you type, not on flashing">
+        Warn about V2-only features
+      </Checkbox>
+      <Switch helperText="Anonymous usage data; no code is collected">
+        Allow analytics
+      </Switch>
     </Stack>
   ),
 };
@@ -185,11 +195,12 @@ export const Sizes: Story = {
 /**
  * `labelPosition="side"` — the settings-row pattern: the label is a
  * preference name beside its control and absorbs the free space, so the
- * control needs an explicit width (`groupCss`/`wrapperCss`/`css` depending on
- * the field). Helper and error text drop to a full-width line below the pair
- * (submit the empty required row to see the error). Not on
- * RadioGroup/CheckboxGroup, whose roots deliberately carry no layout and
- * where RAC's `orientation` means the radios' own layout.
+ * control needs an explicit width (`groupCss`/`wrapperCss`/`triggerCss`
+ * depending on the field). Helper and error text drop to a full-width line
+ * below the pair (submit the empty required row to see the error). Switch's
+ * counterpart is `labelPosition="start"`. Not on RadioGroup/CheckboxGroup,
+ * whose roots deliberately carry no layout and where RAC's `orientation`
+ * means the radios' own layout.
  */
 export const SideLabels: Story = {
   render: () => (
@@ -206,7 +217,7 @@ export const SideLabels: Story = {
           label="Highlight code structure"
           labelPosition="side"
           defaultSelectedKey="Apple"
-          css={{ width: "28ch" }}
+          triggerCss={{ width: "28ch" }}
         >
           {options}
         </Select>
@@ -215,7 +226,7 @@ export const SideLabels: Story = {
           labelPosition="side"
           placeholder="Start typing…"
           emptyState="No matches"
-          css={{ width: "28ch" }}
+          triggerCss={{ width: "28ch" }}
         >
           {options}
         </ComboBox>
@@ -233,6 +244,15 @@ export const SideLabels: Story = {
           groupCss={{ width: "12ch" }}
           helperText="Helper text takes a full-width line below the row"
         />
+        {/* The toggle counterpart: label first, switch at the row's end
+            (values are start/end, not top/side — a switch's label is already
+            beside it). */}
+        <Switch
+          labelPosition="start"
+          helperText="Anonymous usage data; no code is collected"
+        >
+          Allow analytics
+        </Switch>
         <Select
           label="Fruit (required)"
           labelPosition="side"
@@ -240,7 +260,7 @@ export const SideLabels: Story = {
           name="fruit"
           isRequired
           errorMessage="Choose a fruit"
-          css={{ width: "28ch" }}
+          triggerCss={{ width: "28ch" }}
         >
           {options}
         </Select>

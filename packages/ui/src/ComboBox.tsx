@@ -29,7 +29,7 @@ import {
   FieldLayoutProps,
   FieldSupport,
   FieldSupportProps,
-} from "./FieldSupport";
+} from "./Field";
 import { Icon } from "./Icon";
 import { SelectSlotProvider } from "./Select";
 
@@ -82,11 +82,12 @@ export interface ComboBoxProps<T extends object>
    */
   maxHeight?: number;
   /**
-   * Per-instance overrides for the control — the box around the input, its
-   * `startContent` and its indicator, which is what `Select`'s `css` styles
-   * too. Reach the input itself through the `select` recipe's `value` slot.
+   * Per-instance overrides for the trigger — the box around the input, its
+   * `startContent` and its indicator, the same slot `Select`'s `triggerCss`
+   * styles. Reach the input itself through the `select` recipe's `value`
+   * slot.
    */
-  css?: SystemStyleObject;
+  triggerCss?: SystemStyleObject;
   /** Per-instance overrides for the dropdown card. */
   contentCss?: SystemStyleObject;
   className?: string;
@@ -116,7 +117,7 @@ const ComboBoxInner = <T extends object>(
     errorMessage,
     helperTextCss,
     labelPosition,
-    css: cssProp,
+    triggerCss,
     contentCss,
     className,
     ...props
@@ -168,7 +169,10 @@ const ComboBoxInner = <T extends object>(
         )}
         <div
           ref={triggerRef}
-          className={cx(slots.trigger, cssProp ? css(cssProp) : undefined)}
+          className={cx(
+            slots.trigger,
+            triggerCss ? css(triggerCss) : undefined,
+          )}
         >
           {startContent}
           <RACInput
