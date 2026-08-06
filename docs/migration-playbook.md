@@ -973,6 +973,13 @@ accepted — expect them, don't chase them as bugs:
   button on) for toasts that must not auto-dismiss; `toast.update()`
   re-adds (re-animates, restarts timeout) rather than updating in place;
   id-dedup is native.
+- **Field labels are `normal` weight, not FormLabel's `medium`** (decision
+  2026-08-06, `docs/form-controls.md`). Invisible on macOS and Windows — no
+  font in the family's stack ships a 500 face, so `medium` already rendered
+  as 400 — but real on Android/Chrome OS/most Linux (Roboto/Noto have a
+  Medium) and under any future webfont brand preset. Accepted without a
+  device check. Apps wanting a heavier label (data-microbit-org's `bold`
+  dialogs) override as before.
 
 ## Decisions to front-load
 
@@ -1108,27 +1115,28 @@ Censuses were taken July 2026 against Chakra v2.10 in all apps.
     python-editor _had_ to keep it at dense's 0.9rem. The dropped `marginEnd: 3`
     is a latent one: the label has `flex: 1 1 auto`, so a long enough
     translation butts against the select. `createOptions` is duplicated too.
-  - **`field.label`'s `fontWeight: medium` is right, and the overrides are a
-    category rather than a drift.** Eight app call sites pass a visible `label`
-    to a library field; seven take the default (dialog fields — name a project,
-    student name, file name, the sign-up checkbox groups). Only
-    python-editor's font-size NumberField overrides it, to `normal`, and it does
-    so to match the two `SelectFormControl` rows either side of it in the same
-    dialog — all three being _settings rows_, where the label is a preference
-    name beside its control rather than a form field's label, and where the
-    Chakra original overrode FormLabel the same way (`mb="0" fontWeight="normal"`).
-    data-microbit-org's dialogs are the third case, wanting `bold` at `lg`.
-    So don't align the default down: the question is whether a settings row is
-    a distinct thing the library should name (alongside `orientation`), which
-    would also retire the five hand-rolled labels. A `weight` variant on the
-    recipe would serve that better than five `css` escape hatches.
+  - **`field.label` is `normal` weight now — a decided delta, not a drift to
+    fix back** (2026-08-06; the reasoning and the whole plan live in
+    `docs/form-controls.md`). The overrides were a category: settings rows,
+    where the label is a preference name beside its control and the Chakra
+    originals overrode FormLabel the same way (`mb="0" fontWeight="normal"`).
+    `medium` was pixel-identical to `normal` on macOS/Windows anyway (no 500
+    face in the stack), so rather than keep a default nothing structural
+    wanted, the default moved and the app-side overrides go at the next
+    release. The settings row itself becomes a horizontal field
+    (`labelPosition="side"`, per React Spectrum's prop — `orientation` is
+    taken by RAC's RadioGroup) plus a `NativeSelectField`, which retires the
+    five hand-rolled labels. data-microbit-org's `bold`-at-`lg` dialogs keep
+    their override.
   - **The escape hatch is symmetric for labels, not for helper and error
     text.** `FieldLabel` works outside a RAC field container; `FieldSupport`
     cannot, because RAC's `Text slot="description"` and `FieldError` need the
     validation context. So `FormField` hand-rolls a `<div>` with
     `field().helperText` and `FormErrorMsg` hand-rolls `field().errorMessage`.
-    Either bless that (document the slot classes as the non-RAC path) or give
-    the two parts a context-free mode.
+    Decided (2026-08-06): context-free `FieldHelperText`/`FieldErrorMessage`
+    exports rather than documenting the slot classes, so the recipe's slot
+    names and markup stay private. A11y wiring (`aria-describedby`, when the
+    error shows) stays with the caller either way.
 
   Unrelated but adjacent: `data-microbit-org`'s `FormError.tsx` — the
   form-level alert, not to be confused with the field-level `FormErrorMsg.tsx`

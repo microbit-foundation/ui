@@ -29,7 +29,11 @@ export const field = defineSlotRecipe({
     label: {
       display: "block",
       fontSize: "md",
-      fontWeight: "medium",
+      // Deliberately not Chakra FormLabel's `medium`: no font in the family's
+      // stack has a 500 face, so the two were pixel-identical on macOS and
+      // Windows, and the only call sites that cared overrode to `normal`
+      // (settings rows). See the playbook's expected behavioural deltas.
+      fontWeight: "normal",
       marginEnd: "3",
       mb: "2",
       transitionProperty: "opacity",
