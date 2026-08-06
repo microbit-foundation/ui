@@ -24,6 +24,7 @@ export * from "./Input";
 export * from "./InputGroup";
 export * from "./LinkBox";
 export * from "./NativeSelect";
+export * from "./NativeSelectField";
 export * from "./NumberField";
 export * from "./ProgressBar";
 export * from "./Radio";

@@ -9,6 +9,7 @@ import {
   Checkbox,
   CheckboxGroup,
   ComboBox,
+  NativeSelectField,
   NumberField,
   Radio,
   RadioGroup,
@@ -25,6 +26,9 @@ import {
  * same thing on TextField, Select, ComboBox, NumberField, RadioGroup and
  * CheckboxGroup. react-aria wires the helper text to the control's
  * `aria-describedby` and renders the error only while the field is invalid.
+ * NativeSelectField carries the same chrome around a plain `<select>` (native
+ * `required`/`disabled` props there), wiring by hand what RAC does for the
+ * rest.
  *
  * Each field's own page covers its behaviour; this page is the chrome across
  * the set, where drift between them shows up.
@@ -42,6 +46,12 @@ const options = FRUIT.map((f) => (
   <SelectOption key={f} id={f}>
     {f}
   </SelectOption>
+));
+
+const nativeOptions = FRUIT.map((f) => (
+  <option key={f} value={f}>
+    {f}
+  </option>
 ));
 
 /** Helper text below the control, and the asterisk `isRequired` adds. */
@@ -72,6 +82,15 @@ export const HelperText: Story = {
         helperText="Up to a dozen"
         groupCss={{ width: "32" }}
       />
+      {/* Native props here (`required`/`disabled`), not RAC's isRequired/
+          isDisabled — the control is a plain <select>. */}
+      <NativeSelectField
+        label="Fruit (native)"
+        helperText="The platform's own picker"
+        required
+      >
+        {nativeOptions}
+      </NativeSelectField>
       <RadioGroup label="Device" defaultValue="v2" helperText="V2 has a mic">
         <Stack gap={3}>
           <Radio value="v1">micro:bit V1</Radio>
@@ -125,6 +144,9 @@ export const Sizes: Story = {
             size={size}
             helperText="Up to a dozen"
           />
+          <NativeSelectField label="Fruit" size={size}>
+            {nativeOptions}
+          </NativeSelectField>
         </Stack>
       ))}
     </Stack>
@@ -168,6 +190,13 @@ export const SideLabels: Story = {
         >
           {options}
         </ComboBox>
+        <NativeSelectField
+          label="Parameter help (native)"
+          labelPosition="side"
+          wrapperCss={{ width: "28ch" }}
+        >
+          {nativeOptions}
+        </NativeSelectField>
         <NumberField
           label="Simulated devices"
           labelPosition="side"
@@ -223,6 +252,9 @@ export const Disabled: Story = {
         groupCss={{ width: "32" }}
         isDisabled
       />
+      <NativeSelectField label="Fruit (native)" disabled>
+        {nativeOptions}
+      </NativeSelectField>
       <RadioGroup label="Device" defaultValue="v2" isDisabled>
         <Stack gap={3}>
           <Radio value="v1">micro:bit V1</Radio>
