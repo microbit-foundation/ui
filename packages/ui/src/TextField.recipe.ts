@@ -77,9 +77,9 @@ export const field = defineSlotRecipe({
   variants: {
     // The label follows its control's size (the control itself is sized by
     // the `input`/`select` recipes), so one `size` prop scales the whole row.
-    // Chakra's FormLabel never scaled — a deliberate delta, decided in
-    // docs/form-controls.md. Helper and error text stay `sm` at every size,
-    // as Chakra's did.
+    // Chakra's FormLabel never scaled — a deliberate delta; see the playbook's
+    // field-chrome notes. Helper and error text stay `sm` at every size, as
+    // Chakra's did.
     size: {
       lg: { label: { fontSize: "lg" } },
       md: { label: { fontSize: "md" } },

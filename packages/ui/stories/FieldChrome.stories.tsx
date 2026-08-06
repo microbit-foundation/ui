@@ -116,7 +116,7 @@ export const HelperText: Story = {
  * The `size` scale across the four single-control fields. One `size` prop
  * sizes the control (via the `input`/`select` recipes) *and* its label (via
  * the `field` recipe), so the whole row scales together — Chakra's FormLabel
- * never scaled, a deliberate delta (docs/form-controls.md). A TextField and a
+ * never scaled, a deliberate delta (see the playbook). A TextField and a
  * Select on the same row should sit level at every size; helper text stays
  * `sm` throughout, as Chakra's did. Radio/Checkbox groups have their own
  * control scale and are deliberately absent.
