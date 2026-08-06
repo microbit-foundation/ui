@@ -974,7 +974,8 @@ accepted — expect them, don't chase them as bugs:
   re-adds (re-animates, restarts timeout) rather than updating in place;
   id-dedup is native.
 - **Field labels are `normal` weight, not FormLabel's `medium`** (decision
-  2026-08-06, `docs/form-controls.md`). Invisible on macOS and Windows — no
+  2026-08-06; the field-chrome roadmap bullet has the context). Invisible on
+  macOS and Windows — no
   font in the family's stack ships a 500 face, so `medium` already rendered
   as 400 — but real on Android/Chrome OS/most Linux (Roboto/Noto have a
   Medium) and under any future webfont brand preset. Accepted without a
@@ -1091,59 +1092,71 @@ Censuses were taken July 2026 against Chakra v2.10 in all apps.
   reasonable pilot. Until then classroom restates the row states by hand and
   carries the cost in gotcha #43.
 
-- **Hand-composed field chrome, three app-side copies — and every one
-  overrides the label weight.** The six RAC field components cover a labelled
-  control; nothing covers labelling a control react-aria isn't wiring, so
-  `NativeSelect` and masked inputs get hand-rolled labels.
-  `data-microbit-org`'s `FormField.tsx` builds one from `field()` slots plus
-  `FieldRequiredIndicator`, and `python-editor-v3`'s and `ml-trainer`'s
-  `SelectFormControl.tsx` each build a settings row (label beside a
-  28ch NativeSelect). `FieldLabel` is now the supported answer for all three —
-  it takes `id`/`htmlFor` for a control with no RAC context — but they can only
-  adopt it after a release.
+- **Hand-composed field chrome: the library side landed 2026-08-06; the app
+  PRs wait on a release.** The gap was that nothing covered labelling a
+  control react-aria isn't wiring, so `NativeSelect` and masked inputs got
+  hand-rolled labels — `data-microbit-org`'s `FormField.tsx` from `field()`
+  slots, and `python-editor-v3`'s and `ml-trainer`'s `SelectFormControl.tsx`
+  each building a settings row (label beside a 28ch NativeSelect). What
+  landed, and the decisions behind it (2026-08-05/06, owner-reviewed):
 
-  Three things to carry into that work:
+  - **`field.label` is `normal` weight — a decided delta, not a drift to fix
+    back** (see "Expected behavioural deltas"). The old overrides were a
+    category: settings rows, where the label is a preference name beside its
+    control and the Chakra originals overrode FormLabel the same way
+    (`mb="0" fontWeight="normal"`). Rather than keep a default nothing
+    structural wanted, the default moved. data-microbit-org's `bold`-at-`lg`
+    dialogs keep their override.
+  - **A settings row is a horizontal field, not a distinct thing**:
+    `labelPosition="side"` on the four single-control fields (named after
+    React Spectrum's prop — `orientation` is taken by RAC's RadioGroup for
+    the radios' own layout, which is also why the group fields don't take
+    it). The `field` recipe's root owns field-root layout outright;
+    `select.root`/`numberField.root` carry none, so no two recipes ever fight
+    over `flexDirection`.
+  - **One `size` prop scales the whole row**: the label follows the control
+    (`field` recipe size variant — Chakra's FormLabel never scaled; helper
+    and error text stay `sm`, as Chakra's did). Revisit only on repeated
+    counter-examples.
+  - **`NativeSelectField`** pairs the bare control with the field chrome, as
+    `TextField` pairs with `Input`, hand-wiring what RAC can't (`htmlFor`,
+    `aria-describedby`, the root's `data-disabled`). The bare `NativeSelect`
+    export stays: six control-only call sites (aria-labelled, attached
+    ButtonGroup, visually-hidden labels) genuinely want no chrome.
+  - **Non-RAC helper/error text**: context-free
+    `FieldHelperText`/`FieldErrorMessage` exports rather than documenting the
+    recipe's slot classes, so slot names and markup stay private. A11y wiring
+    (`aria-describedby`, when the error shows) stays with the caller either
+    way — `FieldSupport` still can't work outside a RAC field container
+    (RAC's `Text slot="description"` and `FieldError` need the validation
+    context).
 
-  - **The two `SelectFormControl`s are the same component, ported twice and
-    diverged.** Both Chakra originals were byte-identical
-    (`<FormControl display="flex" alignItems="center">` +
-    `<FormLabel htmlFor mb="0" fontWeight="normal" flex="1 1 auto">`).
-    python-editor's port keeps FormLabel's `fontSize: md` and `marginEnd: 3`;
-    ml-trainer's (the pilot, so the rougher port) keeps only `flex`. The
-    `fontSize` omission is invisible there — ml-trainer is off the dense preset,
-    where `md` is the 1rem the label inherits anyway, which is also why
-    python-editor _had_ to keep it at dense's 0.9rem. The dropped `marginEnd: 3`
-    is a latent one: the label has `flex: 1 1 auto`, so a long enough
-    translation butts against the select. `createOptions` is duplicated too.
-  - **`field.label` is `normal` weight now — a decided delta, not a drift to
-    fix back** (2026-08-06; the reasoning and the whole plan live in
-    `docs/form-controls.md`). The overrides were a category: settings rows,
-    where the label is a preference name beside its control and the Chakra
-    originals overrode FormLabel the same way (`mb="0" fontWeight="normal"`).
-    `medium` was pixel-identical to `normal` on macOS/Windows anyway (no 500
-    face in the stack), so rather than keep a default nothing structural
-    wanted, the default moved and the app-side overrides go at the next
-    release. The settings row itself becomes a horizontal field
-    (`labelPosition="side"`, per React Spectrum's prop — `orientation` is
-    taken by RAC's RadioGroup) plus a `NativeSelectField`, which retires the
-    five hand-rolled labels. data-microbit-org's `bold`-at-`lg` dialogs keep
-    their override.
-  - **The escape hatch is symmetric for labels, not for helper and error
-    text.** `FieldLabel` works outside a RAC field container; `FieldSupport`
-    cannot, because RAC's `Text slot="description"` and `FieldError` need the
-    validation context. So `FormField` hand-rolls a `<div>` with
-    `field().helperText` and `FormErrorMsg` hand-rolls `field().errorMessage`.
-    Decided (2026-08-06): context-free `FieldHelperText`/`FieldErrorMessage`
-    exports rather than documenting the slot classes, so the recipe's slot
-    names and markup stay private. A11y wiring (`aria-describedby`, when the
-    error shows) stays with the caller either way.
+  The app PRs, once an alpha ships:
 
-  Unrelated but adjacent: `data-microbit-org`'s `FormError.tsx` — the
-  form-level alert, not to be confused with the field-level `FormErrorMsg.tsx`
-  beside it — colours itself `red.500` where field errors use `danger.500`.
-  Identical pixels today (`danger.500` resolves to `{colors.red.500}`) and
-  divergent vocabulary: the ramp comment above reserves `red.*` for the
-  recording vocabulary, so an app that ever re-points `danger` would split them.
+  - **python-editor settings**: the whole dialog aligns on `md` — its `sm`
+    number input between `md` selects was a Chakra-era accident, and with
+    label-follows-size a faithful port would mismatch the labels too. So the
+    "Font size" NumberField grows to match its neighbours (the one visible
+    delta — screenshot against production) and drops its four `*Css` props
+    for `labelPosition="side" groupCss={{width: "12ch"}}`. No label changes
+    anywhere: everything already renders `md`/`normal`.
+  - **Both `SelectFormControl`s are deleted** for `NativeSelectField`
+    (`labelPosition="side" wrapperCss={{width: "28ch"}}`). They were the same
+    component ported twice and diverged — ml-trainer's dropped FormLabel's
+    `marginEnd: 3`, so a long German/Welsh translation butts against the
+    select; deletion fixes it, verify in those locales. `createOptions` (intl
+    glue, duplicated between them) stays app-side; export it from the library
+    if a third copy appears (needs only a type import of `IntlShape`).
+  - **data-microbit-org**: `FormField` adopts
+    `FieldLabel`/`FieldHelperText`/`FieldErrorMessage`; `GraphSelector` is a
+    seventh hand-rolled horizontal label but bespoke enough (pill variant,
+    `lg` sizes, explicit `medium` weight) to be an optional later adopter.
+    Unrelated but adjacent: `FormError.tsx` — the form-level alert, not the
+    field-level `FormErrorMsg.tsx` beside it — colours itself `red.500` where
+    field errors use `danger.500`. Identical pixels today (`danger.500`
+    resolves to `{colors.red.500}`) and divergent vocabulary: the ramp
+    comment above reserves `red.*` for the recording vocabulary, so an app
+    that ever re-points `danger` would split them.
 
 - **`Information` and `Success` are English in the library's Welsh and Italian
   catalogs.** They were backfilled from classroom's translations, but these two
