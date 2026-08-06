@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { ReactNode } from "react";
+import { HTMLAttributes, ReactNode } from "react";
 import {
   FieldError,
   Label as RACLabel,
@@ -77,6 +77,61 @@ export const FieldSupport = ({
     </>
   );
 };
+
+interface FieldTextProps extends HTMLAttributes<HTMLDivElement> {
+  children: ReactNode;
+  /** The field's `labelPosition`, so the text lays out to match. */
+  labelPosition?: FieldVariantProps["labelPosition"];
+  /** Per-instance style overrides. */
+  css?: SystemStyleObject;
+}
+
+/**
+ * Context-free helper text (Chakra's FormHelperText) for a control react-aria
+ * isn't wiring — a native select or a masked input. Inside a RAC field
+ * container use `FieldSupport`, which wires `aria-describedby` and validation
+ * for free; here the caller owns that wiring: give this an `id` and reference
+ * it from the control's `aria-describedby` (as `NativeSelectField` does).
+ */
+export const FieldHelperText = ({
+  children,
+  labelPosition,
+  css: cssProp,
+  ...rest
+}: FieldTextProps) => (
+  <div
+    {...rest}
+    className={cx(
+      field({ labelPosition }).helperText,
+      cssProp ? css(cssProp) : undefined,
+    )}
+  >
+    {children}
+  </div>
+);
+
+/**
+ * Context-free error message (Chakra's FormErrorMessage), the counterpart to
+ * `FieldHelperText` — see its note on the wiring the caller owns. RAC's
+ * `FieldError` renders only while its field is invalid; here that decision is
+ * the caller's too: render it conditionally.
+ */
+export const FieldErrorMessage = ({
+  children,
+  labelPosition,
+  css: cssProp,
+  ...rest
+}: FieldTextProps) => (
+  <div
+    {...rest}
+    className={cx(
+      field({ labelPosition }).errorMessage,
+      cssProp ? css(cssProp) : undefined,
+    )}
+  >
+    {children}
+  </div>
+);
 
 /**
  * The required-field asterisk (Chakra's FormLabel indicator). Render inside
