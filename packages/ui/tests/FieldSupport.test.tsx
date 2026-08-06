@@ -4,10 +4,13 @@
  * SPDX-License-Identifier: MIT
  */
 import { cleanup, render, screen } from "@testing-library/react";
+import { ReactElement } from "react";
+import { field } from "styled-system/recipes";
 import { afterEach, expect, it } from "vitest";
 import {
   Checkbox,
   CheckboxGroup,
+  ComboBox,
   NumberField,
   Radio,
   RadioGroup,
@@ -125,4 +128,39 @@ it("NumberField renders helper text below the group", () => {
       .filter(Boolean)
       .map((id) => document.getElementById(id)?.textContent),
   ).toContain("Whole numbers");
+});
+
+// Every labelled field, for the two assertions below.
+const fields: [string, ReactElement][] = [
+  ["TextField", <TextField label="L" />],
+  [
+    "Select",
+    <Select label="L">
+      <SelectOption id="a">A</SelectOption>
+    </Select>,
+  ],
+  [
+    "ComboBox",
+    <ComboBox label="L">
+      <SelectOption id="a">A</SelectOption>
+    </ComboBox>,
+  ],
+  ["NumberField", <NumberField label="L" />],
+  [
+    "RadioGroup",
+    <RadioGroup label="L">
+      <Radio value="s">Small</Radio>
+    </RadioGroup>,
+  ],
+  [
+    "CheckboxGroup",
+    <CheckboxGroup label="L">
+      <Checkbox value="a">A</Checkbox>
+    </CheckboxGroup>,
+  ],
+];
+
+it.each(fields)("%s styles its label from the field recipe", (_name, el) => {
+  render(el);
+  expect(screen.getByText("L").className).toContain(field().label);
 });

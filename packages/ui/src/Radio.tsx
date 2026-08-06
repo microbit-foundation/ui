@@ -5,20 +5,15 @@
  */
 import { ReactNode } from "react";
 import {
-  Label as RACLabel,
   Radio as RACRadio,
   RadioProps as RACRadioProps,
   RadioGroup as RACRadioGroup,
   RadioGroupProps as RACRadioGroupProps,
 } from "react-aria-components";
 import { css, cx } from "styled-system/css";
-import { field, radio, RadioVariantProps } from "styled-system/recipes";
+import { radio, RadioVariantProps } from "styled-system/recipes";
 import { SystemStyleObject } from "styled-system/types";
-import {
-  FieldRequiredIndicator,
-  FieldSupport,
-  FieldSupportProps,
-} from "./FieldSupport";
+import { FieldLabel, FieldSupport, FieldSupportProps } from "./FieldSupport";
 
 export interface RadioGroupProps
   extends Omit<RACRadioGroupProps, "className" | "style">,
@@ -57,10 +52,7 @@ export const RadioGroup = ({
       {(renderProps) => (
         <>
           {label != null && (
-            <RACLabel className={field().label}>
-              {label}
-              {rest.isRequired ? <FieldRequiredIndicator /> : null}
-            </RACLabel>
+            <FieldLabel isRequired={rest.isRequired}>{label}</FieldLabel>
           )}
           {typeof children === "function" ? children(renderProps) : children}
           <FieldSupport

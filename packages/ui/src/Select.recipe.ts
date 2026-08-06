@@ -23,13 +23,16 @@ const transitionCommon =
  * Apps restyle it through the `variant` group — classroom's `classroom`
  * variant is the rounded pill its join form uses.
  *
+ * The label is not a slot here: it comes from the `field` recipe, as every
+ * other labelled field's does. The only thing that costs is a per-`variant`
+ * label style — restyle the control and let the label match the family.
+ *
  * Registered in the base preset (base-preset.ts).
  */
 export const select = defineSlotRecipe({
   className: "select",
   slots: [
     "root",
-    "label",
     "trigger",
     "value",
     "indicator",
@@ -44,12 +47,6 @@ export const select = defineSlotRecipe({
       display: "flex",
       flexDirection: "column",
       width: "100%",
-    },
-    label: {
-      fontSize: "md",
-      fontWeight: "medium",
-      marginEnd: "3",
-      mb: "2",
     },
     trigger: {
       display: "flex",

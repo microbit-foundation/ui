@@ -6,16 +6,11 @@
 import { FocusEvent, forwardRef, ReactNode } from "react";
 import {
   Input as RACInput,
-  Label as RACLabel,
   TextField as RACTextField,
   TextFieldProps as RACTextFieldProps,
 } from "react-aria-components";
 import { field, input, InputVariantProps } from "styled-system/recipes";
-import {
-  FieldRequiredIndicator,
-  FieldSupport,
-  FieldSupportProps,
-} from "./FieldSupport";
+import { FieldLabel, FieldSupport, FieldSupportProps } from "./FieldSupport";
 
 export interface TextFieldProps
   extends Omit<
@@ -55,10 +50,7 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
     const slots = field();
     return (
       <RACTextField {...rest} className={slots.root}>
-        <RACLabel className={slots.label}>
-          {label}
-          {rest.isRequired ? <FieldRequiredIndicator /> : null}
-        </RACLabel>
+        <FieldLabel isRequired={rest.isRequired}>{label}</FieldLabel>
         <RACInput
           ref={ref}
           className={input(variantProps)}

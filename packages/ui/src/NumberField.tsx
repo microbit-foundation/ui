@@ -8,19 +8,14 @@ import {
   Button as RACButton,
   Group as RACGroup,
   Input as RACInput,
-  Label as RACLabel,
   NumberField as RACNumberField,
   NumberFieldProps as RACNumberFieldProps,
 } from "react-aria-components";
 import { RiArrowDownSFill, RiArrowUpSFill } from "react-icons/ri";
 import { css, cx } from "styled-system/css";
-import { field, input, numberField } from "styled-system/recipes";
+import { input, numberField } from "styled-system/recipes";
 import { SystemStyleObject } from "styled-system/types";
-import {
-  FieldRequiredIndicator,
-  FieldSupport,
-  FieldSupportProps,
-} from "./FieldSupport";
+import { FieldLabel, FieldSupport, FieldSupportProps } from "./FieldSupport";
 import { Icon } from "./Icon";
 
 export interface NumberFieldProps
@@ -60,22 +55,15 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(
     ref,
   ) {
     const slots = numberField();
-    const fieldSlots = field();
     return (
       <RACNumberField
         {...rest}
         className={cx(slots.root, cssProp ? css(cssProp) : undefined)}
       >
         {label != null && (
-          <RACLabel
-            className={cx(
-              fieldSlots.label,
-              labelCss ? css(labelCss) : undefined,
-            )}
-          >
+          <FieldLabel isRequired={rest.isRequired} css={labelCss}>
             {label}
-            {rest.isRequired ? <FieldRequiredIndicator /> : null}
-          </RACLabel>
+          </FieldLabel>
         )}
         <RACGroup
           className={cx(slots.group, groupCss ? css(groupCss) : undefined)}

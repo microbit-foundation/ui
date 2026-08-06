@@ -19,12 +19,12 @@ import {
 } from "../src";
 
 /**
- * The label/helper/error chrome — Chakra's FormControl parts — is one
- * component (`FieldSupport`) behind every labelled field, so `label`,
- * `helperText`, `errorMessage` and `isRequired` mean the same thing on
- * TextField, Select, ComboBox, NumberField, RadioGroup and CheckboxGroup.
- * react-aria wires the helper text to the control's `aria-describedby` and
- * renders the error only while the field is invalid.
+ * The label/helper/error chrome — Chakra's FormControl parts — comes from two
+ * shared components (`FieldLabel` and `FieldSupport`) behind every labelled
+ * field, so `label`, `helperText`, `errorMessage` and `isRequired` mean the
+ * same thing on TextField, Select, ComboBox, NumberField, RadioGroup and
+ * CheckboxGroup. react-aria wires the helper text to the control's
+ * `aria-describedby` and renders the error only while the field is invalid.
  *
  * Each field's own page covers its behaviour; this page is the chrome across
  * the set, where drift between them shows up.
@@ -83,6 +83,55 @@ export const HelperText: Story = {
         defaultValue={["temperature"]}
         helperText="At least one"
         isRequired
+      >
+        <Stack gap={3}>
+          <Checkbox value="temperature">Temperature</Checkbox>
+          <Checkbox value="light">Light level</Checkbox>
+        </Stack>
+      </CheckboxGroup>
+    </Stack>
+  ),
+};
+
+/**
+ * `isDisabled` across the set. The label dims with the control (Chakra's
+ * FormLabel `_disabled`) because the `field` recipe's label reads
+ * `data-disabled` off the field root — react-aria never puts it on the label
+ * itself, so a rule on the label alone silently does nothing (gotcha #45).
+ * Per-field disabled stories can't show this: it is drift between fields, and
+ * one undimmed label only looks wrong beside six that agree.
+ */
+export const Disabled: Story = {
+  render: () => (
+    <Stack gap={6} maxW="md">
+      <TextField label="Name" defaultValue="Ada" isDisabled />
+      <Select label="Fruit" placeholder="Select…" isDisabled>
+        {options}
+      </Select>
+      <ComboBox
+        label="Fruit"
+        placeholder="Start typing…"
+        emptyState="No matches"
+        isDisabled
+      >
+        {options}
+      </ComboBox>
+      <NumberField
+        label="Quantity"
+        defaultValue={3}
+        groupCss={{ width: "32" }}
+        isDisabled
+      />
+      <RadioGroup label="Device" defaultValue="v2" isDisabled>
+        <Stack gap={3}>
+          <Radio value="v1">micro:bit V1</Radio>
+          <Radio value="v2">micro:bit V2</Radio>
+        </Stack>
+      </RadioGroup>
+      <CheckboxGroup
+        label="Sensors to log"
+        defaultValue={["temperature"]}
+        isDisabled
       >
         <Stack gap={3}>
           <Checkbox value="temperature">Temperature</Checkbox>
