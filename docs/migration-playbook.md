@@ -1154,7 +1154,10 @@ Censuses were taken July 2026 against Chakra v2.10 in all apps.
     own file mirroring CheckboxGroup. (`switchRecipe` keeps its awkward
     export name — `switch` is a JS reserved word.)
 
-  The app PRs, once an alpha ships:
+  The app adoptions — **done 2026-08-06 against alpha.18, committed to each
+  app's `experiment-rai`** (all four suites green; the settings dialogs still
+  want an eyeball against production for the number-input growth and the
+  helper-text grey):
 
   - **python-editor settings**: the whole dialog aligns on `md` — its `sm`
     number input between `md` selects was a Chakra-era accident, and with
