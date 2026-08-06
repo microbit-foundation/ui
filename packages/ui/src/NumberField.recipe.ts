@@ -18,11 +18,11 @@ export const numberField = defineSlotRecipe({
   className: "numberField",
   slots: ["root", "group", "stepper", "stepperButton"],
   base: {
-    root: {
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "stretch",
-    },
+    // No layout here: the component wears the `field` recipe's root alongside
+    // this slot, and that recipe is the single owner of field-root layout
+    // (else `labelPosition` would fight this slot over `flexDirection`). The
+    // slot stays for apps and variants to target.
+    root: {},
     group: {
       position: "relative",
       zIndex: 0,

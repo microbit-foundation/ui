@@ -43,11 +43,11 @@ export const select = defineSlotRecipe({
     "empty",
   ],
   base: {
-    root: {
-      display: "flex",
-      flexDirection: "column",
-      width: "100%",
-    },
+    // No layout here: the component wears the `field` recipe's root alongside
+    // this slot, and that recipe is the single owner of field-root layout
+    // (else `labelPosition` would fight this slot over `flexDirection`). The
+    // slot stays for apps and variants to target.
+    root: {},
     trigger: {
       display: "flex",
       alignItems: "center",

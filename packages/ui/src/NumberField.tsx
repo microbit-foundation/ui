@@ -13,15 +13,26 @@ import {
 } from "react-aria-components";
 import { RiArrowDownSFill, RiArrowUpSFill } from "react-icons/ri";
 import { css, cx } from "styled-system/css";
-import { input, InputVariantProps, numberField } from "styled-system/recipes";
+import {
+  field,
+  input,
+  InputVariantProps,
+  numberField,
+} from "styled-system/recipes";
 import { SystemStyleObject } from "styled-system/types";
-import { FieldLabel, FieldSupport, FieldSupportProps } from "./FieldSupport";
+import {
+  FieldLabel,
+  FieldLayoutProps,
+  FieldSupport,
+  FieldSupportProps,
+} from "./FieldSupport";
 import { Icon } from "./Icon";
 
 export interface NumberFieldProps
   extends Omit<RACNumberFieldProps, "className" | "children" | "style">,
     InputVariantProps,
-    FieldSupportProps {
+    FieldSupportProps,
+    FieldLayoutProps {
   /** Visible label (optional; otherwise pass `aria-label`). */
   label?: ReactNode;
   /** Root style overrides (e.g. row layout for label-beside-field forms). */
@@ -51,6 +62,7 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(
       labelCss,
       groupCss,
       inputCss,
+      labelPosition,
       ...props
     },
     ref,
@@ -59,14 +71,20 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(
     // preset that adds one keeps working.
     const [variantProps, rest] = input.splitVariantProps(props);
     const slots = numberField({ size: variantProps.size });
+    const fieldSlots = field({ size: variantProps.size, labelPosition });
     return (
       <RACNumberField
         {...rest}
-        className={cx(slots.root, cssProp ? css(cssProp) : undefined)}
+        className={cx(
+          fieldSlots.root,
+          slots.root,
+          cssProp ? css(cssProp) : undefined,
+        )}
       >
         {label != null && (
           <FieldLabel
             size={variantProps.size}
+            labelPosition={labelPosition}
             isRequired={rest.isRequired}
             css={labelCss}
           >
@@ -98,6 +116,7 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(
           helperText={helperText}
           errorMessage={errorMessage}
           helperTextCss={helperTextCss}
+          labelPosition={labelPosition}
         />
       </RACNumberField>
     );

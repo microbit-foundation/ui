@@ -132,6 +132,69 @@ export const Sizes: Story = {
 };
 
 /**
+ * `labelPosition="side"` — the settings-row pattern: the label is a
+ * preference name beside its control and absorbs the free space, so the
+ * control needs an explicit width (`groupCss`/`wrapperCss`/`css` depending on
+ * the field). Helper and error text drop to a full-width line below the pair
+ * (submit the empty required row to see the error). Not on
+ * RadioGroup/CheckboxGroup, whose roots deliberately carry no layout and
+ * where RAC's `orientation` means the radios' own layout.
+ */
+export const SideLabels: Story = {
+  render: () => (
+    <form onSubmit={(e) => e.preventDefault()}>
+      <Stack gap={5} maxW="md">
+        <NumberField
+          label="Font size"
+          labelPosition="side"
+          defaultValue={16}
+          minValue={8}
+          groupCss={{ width: "12ch" }}
+        />
+        <Select
+          label="Highlight code structure"
+          labelPosition="side"
+          defaultSelectedKey="Apple"
+          css={{ width: "28ch" }}
+        >
+          {options}
+        </Select>
+        <ComboBox
+          label="Preferred fruit"
+          labelPosition="side"
+          placeholder="Start typing…"
+          emptyState="No matches"
+          css={{ width: "28ch" }}
+        >
+          {options}
+        </ComboBox>
+        <NumberField
+          label="Simulated devices"
+          labelPosition="side"
+          defaultValue={2}
+          groupCss={{ width: "12ch" }}
+          helperText="Helper text takes a full-width line below the row"
+        />
+        <Select
+          label="Fruit (required)"
+          labelPosition="side"
+          placeholder="Select…"
+          name="fruit"
+          isRequired
+          errorMessage="Choose a fruit"
+          css={{ width: "28ch" }}
+        >
+          {options}
+        </Select>
+        <Button type="submit" variant="secondary" css={{ alignSelf: "start" }}>
+          Check
+        </Button>
+      </Stack>
+    </form>
+  ),
+};
+
+/**
  * `isDisabled` across the set. The label dims with the control (Chakra's
  * FormLabel `_disabled`) because the `field` recipe's label reads
  * `data-disabled` off the field root — react-aria never puts it on the label

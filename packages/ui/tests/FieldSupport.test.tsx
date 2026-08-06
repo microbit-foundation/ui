@@ -196,3 +196,39 @@ it("NumberField's size reaches its input", () => {
     input({ size: "sm" }),
   );
 });
+
+// labelPosition takes the same four fields; the variant has to land on the
+// root (row layout), the label (flex/margin) and the support text (the
+// full-width wrap), or the row silently renders as a column.
+const sideFields: [string, ReactElement][] = [
+  ["TextField", <TextField label="L" labelPosition="side" helperText="H" />],
+  [
+    "Select",
+    <Select label="L" labelPosition="side" helperText="H">
+      <SelectOption id="a">A</SelectOption>
+    </Select>,
+  ],
+  [
+    "ComboBox",
+    <ComboBox label="L" labelPosition="side" helperText="H">
+      <SelectOption id="a">A</SelectOption>
+    </ComboBox>,
+  ],
+  [
+    "NumberField",
+    <NumberField label="L" labelPosition="side" helperText="H" />,
+  ],
+];
+
+it.each(sideFields)(
+  "%s's labelPosition reaches root, label and helper",
+  (_name, el) => {
+    const { container } = render(el);
+    const side = field({ labelPosition: "side" });
+    // querySelector, not firstElementChild: RAC's Select puts a <template>
+    // ahead of its root div.
+    expect(container.querySelector("div")?.className).toContain(side.root);
+    expect(screen.getByText("L").className).toContain(side.label);
+    expect(screen.getByText("H").className).toContain(side.helperText);
+  },
+);
