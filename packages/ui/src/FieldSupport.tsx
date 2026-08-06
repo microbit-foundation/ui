@@ -30,6 +30,22 @@ export interface FieldSupportProps {
 }
 
 /**
+ * `labelPosition` for the four single-control fields (TextField, NumberField,
+ * Select, ComboBox). Deliberately not on RadioGroup/CheckboxGroup: their roots
+ * carry no layout, and RAC's own `orientation` prop is a different axis there
+ * (it lays out the radios, not the label).
+ */
+export interface FieldLayoutProps {
+  /**
+   * `side` puts the label beside the control — the settings-row pattern. The
+   * label absorbs the free space; the control keeps its own width, so give it
+   * one (`groupCss`, `wrapperCss` or `css` depending on the field). Helper
+   * and error text drop to a full-width line below the pair.
+   */
+  labelPosition?: FieldVariantProps["labelPosition"];
+}
+
+/**
  * Helper text and error message for a react-aria field container. Render
  * inside any RAC component with field validation context (TextField, Select,
  * ComboBox, NumberField, RadioGroup, CheckboxGroup) — react-aria wires the
@@ -41,8 +57,9 @@ export const FieldSupport = ({
   helperText,
   errorMessage,
   helperTextCss,
-}: FieldSupportProps) => {
-  const slots = field();
+  labelPosition,
+}: FieldSupportProps & FieldLayoutProps) => {
+  const slots = field({ labelPosition });
   return (
     <>
       {helperText != null && (
@@ -79,7 +96,9 @@ export interface FieldLabelProps
   isRequired?: boolean;
   /** The field's `size`, so the label scales with its control. */
   size?: FieldVariantProps["size"];
-  /** Per-instance style overrides (e.g. label-beside-field forms). */
+  /** The field's `labelPosition`, so the label lays out to match. */
+  labelPosition?: FieldVariantProps["labelPosition"];
+  /** Per-instance style overrides. */
   css?: SystemStyleObject;
 }
 
@@ -98,12 +117,16 @@ export const FieldLabel = ({
   children,
   isRequired,
   size,
+  labelPosition,
   css: cssProp,
   ...rest
 }: FieldLabelProps) => (
   <RACLabel
     {...rest}
-    className={cx(field({ size }).label, cssProp ? css(cssProp) : undefined)}
+    className={cx(
+      field({ size, labelPosition }).label,
+      cssProp ? css(cssProp) : undefined,
+    )}
   >
     {children}
     {isRequired ? <FieldRequiredIndicator /> : null}

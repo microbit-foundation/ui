@@ -13,6 +13,12 @@ import { defineSlotRecipe } from "@pandacss/dev";
  * ComboBox, whose own recipe styles only the dropdown pair; the input itself is
  * styled by the `input` recipe (Input.recipe.ts).
  *
+ * `root` is also the single owner of field-root *layout*: Select, ComboBox and
+ * NumberField wear it alongside their own recipe's root slot, which carries no
+ * layout of its own — two recipes fighting over `flexDirection` would leave
+ * `labelPosition` at the mercy of emission order. RadioGroup and CheckboxGroup
+ * deliberately don't wear it (their roots carry no layout at all).
+ *
  * Registered in the base preset (base-preset.ts), which also has the
  * `staticCss` entry that keeps the runtime-prop size variants generated.
  */
@@ -79,8 +85,29 @@ export const field = defineSlotRecipe({
       md: { label: { fontSize: "md" } },
       sm: { label: { fontSize: "sm" } },
     },
+    // `side` puts the label beside its control — the settings-row pattern,
+    // where the label is a preference name and absorbs the free space. The
+    // control keeps its own width; give it one at the call site. Named after
+    // React Spectrum's `labelPosition`, not `orientation`, which RAC's
+    // RadioGroup already uses for the radios' own layout.
+    labelPosition: {
+      top: {},
+      side: {
+        root: {
+          flexDirection: "row",
+          alignItems: "center",
+          // Helper and error text are full-width items, so they wrap to
+          // their own line below the label/control pair.
+          flexWrap: "wrap",
+        },
+        label: { mb: "0", flex: "1 1 auto" },
+        helperText: { width: "100%" },
+        errorMessage: { width: "100%" },
+      },
+    },
   },
   defaultVariants: {
     size: "md",
+    labelPosition: "top",
   },
 });

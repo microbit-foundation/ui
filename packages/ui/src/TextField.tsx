@@ -10,7 +10,12 @@ import {
   TextFieldProps as RACTextFieldProps,
 } from "react-aria-components";
 import { field, input, InputVariantProps } from "styled-system/recipes";
-import { FieldLabel, FieldSupport, FieldSupportProps } from "./FieldSupport";
+import {
+  FieldLabel,
+  FieldLayoutProps,
+  FieldSupport,
+  FieldSupportProps,
+} from "./FieldSupport";
 
 export interface TextFieldProps
   extends Omit<
@@ -18,7 +23,8 @@ export interface TextFieldProps
       "className" | "children" | "style" | "onFocus" | "onBlur"
     >,
     InputVariantProps,
-    FieldSupportProps {
+    FieldSupportProps,
+    FieldLayoutProps {
   /** Visible label (Chakra's FormLabel; asterisk added when `isRequired`). */
   label: ReactNode;
   onFocus?: (e: FocusEvent<HTMLInputElement>) => void;
@@ -38,6 +44,7 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
       helperText,
       errorMessage,
       helperTextCss,
+      labelPosition,
       onFocus,
       autoCapitalize,
       ...props
@@ -47,10 +54,14 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
     // As Input: forward every recipe variant group, not just `size`, so a
     // preset that adds one keeps working.
     const [variantProps, rest] = input.splitVariantProps(props);
-    const slots = field({ size: variantProps.size });
+    const slots = field({ size: variantProps.size, labelPosition });
     return (
       <RACTextField {...rest} className={slots.root}>
-        <FieldLabel size={variantProps.size} isRequired={rest.isRequired}>
+        <FieldLabel
+          size={variantProps.size}
+          labelPosition={labelPosition}
+          isRequired={rest.isRequired}
+        >
           {label}
         </FieldLabel>
         <RACInput
@@ -63,6 +74,7 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
           helperText={helperText}
           errorMessage={errorMessage}
           helperTextCss={helperTextCss}
+          labelPosition={labelPosition}
         />
       </RACTextField>
     );

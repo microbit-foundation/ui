@@ -17,9 +17,14 @@ import {
 } from "react-aria-components";
 import { RiArrowDownSLine } from "react-icons/ri";
 import { css, cx } from "styled-system/css";
-import { select, SelectVariantProps } from "styled-system/recipes";
+import { field, select, SelectVariantProps } from "styled-system/recipes";
 import { SystemStyleObject } from "styled-system/types";
-import { FieldLabel, FieldSupport, FieldSupportProps } from "./FieldSupport";
+import {
+  FieldLabel,
+  FieldLayoutProps,
+  FieldSupport,
+  FieldSupportProps,
+} from "./FieldSupport";
 import { Icon } from "./Icon";
 
 export type SelectSlots = ReturnType<typeof select>;
@@ -38,7 +43,8 @@ export interface SelectProps<T extends object>
       "className" | "children" | "style" | "placeholder"
     >,
     SelectVariantProps,
-    FieldSupportProps {
+    FieldSupportProps,
+    FieldLayoutProps {
   /** Visible label. Use `aria-label` instead where the design has none. */
   label?: ReactNode;
   /** Shown in the trigger while nothing is chosen (Chakra's placeholder). */
@@ -82,6 +88,7 @@ export const Select = <T extends object>({
   helperText,
   errorMessage,
   helperTextCss,
+  labelPosition,
   css: cssProp,
   contentCss,
   className,
@@ -91,14 +98,19 @@ export const Select = <T extends object>({
   // groups to the recipe and they have to reach it (playbook gotcha #37).
   const [variantProps, rest] = select.splitVariantProps(props);
   const slots = select(variantProps);
+  const fieldSlots = field({ size: variantProps.size, labelPosition });
   return (
     <SelectSlotProvider value={slots}>
       <RACSelect
         {...(rest as RACSelectProps<T>)}
-        className={cx(slots.root, className)}
+        className={cx(fieldSlots.root, slots.root, className)}
       >
         {label != null && (
-          <FieldLabel size={variantProps.size} isRequired={props.isRequired}>
+          <FieldLabel
+            size={variantProps.size}
+            labelPosition={labelPosition}
+            isRequired={props.isRequired}
+          >
             {label}
           </FieldLabel>
         )}
@@ -130,6 +142,7 @@ export const Select = <T extends object>({
           helperText={helperText}
           errorMessage={errorMessage}
           helperTextCss={helperTextCss}
+          labelPosition={labelPosition}
         />
       </RACSelect>
     </SelectSlotProvider>

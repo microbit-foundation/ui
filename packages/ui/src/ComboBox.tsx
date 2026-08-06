@@ -22,16 +22,22 @@ import {
 } from "react-aria-components";
 import { RiArrowDownSLine } from "react-icons/ri";
 import { css, cx } from "styled-system/css";
-import { select, SelectVariantProps } from "styled-system/recipes";
+import { field, select, SelectVariantProps } from "styled-system/recipes";
 import { SystemStyleObject } from "styled-system/types";
-import { FieldLabel, FieldSupport, FieldSupportProps } from "./FieldSupport";
+import {
+  FieldLabel,
+  FieldLayoutProps,
+  FieldSupport,
+  FieldSupportProps,
+} from "./FieldSupport";
 import { Icon } from "./Icon";
 import { SelectSlotProvider } from "./Select";
 
 export interface ComboBoxProps<T extends object>
   extends Omit<RACComboBoxProps<T>, "className" | "children" | "style">,
     SelectVariantProps,
-    FieldSupportProps {
+    FieldSupportProps,
+    FieldLayoutProps {
   /** Visible label. Use `aria-label` instead where the design has none. */
   label?: ReactNode;
   placeholder?: string;
@@ -109,6 +115,7 @@ const ComboBoxInner = <T extends object>(
     helperText,
     errorMessage,
     helperTextCss,
+    labelPosition,
     css: cssProp,
     contentCss,
     className,
@@ -119,6 +126,7 @@ const ComboBoxInner = <T extends object>(
   // As Select: forward whatever variant groups the merged recipe has.
   const [variantProps, rest] = select.splitVariantProps(props);
   const slots = select(variantProps);
+  const fieldSlots = field({ size: variantProps.size, labelPosition });
   // Anchor the card to the whole control, not to the bare input inside it —
   // otherwise it hangs off the text baseline and is as narrow as the input.
   const triggerRef = useRef<HTMLDivElement>(null);
@@ -147,10 +155,14 @@ const ComboBoxInner = <T extends object>(
       <RACComboBox
         allowsEmptyCollection={emptyState != null}
         {...(rest as RACComboBoxProps<T>)}
-        className={cx(slots.root, className)}
+        className={cx(fieldSlots.root, slots.root, className)}
       >
         {label != null && (
-          <FieldLabel size={variantProps.size} isRequired={props.isRequired}>
+          <FieldLabel
+            size={variantProps.size}
+            labelPosition={labelPosition}
+            isRequired={props.isRequired}
+          >
             {label}
           </FieldLabel>
         )}
@@ -197,6 +209,7 @@ const ComboBoxInner = <T extends object>(
           helperText={helperText}
           errorMessage={errorMessage}
           helperTextCss={helperTextCss}
+          labelPosition={labelPosition}
         />
       </RACComboBox>
     </SelectSlotProvider>
