@@ -1,12 +1,12 @@
 # Form controls: label weight, control sizes, and field layout
 
-Working sessions on 2026-08-05 and 2026-08-06 (Matt + Claude). The code
-described under "Already in the tree" is written but **uncommitted and
-unreviewed**; everything under "Decided" is agreed design, not started. Read
-`migration-playbook.md` gotchas #44 and #45 and the field-chrome roadmap bullet
-first — they are the same thread. The open questions from the first session
-are all answered; this is now a plan to implement, in the order under
-"Sequencing".
+Working sessions on 2026-08-05 and 2026-08-06 (Matt + Claude). **Status:
+sequencing steps 1–4 are committed** (field-chrome consolidation, the weight
+change with its playbook entries, size variants, `labelPosition`,
+`NativeSelectField` + the context-free exports — CI green, new stories
+screenshot-checked). Remaining: publish an alpha (step 5), then the app PRs
+(step 6). Read `migration-playbook.md` gotchas #44 and #45 and the
+field-chrome roadmap bullet first — they are the same thread.
 
 The trigger was a duplication review of the six labelled field components.
 
