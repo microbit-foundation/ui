@@ -46,6 +46,20 @@ export const toast = defineSlotRecipe({
       color: "white",
       maxW: "sm",
       pointerEvents: "auto",
+      // Entrance, matching Chakra v2's toastMotionVariants for position="top".
+      // On the live element rather than a ::view-transition snapshot: a
+      // snapshot's geometry is rounded to device pixels, so handing back to
+      // the real element shifted a centred toast by up to a pixel just as it
+      // landed. Only the exit needs a snapshot (see Toast.tsx's wrapUpdate).
+      animation: "toastIn token(durations.slower) token(easings.ease-in-out)",
+      // Reflow when a toast is added above or below this one. Toast.tsx's
+      // useToastReflow offsets the toast back to where it was and clears the
+      // offset; this transition is what carries it to its new position.
+      transitionProperty: "transform",
+      transitionDuration: "normal",
+      transitionTimingFunction: "ease-in-out",
+      _motionReduce: { animation: "none", transitionProperty: "none" },
+      viewTransitionClass: "toast",
     },
     icon: {
       fontSize: "1.25rem",

@@ -125,6 +125,17 @@ export const basePreset = definePreset({
           background: "var(--skeleton-end-color)",
         },
       },
+      // Toast enter/exit, matching Chakra v2's toastMotionVariants for
+      // position="top": a 24px drop while fading in, and a fade-and-shrink
+      // out with no travel. `toastIn` runs on the toast itself (Toast.recipe)
+      // and `toastOut` on its ::view-transition snapshot (globalCss below) —
+      // see those two for why they differ.
+      toastIn: {
+        from: { opacity: 0, translate: "0 -24px" },
+      },
+      toastOut: {
+        to: { opacity: 0, scale: "0.85" },
+      },
     },
     tokens: {
       colors: {
@@ -315,6 +326,30 @@ export const basePreset = definePreset({
     // multi-line headings break at different points (mobile/translations).
     "h1, h2, h3, h4, h5, h6": {
       textWrap: "wrap",
+    },
+    // ── Toast exit ────────────────────────────────────────────────────────
+    // Global because ::view-transition-* are document-root pseudo-elements,
+    // not descendants of the toast. Toast.tsx runs closing updates inside
+    // document.startViewTransition() and names each toast; the recipe tags
+    // them with `view-transition-class: toast` so this rule can select them
+    // without knowing the generated names.
+    //
+    // The exit is the one part that has to come from a snapshot: RAC's
+    // UNSTABLE_Toast exposes no exiting state and its region unmounts the
+    // node the moment the toast closes, so there is nothing left to animate.
+    // The old snapshot outlives the unmount, which is the only way to get an
+    // exit without pulling in a motion library. The entrance and the reflow
+    // of the toasts around it both animate the live elements instead — see
+    // Toast.recipe.ts and Toast.tsx's useToastReflow.
+    //
+    // :only-child means "this toast was removed" — an old snapshot with no
+    // new one. A toast that survives the update has both, so it skips this
+    // and just morphs to its new position.
+    "::view-transition-old(.toast):only-child": {
+      animationName: "toastOut",
+      animationDuration: "normal",
+      animationTimingFunction: "ease-in",
+      animationFillMode: "forwards",
     },
   },
   // shared-ui components forward `variant`/`size`/etc. as runtime props to
