@@ -45,6 +45,43 @@ import { tooltip } from "./Tooltip.recipe";
 import { field } from "./Field.recipe";
 import { toast } from "./Toast.recipe";
 
+// The family gray ramp: pure neutrals as the library default. The two
+// halves have different jobs and different override rules:
+//
+// - 10–300 are surface stops (panels, page backdrops, hairlines, subtle
+//   fills). Presets may freely override these values — pinning an app's
+//   existing surfaces or applying a brand tint — because a few bits of
+//   lightness here reads across a whole viewport.
+// - 350 is the decorative/state fill stop (~2.1:1): avatar discs, skeleton
+//   pulse, pressed fills. Never text or boundaries.
+// - 400–900 are ink stops (outlines, placeholders, text) with a contrast
+//   contract on white: 400 ≥ 3:1, the accessible form-outline stop
+//   (WCAG 1.4.11); 500 ≥ 4.5:1, text-safe secondary (placeholders, muted
+//   icons). Presets may re-tint these only luminance-matched — the
+//   contrast figures are the contract, hue is free.
+//
+// Override values, never names: raw var(--colors-gray-*) references and
+// paired private presets depend on the names, so a rename is a breaking
+// change to both and needs every app and paired preset moved in lockstep
+// (as was done when Chakra's misnamed darker-than-50 stop `25` became
+// `75`). And never override partially in a way that lets a stop fall
+// through to a different grey system.
+const gray = {
+  10: { value: "#fcfcfc" },
+  50: { value: "#f9f9f9" },
+  75: { value: "#f5f5f5" },
+  100: { value: "#f1f1f1" },
+  200: { value: "#e7e7e7" },
+  300: { value: "#d4d4d4" },
+  350: { value: "#b4b4b4" }, // ~2.1:1 — decorative fills only
+  400: { value: "#949494" }, // 3.05:1 — accessible outline stop
+  500: { value: "#767676" }, // 4.54:1 — text-safe secondary
+  600: { value: "#575757" },
+  700: { value: "#404040" },
+  800: { value: "#262626" },
+  900: { value: "#1a1a1a" },
+};
+
 /**
  * The base preset: the complete, working micro:bit design system. The base
  * token scales (base-tokens.ts), the micro:bit house style
@@ -92,16 +129,12 @@ export const basePreset = definePreset({
     tokens: {
       colors: {
         ...colors,
-        gray: {
-          ...colors.gray,
-          // Very light grays the family's designs use below Chakra's 50.
-          10: { value: "#fcfcfc" },
-          25: { value: "#f5f5f5" },
-        },
+        gray,
         // OSS default brand ramps (see the brand contract above). `brand`
-        // aliases Chakra blue; `brand2` Chakra's *unmodified* gray (not the
-        // `gray` above, whose 10/25 additions are lighter — getting this
-        // wrong once made card text near-invisible).
+        // aliases Chakra blue; `brand2` stays Chakra's slate gray — a frozen
+        // legacy alias, deliberately decoupled from the neutral `gray` above
+        // so ml-trainer's OSS look and `statusBarBg`'s default don't move.
+        // Removing the slot is a follow-up needing an ml-trainer lockstep.
         brand: colors.blue,
         brand2: colors.gray,
       },

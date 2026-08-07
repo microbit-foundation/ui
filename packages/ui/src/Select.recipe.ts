@@ -63,13 +63,16 @@ export const select = defineSlotRecipe({
       transitionProperty: transitionCommon,
       transitionDuration: "normal",
       border: "1px solid",
-      borderColor: "gray.200",
+      // As the input recipe: the ramp's accessible outline stop, with hover
+      // stepping darker. The dropdown card below keeps the light gray.200 —
+      // it's a surface edge, not a form-control boundary.
+      borderColor: "gray.400",
       bg: "white",
       color: "inherit",
       // As the input recipe, so a Select, a NativeSelect and a TextField in one
       // form all tint together on hover. (react-aria's TextField has no hover
       // effect, but matching the family beats matching their docs.)
-      _hover: { borderColor: "gray.300" },
+      _hover: { borderColor: "gray.500" },
       // `data-invalid` lands on the root — and, in a ComboBox, on the input —
       // but never on the trigger: a RAC Button has no validity state, and our
       // ComboBox control is a plain div. So it comes down from the parent.

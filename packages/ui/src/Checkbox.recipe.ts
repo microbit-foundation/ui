@@ -27,6 +27,11 @@ export const checkbox = defineSlotRecipe({
       verticalAlign: "top",
       cursor: "pointer",
       position: "relative",
+      // The accessible outline stop (WCAG 1.4.11), as the input recipe.
+      // Stated here rather than on the control — whose `borderColor:
+      // inherit` reads it — so a call site can still tint the whole control
+      // by setting borderColor on the root.
+      borderColor: "gray.400",
       "&[data-disabled]": { cursor: "not-allowed" },
     },
     control: {

@@ -259,7 +259,7 @@ it("a valid control is not painted red", () => {
 // which the input recipe documents: red beats hover, the focus ring beats red.
 it("orders the trigger's state rules hover, invalid, focus", () => {
   const keys = Object.keys(triggerRules());
-  const hover = keys.indexOf(ruleFor("gray.300"));
+  const hover = keys.indexOf(ruleFor("gray.500"));
   const invalid = keys.indexOf(ruleFor("danger.500"));
   const focus = keys.indexOf(ruleFor("focusBorder"));
   expect(hover).toBeLessThan(invalid);
