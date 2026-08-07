@@ -15,6 +15,7 @@ import {
   SelectProps as RACSelectProps,
   SelectValue,
 } from "react-aria-components";
+import { useIntl } from "react-intl";
 import { RiArrowDownSLine } from "react-icons/ri";
 import { css, cx } from "styled-system/css";
 import { field, select, SelectVariantProps } from "styled-system/recipes";
@@ -26,6 +27,7 @@ import {
   FieldSupportProps,
 } from "./Field";
 import { Icon } from "./Icon";
+import { uiMessage } from "./messages";
 
 export type SelectSlots = ReturnType<typeof select>;
 
@@ -49,7 +51,10 @@ export interface SelectProps<T extends object>
   label?: ReactNode;
   /** Label style overrides. */
   labelCss?: SystemStyleObject;
-  /** Shown in the trigger while nothing is chosen (Chakra's placeholder). */
+  /**
+   * Shown in the trigger while nothing is chosen (Chakra's placeholder).
+   * Defaults to a translated "Select an item".
+   */
   placeholder?: string;
   /** `SelectOption`s. */
   children: ReactNode;
@@ -100,6 +105,7 @@ export const Select = <T extends object>({
   // splitVariantProps, not a hand-picked list: an app preset can add variant
   // groups to the recipe and they have to reach it (playbook gotcha #37).
   const [variantProps, rest] = select.splitVariantProps(props);
+  const intl = useIntl();
   const slots = select(variantProps);
   const fieldSlots = field({ size: variantProps.size, labelPosition });
   return (
@@ -126,7 +132,10 @@ export const Select = <T extends object>({
         >
           <SelectValue className={slots.value}>
             {({ isPlaceholder, defaultChildren }) =>
-              isPlaceholder ? placeholder ?? "" : defaultChildren
+              isPlaceholder
+                ? placeholder ??
+                  intl.formatMessage(uiMessage("ui.select-placeholder"))
+                : defaultChildren
             }
           </SelectValue>
           {indicator !== null && (

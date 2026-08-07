@@ -3,11 +3,29 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import {
+  cleanup,
+  fireEvent,
+  render as renderRaw,
+  RenderOptions,
+  screen,
+} from "@testing-library/react";
+import { ReactNode } from "react";
+import { IntlProvider } from "react-intl";
 import { afterEach, expect, it } from "vitest";
 import { ComboBox, SelectOption } from "../src";
 
 afterEach(cleanup);
+
+// Some components' built-in labels are react-intl messages (README
+// "Strings"); English renders from defaultMessage, so no catalog is needed.
+const render = (ui: ReactNode, options?: RenderOptions) =>
+  renderRaw(ui, {
+    wrapper: ({ children }) => (
+      <IntlProvider locale="en">{children}</IntlProvider>
+    ),
+    ...options,
+  });
 
 interface School {
   id: string;

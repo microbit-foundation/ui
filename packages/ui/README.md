@@ -212,17 +212,40 @@ from the root.
 
 ### react-aria's own strings
 
-Separately from all of the above, react-aria has built-in strings of its own —
-stepper button labels, the toast region's landmark label, hidden dismiss
-buttons, listbox and selection announcements — and translates them from
-catalogs it bundles, nothing to do with react-intl. `SharedUIProvider` hands it
-the app's locale so the two agree.
+Separately from all of the above, react-aria has built-in strings of its own
+and translates them from catalogs it bundles, nothing to do with react-intl.
+`SharedUIProvider` hands it the app's locale so the two agree. It covers 32
+locales; of ours, ca, cy and ga-IE (and the `lol` pseudo-locale) are not among
+them and fall back to English, and there is no supported way to teach it more
+(the rest resolve, including where our id is less specific than react-aria's —
+`fr` finds its fr-FR).
 
-It covers 32 locales. Of ours, ca, cy and ga-IE (and the `lol` pseudo-locale)
-are not among them and fall back to English; the rest resolve, including where
-our id is less specific than react-aria's (`fr` finds its fr-FR). There is no
-supported way to supply translations for the locales it misses, so where one of
-its strings matters we pass our own text in as a label instead.
+Where react-aria lets a prop replace one of those strings, the component
+passes our own react-intl message instead, so the string rides `lang/` and
+Crowdin like everything else and the missing locales can catch up:
+
+- `ui.numberfield-increase` / `ui.numberfield-decrease` — NumberField's
+  stepper button labels
+- `ui.toast-region` — the toast region's landmark label (counts the visible
+  toasts, as react-aria's does)
+- `ui.combobox-trigger` / `ui.combobox-listbox` — the button that opens a
+  ComboBox and its popup list
+- `ui.select-placeholder` — Select's placeholder when the caller passes none
+- `ui.select-row-action` — the name of a `slot="selection"` checkbox in a
+  GridList row, read together with the row's content. (A future Table's
+  select-all header checkbox shares the slot name and will need its own
+  message.)
+
+Their non-English translations were pre-seeded from react-aria's own catalogs
+([adobe/react-spectrum](https://github.com/adobe/react-spectrum) at tag
+`react-aria-components@1.19.0`, Apache 2.0 — see the notice in
+[LICENSE.md](LICENSE.md)) for the locales both sides cover, so only ca, cy and
+ga-IE wait on Crowdin. That provenance is recorded here rather than in `lang/`
+because Crowdin roundtrips rewrite those files.
+
+What react-aria does not expose as a prop — live announcements ("2 items
+selected"), its hidden dismiss buttons — still comes from its bundled catalogs
+and falls back to English in the locales above.
 
 ## Chakra UI heritage and license
 

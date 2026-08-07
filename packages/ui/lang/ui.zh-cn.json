@@ -1,7 +1,43 @@
 {
+  "ui.breadcrumb": {
+    "defaultMessage": "Breadcrumb",
+    "description": "Accessible label for the breadcrumb navigation trail (the WAI-ARIA APG's conventional name)"
+  },
   "ui.close-action": {
     "defaultMessage": "关闭",
     "description": "Close button text or label"
+  },
+  "ui.combobox-listbox": {
+    "defaultMessage": "建议",
+    "description": "Accessible label for a ComboBox's dropdown list of suggestions"
+  },
+  "ui.combobox-trigger": {
+    "defaultMessage": "显示建议",
+    "description": "Accessible label for the button that opens a ComboBox's suggestions dropdown"
+  },
+  "ui.loading": {
+    "defaultMessage": "Loading",
+    "description": "Announced by screen readers for a button showing a loading spinner"
+  },
+  "ui.numberfield-decrease": {
+    "defaultMessage": "降低 {fieldLabel}",
+    "description": "Accessible label for a number field's decrement stepper; fieldLabel is the field's label and may be empty"
+  },
+  "ui.numberfield-increase": {
+    "defaultMessage": "提高 {fieldLabel}",
+    "description": "Accessible label for a number field's increment stepper; fieldLabel is the field's label and may be empty"
+  },
+  "ui.select-placeholder": {
+    "defaultMessage": "选择一个项目",
+    "description": "Shown in a Select's trigger while nothing is chosen and the app supplies no placeholder"
+  },
+  "ui.select-row-action": {
+    "defaultMessage": "选择",
+    "description": "Accessible label for a row-selection checkbox in a list or table; screen readers read it together with the row's content"
+  },
+  "ui.toast-region": {
+    "defaultMessage": "{count, plural, one {# 个通知} other {# 个通知}}。",
+    "description": "Accessible label for the notifications area; count is the number of notifications showing"
   },
   "ui.toast-status-error": {
     "defaultMessage": "Error",

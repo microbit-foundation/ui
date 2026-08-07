@@ -11,6 +11,7 @@ import {
   NumberField as RACNumberField,
   NumberFieldProps as RACNumberFieldProps,
 } from "react-aria-components";
+import { useIntl } from "react-intl";
 import { RiArrowDownSFill, RiArrowUpSFill } from "react-icons/ri";
 import { css, cx } from "styled-system/css";
 import {
@@ -27,6 +28,7 @@ import {
   FieldSupportProps,
 } from "./Field";
 import { Icon } from "./Icon";
+import { uiMessage } from "./messages";
 
 export interface NumberFieldProps
   extends Omit<RACNumberFieldProps, "className" | "children" | "style">,
@@ -73,8 +75,19 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(
     const [variantProps, rest] = input.splitVariantProps(props);
     const slots = numberField({ size: variantProps.size });
     const fieldSlots = field({ size: variantProps.size, labelPosition });
+    const intl = useIntl();
+    // Fold the field's name into the stepper labels as react-aria does; the
+    // trim eats the leftover space when there is no usable name.
+    const fieldLabel =
+      rest["aria-label"] ?? (typeof label === "string" ? label : "");
     return (
       <RACNumberField
+        incrementAriaLabel={intl
+          .formatMessage(uiMessage("ui.numberfield-increase"), { fieldLabel })
+          .trim()}
+        decrementAriaLabel={intl
+          .formatMessage(uiMessage("ui.numberfield-decrease"), { fieldLabel })
+          .trim()}
         {...rest}
         className={cx(
           fieldSlots.root,

@@ -6,17 +6,19 @@
 import { cleanup, render, screen } from "@testing-library/react";
 import { afterEach, expect, it } from "vitest";
 import { IntlProvider } from "react-intl";
-import { NumberField, SharedUIProvider } from "../src";
+import { Modal, SharedUIProvider } from "../src";
 
-// NumberField's steppers are labelled by react-aria from its own catalogs, so
-// they show which locale react-aria resolved. Match the stepper's own word
-// rather than the whole accessible name, which also carries the field label and
-// composes in a different order per locale.
-const renderNumberField = (locale: string, props = {}) =>
+// The probe is react-aria's hidden dismiss button, labelled from its own
+// bundled catalogs, so it shows which locale react-aria resolved. (It used to
+// be NumberField's steppers, but those labels are our react-intl messages now
+// — README "Strings".)
+const renderModal = (locale: string, props = {}) =>
   render(
     <IntlProvider locale={locale}>
       <SharedUIProvider {...props}>
-        <NumberField label="Count" />
+        <Modal isOpen onClose={() => undefined}>
+          Body
+        </Modal>
       </SharedUIProvider>
     </IntlProvider>,
   );
@@ -24,22 +26,30 @@ const renderNumberField = (locale: string, props = {}) =>
 afterEach(cleanup);
 
 it("localizes react-aria's strings from the IntlProvider locale", () => {
-  renderNumberField("fr");
-  expect(screen.getByRole("button", { name: /Augmenter/ })).toBeTruthy();
+  renderModal("fr");
+  expect(screen.getAllByRole("button", { name: "Rejeter" })).not.toHaveLength(
+    0,
+  );
 });
 
 it("resolves a locale react-aria lacks strings for to English", () => {
-  renderNumberField("cy");
-  expect(screen.getByRole("button", { name: /Increase/ })).toBeTruthy();
+  renderModal("cy");
+  expect(screen.getAllByRole("button", { name: "Dismiss" })).not.toHaveLength(
+    0,
+  );
 });
 
 it("prefers an explicit locale over the IntlProvider's", () => {
-  renderNumberField("fr", { locale: "de" });
-  expect(screen.getByRole("button", { name: /erhöhen/ })).toBeTruthy();
+  renderModal("fr", { locale: "de" });
+  expect(screen.getAllByRole("button", { name: "Schließen" })).not.toHaveLength(
+    0,
+  );
 });
 
 // Only reachable via the prop: react-intl rejects a malformed locale itself.
 it("survives a malformed explicit locale", () => {
-  renderNumberField("en", { locale: "en_GB" });
-  expect(screen.getByRole("button", { name: /Increase/ })).toBeTruthy();
+  renderModal("en", { locale: "en_GB" });
+  expect(screen.getAllByRole("button", { name: "Dismiss" })).not.toHaveLength(
+    0,
+  );
 });

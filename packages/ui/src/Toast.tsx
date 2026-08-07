@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { ReactNode, useMemo } from "react";
+import { ReactNode, useMemo, useSyncExternalStore } from "react";
 import {
   Button as RACButton,
   UNSTABLE_Toast as RACToast,
@@ -55,6 +55,10 @@ const statusIcon: Record<ToastStatus, IconType> = {
   error: RiErrorWarningFill,
 };
 
+// Module scope so useSyncExternalStore doesn't resubscribe every render.
+const subscribeToQueue = (fn: () => void) => toastQueue.subscribe(fn);
+const getVisibleCount = () => toastQueue.visibleToasts.length;
+
 /**
  * Mount once near the app root, inside the IntlProvider (the close button's
  * label and the status announcements are react-intl messages).
@@ -63,8 +67,19 @@ const statusIcon: Record<ToastStatus, IconType> = {
 export const ToastProvider = () => {
   const intl = useIntl();
   const slots = toastRecipe();
+  // The region's landmark label counts the visible toasts, so it has to
+  // track the queue.
+  const count = useSyncExternalStore(
+    subscribeToQueue,
+    getVisibleCount,
+    getVisibleCount,
+  );
   return (
-    <RACToastRegion queue={toastQueue} className={slots.region}>
+    <RACToastRegion
+      queue={toastQueue}
+      aria-label={intl.formatMessage(uiMessage("ui.toast-region"), { count })}
+      className={slots.region}
+    >
       {({ toast }) => {
         const status = toast.content.status ?? "info";
         return (

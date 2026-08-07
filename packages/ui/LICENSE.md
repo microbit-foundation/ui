@@ -51,3 +51,11 @@ Chakra UI is used under the MIT License:
 > LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 > OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 > SOFTWARE.
+
+This package's `lang/ui.<locale>.json` catalogs include translations of a few
+user-interface strings copied from
+[React Spectrum](https://github.com/adobe/react-spectrum) (react-aria), taken
+at tag `react-aria-components@1.19.0` (see the README's "Strings" section for
+which). React Spectrum is copyright Adobe and its contributors, and is used
+under the Apache License, Version 2.0:
+<https://www.apache.org/licenses/LICENSE-2.0>.

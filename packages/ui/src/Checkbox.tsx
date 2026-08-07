@@ -8,10 +8,12 @@ import {
   Checkbox as RACCheckbox,
   CheckboxProps as RACCheckboxProps,
 } from "react-aria-components";
+import { useIntl } from "react-intl";
 import { css, cx } from "styled-system/css";
 import { checkbox, CheckboxVariantProps } from "styled-system/recipes";
 import { SystemStyleObject } from "styled-system/types";
 import { FieldHelperText } from "./Field";
+import { uiMessage } from "./messages";
 
 /** What a render-prop child is told about the checkbox. */
 export interface CheckboxState {
@@ -67,14 +69,24 @@ export const Checkbox = ({
 }: CheckboxProps) => {
   const slots = checkbox({ size });
   const helperId = useId();
+  const intl = useIntl();
   const describedBy =
     [rest["aria-describedby"], helperText != null ? helperId : undefined]
       .filter(Boolean)
       .join(" ") || undefined;
+  // Default name for a row-selection checkbox (a GridList row's). A future
+  // Table's select-all header checkbox shares the slot name and will need a
+  // different label.
+  const ariaLabel =
+    rest["aria-label"] ??
+    (rest.slot === "selection"
+      ? intl.formatMessage(uiMessage("ui.select-row-action"))
+      : undefined);
   const checkboxElement = (
     <RACCheckbox
       className={cx(slots.root, cssProp ? css(cssProp) : undefined, className)}
       {...rest}
+      aria-label={ariaLabel}
       aria-describedby={describedBy}
     >
       {({ isSelected, isFocusVisible, isDisabled }) => {

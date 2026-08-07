@@ -3,8 +3,14 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { cleanup, render, screen } from "@testing-library/react";
-import { ReactElement } from "react";
+import {
+  cleanup,
+  render as renderRaw,
+  RenderOptions,
+  screen,
+} from "@testing-library/react";
+import { ReactElement, ReactNode } from "react";
+import { IntlProvider } from "react-intl";
 import { css } from "styled-system/css";
 import { field, input, switchRecipe } from "styled-system/recipes";
 import { afterEach, expect, it } from "vitest";
@@ -23,6 +29,16 @@ import {
 } from "../src";
 
 afterEach(cleanup);
+
+// Some components' built-in labels are react-intl messages (README
+// "Strings"); English renders from defaultMessage, so no catalog is needed.
+const render = (ui: ReactNode, options?: RenderOptions) =>
+  renderRaw(ui, {
+    wrapper: ({ children }) => (
+      <IntlProvider locale="en">{children}</IntlProvider>
+    ),
+    ...options,
+  });
 
 // The field chrome (label/required indicator/helper text/error message —
 // Chakra's FormControl parts) was generalised out of TextField for

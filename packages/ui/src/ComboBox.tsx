@@ -20,6 +20,7 @@ import {
   Popover,
   PopoverProps,
 } from "react-aria-components";
+import { useIntl } from "react-intl";
 import { RiArrowDownSLine } from "react-icons/ri";
 import { css, cx } from "styled-system/css";
 import { field, select, SelectVariantProps } from "styled-system/recipes";
@@ -31,6 +32,7 @@ import {
   FieldSupportProps,
 } from "./Field";
 import { Icon } from "./Icon";
+import { uiMessage } from "./messages";
 import { SelectSlotProvider } from "./Select";
 
 export interface ComboBoxProps<T extends object>
@@ -129,6 +131,7 @@ const ComboBoxInner = <T extends object>(
 ) => {
   // As Select: forward whatever variant groups the merged recipe has.
   const [variantProps, rest] = select.splitVariantProps(props);
+  const intl = useIntl();
   const slots = select(variantProps);
   const fieldSlots = field({ size: variantProps.size, labelPosition });
   // Anchor the card to the whole control, not to the bare input inside it —
@@ -185,7 +188,10 @@ const ComboBoxInner = <T extends object>(
             className={slots.value}
           />
           {indicator !== null && (
-            <RACButton className={slots.indicator}>
+            <RACButton
+              aria-label={intl.formatMessage(uiMessage("ui.combobox-trigger"))}
+              className={slots.indicator}
+            >
               {indicator ?? <Icon as={RiArrowDownSLine} />}
             </RACButton>
           )}
@@ -202,6 +208,7 @@ const ComboBoxInner = <T extends object>(
             )}
           >
             <RACListBox
+              aria-label={intl.formatMessage(uiMessage("ui.combobox-listbox"))}
               className={slots.list}
               renderEmptyState={
                 emptyState
