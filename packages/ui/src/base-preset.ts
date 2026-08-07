@@ -60,14 +60,16 @@ import { toast } from "./Toast.recipe";
 //   icons). Presets may re-tint these only luminance-matched — the
 //   contrast figures are the contract, hue is free.
 //
-// Override values, never names (raw var(--colors-gray-*) references and
-// paired private presets depend on them — that's why `25` keeps its
-// historical darker-than-50 name), and never partially in a way that lets
-// a stop fall through to a different grey system.
+// Override values, never names: raw var(--colors-gray-*) references and
+// paired private presets depend on the names, so a rename is a breaking
+// change to both and needs every app and paired preset moved in lockstep
+// (as was done when Chakra's misnamed darker-than-50 stop `25` became
+// `75`). And never override partially in a way that lets a stop fall
+// through to a different grey system.
 const gray = {
   10: { value: "#fcfcfc" },
-  25: { value: "#f5f5f5" },
   50: { value: "#f9f9f9" },
+  75: { value: "#f5f5f5" },
   100: { value: "#f1f1f1" },
   200: { value: "#e7e7e7" },
   300: { value: "#d4d4d4" },
