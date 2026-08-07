@@ -7,15 +7,27 @@ import {
   act,
   cleanup,
   fireEvent,
-  render,
+  render as renderRaw,
+  RenderOptions,
   screen,
 } from "@testing-library/react";
-import { ReactElement, useState } from "react";
+import { ReactElement, ReactNode, useState } from "react";
+import { IntlProvider } from "react-intl";
 import { afterEach, expect, it, vi } from "vitest";
 import { ComboBox, Select, SelectOption } from "../src";
 import { select } from "../src/Select.recipe";
 
 afterEach(cleanup);
+
+// Some components' built-in labels are react-intl messages (README
+// "Strings"); English renders from defaultMessage, so no catalog is needed.
+const render = (ui: ReactNode, options?: RenderOptions) =>
+  renderRaw(ui, {
+    wrapper: ({ children }) => (
+      <IntlProvider locale="en">{children}</IntlProvider>
+    ),
+    ...options,
+  });
 
 const FRUIT = ["Apple", "Banana", "Cherry"];
 
