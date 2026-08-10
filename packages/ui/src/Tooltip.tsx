@@ -40,8 +40,41 @@ export interface TooltipProps {
    * the trigger (i.e. it is not a RAC component or `Focusable`).
    */
   triggerRef?: RefObject<HTMLElement | null>;
-  /** Hover open delay in ms (RAC default ~1500; pass 0 for instant). */
+  /**
+   * Hover open delay in ms, defaulting to react-aria's 1500.
+   *
+   * The delay is per bout of interest, not per control: react-aria keeps a
+   * global "warm" flag, so the first tooltip waits and every one after it opens
+   * instantly until half a second or so after the last one closes. That is what
+   * keeps a row of buttons from firing tooltips at a pointer merely crossing
+   * them.
+   *
+   * **Pass 0 where the tooltip is the label** — an icon-only button, where the
+   * text is the only explanation of the glyph and waiting for it reads as
+   * broken. Leave it alone where the control already says what it is and the
+   * tooltip adds detail.
+   */
   delay?: number;
+  /**
+   * Close delay in ms, defaulting to react-aria's 500.
+   *
+   * This is what makes a tooltip hoverable, as WCAG 1.4.13 asks: react-aria
+   * puts hover handlers on the tooltip that re-open it, but with an immediate
+   * close it has unmounted before the pointer can cross the gap. Chakra closed
+   * on mouse-out and we matched that at first; a tooltip that vanishes as you
+   * reach for it is not worth the parity. Pass 0 where the delay is wrong for a
+   * particular control.
+   */
+  closeDelay?: number;
+  /**
+   * Whether pressing the trigger closes the tooltip (RAC default true).
+   *
+   * react-aria binds this to keydown as well as pointerdown, so with the
+   * default *any* key press dismisses the tooltip and only hover or focus
+   * brings it back. Pass false where the tooltip's text is the point of the
+   * control rather than a hint about an action.
+   */
+  shouldCloseOnPress?: boolean;
   css?: SystemStyleObject;
 }
 
@@ -58,10 +91,17 @@ export const Tooltip = ({
   hasArrow,
   isOpen,
   triggerRef,
-  delay = 0,
+  delay,
+  closeDelay,
+  shouldCloseOnPress,
   css: cssProp,
 }: TooltipProps) => (
-  <TooltipTrigger isOpen={isOpen} delay={delay} closeDelay={0}>
+  <TooltipTrigger
+    isOpen={isOpen}
+    delay={delay}
+    closeDelay={closeDelay}
+    shouldCloseOnPress={shouldCloseOnPress}
+  >
     {children}
     <RACTooltip
       triggerRef={triggerRef}

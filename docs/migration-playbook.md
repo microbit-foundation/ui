@@ -922,6 +922,24 @@ border` and carry the total across.
     on a Select — classroom's `classroom` variant styles only the control and
     card, so nothing paid it.
 
+46. **An overlay opened from inside a `Modal` positions against the document,
+    so a page whose body is shorter than the viewport throws it hundreds of
+    pixels off.** A tooltip on a control in a modal landed at `y: -387` for a
+    trigger at `y: 174` in a Storybook story whose body was 72px tall against a
+    600px viewport; giving the story a `minHeight: 100vh` wrapper put it back
+    where it belonged. Identical for `Tooltip` and `TooltipButton`, so it is the
+    positioning, not the component. Real app pages are full height and don't
+    show it — stories and small test harnesses do, so wrap a modal story in a
+    full-height box before believing an overlay is mispositioned.
+
+    The same portal arrangement is why a tooltip inside a modal cannot be
+    hovered: react-aria marks the app-level overlay container `inert` while a
+    modal is open, so the tooltip is painted but never the target of a mouse
+    event, and its own hover-to-stay-open handling can't fire.
+    `TooltipButton` works around it with pointer geometry; the cleaner fix
+    would be portalling overlays inside the modal (react-aria's
+    `UNSAFE_PortalProvider`), which nothing has needed enough yet.
+
 Also remember (from the RAC component work, not numbered): RAC re-selects a
 pressed radio value against current state after any earlier handler runs —
 "click the selected option again to deselect" interactions need a native
@@ -938,6 +956,42 @@ accepted — expect them, don't chase them as bugs:
   under the still-hovering pointer (0ms delay). If a design can't live
   with it, the library Tooltip needs a closed-until-re-enter state
   machine (unbuilt).
+- **Any key press dismisses a tooltip**, and only hover or focus brings it
+  back — `useTooltipTrigger` binds its close to `onKeyDown` as well as
+  `onPointerDown`. Fine for a hint on an action button, wrong where the
+  tooltip's text is the point of the control: pass `shouldCloseOnPress={false}`
+  (or use `TooltipButton`, which does).
+- **Hover is ignored until the next pointer press** once the keyboard has been
+  used, and on a freshly loaded page — react-aria gates tooltip hover on the
+  interaction modality, which a pointer _down_ sets, not pointer movement.
+  Verified identical for `Tooltip` and `TooltipButton`; don't chase it in one
+  of them.
+- **A tooltip waits ~1.5s before its first appearance**, where Chakra's popped
+  immediately — react-aria's warmup, which the library used to override to 0 for
+  parity, restored for the same reason as the cooldown below. The wait is per
+  bout of interest, not per control: a global warm flag makes every tooltip
+  after the first open instantly, until ~500ms after the last one closes. It's
+  what stops a row of buttons firing tooltips at a pointer that is merely
+  crossing them (python-editor's toolbar being the case that prompted it).
+
+  **The rule: pass `delay={0}` where the tooltip is the label** — an icon-only
+  button whose glyph the text is explaining. Leave the default where the control
+  already says what it is and the tooltip adds detail. `TooltipButton` sets 0
+  for itself. Two known sites need annotating on their next pass:
+  python-editor's `ProjectNameEditable` (an `IconButton`) and
+  data-microbit-org's `PauseIcon`.
+
+  Mind that mixed delays are coupled: once a 0-delay tooltip has shown, the
+  warm flag makes the delayed ones instant too for the next second or so, so
+  the flip buys "quiet on first approach", not "never noisy".
+
+- **Tooltips linger ~500ms after mouse-out** rather than closing instantly as
+  Chakra's did — react-aria's cooldown default, which the library used to
+  override to 0 for parity. The delay is what makes a tooltip hoverable at all
+  (WCAG 1.4.13): react-aria puts hover handlers on the tooltip to re-open it,
+  but with an immediate close it has unmounted before the pointer crosses the
+  gap. Deliberate as of the `TooltipButton` work; pass `closeDelay={0}` at a
+  control where the lingering is wrong, rather than reverting the default.
 - **Focus rings show after mouse interaction** in places Chakra hid them
   (auto-focused dialog buttons, slider thumbs).
 - **A menu opened with the mouse focuses no item.** Chakra highlighted the
@@ -1006,6 +1060,35 @@ data-microbit-org can trail by months. ml-trainer is done (the pilot).
 Censuses were taken July 2026 against Chakra v2.10 in all apps.
 
 ### Open across the completed migrations
+
+- **`TooltipButton` may be the wrong shape: Spectrum would make these
+  popovers.** react-spectrum's answer to "information the user needs, beside a
+  heading" is `ContextualHelp` — an icon button opening a _popover_ on press
+  (`DialogTrigger` + `Popover`), not a tooltip. Their defaults say the same
+  thing by omission: a tooltip closes on any key press, ignores hover until a
+  pointer press, and never opens on touch, because a Spectrum tooltip is a
+  transient hint about an action. Every one of those `TooltipButton` inverts or
+  works around, which is the tell.
+
+  A popover would dissolve rather than work around three things: the visually
+  hidden copy of the body (popover content is a dialog in the accessibility
+  tree, properly associated), the pointer-geometry keep-alive (popovers opened
+  inside a modal get their own container and stay hit-testable — measured,
+  unlike tooltips, see gotcha #46), and the `aria-describedby` that react-aria
+  overwrites while open. Touch works by construction.
+
+  It costs hover-to-open, which `ContextualHelp` doesn't do, and it looks like a
+  popover rather than a small dark bubble — so it is a design change, not a
+  refactor. It bites hardest where the content is least tooltip-like: a bold
+  title plus a paragraph, or ml-trainer's language cards, whose body is a list
+  of checked/unchecked support items. **Likely first move**: the language dialog
+  markers. Anything wider wants the pattern's owner in the room.
+
+  Tracked as microbit-foundation/ui#63 — build the component there, deprecate
+  `TooltipButton` behind it. Spectrum's own packages aren't installed in this
+  repo, so check
+  `react-spectrum.adobe.com/react-spectrum/ContextualHelp.html` for the prop
+  surface before building.
 
 - **Native `aspect-ratio` below the support floor** (see gotcha #11, corrected
   2026-08-02 — it previously recommended exactly this). It needs Safari 15 /
