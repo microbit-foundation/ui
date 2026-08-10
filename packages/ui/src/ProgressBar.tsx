@@ -50,7 +50,6 @@ export const ProgressBar = ({
           {
             height: "100%",
             bg: "brand.500",
-            transition: "width 0.2s",
           },
           barCss,
         )}
