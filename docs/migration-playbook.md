@@ -966,10 +966,13 @@ accepted — expect them, don't chase them as bugs:
   interaction modality, which a pointer _down_ sets, not pointer movement.
   Verified identical for `Tooltip` and `TooltipButton`; don't chase it in one
   of them.
-- **Tooltips aren't hoverable at the library's default `closeDelay: 0`**
+- **Tooltips linger ~500ms after mouse-out** rather than closing instantly as
+  Chakra's did — react-aria's cooldown default, which the library used to
+  override to 0 for parity. The delay is what makes a tooltip hoverable at all
   (WCAG 1.4.13): react-aria puts hover handlers on the tooltip to re-open it,
-  but at 0ms it has unmounted before the pointer crosses the gap. Set a
-  `closeDelay` where the text is long enough to want reading at magnification.
+  but with an immediate close it has unmounted before the pointer crosses the
+  gap. Deliberate as of the `TooltipButton` work; pass `closeDelay={0}` at a
+  control where the lingering is wrong, rather than reverting the default.
 - **Focus rings show after mouse interaction** in places Chakra hid them
   (auto-focused dialog buttons, slider thumbs).
 - **A menu opened with the mouse focuses no item.** Chakra highlighted the

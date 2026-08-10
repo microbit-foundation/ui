@@ -34,12 +34,9 @@ import { VisuallyHidden } from "./VisuallyHidden";
 //
 // Everything else is left to react-aria: it opens on hover and on keyboard
 // focus, closes on Escape without disturbing a surrounding dialog, and keeps
-// only one tooltip open at a time across the whole document.
-
-// Time for the pointer to cross the gap onto the tooltip, so it can be read at
-// magnification (WCAG 1.4.13). react-aria's own default (Spectrum's cooldown
-// guidance), which `Tooltip` overrides to 0 for Chakra parity.
-const closeDelayMs = 500;
+// only one tooltip open at a time across the whole document. Hovering the
+// tooltip to keep it open relies on Tooltip's non-zero close delay, so don't
+// pass `closeDelay={0}` through to it.
 
 // How far outside the tooltip the pointer still counts as on it, covering the
 // trigger/tooltip gap and the arrow.
@@ -114,7 +111,6 @@ export const TooltipButton = ({
       placement={placement}
       hasArrow={hasArrow}
       css={cssProp}
-      closeDelay={closeDelayMs}
       shouldCloseOnPress={false}
     >
       <span className={css({ display: "flex" })}>

@@ -43,13 +43,14 @@ export interface TooltipProps {
   /** Hover open delay in ms (RAC default ~1500; pass 0 for instant). */
   delay?: number;
   /**
-   * Close delay in ms, defaulting to 0 as Chakra closed on mouse-out.
-   * react-aria's own default is 500.
+   * Close delay in ms, defaulting to react-aria's 500.
    *
-   * This is also what makes a tooltip hoverable: react-aria puts hover
-   * handlers on the tooltip that re-open it, but at 0ms it has unmounted
-   * before the pointer can cross the gap, so a tooltip whose text is long
-   * enough to want reading at magnification should set this (WCAG 1.4.13).
+   * This is what makes a tooltip hoverable, as WCAG 1.4.13 asks: react-aria
+   * puts hover handlers on the tooltip that re-open it, but with an immediate
+   * close it has unmounted before the pointer can cross the gap. Chakra closed
+   * on mouse-out and we matched that at first; a tooltip that vanishes as you
+   * reach for it is not worth the parity. Pass 0 where the delay is wrong for a
+   * particular control.
    */
   closeDelay?: number;
   /**
@@ -78,7 +79,7 @@ export const Tooltip = ({
   isOpen,
   triggerRef,
   delay = 0,
-  closeDelay = 0,
+  closeDelay,
   shouldCloseOnPress,
   css: cssProp,
 }: TooltipProps) => (
