@@ -81,10 +81,86 @@ it("re-adding a visible id is a no-op", () => {
   expect(screen.queryByText("Second")).toBeNull();
 });
 
+it("closeAll clears toasts queued behind the visible limit", () => {
+  renderProvider();
+  // More than maxVisibleToasts, so some are queued rather than rendered.
+  for (let i = 0; i < 8; i++) {
+    act(() => toast({ title: `Toast ${i}`, persistent: true }));
+  }
+  act(() => toast.closeAll());
+  expect(screen.queryAllByRole("alertdialog")).toHaveLength(0);
+});
+
 it("update replaces a visible toast's content", () => {
   renderProvider();
   act(() => toast({ id: "u", title: "Before" }));
   act(() => toast.update("u", { title: "After" }));
   expect(screen.queryByText("Before")).toBeNull();
   expect(screen.getByText("After")).toBeDefined();
+});
+
+// The queue shows the newest maxVisibleToasts, so enough new toasts push an
+// older one out of sight without closing it. Ids have to see it there.
+const pushOutOfSight = () => {
+  for (let i = 0; i < 5; i++) {
+    act(() => toast({ title: `Filler ${i}` }));
+  }
+};
+const expireFillers = () => act(() => vi.advanceTimersByTime(5100));
+
+it("re-adding an id that's queued out of sight is a no-op", () => {
+  vi.useFakeTimers();
+  renderProvider();
+  act(() => toast({ id: "dup", title: "First", persistent: true }));
+  pushOutOfSight();
+  expect(screen.queryByText("First")).toBeNull();
+  act(() => toast({ id: "dup", title: "Second", persistent: true }));
+  expireFillers();
+  expect(screen.getByText("First")).toBeDefined();
+  expect(screen.queryByText("Second")).toBeNull();
+});
+
+it("update replaces a toast queued out of sight", () => {
+  vi.useFakeTimers();
+  renderProvider();
+  act(() => toast({ id: "u", title: "Before", persistent: true }));
+  pushOutOfSight();
+  act(() => toast.update("u", { title: "After", persistent: true }));
+  expireFillers();
+  expect(screen.queryByText("Before")).toBeNull();
+  expect(screen.getByText("After")).toBeDefined();
+});
+
+it("isActive tracks a toast queued out of sight", () => {
+  vi.useFakeTimers();
+  renderProvider();
+  act(() => toast({ id: "a", title: "Hidden", persistent: true }));
+  pushOutOfSight();
+  expect(toast.isActive("a")).toBe(true);
+});
+
+it("an id is free again once its toast has gone", async () => {
+  renderProvider();
+  act(() => toast({ id: "r", title: "First", persistent: true }));
+  await userEvent.click(screen.getByRole("button", { name: "Close" }));
+  expect(toast.isActive("r")).toBe(false);
+  act(() => toast({ id: "r", title: "Second" }));
+  expect(screen.getByText("Second")).toBeDefined();
+});
+
+it("an id is free again after it times out", () => {
+  vi.useFakeTimers();
+  renderProvider();
+  act(() => toast({ id: "r", title: "First" }));
+  act(() => vi.advanceTimersByTime(5100));
+  act(() => toast({ id: "r", title: "Second" }));
+  expect(screen.getByText("Second")).toBeDefined();
+});
+
+it("an id is free again after closeAll", () => {
+  renderProvider();
+  act(() => toast({ id: "r", title: "First", persistent: true }));
+  act(() => toast.closeAll());
+  act(() => toast({ id: "r", title: "Second" }));
+  expect(screen.getByText("Second")).toBeDefined();
 });

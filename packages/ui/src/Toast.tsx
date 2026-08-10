@@ -28,7 +28,7 @@ import { VisuallyHidden } from "./VisuallyHidden";
 export type ToastStatus = "info" | "success" | "warning" | "error";
 
 export interface ToastContent {
-  /** Dedup key: adding a toast whose id is already visible is a no-op. */
+  /** Dedup key: adding a toast whose id is already queued is a no-op. */
   id?: string;
   title?: ReactNode;
   description?: ReactNode;
@@ -74,6 +74,15 @@ export const toastQueue = new RACToastQueue<ToastContent>({
   maxVisibleToasts: 5,
   wrapUpdate,
 });
+
+// Index of our ids to the queue's own keys. The queue only exposes its
+// visible slice — the newest `maxVisibleToasts` — so ids can't be resolved by
+// scanning it: once newer toasts arrive an older one is still queued but out
+// of sight, and dedup would let a second copy through while update() added
+// rather than replaced. react-aria's per-toast `onClose` keeps this honest
+// however a toast goes (timeout, close button, or update). clear() doesn't
+// call onClose, so closeAll empties both.
+const keysById = new Map<string, string>();
 
 // Status icon matching Chakra's AlertIcon (filled glyphs, coloured by the
 // toast foreground = white here). Warning is a triangle, error a circle, as
@@ -166,14 +175,18 @@ export interface ToastOptions extends ToastContent {
 
 export interface ToastFn {
   (options: ToastOptions): void;
-  /** Whether a toast with this id is currently visible. */
+  /**
+   * Whether a toast with this id is still queued — displayed, or waiting
+   * behind newer toasts for its turn.
+   */
   isActive(id: string): boolean;
   /**
-   * Replace a visible toast's content (Chakra's toast.update). The toast is
-   * re-added, so unlike Chakra it re-animates and restarts any timeout.
+   * Replace a queued toast's content (Chakra's toast.update). The toast is
+   * re-added, so unlike Chakra it re-animates, restarts any timeout, and
+   * takes its place at the front of the queue.
    */
   update(id: string, options: ToastOptions): void;
-  /** Dismiss all visible toasts (Chakra's toast.closeAll). */
+  /** Dismiss every toast, queued as well as displayed (Chakra's toast.closeAll). */
   closeAll(): void;
 }
 
@@ -184,8 +197,7 @@ export interface ToastFn {
  */
 export const useToast = (): ToastFn =>
   useMemo(() => {
-    const isActive = (id: string) =>
-      toastQueue.visibleToasts.some((t) => t.content.id === id);
+    const isActive = (id: string) => keysById.has(id);
     const add = ({
       id,
       title,
@@ -198,7 +210,7 @@ export const useToast = (): ToastFn =>
       if (id && isActive(id)) {
         return;
       }
-      toastQueue.add(
+      const key = toastQueue.add(
         {
           id,
           title,
@@ -206,21 +218,37 @@ export const useToast = (): ToastFn =>
           status,
           isClosable: isClosable || persistent,
         },
-        { timeout: persistent ? undefined : duration ?? 5000 },
+        {
+          timeout: persistent ? undefined : duration ?? 5000,
+          onClose: id
+            ? // Only our own entry is ours to drop: an id reused after this
+              // toast closed belongs to the later add.
+              () => {
+                if (keysById.get(id) === key) {
+                  keysById.delete(id);
+                }
+              }
+            : undefined,
+        },
       );
+      if (id) {
+        keysById.set(id, key);
+      }
     };
     const update = (id: string, options: ToastOptions) => {
-      const existing = toastQueue.visibleToasts.find(
-        (t) => t.content.id === id,
-      );
-      if (existing) {
-        toastQueue.close(existing.key);
+      const key = keysById.get(id);
+      if (key !== undefined) {
+        toastQueue.close(key);
       }
       add({ ...options, id });
     };
+    // clear() empties the whole queue, including the toasts held back by
+    // maxVisibleToasts. Closing the visible ones one by one would only
+    // promote the queued ones into view. It's also a single update, so the
+    // whole set exits in one view transition.
     const closeAll = () => {
-      // Copy first: closing mutates visibleToasts as we iterate.
-      [...toastQueue.visibleToasts].forEach((t) => toastQueue.close(t.key));
+      keysById.clear();
+      toastQueue.clear();
     };
     return Object.assign(add, { isActive, update, closeAll });
   }, []);

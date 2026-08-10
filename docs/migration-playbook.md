@@ -972,7 +972,9 @@ accepted — expect them, don't chase them as bugs:
   `duration: null` — use `persistent: true` (which forces the close
   button on) for toasts that must not auto-dismiss; `toast.update()`
   re-adds (re-animates, restarts timeout) rather than updating in place;
-  id-dedup is native.
+  id-dedup works as Chakra's at the call site, but it's ours — react-aria's
+  queue has no notion of ids, and only exposes the newest
+  `maxVisibleToasts`, so `Toast.tsx` indexes ids over the whole queue.
 - **Field labels are `normal` weight, not FormLabel's `medium`** (decision
   2026-08-06; the field-chrome roadmap bullet has the context). Invisible on
   macOS and Windows — no
