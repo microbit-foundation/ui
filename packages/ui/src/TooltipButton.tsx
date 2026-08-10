@@ -89,6 +89,13 @@ export interface TooltipButtonProps {
  * reaches screen readers on every platform. Use it for an information icon
  * beside a heading or a "partially supported" marker; use `Tooltip` for a hint
  * on a button that does something else.
+ *
+ * Open question: react-spectrum makes this pattern a popover
+ * (`ContextualHelp`), not a tooltip, which would remove the hidden copy of the
+ * body and the pointer-geometry keep-alive below rather than work around them.
+ * Tracked as microbit-foundation/ui#63, which would deprecate this component;
+ * see "Open across the completed migrations" in docs/migration-playbook.md
+ * before extending it.
  */
 export const TooltipButton = ({
   label,
