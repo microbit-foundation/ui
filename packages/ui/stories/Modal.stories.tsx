@@ -110,6 +110,65 @@ const DoneButton = () => {
   );
 };
 
+/**
+ * A full-size dialog over a page that scrolls. Opening a modal locks page
+ * scroll by reserving the scrollbar gutter; the backdrop and dialog must
+ * still reach the right-hand viewport edge — the page is striped yellow, the
+ * dialog plain white, so any stripe visible beside the open dialog is the
+ * bug. Scrolling content inside the dialog gets its own scrollbar (the
+ * data-log table case).
+ */
+export const FullOverScrollingPage: Story = {
+  args: { size: "full" },
+  render: (args) => {
+    const [isOpen, setOpen] = useState(false);
+    return (
+      <>
+        {/* The "page": loudly striped, and spanning the viewport with vw
+            units so it also paints under the reserved gutter — any sliver
+            of stripes beside the open dialog is the bug. */}
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            width: "100vw",
+            height: "100vh",
+            zIndex: -1,
+            background:
+              "repeating-linear-gradient(45deg, #ffd166 0 24px, #fff3cd 24px 48px)",
+          }}
+        />
+        <Button variant="primary" onPress={() => setOpen(true)}>
+          Open full-screen dialog
+        </Button>
+        {/* Tall enough that the page behind has a scrollbar to give up. */}
+        <div style={{ height: "300vh" }} />
+        <Modal {...args} isOpen={isOpen} onClose={() => setOpen(false)}>
+          <ModalCloseButton />
+          <ModalHeader>Edge to edge</ModalHeader>
+          <ModalBody>
+            <Text>
+              The page behind has a scrollbar. This dialog spans the full
+              viewport width; the rows below scroll inside the dialog.
+            </Text>
+            <div
+              style={{
+                overflowY: "auto",
+                maxHeight: "50vh",
+                marginTop: "1rem",
+              }}
+            >
+              {Array.from({ length: 60 }, (_, i) => (
+                <Text key={i}>Row {i + 1}</Text>
+              ))}
+            </div>
+          </ModalBody>
+        </Modal>
+      </>
+    );
+  },
+};
+
 export const AlertDialog: Story = {
   render: () => {
     const [isOpen, setOpen] = useState(false);
