@@ -65,7 +65,8 @@ export const slider = defineSlotRecipe({
       top: 0,
       left: 0,
       height: "100%",
-      bg: "sliderFilledTrack",
+      // Fill colour is set per call site via `filledTrackCss`.
+      bg: "brand.500",
     },
     thumb: {
       position: "absolute",

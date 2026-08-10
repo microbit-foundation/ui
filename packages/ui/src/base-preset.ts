@@ -179,15 +179,13 @@ export const basePreset = definePreset({
     },
     semanticTokens: {
       colors: {
-        // Checked/focus states of form controls (Chakra's default blue
-        // colorScheme). Checkbox/Switch checked backgrounds, Input focus
-        // border, and the Slider/ProgressBar fills (the last two are
-        // near-dead defaults - current call sites override them).
-        controlCheckedBg: { value: "{colors.blue.500}" },
-        controlCheckedHoverBg: { value: "{colors.blue.600}" },
-        focusBorder: { value: "{colors.blue.500}" },
-        sliderFilledTrack: { value: "{colors.blue.500}" },
-        progressFilledTrack: { value: "{colors.blue.500}" },
+        // Checked/focus states of form controls: Checkbox/Switch/Radio
+        // checked backgrounds and the Input/Select focus border. Semantic
+        // so a brand can diverge them from its ramp — e.g. a light
+        // brand.500 needing a darker 3:1 focus border.
+        controlCheckedBg: { value: "{colors.brand.500}" },
+        controlCheckedHoverBg: { value: "{colors.brand.600}" },
+        focusBorder: { value: "{colors.brand.500}" },
         // Error/destructive ramp (Chakra red). Destructive button variants,
         // field error states and the error toast; the record* button
         // variants deliberately stay on red.* (recording vocabulary, not

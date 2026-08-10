@@ -71,9 +71,9 @@ semantic tokens _while still on Chakra_ — this pre-work is independently
 shippable and shrinks the migration. Changing the OSS theme is acceptable
 where it simplifies (agreed in principle; scope per component). Semantic
 tokens that already exist in the base preset: `languageText*`, `toast*Bg`,
-`statusBarBg`, `danger.*`, `controlCheckedBg`, `focusBorder`,
-`sliderFilledTrack`, `progressFilledTrack`. Rerun the differ after any theme
-or preset change while Chakra remains.
+`statusBarBg`, `danger.*`, `controlCheckedBg`, `focusBorder`. Slider and
+ProgressBar fill colours are set per call site via `filledTrackCss`/`barCss`.
+Rerun the differ after any theme or preset change while Chakra remains.
 
 ### 2. Foundation: Panda + preset stack + layers
 
