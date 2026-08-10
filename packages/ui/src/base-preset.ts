@@ -125,6 +125,15 @@ export const basePreset = definePreset({
           background: "var(--skeleton-end-color)",
         },
       },
+      // Toast enter/exit, played on the view-transition snapshots (see the
+      // ::view-transition rules in globalCss). Chakra-ballpark timings: fade
+      // + short slide in, quicker fade + shrink out.
+      toastSlideIn: {
+        from: { opacity: 0, transform: "translateY(-24px)" },
+      },
+      toastSlideOut: {
+        to: { opacity: 0, transform: "scale(0.85)" },
+      },
     },
     tokens: {
       colors: {
@@ -313,6 +322,29 @@ export const basePreset = definePreset({
     // multi-line headings break at different points (mobile/translations).
     "h1, h2, h3, h4, h5, h6": {
       textWrap: "wrap",
+    },
+    // Toast enter/exit (the ToastQueue wraps updates in
+    // document.startViewTransition — see Toast.tsx, which also stamps the
+    // scoping class on <html> while its transitions run). Timings sit in
+    // Chakra's ballpark: 0.4s fade+slide in, 0.2s fade+shrink out; the
+    // stack reflow comes from the default group animation. `(*)` +
+    // `:only-child` matches exactly the entering/exiting toast groups: the
+    // root snapshot always has both old and new children, and toasts are
+    // the only named groups during a toast transition. The snapshot
+    // overlay must not eat clicks while a toast animates, hence
+    // pointer-events, scoped likewise.
+    "html.microbit-ui-toast-transition::view-transition": {
+      pointerEvents: "none",
+    },
+    // `both` fill: the snapshots must hold the keyframes' end states for
+    // however long the rest of the transition (e.g. the 0.25s default group
+    // animation) outlives them, or they snap back to full size/opacity for
+    // the remainder.
+    "html.microbit-ui-toast-transition::view-transition-new(*):only-child": {
+      animation: "toastSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) both",
+    },
+    "html.microbit-ui-toast-transition::view-transition-old(*):only-child": {
+      animation: "toastSlideOut 0.2s cubic-bezier(0.4, 0, 1, 1) both",
     },
   },
   // shared-ui components forward `variant`/`size`/etc. as runtime props to
