@@ -40,7 +40,20 @@ export interface TooltipProps {
    * the trigger (i.e. it is not a RAC component or `Focusable`).
    */
   triggerRef?: RefObject<HTMLElement | null>;
-  /** Hover open delay in ms (RAC default ~1500; pass 0 for instant). */
+  /**
+   * Hover open delay in ms, defaulting to react-aria's 1500.
+   *
+   * The delay is per bout of interest, not per control: react-aria keeps a
+   * global "warm" flag, so the first tooltip waits and every one after it opens
+   * instantly until half a second or so after the last one closes. That is what
+   * keeps a row of buttons from firing tooltips at a pointer merely crossing
+   * them.
+   *
+   * **Pass 0 where the tooltip is the label** — an icon-only button, where the
+   * text is the only explanation of the glyph and waiting for it reads as
+   * broken. Leave it alone where the control already says what it is and the
+   * tooltip adds detail.
+   */
   delay?: number;
   /**
    * Close delay in ms, defaulting to react-aria's 500.
@@ -78,7 +91,7 @@ export const Tooltip = ({
   hasArrow,
   isOpen,
   triggerRef,
-  delay = 0,
+  delay,
   closeDelay,
   shouldCloseOnPress,
   css: cssProp,

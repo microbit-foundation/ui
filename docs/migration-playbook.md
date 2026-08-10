@@ -966,6 +966,25 @@ accepted — expect them, don't chase them as bugs:
   interaction modality, which a pointer _down_ sets, not pointer movement.
   Verified identical for `Tooltip` and `TooltipButton`; don't chase it in one
   of them.
+- **A tooltip waits ~1.5s before its first appearance**, where Chakra's popped
+  immediately — react-aria's warmup, which the library used to override to 0 for
+  parity, restored for the same reason as the cooldown below. The wait is per
+  bout of interest, not per control: a global warm flag makes every tooltip
+  after the first open instantly, until ~500ms after the last one closes. It's
+  what stops a row of buttons firing tooltips at a pointer that is merely
+  crossing them (python-editor's toolbar being the case that prompted it).
+
+  **The rule: pass `delay={0}` where the tooltip is the label** — an icon-only
+  button whose glyph the text is explaining. Leave the default where the control
+  already says what it is and the tooltip adds detail. `TooltipButton` sets 0
+  for itself. Two known sites need annotating on their next pass:
+  python-editor's `ProjectNameEditable` (an `IconButton`) and
+  data-microbit-org's `PauseIcon`.
+
+  Mind that mixed delays are coupled: once a 0-delay tooltip has shown, the
+  warm flag makes the delayed ones instant too for the next second or so, so
+  the flip buys "quiet on first approach", not "never noisy".
+
 - **Tooltips linger ~500ms after mouse-out** rather than closing instantly as
   Chakra's did — react-aria's cooldown default, which the library used to
   override to 0 for parity. The delay is what makes a tooltip hoverable at all

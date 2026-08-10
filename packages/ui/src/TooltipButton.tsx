@@ -118,6 +118,10 @@ export const TooltipButton = ({
       placement={placement}
       hasArrow={hasArrow}
       css={cssProp}
+      // The tooltip is this button's whole explanation — an icon with a 1.5s
+      // wait before anything appears reads as broken — so opt out of the warmup
+      // the labelled controls want.
+      delay={0}
       shouldCloseOnPress={false}
     >
       <span className={css({ display: "flex" })}>
