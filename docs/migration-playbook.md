@@ -922,6 +922,24 @@ border` and carry the total across.
     on a Select — classroom's `classroom` variant styles only the control and
     card, so nothing paid it.
 
+46. **An overlay opened from inside a `Modal` positions against the document,
+    so a page whose body is shorter than the viewport throws it hundreds of
+    pixels off.** A tooltip on a control in a modal landed at `y: -387` for a
+    trigger at `y: 174` in a Storybook story whose body was 72px tall against a
+    600px viewport; giving the story a `minHeight: 100vh` wrapper put it back
+    where it belonged. Identical for `Tooltip` and `TooltipButton`, so it is the
+    positioning, not the component. Real app pages are full height and don't
+    show it — stories and small test harnesses do, so wrap a modal story in a
+    full-height box before believing an overlay is mispositioned.
+
+    The same portal arrangement is why a tooltip inside a modal cannot be
+    hovered: react-aria marks the app-level overlay container `inert` while a
+    modal is open, so the tooltip is painted but never the target of a mouse
+    event, and its own hover-to-stay-open handling can't fire.
+    `TooltipButton` works around it with pointer geometry; the cleaner fix
+    would be portalling overlays inside the modal (react-aria's
+    `UNSAFE_PortalProvider`), which nothing has needed enough yet.
+
 Also remember (from the RAC component work, not numbered): RAC re-selects a
 pressed radio value against current state after any earlier handler runs —
 "click the selected option again to deselect" interactions need a native
@@ -938,6 +956,20 @@ accepted — expect them, don't chase them as bugs:
   under the still-hovering pointer (0ms delay). If a design can't live
   with it, the library Tooltip needs a closed-until-re-enter state
   machine (unbuilt).
+- **Any key press dismisses a tooltip**, and only hover or focus brings it
+  back — `useTooltipTrigger` binds its close to `onKeyDown` as well as
+  `onPointerDown`. Fine for a hint on an action button, wrong where the
+  tooltip's text is the point of the control: pass `shouldCloseOnPress={false}`
+  (or use `TooltipButton`, which does).
+- **Hover is ignored until the next pointer press** once the keyboard has been
+  used, and on a freshly loaded page — react-aria gates tooltip hover on the
+  interaction modality, which a pointer _down_ sets, not pointer movement.
+  Verified identical for `Tooltip` and `TooltipButton`; don't chase it in one
+  of them.
+- **Tooltips aren't hoverable at the library's default `closeDelay: 0`**
+  (WCAG 1.4.13): react-aria puts hover handlers on the tooltip to re-open it,
+  but at 0ms it has unmounted before the pointer crosses the gap. Set a
+  `closeDelay` where the text is long enough to want reading at magnification.
 - **Focus rings show after mouse interaction** in places Chakra hid them
   (auto-focused dialog buttons, slider thumbs).
 - **A menu opened with the mouse focuses no item.** Chakra highlighted the

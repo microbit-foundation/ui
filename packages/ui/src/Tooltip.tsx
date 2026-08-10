@@ -42,6 +42,25 @@ export interface TooltipProps {
   triggerRef?: RefObject<HTMLElement | null>;
   /** Hover open delay in ms (RAC default ~1500; pass 0 for instant). */
   delay?: number;
+  /**
+   * Close delay in ms, defaulting to 0 as Chakra closed on mouse-out.
+   * react-aria's own default is 500.
+   *
+   * This is also what makes a tooltip hoverable: react-aria puts hover
+   * handlers on the tooltip that re-open it, but at 0ms it has unmounted
+   * before the pointer can cross the gap, so a tooltip whose text is long
+   * enough to want reading at magnification should set this (WCAG 1.4.13).
+   */
+  closeDelay?: number;
+  /**
+   * Whether pressing the trigger closes the tooltip (RAC default true).
+   *
+   * react-aria binds this to keydown as well as pointerdown, so with the
+   * default *any* key press dismisses the tooltip and only hover or focus
+   * brings it back. Pass false where the tooltip's text is the point of the
+   * control rather than a hint about an action.
+   */
+  shouldCloseOnPress?: boolean;
   css?: SystemStyleObject;
 }
 
@@ -59,9 +78,16 @@ export const Tooltip = ({
   isOpen,
   triggerRef,
   delay = 0,
+  closeDelay = 0,
+  shouldCloseOnPress,
   css: cssProp,
 }: TooltipProps) => (
-  <TooltipTrigger isOpen={isOpen} delay={delay} closeDelay={0}>
+  <TooltipTrigger
+    isOpen={isOpen}
+    delay={delay}
+    closeDelay={closeDelay}
+    shouldCloseOnPress={shouldCloseOnPress}
+  >
     {children}
     <RACTooltip
       triggerRef={triggerRef}

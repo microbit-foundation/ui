@@ -58,6 +58,7 @@ export * from "./Modal";
 export * from "./PopoverArrow";
 export * from "./SharedUIProvider";
 export * from "./Tooltip";
+export * from "./TooltipButton";
 export * from "./Toast";
 export * from "./VisuallyHidden";
 export { useBreakpointValue } from "./hooks/useBreakpointValue";
