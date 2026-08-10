@@ -49,7 +49,7 @@ export const ProgressBar = ({
         className={css(
           {
             height: "100%",
-            bg: "progressFilledTrack",
+            bg: "brand.500",
             transition: "width 0.2s",
           },
           barCss,
