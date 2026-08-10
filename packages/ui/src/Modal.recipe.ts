@@ -54,7 +54,13 @@ export const dialog = defineSlotRecipe({
     overlay: {
       position: "fixed",
       inset: 0,
-      w: "100%",
+      // 100vw, not 100%: react-aria's scroll lock reserves the root
+      // scrollbar gutter (scrollbar-gutter: stable), which narrows the
+      // containing block for fixed elements — 100% leaves an uncovered
+      // strip where the page scrollbar was. Viewport units span the
+      // reserved gutter, so the backdrop (and a full-size dialog) reach
+      // the real viewport edge.
+      w: "100vw",
       h: "100%",
       bg: "blackAlpha.600",
       zIndex: "modal",

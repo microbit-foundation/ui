@@ -195,6 +195,12 @@ export const Modal = ({
       }}
       isDismissable={isDismissable}
       isKeyboardDismissDisabled={isKeyboardDismissDisabled}
+      // Marker for the html:has() rule in base-preset.ts that releases the
+      // scroll lock's reserved scrollbar gutter while a full-size dialog is
+      // open: the reserved strip is a hit-testing dead zone (clicks fall
+      // through to the root and read as outside-dismissal), and the page
+      // reflowing behind an opaque full-screen dialog is invisible.
+      data-fullsize={size === "full" || undefined}
       className={cx(
         slots.overlay,
         motionlessClass,

@@ -323,6 +323,17 @@ export const basePreset = definePreset({
     "h1, h2, h3, h4, h5, h6": {
       textWrap: "wrap",
     },
+    // While a full-size dialog is open (the Modal stamps data-fullsize on
+    // its overlay), release the scrollbar gutter that react-aria's scroll
+    // lock reserves on the root. The reserved strip is scrollbar chrome to
+    // hit-testing — elementFromPoint returns null there, so clicks fall
+    // through to the root and dismiss the dialog, and controls near the
+    // right edge lose part of their target. With the page fully covered,
+    // the reflow this causes is invisible. !important: react-aria sets the
+    // reservation as a non-important inline style.
+    "html:has([data-fullsize])": {
+      scrollbarGutter: "auto !important",
+    },
     // Toast enter/exit (the ToastQueue wraps updates in
     // document.startViewTransition — see Toast.tsx, which also stamps the
     // scoping class on <html> while its transitions run). Timings sit in
