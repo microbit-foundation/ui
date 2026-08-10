@@ -115,8 +115,10 @@ const DoneButton = () => {
  * scroll by reserving the scrollbar gutter; the backdrop and dialog must
  * still reach the right-hand viewport edge — the page is striped yellow, the
  * dialog plain white, so any stripe visible beside the open dialog is the
- * bug. Scrolling content inside the dialog gets its own scrollbar (the
- * data-log table case).
+ * bug — as is a click near the right edge dismissing the dialog or missing
+ * the close button (the reserved gutter is a hit-testing dead zone unless
+ * released). Scrolling content inside the dialog gets its own scrollbar
+ * (the data-log table case).
  */
 export const FullOverScrollingPage: Story = {
   args: { size: "full" },
