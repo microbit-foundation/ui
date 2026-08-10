@@ -54,10 +54,18 @@ export const numberField = defineSlotRecipe({
       borderColor: "gray.200",
       transitionProperty: "background",
       transitionDuration: "ultra-fast",
+      // Follow the input's corners, less the 1px border the stepper is inset
+      // by, so the hover and pressed fills curve away with the border instead
+      // of squaring off over its arc. Radii track the input recipe's size
+      // scale, so the `sm` variant restates them.
+      "&:first-child": {
+        borderStartEndRadius: "calc(token(radii.md) - 1px)",
+      },
       "&:last-child": {
         borderTop: "1px solid",
         borderTopColor: "gray.200",
         marginTop: "-1px",
+        borderEndEndRadius: "calc(token(radii.md) - 1px)",
       },
       "&[data-hovered]": { bg: "gray.100" },
       "&[data-pressed]": { bg: "gray.200" },
@@ -75,7 +83,15 @@ export const numberField = defineSlotRecipe({
       },
       md: {},
       sm: {
-        stepperButton: { fontSize: "calc(token(fontSizes.sm) * 0.75)" },
+        stepperButton: {
+          fontSize: "calc(token(fontSizes.sm) * 0.75)",
+          "&:first-child": {
+            borderStartEndRadius: "calc(token(radii.sm) - 1px)",
+          },
+          "&:last-child": {
+            borderEndEndRadius: "calc(token(radii.sm) - 1px)",
+          },
+        },
       },
     },
   },
