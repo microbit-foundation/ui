@@ -36,11 +36,43 @@ export interface ToastContent {
   isClosable?: boolean;
 }
 
+// Enter/exit/reflow animation: queue updates run inside a view transition
+// (react-aria's supported mechanism — toasts unmount synchronously, so CSS
+// transitions on the element can't animate the exit). The keyframes and the
+// ::view-transition rules live in base-preset.ts, scoped by this class,
+// which marks the transition as toast-initiated while it runs: the rules
+// select entering/exiting groups with `(*)`, avoiding view-transition-class
+// (needs Safari 18.2/Chrome 125 vs 18.0/111 for the API itself), and the
+// scoping keeps them — and the pointer-events override — away from any view
+// transitions the app runs. Browsers without the API and reduced-motion
+// users get the bare update.
+const TRANSITION_CLASS = "microbit-ui-toast-transition";
+let activeTransitions = 0;
+const wrapUpdate = (fn: () => void) => {
+  if (
+    typeof document !== "undefined" &&
+    document.startViewTransition &&
+    !window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  ) {
+    activeTransitions++;
+    document.documentElement.classList.add(TRANSITION_CLASS);
+    const transition = document.startViewTransition(fn);
+    transition.finished.finally(() => {
+      if (--activeTransitions === 0) {
+        document.documentElement.classList.remove(TRANSITION_CLASS);
+      }
+    });
+  } else {
+    fn();
+  }
+};
+
 // Module-level queue shared by useToast() and the <ToastProvider/> region.
 // (RAC's Toast API is still flagged UNSTABLE_*; the surface is small and behind
 // this module, so a swap to a custom queue later is contained.)
 export const toastQueue = new RACToastQueue<ToastContent>({
   maxVisibleToasts: 5,
+  wrapUpdate,
 });
 
 // Status icon matching Chakra's AlertIcon (filled glyphs, coloured by the
@@ -83,7 +115,13 @@ export const ToastProvider = () => {
       {({ toast }) => {
         const status = toast.content.status ?? "info";
         return (
-          <RACToast toast={toast} className={toastRecipe({ status }).root}>
+          <RACToast
+            toast={toast}
+            className={toastRecipe({ status }).root}
+            // A unique view-transition-name per toast creates its snapshot
+            // group and lets old/new pair up across the transition.
+            style={{ viewTransitionName: toast.key }}
+          >
             <Icon as={statusIcon[status]} className={slots.icon} aria-hidden />
             <RACToastContent>
               {/* Colour and icon are the only visible status signals; say it
