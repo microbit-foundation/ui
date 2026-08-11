@@ -17,7 +17,16 @@ import { defineSlotRecipe } from "@pandacss/dev";
  */
 export const toast = defineSlotRecipe({
   className: "toast",
-  slots: ["region", "root", "icon", "title", "description", "closeButton"],
+  slots: [
+    "region",
+    "root",
+    "content",
+    "body",
+    "icon",
+    "title",
+    "description",
+    "closeButton",
+  ],
   base: {
     region: {
       position: "fixed",
@@ -34,7 +43,6 @@ export const toast = defineSlotRecipe({
       position: "relative",
       display: "flex",
       alignItems: "flex-start",
-      gap: "3",
       p: "4",
       // Leave room for the absolutely-positioned close button plus breathing
       // space so its hover area never overlaps the title text (24px button at
@@ -46,6 +54,19 @@ export const toast = defineSlotRecipe({
       color: "white",
       maxW: "sm",
       pointerEvents: "auto",
+    },
+    // The icon has to be inside the alert region to be announced with the
+    // message, so this row — not the root — is what lays the two out.
+    content: {
+      display: "flex",
+      alignItems: "flex-start",
+      gap: "3",
+      // Let the text shrink below its content width so long words wrap
+      // instead of pushing past the toast's maxW.
+      minWidth: 0,
+    },
+    body: {
+      minWidth: 0,
     },
     icon: {
       fontSize: "1.25rem",

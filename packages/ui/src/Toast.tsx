@@ -23,7 +23,6 @@ import { toast as toastRecipe } from "styled-system/recipes";
 import { CloseIcon } from "./CloseIcon";
 import { Icon } from "./Icon";
 import { uiMessage } from "./messages";
-import { VisuallyHidden } from "./VisuallyHidden";
 
 export type ToastStatus = "info" | "success" | "warning" | "error";
 
@@ -87,8 +86,8 @@ const keysById = new Map<string, string>();
 // Status icon matching Chakra's AlertIcon (filled glyphs, coloured by the
 // toast foreground = white here). Warning is a triangle, error a circle, as
 // in Chakra — the glyph must distinguish them because the colours alone
-// don't reliably. The icon is decorative; the status is announced via the
-// visually hidden status text.
+// don't reliably. The glyph is also what carries the status for assistive
+// tech, via its accessible name (see ToastProvider).
 const statusIcon: Record<ToastStatus, IconType> = {
   info: RiInformationFill,
   success: RiCheckboxCircleFill,
@@ -131,21 +130,30 @@ export const ToastProvider = () => {
             // group and lets old/new pair up across the transition.
             style={{ viewTransitionName: toast.key }}
           >
-            <Icon as={statusIcon[status]} className={slots.icon} aria-hidden />
-            <RACToastContent>
-              {/* Colour and icon are the only visible status signals; say it
-                  for assistive tech too. */}
-              <VisuallyHidden>
-                {intl.formatMessage(uiMessage(`ui.toast-status-${status}`))}{" "}
-              </VisuallyHidden>
-              {toast.content.title && (
-                <p className={slots.title}>{toast.content.title}</p>
-              )}
-              {toast.content.description && (
-                <div className={slots.description}>
-                  {toast.content.description}
-                </div>
-              )}
+            <RACToastContent className={slots.content}>
+              {/* Colour and the icon are the only visible status signals, so
+                  the icon carries the status as its accessible name rather
+                  than being decorative. react-aria makes this content an
+                  atomic alert region, which is what announces the toast, so
+                  the icon has to sit inside it to be part of that
+                  announcement — beside it, the name would never be read. */}
+              <Icon
+                as={statusIcon[status]}
+                className={slots.icon}
+                aria-label={intl.formatMessage(
+                  uiMessage(`ui.toast-status-${status}`),
+                )}
+              />
+              <div className={slots.body}>
+                {toast.content.title && (
+                  <p className={slots.title}>{toast.content.title}</p>
+                )}
+                {toast.content.description && (
+                  <div className={slots.description}>
+                    {toast.content.description}
+                  </div>
+                )}
+              </div>
             </RACToastContent>
             {toast.content.isClosable && (
               <RACButton

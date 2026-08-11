@@ -45,6 +45,18 @@ it("auto-dismisses after 5s by default", () => {
   expect(screen.queryByText("Saved")).toBeNull();
 });
 
+it("names the status icon, inside the region that gets announced", () => {
+  renderProvider();
+  act(() => toast({ title: "Saved", status: "success" }));
+  // Colour and glyph are the only visible status signals, so the status has
+  // to reach assistive tech as text (react-spectrum's RSP-562). It has to sit
+  // within the alert region react-aria announces, or it is never read out.
+  const icon = screen.getByRole("img", { name: "Success" });
+  const alert = screen.getByRole("alert");
+  expect(alert.contains(icon)).toBe(true);
+  expect(alert.getAttribute("aria-atomic")).toBe("true");
+});
+
 it("honours an explicit duration", () => {
   vi.useFakeTimers();
   renderProvider();
