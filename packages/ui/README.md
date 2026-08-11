@@ -211,58 +211,27 @@ Crowdin ZIP>` (config-driven over packages in
 from the root.
 
 `bin/i18n-packages.cjs` lists every locale a consuming app ships, so a string
-translated for one app is in place for the next. Until this package's Crowdin
-project is wired up the catalogs are seeded from translations of the same
-strings elsewhere in the micro:bit translation programme: ml-trainer,
-python-editor-v3, and MakeCode's editor strings. The last of those are not in
-the pxt repo — fetch a locale's approved strings with
+translated for one app is in place for the next. `i18n:tidy` backfills anything
+missing from English, so an untranslated string renders English rather than
+blank.
 
-```
-https://makecode.microbit.org/api/translations?lang=<locale>&filename=strings.json&approved=true
-```
-
-which covers `Breadcrumb`, `loading...`, `error` and `warning` (its keys are
-mid-sentence, so they are normalised to standalone capitalised form without the
-ellipsis). `i18n:tidy` backfills anything still missing from English, so an
-untranslated string renders English rather than blank.
-
-The `ui.toast-status-*` words come from a fourth source: Spectrum 2's
-InlineAlert catalogs (`@react-spectrum/s2/intl/*.json`, keys
-`inlinealert.informative` / `notice` / `negative` / `positive`), which cover the
-same four statuses in 34 locales. Same licence and notice as the react-aria
+Until this package's Crowdin project is wired up, the non-English catalogs are
+pre-Crowdin seeds — some strings AI-drafted, all of them for Crowdin to review
+— credited as follows. Translations of the same strings elsewhere in the
+micro:bit translation programme: ml-trainer and python-editor-v3, and
+MakeCode's editor strings, which are not in the pxt repo but can be fetched per
+locale from
+`https://makecode.microbit.org/api/translations?lang=<locale>&filename=strings.json&approved=true`.
+The `ui.toast-status-*` words come from Spectrum 2's InlineAlert catalogs
+(`@react-spectrum/s2/intl/*.json`, keys `inlinealert.informative` / `notice` /
+`negative` / `positive`), under the same licence and notice as the react-aria
 seed below.
-
-Two sets of strings are AI-drafted rather than seeded from a human
-translation, and go to Crowdin as untranslated-in-effect, for a reviewer to
-confirm or replace:
-
-- four `ui.breadcrumb` labels that diverge from MakeCode's, where its string
-  named a different component or was too bare to work as a label: de, it, nl
-  and pt-BR
-- the seven strings `ca` and `vi` had no source for. Word choices follow the
-  register and vocabulary of the translations we do have. For ca that is the
-  imperative singular both python-editor-v3 and ml-trainer use ("Selecciona la
-  micro:bit", never the formal "seleccioneu"), `Suggeriments` from
-  python-editor-v3, and `Incrementa`/`Decrementa`/`element` from MakeCode; for
-  vi, `gợi ý`, `tăng`/`giảm`, `chọn` and `mục` from MakeCode. The word for a
-  notification (`notificació`, `thông báo`) is attested in none of them, and
-  neither is Catalan `Èxit` for Success — MakeCode's Catalan words it
-  adverbially ("s'ha processat correctament"), so a reviewer may prefer
-  `Correcte`.
-
-A handful of catalogs hold a string identical to the English on purpose,
-because that is the translation: `ui.combobox-listbox` and `ui.toast-region`
-in fr (react-aria's own fr-FR catalogs have the same values), and
-`ui.toast-status-error` in ca and es-ES. Don't mistake those for gaps.
-
-Everything else seeded from the sources above is an approved human
-translation.
 
 ### react-aria's own strings
 
 Separately from all of the above, react-aria has built-in strings of its own
 and translates them from catalogs it bundles, nothing to do with react-intl.
-`SharedUIProvider` hands it the app's locale so the two agree. It covers 32
+`SharedUIProvider` hands it the app's locale so the two agree. It bundles 34
 locales; of ours, ca, cy, ga-IE, lo and vi (and the `lol` pseudo-locale) are not
 among them and fall back to English, and there is no supported way to teach it
 more (the rest resolve, including where our id is less specific than
@@ -287,9 +256,9 @@ Crowdin like everything else and the missing locales can catch up:
 Their non-English translations were pre-seeded from react-aria's own catalogs
 ([adobe/react-spectrum](https://github.com/adobe/react-spectrum) at tag
 `react-aria-components@1.19.0`, Apache 2.0 — see the notice in
-[LICENSE.md](LICENSE.md)) for the locales both sides cover, so only ca, cy,
-ga-IE, lo and vi wait on Crowdin. That provenance is recorded here rather than
-in `lang/` because Crowdin roundtrips rewrite those files.
+[LICENSE.md](LICENSE.md)) for the locales both sides cover; the five above had
+no such source. That provenance is recorded here rather than in `lang/` because
+Crowdin roundtrips rewrite those files.
 
 What react-aria does not expose as a prop — live announcements ("2 items
 selected"), its hidden dismiss buttons — still comes from its bundled catalogs
