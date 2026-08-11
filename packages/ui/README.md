@@ -212,10 +212,19 @@ from the root.
 
 `bin/i18n-packages.cjs` lists every locale a consuming app ships, so a string
 translated for one app is in place for the next. Until this package's Crowdin
-project is wired up the catalogs are seeded from those apps' own translations
-of the same strings (ml-trainer for the Crowdin locales, python-editor-v3 for
-de, ga-IE and zh-CN); `i18n:tidy` backfills anything missing from English, so
-an untranslated string renders English rather than blank.
+project is wired up the catalogs are seeded from translations of the same
+strings elsewhere in the micro:bit translation programme: ml-trainer,
+python-editor-v3, and MakeCode's editor strings. The last of those are not in
+the pxt repo — fetch a locale's approved strings with
+
+```
+https://makecode.microbit.org/api/translations?lang=<locale>&filename=strings.json&approved=true
+```
+
+which covers `Breadcrumb`, `loading...`, `error` and `warning` (its keys are
+mid-sentence, so they are normalised to standalone capitalised form without the
+ellipsis). `i18n:tidy` backfills anything still missing from English, so an
+untranslated string renders English rather than blank.
 
 ### react-aria's own strings
 

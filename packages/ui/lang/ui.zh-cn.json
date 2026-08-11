@@ -1,6 +1,6 @@
 {
   "ui.breadcrumb": {
-    "defaultMessage": "Breadcrumb",
+    "defaultMessage": "痕迹导航",
     "description": "Accessible label for the breadcrumb navigation trail (the WAI-ARIA APG's conventional name)"
   },
   "ui.close-action": {
@@ -16,7 +16,7 @@
     "description": "Accessible label for the button that opens a ComboBox's suggestions dropdown"
   },
   "ui.loading": {
-    "defaultMessage": "Loading",
+    "defaultMessage": "正在加载",
     "description": "Announced by screen readers for a button showing a loading spinner"
   },
   "ui.numberfield-decrease": {
@@ -40,7 +40,7 @@
     "description": "Accessible label for the notifications area; count is the number of notifications showing"
   },
   "ui.toast-status-error": {
-    "defaultMessage": "Error",
+    "defaultMessage": "错误",
     "description": "Announced by screen readers before an error notification"
   },
   "ui.toast-status-info": {
@@ -52,7 +52,7 @@
     "description": "Announced by screen readers before a success notification"
   },
   "ui.toast-status-warning": {
-    "defaultMessage": "Warning",
+    "defaultMessage": "警告",
     "description": "Announced by screen readers before a warning notification"
   }
 }
