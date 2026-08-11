@@ -48,7 +48,7 @@
     "description": "Announced by screen readers before an informational notification"
   },
   "ui.toast-status-success": {
-    "defaultMessage": "Operazione riuscita",
+    "defaultMessage": "Successo",
     "description": "Announced by screen readers before a success notification"
   },
   "ui.toast-status-warning": {

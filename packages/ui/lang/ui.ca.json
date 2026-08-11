@@ -16,7 +16,7 @@
     "description": "Accessible label for the button that opens a ComboBox's suggestions dropdown"
   },
   "ui.loading": {
-    "defaultMessage": "Carregant",
+    "defaultMessage": "S'està carregant",
     "description": "Announced by screen readers for a button showing a loading spinner"
   },
   "ui.numberfield-decrease": {
@@ -48,11 +48,11 @@
     "description": "Announced by screen readers before an informational notification"
   },
   "ui.toast-status-success": {
-    "defaultMessage": "Èxit",
+    "defaultMessage": "Completat amb èxit",
     "description": "Announced by screen readers before a success notification"
   },
   "ui.toast-status-warning": {
-    "defaultMessage": "Avís",
+    "defaultMessage": "Advertència",
     "description": "Announced by screen readers before a warning notification"
   }
 }

@@ -12,11 +12,11 @@
     "description": "Accessible label for a ComboBox's dropdown list of suggestions"
   },
   "ui.combobox-trigger": {
-    "defaultMessage": "Wyświetlaj sugestie",
+    "defaultMessage": "Pokaż sugestie",
     "description": "Accessible label for the button that opens a ComboBox's suggestions dropdown"
   },
   "ui.loading": {
-    "defaultMessage": "Wczytywanie",
+    "defaultMessage": "Ładowanie",
     "description": "Announced by screen readers for a button showing a loading spinner"
   },
   "ui.numberfield-decrease": {
@@ -32,7 +32,7 @@
     "description": "Shown in a Select's trigger while nothing is chosen and the app supplies no placeholder"
   },
   "ui.select-row-action": {
-    "defaultMessage": "Zaznacz",
+    "defaultMessage": "Wybierz",
     "description": "Accessible label for a row-selection checkbox in a list or table; screen readers read it together with the row's content"
   },
   "ui.toast-region": {
@@ -48,7 +48,7 @@
     "description": "Announced by screen readers before an informational notification"
   },
   "ui.toast-status-success": {
-    "defaultMessage": "Powodzenie",
+    "defaultMessage": "Sukces",
     "description": "Announced by screen readers before a success notification"
   },
   "ui.toast-status-warning": {

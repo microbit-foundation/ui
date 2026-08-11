@@ -20,11 +20,11 @@
     "description": "Announced by screen readers for a button showing a loading spinner"
   },
   "ui.numberfield-decrease": {
-    "defaultMessage": "{fieldLabel} verlagen",
+    "defaultMessage": "Verlaag {fieldLabel}",
     "description": "Accessible label for a number field's decrement stepper; fieldLabel is the field's label and may be empty"
   },
   "ui.numberfield-increase": {
-    "defaultMessage": "{fieldLabel} verhogen",
+    "defaultMessage": "Verhoog {fieldLabel}",
     "description": "Accessible label for a number field's increment stepper; fieldLabel is the field's label and may be empty"
   },
   "ui.select-placeholder": {
@@ -32,7 +32,7 @@
     "description": "Shown in a Select's trigger while nothing is chosen and the app supplies no placeholder"
   },
   "ui.select-row-action": {
-    "defaultMessage": "Selecteren",
+    "defaultMessage": "Selecteer",
     "description": "Accessible label for a row-selection checkbox in a list or table; screen readers read it together with the row's content"
   },
   "ui.toast-region": {
@@ -48,7 +48,7 @@
     "description": "Announced by screen readers before an informational notification"
   },
   "ui.toast-status-success": {
-    "defaultMessage": "Geslaagd",
+    "defaultMessage": "Succes",
     "description": "Announced by screen readers before a success notification"
   },
   "ui.toast-status-warning": {

@@ -16,7 +16,7 @@
     "description": "Accessible label for the button that opens a ComboBox's suggestions dropdown"
   },
   "ui.loading": {
-    "defaultMessage": "Wird geladen",
+    "defaultMessage": "Laden",
     "description": "Announced by screen readers for a button showing a loading spinner"
   },
   "ui.numberfield-decrease": {
