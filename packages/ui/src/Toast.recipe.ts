@@ -33,6 +33,20 @@ export const toast = defineSlotRecipe({
       top: "4",
       left: "50%",
       transform: "translateX(-50%)",
+      // Percentage centring of a text-width region lands the toasts on a
+      // fractional pixel. Chrome floors ::view-transition-group's transform to
+      // a whole CSS pixel, so the snapshot the enter/exit animation displays
+      // sits up to 1px left of the element it stands in for, and every toast
+      // jumps right as the transition hands back to the real DOM (visible
+      // above 1x, where the two no longer round to the same device pixel).
+      // Rounding the region's own offsets keeps it on whole pixels so the two
+      // agree. round() postdates view transitions in Chrome (130 vs 111), so
+      // the guard keeps the plain centring for the versions in between rather
+      // than dropping the declarations and losing it altogether.
+      "@supports (left: round(50%, 1px))": {
+        left: "round(50%, 1px)",
+        transform: "translateX(round(-50%, 1px))",
+      },
       zIndex: "toast",
       display: "flex",
       flexDirection: "column",
