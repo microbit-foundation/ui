@@ -232,10 +232,20 @@ InlineAlert catalogs (`@react-spectrum/s2/intl/*.json`, keys
 same four statuses in 34 locales. Same licence and notice as the react-aria
 seed below.
 
-Four `ui.breadcrumb` labels diverge from MakeCode's, where its string named a
-different component or was too bare to work as a label: de, it, nl and pt-BR.
-Those four are AI-suggested and want a native check; every other string seeded
-from the sources above is an approved human translation.
+Two sets of strings are AI-drafted rather than seeded from a human
+translation, and go to Crowdin as untranslated-in-effect, for a reviewer to
+confirm or replace:
+
+- four `ui.breadcrumb` labels that diverge from MakeCode's, where its string
+  named a different component or was too bare to work as a label: de, it, nl
+  and pt-BR
+- the seven strings `vi` had no source for. Word choices follow MakeCode's
+  Vietnamese where it attests them (`gợi ý` for suggestions, `tăng`/`giảm`,
+  `chọn`, `mục`); `thông báo` for the notification count does not appear as a
+  noun there.
+
+Everything else seeded from the sources above is an approved human
+translation.
 
 ### react-aria's own strings
 
