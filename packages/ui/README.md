@@ -245,7 +245,15 @@ confirm or replace:
   micro:bit", never the formal "seleccioneu"), `Suggeriments` from
   python-editor-v3, and `Incrementa`/`Decrementa`/`element` from MakeCode; for
   vi, `gợi ý`, `tăng`/`giảm`, `chọn` and `mục` from MakeCode. The word for a
-  notification (`notificació`, `thông báo`) is attested in none of them.
+  notification (`notificació`, `thông báo`) is attested in none of them, and
+  neither is Catalan `Èxit` for Success — MakeCode's Catalan words it
+  adverbially ("s'ha processat correctament"), so a reviewer may prefer
+  `Correcte`.
+
+A handful of catalogs hold a string identical to the English on purpose,
+because that is the translation: `ui.combobox-listbox` and `ui.toast-region`
+in fr (react-aria's own fr-FR catalogs have the same values), and
+`ui.toast-status-error` in ca and es-ES. Don't mistake those for gaps.
 
 Everything else seeded from the sources above is an approved human
 translation.
