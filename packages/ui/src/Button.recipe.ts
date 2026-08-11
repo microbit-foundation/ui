@@ -141,8 +141,11 @@ export const button = defineRecipe({
       // worth considering as variants once a second consumer wants them.
       //   - a neutral outline (transparent, 1px gray.200, inherited text,
       //     gray.50/gray.100 hover/press): Chakra's default-colorScheme
-      //     `outline`, and python-editor's *default* variant per the
-      //     playbook's cross-app vocabulary, so likely already a 2-app shape.
+      //     `outline`. Read as a likely 2-app shape when this was written,
+      //     because python-editor's *default* variant resolved to it in the
+      //     OSS build — but only there; its shipped build was brand-coloured,
+      //     and on 2026-08-11 that app moved to `secondary` and deleted the
+      //     fork. So this is classroom-only until a second app asks.
       //   - an on-colour outline (white 2px + white text over a coloured bar,
       //     whiteAlpha hover/press): Chakra's `outline` + `whiteAlpha`.
       // `warning` below is the *destructive* outline and is not a substitute

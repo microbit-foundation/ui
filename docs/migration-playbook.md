@@ -940,6 +940,37 @@ border` and carry the total across.
     would be portalling overlays inside the modal (react-aria's
     `UNSAFE_PortalProvider`), which nothing has needed enough yet.
 
+47. **A Chakra variant that shares a name with a built-in was a _partial_
+    override, and inherited the rest — including its interaction states.**
+    `extendTheme`'s `mergeThemeCustomizer` merges two function variants by
+    calling both and deep-merging the results, so an app variant naming four
+    properties silently kept everything else Chakra's variant of the same name
+    supplied. Read as a standalone definition — which is how a port reads it —
+    it looks complete. python-editor's `outline` named `borderWidth`, `color`
+    and `_hover`, and inherited `_active: { bg: '<colorScheme>.100' }` from the
+    `ghost` variant that Chakra's `outline` spreads; the Panda port carried the
+    four properties and dropped the press state. It shipped that way and was
+    found on 2026-08-11 by someone noticing the Save button didn't respond to a
+    click.
+
+    The tell is in the override itself: python-editor's set
+    `_hover: { bg: 'transparent' }`, which is only meaningful as a suppression
+    of something inherited. Any `_hover`/`_active`/`_focus` key whose value
+    cancels rather than sets is evidence the variant was never standalone.
+
+    To check an already-ported app: list its Chakra variants whose names
+    collide with a Chakra built-in (`solid`, `outline`, `ghost`, `link`,
+    `unstyled` on Button; the same trap exists on every component whose Chakra
+    theme defines variants as functions) and resolve each against Chakra's own
+    source at the app's default `colorScheme`, rather than reading the
+    override. Note that the OSS and private themes can differ in that
+    default — python-editor's private theme applied
+    `withDefaultColorScheme('brand')` and the OSS one didn't, so the same
+    variant function resolved to brand colours in the shipped product and
+    Chakra greys in the OSS build. The port has to pick one; picking the
+    branded resolution is right, but say so in a comment, because the variant
+    then contains values the OSS theme never produced.
+
 Also remember (from the RAC component work, not numbered): RAC re-selects a
 pressed radio value against current state after any earlier handler runs —
 "click the selected option again to deselect" interactions need a native
@@ -1120,17 +1151,71 @@ Censuses were taken July 2026 against Chakra v2.10 in all apps.
 - **The brand ramp review.** classroom and python-editor ship
   byte-identical `brand` ramps, ported verbatim with two long-standing quirks
   (the 600/700 lightness inversion; the light end a grade off), and their
-  `brand.50`/`brand.900` are **placeholders** clamped to the nearest real stop
-  purely so nothing resolves to the base preset's blue (presets deep-merge).
+  `brand.50` is a **placeholder** clamped to 100 purely so nothing resolves to
+  the base preset's blue (presets deep-merge). Neither defines `brand.900`,
+  which nothing references yet — the same trap, waiting for the first token
+  that does.
   Real values need the brand team, with the question of whether `brand` becomes
   a monotonic ramp. `../python-editor-v3-microbit/docs/brand-ramp-review.md` is
-  the live document and any answer should land in both apps. One correction due
-  there: it records `brand.50` as unreferenced, but the base preset's
-  `button.secondaryActiveBg` resolves to it, so a python-editor `secondary`
-  button would show a light-blue active wash — it uses none today, so nothing
-  is broken, but that app should either set the token or fill its ramp. The
+  the live document and any answer should land in both apps. The
   `colorPalette` question below waits on this answer, and raises the stakes on
   ramp _completeness_ rather than only correctness.
+
+  Two things resolved here on 2026-08-11, both from python-editor adopting
+  `secondary` as its default button. Its ramp genuinely had no `brand.50`
+  (only classroom's was clamped), so `button.secondaryActiveBg` did resolve to
+  the base preset's `#ebf8ff`; it is now aliased to 100 like classroom's, same
+  hex, on branch `secondary-default-button` in the private theme package. And
+  the 600/700 inversion now has a symptom to point at rather than only a
+  provenance: `secondary` walks its border 500 → 600 (hover) → 700 (press),
+  which is monotonic everywhere else in the family, so on this ramp the border
+  darkens on hover and then springs back _lighter_ under the pointer. Measured
+  off the rendered button: `#7455c4` rest, `#5a4395` hover, `#6349aa` press.
+  The press wash dominates enough that nobody has reported it, but it is the
+  concrete cost of the inversion and belongs in the review as the argument for
+  monotonicity.
+
+- **`secondary`'s hover is the quietest state in the variant set, and can't be
+  improved before the ramp review.** In the base idiom `secondaryHoverBg` is
+  `transparent`, so hover moves a 2px border by one stop and changes nothing
+  else. Every sibling does more: `primary`, `ghost` and `toolbar` change a
+  background, `warning` changes border _and_ text, `language` changes text and
+  background. So the family's most-used non-primary button has its least
+  legible hover. classroom and data both set `secondaryHoverBg:
+blackAlpha.50` — the black-on-white idiom has no darker stop to walk to, so
+  they had no choice — which leaves ml-trainer and, since 2026-08-11,
+  python-editor as the only consumers of the wash-less version.
+
+  The fix is a wash on hover and the natural value is `brand.50`, which is
+  blocked: python-editor's `brand.50` is an alias of 100, and 100 is the press
+  wash, so hover and press would be pixel-identical there. It needs a distinct
+  light stop — the ramp review again. python-editor plans to drop its
+  `language` button in favour of an extracted language dialog and to revisit
+  hover and outline contrast at that point, so sequence this with that work
+  rather than making a separate pass at the recipe.
+
+  Noted while looking: **`language` has no `_active` at all.** Same shape as
+  the defect in gotcha #47, but faithful rather than lost — `language` isn't a
+  Chakra built-in name, so nothing merged in a press state and nothing was
+  dropped. One call site per app in 4/4, the language-picker tiles, which close
+  the dialog on press. Worth filling only if the variant outlives the extracted
+  dialog.
+
+- **`warning`/`warningSolid` are severity names sitting on `danger.*` tokens,
+  beside the role names `primary`/`secondary`.** The variant's own comment
+  calls it "the _destructive_ outline", which is what the call sites use it
+  for. `danger`/`dangerSolid` would match both the tokens and the intent.
+  Nothing depends on the current names, so this is vocabulary debt — a
+  four-consumer rename today, and a more expensive one per app added later.
+
+- **The attached-group seam assumes 1px borders while every bordered variant is
+  2px** — tracked as microbit-foundation/ui#22. Recording the measurement here
+  because it is easy to mistake for working: `ButtonGroup isAttached` overlaps
+  siblings by `marginEnd: -1px` (Chakra parity, correct for Chakra's 1px
+  `outline`), and python-editor's split Save button renders 2px outer borders
+  with a 1px seam only because `SaveButton` and `MoreMenuButton` each hand-set
+  a 1px border on the inner edge. The seam is hand-built per call site, so a
+  new split button starts by rediscovering it.
 
 - **`colorPalette` instead of per-component colour tokens — a question for
   after the ramp review, not before.** Where an app's only divergence from a
@@ -1465,9 +1550,11 @@ The censuses established 4/4-app convergence on `radii.button: 2rem`, the
 `outline`/`outlineDark` shadow names, and a `language` button variant
 (colour differs per app — hence `languageText*` tokens), plus
 `toolbar`/`sidebar`/`zoom`/`unstyled` variants and an ActionBar-shaped
-component in three apps. Default button variant differs (`secondary` in
-ml-trainer/classroom/data, `outline` in python-editor) — recipes'
-`defaultVariants` must stay preset-overridable per app.
+component in three apps. The default button variant was the one split
+(`secondary` in ml-trainer/classroom/data, `outline` in python-editor), which
+is why recipes' `defaultVariants` must stay preset-overridable per app — but
+python-editor retired its `outline` fork on 2026-08-11, so it is now 4/4 on
+`secondary` and no app overrides `defaultVariants` for `variant`.
 
 **Two button colour idioms, one recipe.** The `primary`/`secondary` variants
 split 2–2: brand-coloured (ml-trainer, python-editor) vs black-on-white
