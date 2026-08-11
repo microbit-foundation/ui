@@ -92,6 +92,17 @@ node_modules/@microbit/ui/lang/ui.fr.json --ast --out-file ...` (multiple
    the tree (e.g. the Android hardware back button).
 7. **`ToastProvider`** once near the root, inside the two providers above.
 
+## Upgrading in an app
+
+After bumping the `@microbit/ui` version:
+
+1. `npm install` — the apps' postinstall runs `panda codegen`, but incremental
+   codegen does not detect external preset changes, so regenerate clean:
+   `rm -rf styled-system && npm run panda`.
+2. `npm run i18n:compile` — recompiles the app's per-locale catalogs so new
+   and retranslated `ui.*` strings ship (otherwise they fall back to English,
+   or stay missing).
+
 ## Legacy browser support (Safari < 15) — temporary
 
 Panda's output uses two things Safari below 15 mishandles. If an app must
