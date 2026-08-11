@@ -131,12 +131,6 @@ export const ToastProvider = () => {
             style={{ viewTransitionName: toast.key }}
           >
             <RACToastContent className={slots.content}>
-              {/* Colour and the icon are the only visible status signals, so
-                  the icon carries the status as its accessible name rather
-                  than being decorative. react-aria makes this content an
-                  atomic alert region, which is what announces the toast, so
-                  the icon has to sit inside it to be part of that
-                  announcement — beside it, the name would never be read. */}
               <Icon
                 as={statusIcon[status]}
                 className={slots.icon}
