@@ -1,6 +1,6 @@
 {
   "ui.breadcrumb": {
-    "defaultMessage": "Breadcrumb",
+    "defaultMessage": "Briwsionyn Bara",
     "description": "Accessible label for the breadcrumb navigation trail (the WAI-ARIA APG's conventional name)"
   },
   "ui.close-action": {
@@ -16,7 +16,7 @@
     "description": "Accessible label for the button that opens a ComboBox's suggestions dropdown"
   },
   "ui.loading": {
-    "defaultMessage": "Loading",
+    "defaultMessage": "Yn llwytho",
     "description": "Announced by screen readers for a button showing a loading spinner"
   },
   "ui.numberfield-decrease": {

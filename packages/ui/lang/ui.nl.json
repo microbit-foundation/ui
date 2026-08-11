@@ -1,6 +1,6 @@
 {
   "ui.breadcrumb": {
-    "defaultMessage": "Breadcrumb",
+    "defaultMessage": "Kruimelpad",
     "description": "Accessible label for the breadcrumb navigation trail (the WAI-ARIA APG's conventional name)"
   },
   "ui.close-action": {
@@ -16,7 +16,7 @@
     "description": "Accessible label for the button that opens a ComboBox's suggestions dropdown"
   },
   "ui.loading": {
-    "defaultMessage": "Loading",
+    "defaultMessage": "Laden",
     "description": "Announced by screen readers for a button showing a loading spinner"
   },
   "ui.numberfield-decrease": {
@@ -40,19 +40,19 @@
     "description": "Accessible label for the notifications area; count is the number of notifications showing"
   },
   "ui.toast-status-error": {
-    "defaultMessage": "Error",
+    "defaultMessage": "Fout",
     "description": "Announced by screen readers before an error notification"
   },
   "ui.toast-status-info": {
-    "defaultMessage": "Information",
+    "defaultMessage": "Informatie",
     "description": "Announced by screen readers before an informational notification"
   },
   "ui.toast-status-success": {
-    "defaultMessage": "Success",
+    "defaultMessage": "Geslaagd",
     "description": "Announced by screen readers before a success notification"
   },
   "ui.toast-status-warning": {
-    "defaultMessage": "Warning",
+    "defaultMessage": "Waarschuwing",
     "description": "Announced by screen readers before a warning notification"
   }
 }

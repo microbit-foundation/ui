@@ -14,17 +14,24 @@ module.exports = [
     // Where this package's strings sit within each language's Crowdin export
     // dir. Placeholder until the Crowdin project is wired up.
     crowdinDir: "new/packages/microbit-ui",
+    // Every locale any consuming app ships, so a string translated for one
+    // app is there for the next. The `lol` pseudo-locale sorts last.
     languages: [
       "ca",
       "cy",
+      "de",
       "es-ES",
       "fr",
+      "ga-IE",
       "it",
       "ja",
       "ko",
+      "lo",
       "nl",
       "pl",
       "pt-BR",
+      "vi",
+      "zh-CN",
       "zh-TW",
       "lol",
     ],
