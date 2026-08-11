@@ -5,7 +5,7 @@
  */
 import { styled } from "styled-system/jsx";
 
-/** Image — an <img> accepting Panda style props. Replaces Chakra's <Image>. */
+/** Image — an <img> accepting Panda style props. */
 export const Image = styled("img", {
   base: { maxWidth: "100%" },
 });

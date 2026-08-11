@@ -10,12 +10,9 @@ import { SystemStyleObject } from "styled-system/types";
 export interface FadeProps {
   /** Visible when true; faded out (but mounted) when false. */
   isOpen: boolean;
-  /**
-   * Fade-in time in seconds (Chakra's `transition.enter.duration`).
-   * Default 0.2, Chakra's.
-   */
+  /** Fade-in time in seconds. Default 0.2. */
   enterDuration?: number;
-  /** Fade-out time in seconds (Chakra's `transition.exit.duration`). */
+  /** Fade-out time in seconds. Default 0.2. */
   exitDuration?: number;
   css?: SystemStyleObject;
   className?: string;
@@ -23,8 +20,8 @@ export interface FadeProps {
 }
 
 /**
- * Fade — Chakra's Fade transition as a CSS opacity transition (see Slide for
- * the pattern). Content stays mounted throughout.
+ * Fade — a CSS opacity transition (see Slide for the pattern). Content stays
+ * mounted throughout.
  */
 export const Fade = ({
   isOpen,
@@ -37,9 +34,8 @@ export const Fade = ({
   <div
     data-open={isOpen ? "" : undefined}
     // Runtime values, so an inline custom property rather than the css()
-    // object (gotcha #9: a non-literal duration would extract to nothing).
-    // The var switches in the same commit as the opacity, so the transition
-    // picks up the direction's own duration.
+    // object. The var switches in the same commit as the opacity, so the
+    // transition picks up the direction's own duration.
     style={
       {
         "--fade-duration": `${isOpen ? enterDuration : exitDuration}s`,

@@ -5,23 +5,22 @@
  */
 import { defineRecipe } from "@pandacss/dev";
 
-// Chakra's transition.property.common, inlined (Panda has no transitionProperty
-// token category). Matches Chakra's Button base transition.
+// The common transition-property list, inlined (Panda has no
+// transitionProperty token category).
 const transitionCommon =
   "background-color, border-color, color, fill, stroke, opacity, box-shadow, transform";
 
 /**
- * Button recipe — Chakra's default Button base + sizes, with this app's
- * borderRadius (`button` = 2rem) and variant set ported from
- * `components/button.ts`. Interaction conditions (`_hover`/`_active`/
+ * Button recipe — the family button base + sizes, with the house
+ * borderRadius (`button` = 2rem). Interaction conditions (`_hover`/`_active`/
  * `_disabled`/`_focusVisible`) are widened in the preset to also match
- * react-aria-components' data attributes, so these Chakra-shaped variant
- * objects work unchanged on RAC's <Button>.
+ * react-aria-components' data attributes, so these variant objects work
+ * unchanged on RAC's <Button>.
  *
  * A config recipe (not a component cva): styles land in the `recipes` layer so
  * call sites can override with plain style props, and presets extend the
  * variants. This file holds the brand-independent variant set — the core
- * Chakra variants plus the family-wide `language`/`toolbar` variants; a
+ * variants plus the family-wide `language`/`toolbar` variants; a
  * consuming app's preset extends it with app vocabulary (e.g. ml-trainer's
  * `led`/`record*`/`secondary-disabled`). Brand divergence within a variant is
  * token-driven (see the `button.*` and `languageText` semantic tokens).
@@ -68,7 +67,7 @@ export const button = defineRecipe({
       xs: { h: "6", minW: "6", fontSize: "xs", px: "2" },
     },
     variant: {
-      // Chakra's unstyled reset + this app's border-radius removal.
+      // A full reset: the button renders as plain inline content.
       unstyled: {
         bg: "none",
         color: "inherit",
@@ -78,7 +77,7 @@ export const button = defineRecipe({
         p: "0",
         borderRadius: "unset",
       },
-      // Chakra's link layout (no padding/height) + this app's colours.
+      // Link-shaped button: no padding/height, underline on hover.
       link: {
         padding: 0,
         height: "auto",
@@ -115,10 +114,9 @@ export const button = defineRecipe({
         _hover: { bg: "blackAlpha.50" },
         _active: { bg: "blackAlpha.100" },
       },
-      // Chakra had no `plain` variant, so `variant="plain"` fell through to
-      // base-only styling: a transparent, colour-inheriting button. Used for the
-      // action-bar icon-button menu triggers (settings/help), which supply their
-      // own colour and shape via instance styles.
+      // Base-only styling: a transparent, colour-inheriting button. Used for
+      // the action-bar icon-button menu triggers (settings/help), which supply
+      // their own colour and shape via instance styles.
       plain: {
         bg: "transparent",
         color: "inherit",
@@ -132,24 +130,12 @@ export const button = defineRecipe({
         },
         _active: { bg: "button.primaryActiveBg" },
       },
-      // 600/700, matching what python-editor's Chakra outline + red
-      // colorScheme resolved to. (Extracted from ml-trainer at 500/600, but
-      // its one warning button tolerates the darkening; python-editor's
-      // "Reset project" was visibly lighter than its Chakra self.)
-      // NOTE (2026-08-02, from classroom): two Chakra `outline` shapes have
-      // no home here and are currently restated per call site in that app —
-      // worth considering as variants once a second consumer wants them.
-      //   - a neutral outline (transparent, 1px gray.200, inherited text,
-      //     gray.50/gray.100 hover/press): Chakra's default-colorScheme
-      //     `outline`. Read as a likely 2-app shape when this was written,
-      //     because python-editor's *default* variant resolved to it in the
-      //     OSS build — but only there; its shipped build was brand-coloured,
-      //     and on 2026-08-11 that app moved to `secondary` and deleted the
-      //     fork. So this is classroom-only until a second app asks.
-      //   - an on-colour outline (white 2px + white text over a coloured bar,
-      //     whiteAlpha hover/press): Chakra's `outline` + `whiteAlpha`.
-      // `warning` below is the *destructive* outline and is not a substitute
-      // for either; `warningSolid` did map exactly onto Chakra solid+red.
+      // The *destructive* outline (text darker than 500 for contrast).
+      // Two other outline shapes are currently restated per call site in
+      // classroom — a neutral outline (1px gray.200, inherited text,
+      // gray.50/gray.100 hover/press) and an on-colour outline (white 2px +
+      // white text over a coloured bar, whiteAlpha hover/press) — worth
+      // considering as variants if a second consumer wants them.
       warning: {
         borderWidth: "2px",
         borderColor: "danger.600",
@@ -158,10 +144,10 @@ export const button = defineRecipe({
         _hover: { borderColor: "danger.700", color: "danger.700" },
         _active: { bg: "danger.50" },
       },
-      // Chakra's built-in solid + red colorScheme (destructive confirm
-      // buttons). Same values as `record` today, but a separate variant so
-      // recording UI and destructive actions can diverge - hence danger
-      // tokens here, red.* literals there.
+      // The destructive solid (confirm buttons). Same values as ml-trainer's
+      // `record` today, but a separate variant so recording UI and
+      // destructive actions can diverge - hence danger tokens here, red.*
+      // literals there.
       warningSolid: {
         color: "white",
         bg: "danger.500",

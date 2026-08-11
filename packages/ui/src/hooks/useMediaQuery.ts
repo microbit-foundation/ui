@@ -6,10 +6,9 @@
 import { useCallback, useSyncExternalStore } from "react";
 
 /**
- * Tracks a raw CSS media query, replacing Chakra's `useMediaQuery` for
- * queries that aren't breakpoint-based (custom widths, height-based
- * queries). For the preset's breakpoint scale prefer `useBreakpointValue`.
- * Returns false during SSR.
+ * Tracks a raw CSS media query, for queries that aren't breakpoint-based
+ * (custom widths, height-based queries). For the preset's breakpoint scale
+ * prefer `useBreakpointValue`. Returns false during SSR.
  */
 export function useMediaQuery(query: string): boolean {
   const subscribe = useCallback(

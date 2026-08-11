@@ -22,9 +22,9 @@ import {
 } from "../src";
 
 /**
- * The label/helper/error chrome — Chakra's FormControl parts — comes from two
- * shared components (`FieldLabel` and `FieldSupport`) behind every labelled
- * field, so `label`, `helperText`, `errorMessage` and `isRequired` mean the
+ * The label/helper/error chrome comes from two shared components
+ * (`FieldLabel` and `FieldSupport`) behind every labelled field, so
+ * `label`, `helperText`, `errorMessage` and `isRequired` mean the
  * same thing on TextField, Select, ComboBox, NumberField, RadioGroup and
  * CheckboxGroup. react-aria wires the helper text to the control's
  * `aria-describedby` and renders the error only while the field is invalid.
@@ -134,12 +134,11 @@ const LANGUAGES = ["English", "Cymraeg", "Français", "Deutsch"];
 /**
  * The `size` scale, the same small form at each step. One `size` prop sizes
  * the control (via the `input`/`select` recipes) *and* its label (via the
- * `field` recipe), so the whole form scales together — Chakra's FormLabel
- * never scaled, a deliberate delta (see the playbook). The first row pairs a
- * TextField with a Select because the two are sized by different recipes: if
- * the ladders drift, they stop sitting level. Helper text stays `sm`
- * throughout, as Chakra's did. Radio/Checkbox groups have their own control
- * scale and are deliberately absent.
+ * `field` recipe): the label follows the field's size so the whole form
+ * scales together. The first row pairs a TextField with a Select because the
+ * two are sized by different recipes: if the ladders drift, they stop sitting
+ * level. Helper text stays `sm` throughout. Radio/Checkbox groups have their
+ * own control scale and are deliberately absent.
  */
 export const Sizes: Story = {
   render: () => (
@@ -273,12 +272,12 @@ export const SideLabels: Story = {
 };
 
 /**
- * `isDisabled` across the set. The label dims with the control (Chakra's
- * FormLabel `_disabled`) because the `field` recipe's label reads
- * `data-disabled` off the field root — react-aria never puts it on the label
- * itself, so a rule on the label alone silently does nothing (gotcha #45).
- * Per-field disabled stories can't show this: it is drift between fields, and
- * one undimmed label only looks wrong beside six that agree.
+ * `isDisabled` across the set. The label dims with the control because the
+ * `field` recipe's label reads `data-disabled` off the field root —
+ * react-aria never puts it on the label itself, so a rule on the label alone
+ * silently does nothing. Per-field disabled stories can't show this: it is
+ * drift between fields, and one undimmed label only looks wrong beside six
+ * that agree.
  */
 export const Disabled: Story = {
   render: () => (

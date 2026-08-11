@@ -9,28 +9,25 @@ import { dataAttrs } from "./data-attrs";
 import { SystemStyleObject } from "styled-system/types";
 
 export interface SpinnerProps {
-  /** Chakra Spinner sizes: sm 1rem, md 1.5rem (default). */
+  /** sm is 1rem, md 1.5rem (default). */
   size?: "sm" | "md";
   /**
-   * Revolution time (Chakra's `speed`, default 0.45s). Under
-   * prefers-reduced-motion the spin is slowed to ~3x this value.
+   * Revolution time (default 0.45s). Under prefers-reduced-motion the spin is
+   * slowed to ~3x this value.
    */
   speed?: string;
   /** Per-instance style overrides, merged after the base. */
   css?: SystemStyleObject;
   className?: string;
-  /**
-   * Accessible name. Required: Chakra's Spinner announced a visually hidden
-   * "Loading..." by default, so a nameless spinner would regress on it.
-   */
+  /** Accessible name. Required: a spinner must announce what is loading. */
   "aria-label": string;
   /** `data-*` attributes land on the spinner, for tests that wait on it. */
   [key: `data-${string}`]: unknown;
 }
 
 /**
- * Spinner — Chakra's border-based spinner (currentColor with transparent
- * bottom/left quadrants).
+ * Spinner — a border-based spinner (currentColor with transparent bottom/left
+ * quadrants).
  */
 export const Spinner = ({
   size = "md",

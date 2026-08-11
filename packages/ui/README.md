@@ -64,11 +64,11 @@ an app must do:
    @import "@microbit/ui/reset.css" layer(reset);
    ```
 
-   The `reset.css` import is **required**: it carries the Chakra-parity
+   The `reset.css` import is **required**: it carries the
    `* { border-color; word-wrap }` defaults, which must sit in the bottom
    layer (the legacy-Safari cascade-layer flattening specificity-boosts
    higher layers above CSS it can't see — runtime-injected styles, other
-   files; playbook gotcha #28). Without it, elements that set a border
+   files). Without it, elements that set a border
    width but no colour render `currentColor` borders.
    The `vendor` layer is for third-party stylesheets: import any vendor CSS
    with `@import "..." layer(vendor)` so it beats the preflight reset but
@@ -174,9 +174,8 @@ apply wherever the token is consumed.
 ## Runtime token lookups
 
 For values that feed _computation_ rather than stylesheets (canvas painting,
-colour math, inline `style` for data-driven values — see gotcha #9 in the
-repo's [migration playbook](../../docs/migration-playbook.md)), import the
-runtime lookup:
+colour math, inline `style` for data-driven values that Panda's static
+extraction can't see), import the runtime lookup:
 
 ```ts
 import { token } from "@microbit/ui"; // re-exports styled-system/tokens

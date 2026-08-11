@@ -11,11 +11,10 @@ const toTokens = (values: Record<string, string>) =>
   ) as Record<string, { value: string }>;
 
 /**
- * The numeric spacing/size grid, Chakra's 0.25rem step × 0.88.
+ * The numeric spacing/size grid, the base 0.25rem step × 0.88.
  *
  * Only the numeric scale is touched: the named `sizes` (`xs`…`8xl`, `max`,
- * `full`, `container.*`) stay at their base-preset values, as they did in
- * both apps' Chakra themes.
+ * `full`, `container.*`) stay at their base-preset values.
  */
 const scale = toTokens({
   px: "1px",
@@ -81,11 +80,11 @@ const denseFontSizes = toTokens({
  * ```
  *
  * Both python-editor and classroom shipped the same "make everything
- * smaller" Chakra theme change (2022): the numeric spacing/sizes grid at
- * × 0.88 and `fontSizes` from `md` up at × 0.9. The two themes' values were
+ * smaller" theme change (2022): the numeric spacing/sizes grid at
+ * × 0.88 and `fontSizes` from `md` up at × 0.9. The two apps' values were
  * byte-identical, so the scale lives here rather than being replicated in
- * each app preset (migration-playbook gotcha #25 — a global scale override
- * hides from every safeguard, so it needs to be explicit and shared).
+ * each app preset — a global scale override hides from every safeguard,
+ * so it needs to be explicit and shared.
  *
  * Whether this density stays or the family aligns on one scale is an open
  * design question; when it is answered, this preset is the single place the

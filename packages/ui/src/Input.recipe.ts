@@ -5,15 +5,14 @@
  */
 import { defineRecipe } from "@pandacss/dev";
 
-// Chakra's transition.property.common, inlined (Panda has no transitionProperty
-// token category).
+// The common transition-property list, inlined (Panda has no
+// transitionProperty token category).
 const transitionCommon =
   "background-color, border-color, color, fill, stroke, opacity, box-shadow, transform";
 
 /**
- * Input recipe — Chakra's outline Input field (light mode) with its size
- * scale. Used by the shared-ui Input and NativeSelect, and by TextField's
- * input slot.
+ * Input recipe — the outline text field with an sm/md/lg size scale. Used by
+ * the shared-ui Input and NativeSelect, and by TextField's input slot.
  *
  * Focus matches both native `:focus-visible` (plain inputs; browsers treat any
  * focus in a text field as focus-visible) and react-aria's `data-focused`
@@ -70,7 +69,7 @@ export const input = defineRecipe({
     },
   },
   variants: {
-    // Chakra's Input size scale, minus the unused xs.
+    // The sm/md/lg size scale.
     size: {
       lg: { fontSize: "lg", px: "4", h: "12", borderRadius: "md" },
       md: { fontSize: "md", px: "4", h: "10", borderRadius: "md" },

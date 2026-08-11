@@ -6,9 +6,9 @@
 import { defineSlotRecipe } from "@pandacss/dev";
 
 /**
- * Field slot recipe — Chakra's FormControl parts (FormLabel/FormHelperText/
- * FormErrorMessage, light mode), mapped onto react-aria-components'
- * Label/Text/FieldError by `FieldLabel` and `FieldSupport`. Every labelled
+ * Field slot recipe — the label/helper/error chrome, mapped onto
+ * react-aria-components' Label/Text/FieldError by `FieldLabel` and
+ * `FieldSupport`. Every labelled
  * field in the library draws its chrome from here, including Select and
  * ComboBox, whose own recipe styles only the dropdown pair; the input itself is
  * styled by the `input` recipe (Input.recipe.ts).
@@ -35,10 +35,9 @@ export const field = defineSlotRecipe({
     label: {
       display: "block",
       fontSize: "md",
-      // Deliberately not Chakra FormLabel's `medium`: no font in the family's
-      // stack has a 500 face, so the two were pixel-identical on macOS and
-      // Windows, and the only call sites that cared overrode to `normal`
-      // (settings rows). See the playbook's expected behavioural deltas.
+      // Deliberately `normal`, not `medium`: no font in the family's stack
+      // has a 500 face (the two render identically on macOS and Windows),
+      // and the call sites that cared (settings rows) want `normal`.
       fontWeight: "normal",
       marginEnd: "3",
       mb: "2",
@@ -46,7 +45,7 @@ export const field = defineSlotRecipe({
       transitionDuration: "normal",
       // RAC stamps `data-disabled` on the field root and on the control, never
       // on the label, so an `&[data-disabled]` rule here matches nothing — it
-      // has to come down from the root (gotcha #45). Direct child rather than a
+      // has to come down from the root. Direct child rather than a
       // descendant selector, as the select recipe's invalid rule: an app's own
       // disabled form wrapper must not be able to dim every label inside it.
       "[data-disabled] > &": { opacity: 0.4 },
@@ -58,7 +57,7 @@ export const field = defineSlotRecipe({
     helperText: {
       // RAC's Text renders a span, and RadioGroup/CheckboxGroup roots are not
       // flex containers to blockify it, where an inline box would drop the
-      // margin below (gotcha #44).
+      // margin below.
       display: "block",
       mt: "2",
       fontSize: "sm",
@@ -77,9 +76,7 @@ export const field = defineSlotRecipe({
   variants: {
     // The label follows its control's size (the control itself is sized by
     // the `input`/`select` recipes), so one `size` prop scales the whole row.
-    // Chakra's FormLabel never scaled — a deliberate delta; see the playbook's
-    // field-chrome notes. Helper and error text stay `sm` at every size, as
-    // Chakra's did.
+    // Helper and error text stay `sm` at every size.
     size: {
       lg: { label: { fontSize: "lg" } },
       md: { label: { fontSize: "md" } },

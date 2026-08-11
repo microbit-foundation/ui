@@ -40,12 +40,11 @@ const render = (ui: ReactNode, options?: RenderOptions) =>
     ...options,
   });
 
-// The field chrome (label/required indicator/helper text/error message —
-// Chakra's FormControl parts) was generalised out of TextField for
-// data-microbit-org's forms, which attach it to selects, radio groups and
-// checkbox groups too. These assert each field type wires it through
-// react-aria: helper text reaches aria-describedby, the error renders only
-// while invalid.
+// The field chrome (label/required indicator/helper text/error message) was
+// generalised out of TextField for data-microbit-org's forms, which attach it
+// to selects, radio groups and checkbox groups too. These assert each field
+// type wires it through react-aria: helper text reaches aria-describedby, the
+// error renders only while invalid.
 
 it("TextField keeps its helper and error wiring after the extraction", () => {
   render(

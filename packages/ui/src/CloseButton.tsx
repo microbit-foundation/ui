@@ -10,7 +10,7 @@ import { CloseIcon } from "./CloseIcon";
 
 export interface CloseButtonProps
   extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "className"> {
-  /** Chakra CloseButton sizes: sm 24px box, md 32px (default). */
+  /** sm is a 24px box, md 32px (default). */
   size?: "sm" | "md";
   /**
    * Grow the touch target 8px beyond the visible button on every side via an
@@ -24,7 +24,7 @@ export interface CloseButtonProps
 }
 
 /**
- * CloseButton — Chakra's standalone X button. A plain button (not react-aria)
+ * CloseButton — a standalone X button. A plain button (not react-aria)
  * so call sites can extend the hit area with pseudo-elements, which
  * react-aria's press bounding-rect check would defeat.
  */

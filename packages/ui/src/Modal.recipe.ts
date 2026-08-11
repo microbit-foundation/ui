@@ -6,9 +6,9 @@
 import { defineSlotRecipe } from "@pandacss/dev";
 
 /**
- * Dialog slot recipe — Chakra's default Modal parts (light mode), plus this
- * app's overrides: a full-viewport overlay (the iOS WKWebView 100% fix) and a
- * `full` size with safe-area insets and the brand status-bar gradient.
+ * Dialog slot recipe. The overlay spans the full viewport (the iOS WKWebView
+ * 100% fix) and the `full` size adds safe-area insets and the brand
+ * status-bar gradient.
  *
  * A config recipe (rather than an atomic `sva`) so the `size` variant accepts
  * responsive values, e.g. `{ base: "full", md: "4xl" }`. Consumed by the
@@ -85,7 +85,7 @@ export const dialog = defineSlotRecipe({
       display: "flex",
       flexDirection: "column",
       outline: "none",
-      // Approximate Chakra's fade + scale enter/exit.
+      // Fade + scale enter/exit.
       opacity: 1,
       transform: "scale(1)",
       transition: "opacity 0.2s ease-out, transform 0.2s ease-out",
@@ -114,16 +114,15 @@ export const dialog = defineSlotRecipe({
       display: "flex",
       alignItems: "center",
       justifyContent: "flex-end",
-      // Chakra had no footer gap (call sites wrapped buttons in HStacks);
-      // baked in as the house style. Override via css for tighter layouts.
+      // The gap is house style; override via css for tighter layouts.
       gap: "5",
       flexShrink: 0,
     },
     closeTrigger: { position: "absolute", top: "2", insetEnd: "3" },
   },
   variants: {
-    // Chakra's `isCentered`: vertically centre the dialog in the viewport
-    // rather than the default top alignment.
+    // Vertically centre the dialog in the viewport rather than the default
+    // top alignment.
     centered: {
       true: {
         overlay: { alignItems: "center" },

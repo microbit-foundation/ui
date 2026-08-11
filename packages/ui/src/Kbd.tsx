@@ -6,7 +6,7 @@
 import { styled } from "styled-system/jsx";
 
 /**
- * Kbd — keyboard-key chip matching Chakra's <Kbd> (light mode).
+ * Kbd — a keyboard-key chip (light mode).
  */
 export const Kbd = styled("kbd", {
   base: {

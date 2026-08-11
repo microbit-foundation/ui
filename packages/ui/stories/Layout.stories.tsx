@@ -76,7 +76,7 @@ export const WrapLayout: Story = {
   ),
 };
 
-/** Container centres itself and caps its width (Chakra's Container). */
+/** Container centres itself and caps its width. */
 export const ContainerLayout: Story = {
   render: () => (
     <Container maxW="md" bg="gray.100" borderRadius="md" px={4} py={3}>

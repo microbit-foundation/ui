@@ -13,12 +13,11 @@ export interface Disclosure {
 }
 
 /**
- * useDisclosure — Chakra's hook of the same name: the open/closed state of a
- * dialog, menu or drawer, and the three functions that change it.
+ * useDisclosure — the open/closed state of a dialog, menu or drawer, and the
+ * three functions that change it.
  *
- * A thin `useState` wrapper, kept because it is the shape a Chakra app's
- * dialog call sites are written in, and because a stable object means a
- * disclosure can be passed to a memoised child without re-rendering it.
+ * A thin `useState` wrapper; the stable object means a disclosure can be
+ * passed to a memoised child without re-rendering it.
  */
 export const useDisclosure = (defaultIsOpen = false): Disclosure => {
   const [isOpen, setIsOpen] = useState(defaultIsOpen);

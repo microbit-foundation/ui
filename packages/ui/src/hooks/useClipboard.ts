@@ -7,7 +7,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 /**
  * Copy a value to the clipboard with a transient `hasCopied` flag for
- * "Copied!" feedback. Replaces Chakra's `useClipboard`.
+ * "Copied!" feedback.
  */
 export function useClipboard(
   value: string,
@@ -34,11 +34,10 @@ export function useClipboard(
 }
 
 /**
- * Chakra's useClipboard wrapped the execCommand-based copy-to-clipboard
- * package, which works on a user gesture in contexts the async API refuses:
- * insecure (non-localhost http) origins, where `navigator.clipboard` is
- * undefined, and frames without a clipboard-write permissions policy, where
- * `writeText` rejects.
+ * execCommand-based fallback copy. Works on a user gesture in contexts the
+ * async API refuses: insecure (non-localhost http) origins, where
+ * `navigator.clipboard` is undefined, and frames without a clipboard-write
+ * permissions policy, where `writeText` rejects.
  */
 function execCommandCopy(value: string): boolean {
   const active = document.activeElement;

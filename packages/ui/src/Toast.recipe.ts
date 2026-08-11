@@ -6,10 +6,9 @@
 import { defineSlotRecipe } from "@pandacss/dev";
 
 /**
- * Toast slot recipe — the Chakra-era solid Alert restyled as a toast (white
- * text, teal for every status except error). Status colours come from the
- * `toast*Bg` semantic tokens so brand presets can retune them without
- * touching the recipe.
+ * Toast slot recipe — a solid alert card with white text, teal for every
+ * status except error. Status colours come from the `toast*Bg` semantic
+ * tokens so brand presets can retune them without touching the recipe.
  *
  * Registered in the base preset (base-preset.ts). The status variant
  * is chosen at runtime from the toast content, so it needs the preset's
@@ -93,9 +92,8 @@ export const toast = defineSlotRecipe({
       mt: "1",
     },
     closeButton: {
-      // A sized box with the glyph centred (like Chakra's CloseButton size
-      // "sm": 24px box, 2xs glyph) gives padding around the X and a hover
-      // affordance.
+      // A sized box with the glyph centred (24px box, 2xs glyph) gives
+      // padding around the X and a hover affordance.
       position: "absolute",
       top: "1",
       insetEnd: "1",
@@ -114,8 +112,7 @@ export const toast = defineSlotRecipe({
       outline: "none",
       transitionProperty: "background-color, box-shadow",
       transitionDuration: "normal",
-      // Chakra's CloseButton hover is a subtle dark overlay (blackAlpha) in
-      // light mode, not a bright highlight.
+      // Hover is a subtle dark overlay (blackAlpha), not a bright highlight.
       _hover: { bg: "blackAlpha.100" },
       _active: { bg: "blackAlpha.200" },
       _focusVisible: { focusShadow: "outline" },

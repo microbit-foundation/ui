@@ -63,8 +63,8 @@ export const States: Story = {
 };
 
 /**
- * Input adornments use the raw Input + InputGroup parts (Chakra's
- * InputLeftElement/InputRightElement); pad the input to make room. The
+ * Input adornments use the raw Input + InputGroup parts
+ * (InputLeftElement/InputRightElement); pad the input to make room. The
  * elements take the same `size` as the input so the overlay box tracks the
  * field height.
  */

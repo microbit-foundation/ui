@@ -16,11 +16,11 @@ import { buttonIcon } from "./button-icon";
 import { uiMessage } from "./messages";
 import { Spinner } from "./Spinner";
 
-// Chakra's ButtonSpinner: a 1em spinner centred over the hidden label. Out of
-// flow, so the label alone sets the button's size; the recipe's base
-// `position: relative` is what it anchors to. Its own component so useIntl runs
-// only while a button is actually loading — a bare Button must keep working
-// without an IntlProvider (test renders commonly lack one).
+// A 1em spinner centred over the hidden label. Out of flow, so the label alone
+// sets the button's size; the recipe's base `position: relative` is what it
+// anchors to. Its own component so useIntl runs only while a button is
+// actually loading — a bare Button must keep working without an IntlProvider
+// (test renders commonly lack one).
 const ButtonSpinner = () => {
   const intl = useIntl();
   return (
@@ -47,16 +47,14 @@ export interface ButtonProps
   /** Per-instance style overrides, merged after the recipe. */
   css?: SystemStyleObject;
   className?: string;
-  /** Icon rendered before the label, matching Chakra's `leftIcon`. */
+  /** Icon rendered before the label. */
   leftIcon?: ReactNode;
-  /** Icon rendered after the label, matching Chakra's `rightIcon`. */
+  /** Icon rendered after the label. */
   rightIcon?: ReactNode;
   /**
-   * Show a spinner in place of the label and disable interaction, matching
-   * Chakra's `isLoading`: the label stays in the layout but invisible, so the
-   * button keeps its size, and the dimmed disabled look applies. Chakra's
-   * `loadingText`/`spinnerPlacement` (a visible label beside the spinner) are
-   * unported — no app in the family used them.
+   * Show a spinner in place of the label and disable interaction: the label
+   * stays in the layout but invisible, so the button keeps its size, and the
+   * dimmed disabled look applies.
    */
   isLoading?: boolean;
   children?: ReactNode;

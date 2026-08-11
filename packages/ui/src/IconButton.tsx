@@ -11,7 +11,7 @@ export interface IconButtonProps
   /** Icon-only buttons have no visible label, so this is required. */
   "aria-label": string;
   /**
-   * Circular rather than the recipe's border-radius (Chakra's `isRound`).
+   * Circular rather than the recipe's border-radius.
    * Usually a visual no-op here: the 2rem `button` radius already renders
    * square icon buttons as circles. Kept for ported call sites and for
    * variants/overrides with a smaller radius (e.g. `unstyled`).

@@ -22,8 +22,8 @@ export interface RadioProps
 }
 
 /**
- * Radio — react-aria-components <Radio> styled like Chakra's radio. Must be
- * rendered inside a RadioGroup. Children render as the label.
+ * Radio — a styled react-aria-components <Radio>. Must be rendered inside a
+ * RadioGroup. Children render as the label.
  */
 export const Radio = ({
   size,

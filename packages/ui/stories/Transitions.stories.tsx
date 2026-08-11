@@ -48,7 +48,7 @@ export const CollapseStory: Story = {
   },
 };
 
-/** Chakra's "show more" pattern via startingHeight. */
+/** Partial collapse ("show more") via startingHeight. */
 export const CollapsePartial: Story = {
   render: () => {
     const [isOpen, setOpen] = useState(false);
@@ -86,9 +86,9 @@ export const FadeStory: Story = {
 };
 
 /**
- * Per-direction durations (Chakra's `transition.enter`/`transition.exit`): a
- * slow fade in and a quick fade out here. The duration rides an inline custom
- * property that switches with the opacity, so each direction gets its own.
+ * Per-direction durations: a slow fade in and a quick fade out here. The
+ * duration rides an inline custom property that switches with the opacity, so
+ * each direction gets its own.
  */
 export const FadeDurations: Story = {
   name: "Fade (per-direction durations)",

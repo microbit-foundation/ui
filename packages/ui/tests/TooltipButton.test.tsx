@@ -12,8 +12,8 @@ afterEach(cleanup);
 
 // Presses go through fireEvent.click, not user-event: jsdom gives every element
 // a 0x0 rect at the origin, and react-aria's usePress cancels a press it thinks
-// ended outside the trigger (playbook gotcha #15). react-aria treats a bare
-// click as a virtual press, which is also the path a screen reader takes.
+// ended outside the trigger. react-aria treats a bare click as a virtual press,
+// which is also the path a screen reader takes.
 //
 // Not covered here, because jsdom has no layout: the pointer geometry that keeps
 // the tooltip open while it is hovered, and its behaviour inside a modal, where

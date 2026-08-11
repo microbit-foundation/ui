@@ -5,9 +5,8 @@
  */
 import { cva } from "styled-system/css";
 
-// Chakra's ButtonIcon: keeps the glyph centred and spaced from the label
-// (iconSpacing 0.5rem). Shared by Button and LinkButton; deliberately not
-// exported from the package index.
+// Keeps the glyph centred and spaced 0.5rem from the label. Shared by Button
+// and LinkButton; deliberately not exported from the package index.
 export const buttonIcon = cva({
   base: {
     display: "inline-flex",

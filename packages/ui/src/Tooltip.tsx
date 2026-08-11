@@ -12,9 +12,9 @@ import { PopoverArrow } from "./PopoverArrow";
 
 export interface TooltipProps {
   /**
-   * Tooltip body (Chakra's `label`). Not named `content`: Panda extracts
-   * utility-named props with literal values from any JSX component, so a
-   * `content` prop taking a string would emit a broken CSS `content` rule.
+   * Tooltip body. Not named `content`: Panda extracts utility-named props
+   * with literal values from any JSX component, so a `content` prop taking a
+   * string would emit a broken CSS `content` rule.
    */
   label: ReactNode;
   /** A single focusable trigger element (e.g. a Button). */
@@ -60,10 +60,8 @@ export interface TooltipProps {
    *
    * This is what makes a tooltip hoverable, as WCAG 1.4.13 asks: react-aria
    * puts hover handlers on the tooltip that re-open it, but with an immediate
-   * close it has unmounted before the pointer can cross the gap. Chakra closed
-   * on mouse-out and we matched that at first; a tooltip that vanishes as you
-   * reach for it is not worth the parity. Pass 0 where the delay is wrong for a
-   * particular control.
+   * close it has unmounted before the pointer can cross the gap. Pass 0 where
+   * the delay is wrong for a particular control.
    */
   closeDelay?: number;
   /**
@@ -79,10 +77,10 @@ export interface TooltipProps {
 }
 
 /**
- * Tooltip — react-aria-components TooltipTrigger + Tooltip, styled to match
- * Chakra's dark tooltip. The child must be a focusable element so the tooltip
- * is reachable by keyboard (RAC requirement), unless `triggerRef` provides
- * the anchor and the caller manages open state and keyboard access itself.
+ * Tooltip — react-aria-components TooltipTrigger + Tooltip in the dark
+ * tooltip style. The child must be a focusable element so the tooltip is
+ * reachable by keyboard (RAC requirement), unless `triggerRef` provides the
+ * anchor and the caller manages open state and keyboard access itself.
  */
 export const Tooltip = ({
   label,

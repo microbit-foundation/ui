@@ -6,26 +6,24 @@
 import { styled } from "styled-system/jsx";
 
 /**
- * Unstyled list, matching Chakra's <List>. The marker removal is explicit —
- * Chakra's List set listStyleType itself, and coexisting apps run without
- * Panda's preflight (margins/padding are zeroed by whichever reset is
- * active).
+ * Unstyled list. The marker removal is explicit rather than relying on a
+ * reset.
  */
 export const List = styled("ul", {
   base: { listStyleType: "none" },
 });
 
-/** List item, matching Chakra's <ListItem>. */
+/** List item. */
 export const ListItem = styled("li", {
   base: {},
 });
 
-/** Bulleted list matching Chakra's <UnorderedList>. */
+/** Bulleted list. */
 export const UnorderedList = styled("ul", {
   base: { listStyleType: "disc", marginStart: "1em" },
 });
 
-/** Numbered list matching Chakra's <OrderedList>. */
+/** Numbered list. */
 export const OrderedList = styled("ol", {
   base: { listStyleType: "decimal", marginStart: "1em" },
 });

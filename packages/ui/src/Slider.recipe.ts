@@ -6,21 +6,18 @@
 import { defineSlotRecipe } from "@pandacss/dev";
 
 /**
- * Slider slot recipe — Chakra's horizontal md slider (3.5-token thumb, 1-token
- * gray.200 track, blue filled track; light mode). Consumed by the shared-ui
- * Slider, which maps the slots onto react-aria-components'
- * Slider/SliderTrack/SliderThumb.
+ * Slider slot recipe — a horizontal slider (3.5-token thumb, 1-token gray.200
+ * track, blue filled track). Consumed by the shared-ui Slider, which maps the
+ * slots onto react-aria-components' Slider/SliderTrack/SliderThumb.
  *
- * Geometry matches Chakra's DOM: the root is thumb-height with NO horizontal
- * padding, the track is absolutely centred inside it at full width, and the
- * thumb overhangs the track ends at 0%/100%. Call sites position overlays
- * (marks, value labels) against that root box, so Chakra-era offsets work
- * unchanged. Sizes are tokens, not px, so apps with resized scales (e.g.
- * python-editor's ×0.88) get their Chakra-equivalent geometry.
+ * Geometry: the root is thumb-height with NO horizontal padding, the track is
+ * absolutely centred inside it at full width, and the thumb overhangs the
+ * track ends at 0%/100%. Call sites position overlays (marks, value labels)
+ * against that root box. Sizes are tokens, not px, so apps with resized
+ * scales (e.g. python-editor's ×0.88) keep proportional geometry.
  *
- * The `mark` slot is hidden until the slider has focus (Chakra call sites did
- * this with `_focusWithin` + a class); the reveal lives here so call sites
- * only style the mark's look.
+ * The `mark` slot is hidden until the slider has focus; the reveal lives here
+ * so call sites only style the mark's look.
  *
  * Registered in the base preset (base-preset.ts). No variants, so it
  * needs no `staticCss` entry.
@@ -33,7 +30,7 @@ export const slider = defineSlotRecipe({
       position: "relative",
       display: "block",
       width: "100%",
-      // Thumb-height, like Chakra's container; the track centres inside.
+      // Thumb-height; the track centres inside.
       height: "3.5",
       touchAction: "none",
       "&:focus-within [data-part='mark']": {

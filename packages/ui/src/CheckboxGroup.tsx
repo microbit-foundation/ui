@@ -16,8 +16,8 @@ export interface CheckboxGroupProps
   extends Omit<RACCheckboxGroupProps, "className" | "style">,
     FieldSupportProps {
   /**
-   * Visible label for the group (Chakra's FormLabel above it). Use
-   * `aria-label` instead where the design has none.
+   * Visible label for the group. Use `aria-label` instead where the design
+   * has none.
    */
   label?: ReactNode;
   /** Label style overrides. */
@@ -30,11 +30,9 @@ export interface CheckboxGroupProps
 /**
  * CheckboxGroup — react-aria-components <CheckboxGroup> for a set of
  * Checkboxes sharing one value array (each Checkbox's `value` marks its
- * entry). Beyond the optional field chrome (label/helperText/errorMessage —
- * Chakra's FormControl parts) it carries no styling of its own: compose with
- * Stack for layout, as RadioGroup does. Chakra's CheckboxGroup was a bare
- * context provider, so ported call sites gain the chrome rather than
- * restating it around the group.
+ * entry). Beyond the optional field chrome (label/helperText/errorMessage)
+ * it carries no styling of its own: compose with Stack for layout, as
+ * RadioGroup does.
  */
 export const CheckboxGroup = ({
   label,

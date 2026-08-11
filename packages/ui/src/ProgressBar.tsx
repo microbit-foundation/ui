@@ -18,9 +18,8 @@ export interface ProgressBarProps {
 }
 
 /**
- * ProgressBar — react-aria-components <ProgressBar> styled like Chakra's md
- * Progress (12px gray.100 track). Set the fill colour per call site via
- * `barCss` (Chakra's colorScheme).
+ * ProgressBar — a styled react-aria-components <ProgressBar> (12px gray.100
+ * track). Set the fill colour per call site via `barCss`.
  */
 export const ProgressBar = ({
   value,

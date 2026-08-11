@@ -17,8 +17,8 @@ export interface SlideProps {
 }
 
 /**
- * Slide — Chakra's Slide transition, bottom edge only (add other directions
- * when a use appears): a full-width panel pinned to the viewport bottom,
+ * Slide — a slide-in transition, bottom edge only (add other directions when
+ * a use appears): a full-width panel pinned to the viewport bottom,
  * translated offscreen when closed. Content stays mounted throughout, so
  * closing doesn't drop in-flight state and the exit animates.
  */

@@ -6,7 +6,7 @@
 import { styled } from "styled-system/jsx";
 
 /**
- * Code — inline code chip matching Chakra's <Code> (gray subtle, light mode).
+ * Code — an inline code chip (subtle grey, light mode).
  */
 export const Code = styled("code", {
   base: {

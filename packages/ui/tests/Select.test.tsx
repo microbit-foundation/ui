@@ -267,8 +267,8 @@ it("a valid control is not painted red", () => {
 });
 
 // jsdom applies no CSS, so the cascade can only be checked as declaration
-// order: equal-specificity rules, so the last one wins. Chakra's behaviour,
-// which the input recipe documents: red beats hover, the focus ring beats red.
+// order: equal-specificity rules, so the last one wins. The order the input
+// recipe documents: red beats hover, the focus ring beats red.
 it("orders the trigger's state rules hover, invalid, focus", () => {
   const keys = Object.keys(triggerRules());
   const hover = keys.indexOf(ruleFor("gray.500"));

@@ -9,12 +9,10 @@ import { SystemStyleObject } from "styled-system/types";
 
 /**
  * The placeholder block, as an object rather than a precomputed class so a
- * caller's `css` is merged into one `css()` call and its overrides win
- * (playbook gotcha #8).
+ * caller's `css` is merged into one `css()` call and its overrides win.
  *
- * The colours flow through the same pair of custom properties Chakra used,
- * so a call site can retint one skeleton without knowing how the animation
- * works.
+ * The colours flow through a pair of custom properties, so a call site can
+ * retint one skeleton without knowing how the animation works.
  */
 const skeletonBase: SystemStyleObject = {
   "--skeleton-start-color": "token(colors.gray.100)",
@@ -30,8 +28,8 @@ const skeletonBase: SystemStyleObject = {
   color: "transparent",
   pointerEvents: "none",
   userSelect: "none",
-  // Chakra hid the content rather than unmounting it, so a skeleton sized
-  // from real children keeps their dimensions.
+  // The content is hidden rather than unmounted, so a skeleton sized from
+  // real children keeps their dimensions.
   "&::before, &::after, *": { visibility: "hidden" },
   animation:
     "skeletonFade var(--skeleton-speed, 0.8s) linear infinite alternate",
@@ -42,7 +40,7 @@ export interface SkeletonProps
   extends Omit<HTMLAttributes<HTMLDivElement>, "color"> {
   /** Show the children instead of the placeholder. */
   isLoaded?: boolean;
-  /** Seconds per pulse (Chakra's `speed`, default 0.8). */
+  /** Seconds per pulse (default 0.8). */
   speed?: number;
   children?: ReactNode;
   /** Per-instance style overrides, merged after the base. */
@@ -51,11 +49,11 @@ export interface SkeletonProps
 }
 
 /**
- * Skeleton — Chakra's loading placeholder: a block pulsing between two greys
- * until its content is ready.
+ * Skeleton — a loading placeholder: a block pulsing between two greys until
+ * its content is ready.
  *
- * Chakra faded the real content in over 0.4s when `isLoaded` turned true;
- * here it simply appears. Wrap in `Fade` where that transition matters.
+ * Content simply appears when `isLoaded` turns true; wrap in `Fade` where a
+ * transition matters.
  */
 export const Skeleton = ({
   isLoaded,
@@ -93,7 +91,7 @@ export const Skeleton = ({
 };
 
 export interface SkeletonTextProps extends SkeletonProps {
-  /** How many lines to draw (Chakra's default is 3). */
+  /** How many lines to draw (default 3). */
   noOfLines?: number;
   /** Gap between the lines. Any CSS length. */
   spacing?: string;
@@ -103,7 +101,7 @@ export interface SkeletonTextProps extends SkeletonProps {
 
 /**
  * SkeletonText — a paragraph-shaped `Skeleton`: evenly spaced lines, the last
- * one short, as Chakra drew them.
+ * one short.
  */
 export const SkeletonText = ({
   noOfLines = 3,
@@ -137,7 +135,7 @@ export const SkeletonText = ({
           speed={speed}
           style={{
             height: skeletonHeight,
-            // Chakra's shape: a last line at 80%, and no gap after it.
+            // The last line is drawn at 80%, with no gap after it.
             width: noOfLines > 1 && index === noOfLines - 1 ? "80%" : "100%",
             marginBottom: index === noOfLines - 1 ? "0" : spacing,
           }}

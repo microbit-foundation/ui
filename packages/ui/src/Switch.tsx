@@ -31,10 +31,9 @@ export interface SwitchProps
 }
 
 /**
- * Switch — react-aria-components <Switch> styled like Chakra's switch.
- * Children render as the label; pass `aria-label` for label-less switches.
- * `labelPosition="start"` is the settings-row layout: label first, switch at
- * the row's end.
+ * Switch — a styled react-aria-components <Switch>. Children render as the
+ * label; pass `aria-label` for label-less switches. `labelPosition="start"`
+ * is the settings-row layout: label first, switch at the row's end.
  */
 export const Switch = ({
   size,

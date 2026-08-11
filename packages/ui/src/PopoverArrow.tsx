@@ -38,8 +38,7 @@ const arrowBase = css({
 export interface PopoverArrowProps {
   /**
    * Base width of the visible triangle in px; it protrudes half this into
-   * the gap. Defaults to Chakra's tooltip arrow proportions (an 8px square
-   * rotated 45°).
+   * the gap. Defaults to the proportions of an 8px square rotated 45°.
    */
   size?: number;
   /** Styles merged after the base, e.g. `{ "& svg": { fill: "white" } }`. */

@@ -11,8 +11,7 @@ import { SystemStyleObject } from "styled-system/types";
  * Any component that renders an `<svg>` from svg props. Deliberately no
  * narrower than the props `Icon` actually passes, so it accepts both
  * react-icons' `IconType` and svgr components (`import X from "./x.svg?react"`,
- * which the apps use for their custom-path icons — Chakra's `<Icon as={…}>`
- * took either).
+ * which the apps use for their custom-path icons).
  */
 export type IconComponent = ComponentType<
   Pick<
@@ -32,10 +31,9 @@ export interface IconProps {
 }
 
 /**
- * Icon — renders a react-icons glyph inline at `1em`, matching Chakra's <Icon>
- * base styles. `fill: currentColor` means the glyph follows the surrounding
- * text colour (set `css={{ color: ... }}` to override), so it inherits colour
- * like Chakra's icons rather than defaulting to black.
+ * Icon — renders a react-icons glyph inline at `1em`. `fill: currentColor`
+ * means the glyph follows the surrounding text colour rather than defaulting
+ * to black (set `css={{ color: ... }}` to override).
  *
  * Unlabelled icons are treated as decorative and hidden from assistive tech;
  * a labelled icon gets `role="img"` (a bare svg aria-label is unreliably
@@ -57,11 +55,9 @@ export const Icon = ({
         lineHeight: "1em",
         flexShrink: 0,
         fill: "currentColor",
-        // Chakra's Icon set this on the element itself, and an inline-block
-        // icon sits ~3px off without it. Panda's preflight happens to set it
-        // on every svg, which hid the omission in apps that had already
-        // flipped — classroom measured the difference at its kill-switch,
-        // where the preflight arrived and moved every icon back.
+        // Set on the element itself: an inline-block icon sits ~3px off
+        // without it. Don't rely on Panda's preflight happening to set it on
+        // every svg.
         verticalAlign: "middle",
         ...cssProp,
       }),

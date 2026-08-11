@@ -41,7 +41,7 @@ export const FocusMark: Story = {
           onChange={setValue}
           mark={value}
           // The component only sets the mark's `left`; call sites position
-          // and style it (as with Chakra's SliderMark).
+          // and style it.
           markCss={{
             top: "5",
             transform: "translateX(-50%)",
@@ -61,8 +61,8 @@ export const FocusMark: Story = {
 };
 
 /**
- * Chakra's Tooltip-around-SliderThumb pattern: the bubble is driven from
- * hover on an enclosing element plus thumb focus.
+ * A value bubble on the thumb: driven from hover on an enclosing element
+ * plus thumb focus.
  */
 export const ThumbTooltip: Story = {
   render: () => {

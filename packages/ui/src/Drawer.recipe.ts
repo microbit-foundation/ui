@@ -6,12 +6,11 @@
 import { defineSlotRecipe } from "@pandacss/dev";
 
 /**
- * Drawer slot recipe — Chakra's default Drawer parts (light mode) at its
- * default `xs` size (20rem panel). Consumed by the shared-ui Drawer, which maps
- * the slots onto react-aria-components' ModalOverlay / Modal / Dialog.
+ * Drawer slot recipe — a 20rem (`xs`) side panel. Consumed by the shared-ui
+ * Drawer, which maps the slots onto react-aria-components' ModalOverlay /
+ * Modal / Dialog.
  *
- * The enter transition approximates Chakra's slide spring (damping 25,
- * stiffness 180) with a decelerating tween; exit matches its 0.15s ease-in-out
+ * The enter transition is a decelerating tween; the exit a 0.15s ease-in-out
  * tween.
  *
  * Registered in the base preset (base-preset.ts); `placement` is

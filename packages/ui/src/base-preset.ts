@@ -63,7 +63,7 @@ import { toast } from "./Toast.recipe";
 // Override values, never names: raw var(--colors-gray-*) references and
 // paired private presets depend on the names, so a rename is a breaking
 // change to both and needs every app and paired preset moved in lockstep
-// (as was done when Chakra's misnamed darker-than-50 stop `25` became
+// (as was done when the misnamed darker-than-50 stop `25` became
 // `75`). And never override partially in a way that lets a stop fall
 // through to a different grey system.
 const gray = {
@@ -88,17 +88,17 @@ const gray = {
  * (pill `radii.button`, `outline*` focus shadows, Helvetica fonts, the
  * `language`/`toolbar` button variants in Button.recipe.ts, the
  * `languageText`/`toast*Bg`/`statusBarBg` semantic tokens), the shared-ui
- * component recipes, the react-aria condition widening, the Chakra-reset
- * parity `globalCss`, and the `staticCss` that keeps runtime-prop recipe
+ * component recipes, the react-aria condition widening, the `globalCss`
+ * defaults, and the `staticCss` that keeps runtime-prop recipe
  * variants generated. Used alone it renders in the OSS default look.
  *
  * ── Brand contract ──────────────────────────────────────────────────────
  * A private brand preset (a sibling repo, e.g. CreateAI) is merged AFTER this
  * one to restyle everything by overriding just these token *values* (never
  * their names — see the CSS-var contract in the README):
- *   - colours: the `brand` and `brand2` ramps (OSS defaults: Chakra
- *     blue / Chakra's unmodified gray). Other ramps a brand tweaks
- *     (teal/purple/pink/…) already exist in the Chakra scales below.
+ *   - colours: the `brand` and `brand2` ramps (OSS defaults: the blue
+ *     ramp / a legacy slate gray). Other ramps a brand tweaks
+ *     (teal/purple/pink/…) already exist in the base scales below.
  *   - font: `display` (OSS default: Helvetica; e.g. GT Walsheim privately).
  * The recipes and semantic tokens here reference those, so a brand swap needs
  * no recipe changes. With no private preset, these OSS defaults stand.
@@ -126,8 +126,8 @@ export const basePreset = definePreset({
         },
       },
       // Toast enter/exit, played on the view-transition snapshots (see the
-      // ::view-transition rules in globalCss). Chakra-ballpark timings: fade
-      // + short slide in, quicker fade + shrink out.
+      // ::view-transition rules in globalCss): fade + short slide in,
+      // quicker fade + shrink out.
       toastSlideIn: {
         from: { opacity: 0, transform: "translateY(-24px)" },
       },
@@ -140,9 +140,10 @@ export const basePreset = definePreset({
         ...colors,
         gray,
         // OSS default brand ramps (see the brand contract above). `brand`
-        // aliases Chakra blue; `brand2` stays Chakra's slate gray — a frozen
-        // legacy alias, deliberately decoupled from the neutral `gray` above
-        // so ml-trainer's OSS look and `statusBarBg`'s default don't move.
+        // aliases the blue ramp; `brand2` is a frozen legacy alias of the
+        // slate gray in base-tokens, deliberately decoupled from the neutral
+        // `gray` above so ml-trainer's OSS look and `statusBarBg`'s default
+        // don't move.
         // Removing the slot is a follow-up needing an ml-trainer lockstep.
         brand: colors.blue,
         brand2: colors.gray,
@@ -165,7 +166,7 @@ export const basePreset = definePreset({
       },
       shadows: {
         ...shadows,
-        // Chakra's outline shadow widened to 4px, plus dark/light-surface
+        // The 4px focus outline shadow, plus dark/light-surface
         // companions. Consumed via the `focusShadow` utility.
         outline: { value: "0 0 0 4px rgba(66, 153, 225, 0.6)" },
         outlineDark: { value: "0 0 0 4px rgba(0, 0, 0, 0.5)" },
@@ -174,7 +175,7 @@ export const basePreset = definePreset({
       fonts: {
         // Helvetica heading/body (4/4 apps); a brand preset leaves these and
         // overrides only `display` (the marketing font — see the brand
-        // contract above). `mono` is Chakra's default stack.
+        // contract above).
         heading: { value: "Helvetica, Arial, sans-serif" },
         body: { value: "Helvetica, Arial, sans-serif" },
         mono: {
@@ -195,7 +196,7 @@ export const basePreset = definePreset({
         controlCheckedBg: { value: "{colors.brand.500}" },
         controlCheckedHoverBg: { value: "{colors.brand.600}" },
         focusBorder: { value: "{colors.brand.500}" },
-        // Error/destructive ramp (Chakra red). Destructive button variants,
+        // Error/destructive ramp. Destructive button variants,
         // field error states and the error toast; the record* button
         // variants deliberately stay on red.* (recording vocabulary, not
         // danger).
@@ -211,9 +212,6 @@ export const basePreset = definePreset({
         // (CreateAI privately to brand.600 with no hover change,
         // python-editor to brand.500/600 — the default). Semantic tokens so
         // the recipe stays shared and a brand preset overrides only values.
-        // (Was brand2.* — the grey ml-trainer OSS Chakra look — but both
-        // apps' final values sit on their primary brand, so the default
-        // follows; OSS language buttons are brand blue.)
         languageText: { value: "{colors.brand.500}" },
         languageTextHover: { value: "{colors.brand.600}" },
         // The `label`/`subtitle` heading variants' colour (page-title chrome).
@@ -243,8 +241,8 @@ export const basePreset = definePreset({
           secondaryActiveBorder: { value: "{colors.brand.700}" },
           secondaryActiveBg: { value: "{colors.brand.50}" },
         },
-        // Toast status colours: the Chakra-era toast Alert restyle (teal for
-        // every status except error) shared across the app family.
+        // Toast status colours (teal for every status except error), shared
+        // across the app family.
         toastInfoBg: { value: "{colors.teal.800}" },
         toastSuccessBg: { value: "{colors.teal.800}" },
         toastWarningBg: { value: "{colors.teal.800}" },
@@ -280,13 +278,10 @@ export const basePreset = definePreset({
       toast,
     },
   },
-  // What ChakraProvider used to inject and Panda's preflight doesn't cover:
-  // the theme's styles.global (body text/background defaults, global
-  // border/placeholder colours) plus the parts of Chakra's CSS reset that
-  // Panda's has no equivalent for — kerning/text-rendering (their absence
-  // shifts glyphs page-wide), word-wrap and touch-action. Token references
-  // resolve against the merged preset stack, so the values track any brand
-  // overrides exactly as they did under Chakra's runtime theme.
+  // Global defaults Panda's preflight doesn't cover: body text/background,
+  // placeholder colour, kerning/text-rendering (their absence shifts
+  // glyphs page-wide) and touch-action. Token references resolve against
+  // the merged preset stack, so the values track any brand overrides.
   globalCss: {
     html: {
       textRendering: "optimizeLegibility",
@@ -306,20 +301,20 @@ export const basePreset = definePreset({
     "*::placeholder": {
       color: "gray.500",
     },
-    // The `* { border-color; word-wrap }` Chakra-reset parity lives in
-    // ../reset.css, imported into the `reset` layer by consumers'
-    // layers.css — NOT here: globalCss emits into the `base` layer, which
-    // the legacy-Safari cascade-layer flattening specificity-boosts above
-    // runtime-injected CSS (CodeMirror themes) and other app CSS files.
-    // Resets must stay at the bottom (playbook gotcha #28).
-    // Panda's preflight, unlike Chakra's reset, doesn't set the pointer
-    // cursor on buttons. Recipes' disabled states (cursor: not-allowed)
-    // override this from the higher recipes layer.
+    // The `* { border-color; word-wrap }` defaults live in ../reset.css,
+    // imported into the `reset` layer by consumers' layers.css — NOT here:
+    // globalCss emits into the `base` layer, which the legacy-Safari
+    // cascade-layer flattening specificity-boosts above runtime-injected
+    // CSS (CodeMirror themes) and other app CSS files. Resets must stay in
+    // the bottom layer.
+    // Panda's preflight doesn't set the pointer cursor on buttons.
+    // Recipes' disabled states (cursor: not-allowed) override this from
+    // the higher recipes layer.
     "button, [role='button']": {
       cursor: "pointer",
     },
-    // Panda's preflight balance-wraps headings; Chakra didn't, and balanced
-    // multi-line headings break at different points (mobile/translations).
+    // Panda's preflight balance-wraps headings; balanced multi-line
+    // headings break at different points (mobile/translations), so undo it.
     "h1, h2, h3, h4, h5, h6": {
       textWrap: "wrap",
     },
@@ -336,8 +331,8 @@ export const basePreset = definePreset({
     },
     // Toast enter/exit (the ToastQueue wraps updates in
     // document.startViewTransition — see Toast.tsx, which also stamps the
-    // scoping class on <html> while its transitions run). Timings sit in
-    // Chakra's ballpark: 0.4s fade+slide in, 0.2s fade+shrink out; the
+    // scoping class on <html> while its transitions run). Timings: 0.4s
+    // fade+slide in, 0.2s fade+shrink out; the
     // stack reflow comes from the default group animation. `(*)` +
     // `:only-child` matches exactly the entering/exiting toast groups: the
     // root snapshot always has both old and new children, and toasts are
@@ -365,8 +360,8 @@ export const basePreset = definePreset({
   // can silently lose runtime-prop variants.
   staticCss: {
     recipes: {
-      // Size is passed responsively at call sites ported from Chakra's
-      // `size={["md", "lg"]}`, so generate the breakpoint-prefixed variants
+      // Size is passed responsively at call sites
+      // (`size={["md", "lg"]}`), so generate the breakpoint-prefixed variants
       // too — otherwise the class lands on the element with no rule behind it
       // and the button silently falls back to the base size.
       avatar: ["*"],
@@ -410,8 +405,8 @@ export const basePreset = definePreset({
       },
     },
   },
-  // Widen the interaction conditions so the Chakra-shaped recipe/style objects
-  // (`_hover`/`_active`/`_focusVisible`/`_disabled`) also respond to
+  // Widen the interaction conditions so recipe/style objects written with
+  // `_hover`/`_active`/`_focusVisible`/`_disabled` also respond to
   // react-aria-components' data attributes, not just native pseudo-classes.
   conditions: {
     extend: {

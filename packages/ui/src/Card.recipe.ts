@@ -6,8 +6,7 @@
 import { defineSlotRecipe } from "@pandacss/dev";
 
 /**
- * Card slot recipe — Chakra's Card at its default md size (light mode), with
- * the `elevated` (default) and `outline` variants this app uses.
+ * Card slot recipe, with `elevated` (default) and `outline` variants.
  *
  * Registered in the base preset (base-preset.ts); `variant` is
  * forwarded as a runtime prop so the variants are generated via `staticCss`.

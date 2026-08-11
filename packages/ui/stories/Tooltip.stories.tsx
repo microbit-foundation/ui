@@ -15,7 +15,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Basic: Story = {
   render: () => (
-    <Tooltip label="Tooltips match Chakra's dark style" hasArrow>
+    <Tooltip label="Tooltips use the dark style" hasArrow>
       <Button variant="ghost">Hover me</Button>
     </Tooltip>
   ),

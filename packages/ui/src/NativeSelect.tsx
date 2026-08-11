@@ -9,8 +9,8 @@ import { input, InputVariantProps } from "styled-system/recipes";
 import { SystemStyleObject } from "styled-system/types";
 
 export interface NativeSelectProps
-  // `size` is the recipe's size scale, as in Chakra; the native visible-rows
-  // attribute it shadows was unused.
+  // `size` is the recipe's size scale; the native visible-rows attribute it
+  // shadows was unused.
   extends Omit<SelectHTMLAttributes<HTMLSelectElement>, "className" | "size">,
     InputVariantProps {
   /**
@@ -23,18 +23,17 @@ export interface NativeSelectProps
   css?: SystemStyleObject;
   /**
    * Style overrides for the chevron wrapper, which is where width constraints
-   * belong (the select fills it). Chakra's Select worked the same way: layout
-   * props were split onto `.chakra-select__wrapper`, `width: 100%` otherwise.
-   * No wrapper is rendered with `hideChevron`; constrain the select directly.
+   * belong (the select fills it). No wrapper is rendered with `hideChevron`;
+   * constrain the select directly.
    */
   wrapperCss?: SystemStyleObject;
   className?: string;
 }
 
 /**
- * NativeSelect — a native select styled like Chakra's Select field (outline).
- * The recipe's `appearance: none` removes the platform chevron, so one is
- * drawn back in by default (Chakra Select's glyph, `currentColor`).
+ * NativeSelect — a native select styled like the outline Input. The recipe's
+ * `appearance: none` removes the platform chevron, so one is drawn back in by
+ * default (`currentColor`).
  */
 export const NativeSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(
   function NativeSelect(
@@ -47,15 +46,14 @@ export const NativeSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(
         className={cx(
           input({ size }),
           css(
-            // Chakra's Select field carried a 1px bottom padding its Input
-            // didn't (its option text sits a hair higher than input text).
+            // Option text sits a hair higher than input text; the 1px bottom
+            // padding compensates.
             {
               cursor: "pointer",
               paddingBottom: "1px",
               _disabled: { cursor: "not-allowed" },
             },
-            // Room for the chevron overlay (Chakra Select's icon spacing,
-            // constant across sizes).
+            // Room for the chevron overlay (constant across sizes).
             hideChevron ? undefined : { paddingRight: "8" },
             cssProp,
           ),
@@ -70,14 +68,16 @@ export const NativeSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(
     return (
       <span
         className={css(
-          // Full-width like every other field (and Chakra's select wrapper);
-          // the select's own recipe width fills it. Constrain via wrapperCss.
+          // Full-width like every other field; the select's own recipe width
+          // fills it. Constrain via wrapperCss.
           { position: "relative", display: "inline-flex", width: "100%" },
           wrapperCss,
         )}
       >
         {select}
-        {/* Chakra Select's chevron, fixed-size across field sizes. */}
+        {/* The chevron, fixed-size across field sizes. The path is Chakra
+            UI's Select chevron, inlined for visual parity with the apps'
+            original look (see the notice in LICENSE.md). */}
         <svg
           viewBox="0 0 24 24"
           aria-hidden
@@ -91,7 +91,7 @@ export const NativeSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(
             pointerEvents: "none",
             fill: "currentColor",
             // The chevron sits outside the select so it doesn't inherit its
-            // disabled dimming; Chakra's Select icon dimmed to 0.5.
+            // disabled dimming; dim it explicitly to match.
             "select:disabled + &": { opacity: 0.5 },
           })}
         >

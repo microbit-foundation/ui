@@ -22,13 +22,13 @@ export type {
   GridProps,
 } from "styled-system/jsx";
 
-// Layout patterns — the Panda-native equivalents of Chakra's Box/Flex/Stack/etc.
+// Layout patterns — Box/Flex/Stack/etc.
 //
 // `styled` is re-exported for the `styled(Component)` form, which works from
 // anywhere. The `styled.tag` JSX form does NOT: Panda recognises the factory by
 // the module it was imported from, so `<styled.table css={…}>` on a `styled`
 // imported from here silently produces no CSS. Import it from
-// "styled-system/jsx" for that (playbook gotcha #41).
+// "styled-system/jsx" for that.
 export {
   AspectRatio,
   Box,

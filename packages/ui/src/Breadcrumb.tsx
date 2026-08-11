@@ -14,12 +14,12 @@ import { uiMessage } from "./messages";
 
 // The separator is declared once on the Breadcrumb and rendered by every
 // item; the current-page flag hops from BreadcrumbItem to the BreadcrumbLink
-// inside it (Chakra did both with cloneElement).
+// inside it.
 const SeparatorContext = createContext<ReactNode>("/");
 const CurrentPageContext = createContext(false);
 
 export interface BreadcrumbProps {
-  /** Between items; an element or string. Chakra's default "/". */
+  /** Between items; an element or string. Default "/". */
   separator?: ReactNode;
   /** Per-instance style overrides for the nav (e.g. fontSize). */
   css?: SystemStyleObject;
@@ -29,9 +29,8 @@ export interface BreadcrumbProps {
 }
 
 /**
- * Breadcrumb — navigation trail matching Chakra's: nav > ol > li with a
- * separator between items and the current page as plain text with
- * `aria-current="page"`.
+ * Breadcrumb — a navigation trail: nav > ol > li with a separator between
+ * items and the current page as plain text with `aria-current="page"`.
  */
 export const Breadcrumb = ({
   separator = "/",
@@ -98,9 +97,8 @@ export type BreadcrumbLinkProps = HTMLStyledProps<"a">;
 const CurrentPageText = styled("span");
 
 /**
- * The trail's link: the shared `Link` (Chakra's BreadcrumbLink base was its
- * Link base), or a plain span with `aria-current="page"` inside an item
- * marked `isCurrentPage`.
+ * The trail's link: the shared `Link`, or a plain span with
+ * `aria-current="page"` inside an item marked `isCurrentPage`.
  */
 export const BreadcrumbLink = (props: BreadcrumbLinkProps) => {
   const isCurrentPage = useContext(CurrentPageContext);

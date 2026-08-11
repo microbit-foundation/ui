@@ -6,11 +6,10 @@
 import { defineSlotRecipe } from "@pandacss/dev";
 
 /**
- * Radio slot recipe — Chakra's radio with the default blue colorScheme
- * (light mode) and its sm/md/lg size scale: the checkbox control rounded
- * fully, with a 50% `currentColor` dot when selected instead of the check
- * glyph. As with the checkbox, `borderColor: inherit` picks up a
- * `borderColor` set on the root.
+ * Radio slot recipe — the checkbox control rounded fully, with a 50%
+ * `currentColor` dot when selected instead of the check glyph, across the
+ * same sm/md/lg size scale. As with the checkbox, `borderColor: inherit`
+ * picks up a `borderColor` set on the root.
  *
  * State styling keys off data attributes stamped by the shared-ui Radio
  * (react-aria provides the state via render props).
@@ -55,7 +54,7 @@ export const radio = defineSlotRecipe({
           bg: "controlCheckedHoverBg",
           borderColor: "controlCheckedHoverBg",
         },
-        // Chakra's radio dot.
+        // The radio dot.
         _before: {
           content: '""',
           display: "inline-block",
@@ -66,8 +65,8 @@ export const radio = defineSlotRecipe({
           bg: "currentColor",
         },
       },
-      // Chakra's disabled greys; the selected block restates _hover so the
-      // widened native-:hover condition can't re-tint a disabled control.
+      // Disabled greys; the selected block restates _hover so the widened
+      // native-:hover condition can't re-tint a disabled control.
       "&[data-disabled]": {
         bg: "gray.100",
         borderColor: "gray.100",
@@ -89,7 +88,7 @@ export const radio = defineSlotRecipe({
     },
   },
   variants: {
-    // Chakra's Radio size scale (the Checkbox control scale).
+    // The sm/md/lg size scale; control dimensions match the checkbox's.
     size: {
       sm: {
         control: { width: "3", height: "3" },

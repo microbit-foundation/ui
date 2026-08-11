@@ -5,8 +5,8 @@ behaviour/accessibility and Panda CSS for styling, with a design language
 ported from the apps' [Chakra UI](https://chakra-ui.com/) v2 themes (see
 [Chakra UI heritage](#chakra-ui-heritage)).
 
-Extracted from [ml-trainer](https://github.com/microbit-foundation/ml-trainer)
-(see its RAC-MIGRATION.md for the migration and extraction history).
+Extracted from [ml-trainer](https://github.com/microbit-foundation/ml-trainer),
+the first app in the family to adopt it.
 
 ## Planned breaking changes
 
@@ -34,14 +34,7 @@ One package for now:
   (preset stack, `styled-system` alias, cascade layers, react-intl
   messages).
 
-(The monorepo layout anticipates more packages later — see the roadmap in
-the [migration playbook](./docs/migration-playbook.md).)
-
-## Migrating an app to this library
-
-See the [migration playbook](./docs/migration-playbook.md): the
-Chakra → RAC/Panda migration method distilled from ml-trainer's run, the
-gotcha catalog, the kit scripts in [`bin/`](./bin), and the family roadmap.
+(The monorepo layout anticipates more packages later.)
 
 ## Storybook
 
