@@ -8,8 +8,17 @@ ported from the apps' [Chakra UI](https://chakra-ui.com/) v2 themes (see
 Extracted from [ml-trainer](https://github.com/microbit-foundation/ml-trainer)
 (see its RAC-MIGRATION.md for the migration and extraction history).
 
-This is not really intended for wider adoption and will go through breaking
-changes as we better align its surface with the needs of the apps.
+## Planned breaking changes
+
+This is a first pass version that allows for a very close fidelity for the Foundation's apps.
+
+We're going to evolve this in some significant and breaking ways:
+
+- Switch to role based colour tokens to improve theming options
+- Review of where we're not making the most of the underlying components (as the port has focused on enabling fidelity to existing Chakra themes)
+- Integration of feedback from an accessibility review
+
+It will be a while before this settles down as a component API, but in the short term there will be churn in design tokens too as we work through the above.
 
 ## Packages
 
