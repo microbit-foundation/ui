@@ -69,6 +69,9 @@ export const avatarInitials = (name: string): string => {
  * The generic person glyph, the fallback when there is no name. It inherits
  * `currentColor` — white on the no-name grey background — so it stays visible
  * if a call site recolours.
+ *
+ * The paths are Chakra UI's avatar glyph, inlined for visual parity with the
+ * apps' original look (see the notice in LICENSE.md).
  */
 export const GenericAvatarIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 128 128" width="100%" height="100%" {...props}>

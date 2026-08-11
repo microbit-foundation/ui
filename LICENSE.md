@@ -27,8 +27,10 @@ SOFTWARE.
 This project includes design tokens and component styling derived from
 [Chakra UI](https://github.com/chakra-ui/chakra-ui) v2: the token scales in
 `packages/ui/src/base-tokens.ts` were snapshotted from `@chakra-ui/theme`'s
-default values, and the component recipes were ported from Chakra's component
-styles. Chakra UI is used under the MIT License:
+default values, the component recipes were ported from Chakra's component
+styles, and a few icon SVG paths (the close "✕", the avatar person glyph and
+the select chevron) are inlined from Chakra's icons for visual parity.
+Chakra UI is used under the MIT License:
 
 > MIT License
 >

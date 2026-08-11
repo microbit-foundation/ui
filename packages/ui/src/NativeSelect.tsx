@@ -75,7 +75,9 @@ export const NativeSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(
         )}
       >
         {select}
-        {/* The chevron, fixed-size across field sizes. */}
+        {/* The chevron, fixed-size across field sizes. The path is Chakra
+            UI's Select chevron, inlined for visual parity with the apps'
+            original look (see the notice in LICENSE.md). */}
         <svg
           viewBox="0 0 24 24"
           aria-hidden
