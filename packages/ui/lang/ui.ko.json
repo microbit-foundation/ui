@@ -44,11 +44,11 @@
     "description": "Announced by screen readers before an error notification"
   },
   "ui.toast-status-info": {
-    "defaultMessage": "Information",
+    "defaultMessage": "정보",
     "description": "Announced by screen readers before an informational notification"
   },
   "ui.toast-status-success": {
-    "defaultMessage": "Success",
+    "defaultMessage": "성공",
     "description": "Announced by screen readers before a success notification"
   },
   "ui.toast-status-warning": {

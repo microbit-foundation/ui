@@ -226,6 +226,12 @@ mid-sentence, so they are normalised to standalone capitalised form without the
 ellipsis). `i18n:tidy` backfills anything still missing from English, so an
 untranslated string renders English rather than blank.
 
+The `ui.toast-status-*` words come from a fourth source: Spectrum 2's
+InlineAlert catalogs (`@react-spectrum/s2/intl/*.json`, keys
+`inlinealert.informative` / `notice` / `negative` / `positive`), which cover the
+same four statuses in 34 locales. Same licence and notice as the react-aria
+seed below.
+
 Four `ui.breadcrumb` labels diverge from MakeCode's, where its string named a
 different component or was too bare to work as a label: de, it, nl and pt-BR.
 Those four are AI-suggested and want a native check; every other string seeded
