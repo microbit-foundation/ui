@@ -31,10 +31,10 @@ const activeBreakpoint = (): Breakpoint => {
 };
 
 /**
- * JS-side responsive value resolver, replacing Chakra's `useBreakpointValue`.
- * Panda handles responsive *styles* in CSS; this is for responsive *logic*
- * (choosing a prop value, branching behaviour). Resolves to the value at the
- * active breakpoint, falling back to the nearest smaller one that is defined.
+ * JS-side responsive value resolver. Panda handles responsive *styles* in
+ * CSS; this is for responsive *logic* (choosing a prop value, branching
+ * behaviour). Resolves to the value at the active breakpoint, falling back to
+ * the nearest smaller one that is defined.
  */
 export function useBreakpointValue<T>(
   values: Partial<Record<Breakpoint, T>>,

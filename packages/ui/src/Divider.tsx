@@ -59,10 +59,10 @@ const StyledDivider = styled("hr", {
 export interface DividerProps extends ComponentProps<typeof StyledDivider> {}
 
 /**
- * Divider — a hairline rule matching Chakra's <Divider> (60% opacity; set
- * `borderColor` to tint, `thickness="thick"` for a 2px rule).
+ * Divider — a hairline rule (60% opacity; set `borderColor` to tint,
+ * `thickness="thick"` for a 2px rule).
  * `orientation="vertical"` needs a height from the layout, e.g. a stretched
- * flex row (Chakra's vertical divider likewise relied on `height: 100%`).
+ * flex row.
  *
  * Decorative by default: hidden from assistive tech, since a visual rule
  * between sections is noise as an announced separator (and every call site

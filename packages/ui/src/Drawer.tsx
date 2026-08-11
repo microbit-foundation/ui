@@ -24,7 +24,7 @@ export interface DrawerProps extends DrawerVariantProps {
   onClose: () => void;
   /**
    * Called after the drawer has fully closed (exit transition done and the
-   * drawer removed). Matches Chakra's `onCloseComplete`.
+   * drawer removed).
    */
   onCloseComplete?: () => void;
   /** Allow closing by clicking the backdrop / pressing Escape (default true). */
@@ -39,9 +39,8 @@ export interface DrawerProps extends DrawerVariantProps {
 }
 
 /**
- * Drawer — a focus-trapping panel that slides in from the side. Collapses
- * Chakra's Drawer/DrawerOverlay/DrawerContent into a single shell; place
- * DrawerHeader and DrawerBody inside.
+ * Drawer — a focus-trapping panel that slides in from the side, in a single
+ * shell; place DrawerHeader and DrawerBody inside.
  */
 export const Drawer = ({
   isOpen,

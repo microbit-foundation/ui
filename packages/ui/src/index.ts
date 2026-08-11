@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: MIT
  */
 /**
- * shared-ui — react-aria-components + Panda CSS primitives replacing Chakra,
- * designed to be extracted into a library shared across sibling apps. Visuals
- * match the Chakra theme; behaviour follows react-aria patterns.
+ * shared-ui — react-aria-components + Panda CSS primitives shared across the
+ * micro:bit app family. Behaviour follows react-aria patterns; styling comes
+ * from the recipe/token system in the base preset.
  */
 export * from "./system";
 export * from "./Avatar";

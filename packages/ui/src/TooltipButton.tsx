@@ -94,8 +94,7 @@ export interface TooltipButtonProps {
  * (`ContextualHelp`), not a tooltip, which would remove the hidden copy of the
  * body and the pointer-geometry keep-alive below rather than work around them.
  * Tracked as microbit-foundation/ui#63, which would deprecate this component;
- * see "Open across the completed migrations" in docs/migration-playbook.md
- * before extending it.
+ * prefer that direction over extending it.
  */
 export const TooltipButton = ({
   label,

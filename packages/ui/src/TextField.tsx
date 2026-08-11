@@ -26,7 +26,7 @@ export interface TextFieldProps
     InputVariantProps,
     FieldSupportProps,
     FieldLayoutProps {
-  /** Visible label (Chakra's FormLabel; asterisk added when `isRequired`). */
+  /** Visible label (asterisk added when `isRequired`). */
   label: ReactNode;
   /** Label style overrides. */
   labelCss?: SystemStyleObject;
@@ -36,9 +36,8 @@ export interface TextFieldProps
 }
 
 /**
- * TextField — a labelled single-line text input, collapsing Chakra's
- * FormControl/FormLabel/Input/FormHelperText/FormErrorMessage. The ref is
- * forwarded to the input element.
+ * TextField — a labelled single-line text input with optional help and error
+ * text. The ref is forwarded to the input element.
  */
 export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
   function TextField(

@@ -7,8 +7,7 @@ import { styled } from "styled-system/jsx";
 
 /**
  * InputGroup — relative wrapper for an Input with addon elements. Pad the
- * input (`pl`/`pr`) to make room for the elements. Replaces Chakra's
- * InputGroup.
+ * input (`pl`/`pr`) to make room for the elements.
  */
 export const InputGroup = styled("div", {
   base: { position: "relative", width: "100%", display: "flex" },
@@ -17,9 +16,9 @@ export const InputGroup = styled("div", {
 // The element styles are written out twice rather than shared via a spread:
 // Panda's extractor only reliably evaluates inline literals.
 // The size variants are square boxes matching the input recipe's height per
-// size, as in Chakra; pass the same `size` as the grouped Input.
+// size; pass the same `size` as the grouped Input.
 
-/** Element overlaying the start of an InputGroup (Chakra InputLeftElement). */
+/** Element overlaying the start of an InputGroup. */
 export const InputLeftElement = styled("div", {
   base: {
     position: "absolute",
@@ -40,7 +39,7 @@ export const InputLeftElement = styled("div", {
   defaultVariants: { size: "md" },
 });
 
-/** Element overlaying the end of an InputGroup (Chakra InputRightElement). */
+/** Element overlaying the end of an InputGroup. */
 export const InputRightElement = styled("div", {
   base: {
     position: "absolute",

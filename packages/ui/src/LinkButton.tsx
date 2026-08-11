@@ -19,9 +19,9 @@ export interface LinkButtonProps
   /** Per-instance style overrides, merged after the recipe. */
   css?: SystemStyleObject;
   className?: string;
-  /** Icon rendered before the label, matching Chakra's `leftIcon`. */
+  /** Icon rendered before the label. */
   leftIcon?: ReactNode;
-  /** Icon rendered after the label, matching Chakra's `rightIcon`. */
+  /** Icon rendered after the label. */
   rightIcon?: ReactNode;
   children?: ReactNode;
 }
@@ -33,8 +33,8 @@ const linkReset = css.raw({
 });
 
 /**
- * LinkButton — a navigation link that looks like a Button (Chakra's
- * `Button as="a"`). react-aria-components <Link> renders a real anchor
+ * LinkButton — a navigation link that looks like a Button.
+ * react-aria-components <Link> renders a real anchor
  * (`href`, `target`, new-tab/middle-click semantics preserved) with the same
  * interaction data attributes as Button, so the `button` recipe's
  * hover/press/focus/disabled states apply unchanged.

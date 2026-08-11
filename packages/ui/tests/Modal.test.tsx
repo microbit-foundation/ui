@@ -33,7 +33,7 @@ const renderModal = (props: Record<string, unknown> = {}) =>
     </IntlProvider>,
   );
 
-it("puts data attributes on the dialog box, as Chakra's ModalContent did", () => {
+it("puts data attributes on the dialog box", () => {
   renderModal({ "data-testid": "the-dialog", "data-state": "open" });
   const box = screen.getByTestId("the-dialog");
   expect(box.getAttribute("data-state")).toBe("open");
@@ -42,8 +42,7 @@ it("puts data attributes on the dialog box, as Chakra's ModalContent did", () =>
 });
 
 it("labels the dialog from the header, at h2 by default", () => {
-  // RAC's Dialog supplies level 2 through HeadingContext for the title slot,
-  // so this matches Chakra call sites that put an <h2> in the header.
+  // RAC's Dialog supplies level 2 through HeadingContext for the title slot.
   renderModal({ "data-testid": "d" });
   expect(screen.getByRole("heading", { name: "Title" }).tagName).toBe("H2");
   cleanup();

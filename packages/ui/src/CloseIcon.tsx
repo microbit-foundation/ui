@@ -12,10 +12,9 @@ export interface CloseIconProps {
 }
 
 /**
- * CloseIcon — the "✕" glyph used on close buttons (dialogs, toasts). This is
- * Chakra's exact CloseButton path so the visual matches; sized to `1em` and
- * `fill: currentColor` like the other icons. Reused wherever a close control
- * is needed.
+ * CloseIcon — the "✕" glyph used on close buttons (dialogs, toasts). Sized to
+ * `1em` and `fill: currentColor` like the other icons. Reused wherever a
+ * close control is needed.
  */
 export const CloseIcon = ({ css: cssProp, className }: CloseIconProps) => (
   <svg

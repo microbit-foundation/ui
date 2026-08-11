@@ -6,9 +6,8 @@
 import { defineSlotRecipe } from "@pandacss/dev";
 
 /**
- * Switch slot recipe — Chakra's switch with the default blue colorScheme
- * (light mode) and its sm/md/lg size scale. The track has a 2px inset; the
- * thumb matches the track height and slides by the track width/height
+ * Switch slot recipe with an sm/md/lg size scale. The track has a 2px inset;
+ * the thumb matches the track height and slides by the track width/height
  * difference when selected.
  *
  * State styling keys off data attributes stamped by the shared-ui Switch
@@ -90,8 +89,8 @@ export const switchRecipe = defineSlotRecipe({
         label: { marginStart: "0", marginEnd: "3" },
       },
     },
-    // Chakra's Switch size scale (track width x height; the selected-thumb
-    // translate is the difference between them).
+    // Track width x height per size; the selected-thumb translate is the
+    // difference between them.
     size: {
       sm: {
         track: { width: "1.375rem", height: "3" },

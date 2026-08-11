@@ -49,10 +49,10 @@ export interface NumberFieldProps
 }
 
 /**
- * NumberField — react-aria-components <NumberField> styled like Chakra's
- * NumberInput (outline input + right-hand stepper column). The ref is
- * forwarded to the input element. Value clamping to min/maxValue is
- * handled by react-aria; onChange receives NaN when the field is emptied.
+ * NumberField — react-aria-components <NumberField>: an outline input with a
+ * right-hand stepper column. The ref is forwarded to the input element. Value
+ * clamping to min/maxValue is handled by react-aria; onChange receives NaN
+ * when the field is emptied.
  */
 export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(
   function NumberField(

@@ -5,8 +5,8 @@
  */
 import { defineSlotRecipe } from "@pandacss/dev";
 
-// Chakra's transition.property.common, inlined (Panda has no transitionProperty
-// token category).
+// The common transition-property list, inlined (Panda has no
+// transitionProperty token category).
 const transitionCommon =
   "background-color, border-color, color, fill, stroke, opacity, box-shadow, transform";
 
@@ -16,9 +16,9 @@ const transitionCommon =
  * the two differ only in what the control is: keeping them together is what
  * stops a searchable and a non-searchable picker drifting apart visually.
  *
- * `trigger` is styled from the Chakra outline Input field so a select sits
- * level with a TextField beside it; `content` matches the `menu` recipe's card
- * so every dropdown surface in the family agrees.
+ * `trigger` matches the `input` recipe's outline field so a select sits level
+ * with a TextField beside it; `content` matches the `menu` recipe's card so
+ * every dropdown surface in the family agrees.
  *
  * Apps restyle it through the `variant` group — classroom's `classroom`
  * variant is the rounded pill its join form uses.
@@ -144,10 +144,10 @@ export const select = defineSlotRecipe({
       outline: "none",
     },
     content: {
-      // Line the card up with the control, as a select should and as
-      // react-select did. `Select` gets this from RAC, whose trigger is the
-      // button it measures; `ComboBox` measures its own control and sets the
-      // width inline, because RAC's var is the *input's* width there.
+      // Line the card up with the control, as a select should. `Select` gets
+      // this from RAC, whose trigger is the button it measures; `ComboBox`
+      // measures its own control and sets the width inline, because RAC's var
+      // is the *input's* width there.
       minWidth: "var(--trigger-width)",
       display: "flex",
       flexDirection: "column",

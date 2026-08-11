@@ -6,7 +6,7 @@
 import { defineRecipe } from "@pandacss/dev";
 
 /**
- * Heading recipe — Chakra's default Heading base + responsive sizes.
+ * Heading recipe — a bold heading-font base + responsive sizes.
  * A config recipe for the same reasons as `button` (see Button.recipe.ts);
  * the `marketing` variant is token-driven via the `display` font, so brands
  * only override tokens.
@@ -50,10 +50,10 @@ export const heading = defineRecipe({
       //
       // `fontSize` goes through a doubled selector because `size` sets it too,
       // responsively. Source order can't settle that: Panda hoists media
-      // queries below the base rules (gotcha #31) and emits variant rules in
-      // the order it meets them, so which of the two wins would depend on the
-      // breakpoint and on what other call sites exist. Two classes beat one at
-      // every width instead.
+      // queries below the base rules and emits variant rules in the order it
+      // meets them, so which of the two wins would depend on the breakpoint
+      // and on what other call sites exist. Two classes beat one at every
+      // width instead.
       label: {
         "&&": { fontSize: "4xl" },
         color: "headingAccent",

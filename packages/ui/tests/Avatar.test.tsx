@@ -21,13 +21,13 @@ it("shows one initial for a single-word name", () => {
   expect(screen.getByRole("img", { name: "Ada" }).textContent).toBe("A");
 });
 
-// The hash is Chakra's, and these are the colours Chakra produced for these
-// names — the fidelity contract for apps migrating a roster of avatars.
+// The exact hash is a compatibility contract: these are the colours apps'
+// existing avatar rosters rely on, so a change here changes shipped UIs.
 it.each([
   ["Ada Lovelace", "#8b409d"],
   ["Tim Berners-Lee", "#9e72e7"],
   ["", undefined],
-])("derives Chakra's background colour from %s", (name, expected) => {
+])("derives the background colour from %s", (name, expected) => {
   const { container } = render(<Avatar name={name} data-testid="avatar" />);
   const root = container.firstElementChild as HTMLElement;
   expect(root.style.getPropertyValue("--avatar-bg") || undefined).toBe(
@@ -37,8 +37,8 @@ it.each([
 
 it("darkens the text over a light derived background", () => {
   // #9e72e7 is bright enough to need dark text; #8b409d is not. The colour
-  // is a custom property, not a state selector, so a call site's `css` still
-  // beats it where cascade layers aren't in play (playbook gotcha #40).
+  // is a custom property, not a state selector, so a call site's `css` can
+  // still override it.
   const { container: light } = render(<Avatar name="Tim Berners-Lee" />);
   expect(
     (light.firstElementChild as HTMLElement).style.getPropertyValue(

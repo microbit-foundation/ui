@@ -11,8 +11,7 @@ import { defineSlotRecipe } from "@pandacss/dev";
  * a listbox: the roving tab index moves through rows, and the controls inside
  * a row are reachable without leaving it).
  *
- * Chakra had no equivalent, so there is no Chakra look to match: the greys
- * here are the family's neutral list styling, and an app with a strong
+ * The greys here are the family's neutral list styling; an app with a strong
  * selection colour restates them (classroom's roster does).
  *
  * Registered in the base preset (base-preset.ts), which also has the

@@ -16,8 +16,8 @@ export interface RadioGroupProps
   extends Omit<RACRadioGroupProps, "className" | "style">,
     FieldSupportProps {
   /**
-   * Visible label for the group (Chakra's FormLabel above it). Use
-   * `aria-label` instead where the design has none.
+   * Visible label for the group. Use `aria-label` instead where the design
+   * has none.
    */
   label?: ReactNode;
   /** Label style overrides. */
@@ -29,9 +29,8 @@ export interface RadioGroupProps
 
 /**
  * RadioGroup — react-aria-components <RadioGroup> for a set of Radios. Beyond
- * the optional field chrome (label/helperText/errorMessage — Chakra's
- * FormControl parts) it carries no styling of its own: compose with Stack for
- * layout, as Chakra call sites did.
+ * the optional field chrome (label/helperText/errorMessage) it carries no
+ * styling of its own: compose with Stack for layout.
  */
 export const RadioGroup = ({
   label,

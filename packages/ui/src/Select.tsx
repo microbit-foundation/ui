@@ -52,8 +52,8 @@ export interface SelectProps<T extends object>
   /** Label style overrides. */
   labelCss?: SystemStyleObject;
   /**
-   * Shown in the trigger while nothing is chosen (Chakra's placeholder).
-   * Defaults to a translated "Select an item".
+   * Shown in the trigger while nothing is chosen. Defaults to a translated
+   * "Select an item".
    */
   placeholder?: string;
   /** `SelectOption`s. */
@@ -68,9 +68,9 @@ export interface SelectProps<T extends object>
   /** Placement of the dropdown relative to the trigger. */
   placement?: PopoverProps["placement"];
   /**
-   * Cap the dropdown's height (react-select's `maxMenuHeight`). A prop rather
-   * than a `contentCss` rule because RAC writes its own max-height inline
-   * while positioning, which beats any class.
+   * Cap the dropdown's height. A prop rather than a `contentCss` rule because
+   * RAC writes its own max-height inline while positioning, which beats any
+   * class.
    */
   maxHeight?: number;
   /** Per-instance overrides for the trigger (the button the value sits in). */
@@ -81,9 +81,8 @@ export interface SelectProps<T extends object>
 }
 
 /**
- * Select — a listbox behind a button, for choosing one of a known set.
- * Replaces Chakra-era react-select at non-searchable call sites; use ComboBox
- * where the user should be able to type to filter.
+ * Select — a listbox behind a button, for choosing one of a known set. Use
+ * ComboBox where the user should be able to type to filter.
  */
 export const Select = <T extends object>({
   label,
@@ -103,7 +102,7 @@ export const Select = <T extends object>({
   ...props
 }: SelectProps<T>) => {
   // splitVariantProps, not a hand-picked list: an app preset can add variant
-  // groups to the recipe and they have to reach it (playbook gotcha #37).
+  // groups to the recipe and they have to reach it.
   const [variantProps, rest] = select.splitVariantProps(props);
   const intl = useIntl();
   const slots = select(variantProps);

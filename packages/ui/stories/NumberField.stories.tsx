@@ -25,8 +25,8 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {
-  // groupCss must be a JSX literal for Panda extraction (playbook gotcha #9),
-  // so it can't live in `args`.
+  // groupCss must be a JSX literal for Panda extraction, so it can't live
+  // in `args`.
   render: (args) => <NumberField {...args} groupCss={{ width: "32" }} />,
 };
 

@@ -15,15 +15,15 @@ import { field, FieldVariantProps } from "styled-system/recipes";
 import { SystemStyleObject } from "styled-system/types";
 
 /**
- * The label/helper/error chrome every labelled form field shares — Chakra's
- * FormControl parts, generalised out of TextField so Select, ComboBox,
- * NumberField, RadioGroup and CheckboxGroup carry the same props
- * (data-microbit-org's forms attach helper and error text to all of these).
+ * The helper/error chrome every labelled form field shares — TextField,
+ * Select, ComboBox, NumberField, RadioGroup and CheckboxGroup carry the same
+ * props (data-microbit-org's forms attach helper and error text to all of
+ * these).
  */
 export interface FieldSupportProps {
-  /** Help text below the field (Chakra's FormHelperText). */
+  /** Help text below the field. */
   helperText?: ReactNode;
-  /** Shown below the field when invalid (Chakra's FormErrorMessage). */
+  /** Shown below the field when invalid. */
   errorMessage?: ReactNode;
   /** Per-instance style overrides for the helper text. */
   helperTextCss?: SystemStyleObject;
@@ -87,8 +87,8 @@ interface FieldTextProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 /**
- * Context-free helper text (Chakra's FormHelperText) for a control react-aria
- * isn't wiring — a native select or a masked input. Inside a RAC field
+ * Context-free helper text for a control react-aria isn't wiring — a native
+ * select or a masked input. Inside a RAC field
  * container use `FieldSupport`, which wires `aria-describedby` and validation
  * for free; here the caller owns that wiring: give this an `id` and reference
  * it from the control's `aria-describedby` (as `NativeSelectField` does).
@@ -111,8 +111,8 @@ export const FieldHelperText = ({
 );
 
 /**
- * Context-free error message (Chakra's FormErrorMessage), the counterpart to
- * `FieldHelperText` — see its note on the wiring the caller owns. RAC's
+ * Context-free error message, the counterpart to `FieldHelperText` — see its
+ * note on the wiring the caller owns. RAC's
  * `FieldError` renders only while its field is invalid; here that decision is
  * the caller's too: render it conditionally.
  */
@@ -134,9 +134,9 @@ export const FieldErrorMessage = ({
 );
 
 /**
- * The required-field asterisk (Chakra's FormLabel indicator). Render inside
- * the field's label when `isRequired`; aria-hidden because react-aria already
- * announces requiredness from the input itself.
+ * The required-field asterisk. Render inside the field's label when
+ * `isRequired`; aria-hidden because react-aria already announces requiredness
+ * from the input itself.
  */
 export const FieldRequiredIndicator = () => (
   <span aria-hidden className={field().requiredIndicator}>
@@ -158,11 +158,9 @@ export interface FieldLabelProps
 }
 
 /**
- * A field's visible label (Chakra's FormLabel), asterisk included. Every
- * labelled field in the library renders its label through this, so the `field`
- * recipe is the single answer to what a label looks like — Select and ComboBox
- * previously carried a near-identical `label` slot on the `select` recipe,
- * which is how the two drifted.
+ * A field's visible label, asterisk included. Every labelled field in the
+ * library renders its label through this, so the `field` recipe is the single
+ * answer to what a label looks like.
  *
  * Also exported for app-side composites: inside a RAC field container the
  * association is automatic, and outside one (a masked or native input) pass

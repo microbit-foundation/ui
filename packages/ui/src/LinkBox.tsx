@@ -12,7 +12,7 @@ import { SystemStyleObject } from "styled-system/types";
 /**
  * LinkBox — makes a whole box clickable via a nested LinkOverlay (or any
  * element with an inset `_before` overlay). Other interactive children must
- * be raised with `zIndex: 1`. Replaces Chakra's <LinkBox>.
+ * be raised with `zIndex: 1`.
  */
 export const LinkBox = styled("div", {
   base: { position: "relative" },
@@ -54,8 +54,7 @@ export interface LinkOverlayButtonProps
  * Deliberately a plain button, not a react-aria one: react-aria's usePress
  * cancels presses that land outside the button's bounding rect, which defeats
  * the overlay. `position: static` overrides the button recipe's base so the
- * overlay anchors to the LinkBox (Chakra's LinkOverlay did the same over its
- * Button).
+ * overlay anchors to the LinkBox.
  */
 export const LinkOverlayButton = forwardRef<
   HTMLButtonElement,

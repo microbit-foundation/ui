@@ -71,7 +71,7 @@ it("renders a checkbox group as menuitemcheckbox and toggles independently", () 
   // The check indicator is driven by data-selected, in this mode too.
   expect(attr("Grid", "data-selected")).not.toBeNull();
 
-  // Checking an option leaves the menu open, as Chakra's checkbox groups did.
+  // Checking an option leaves the menu open.
   fireEvent.click(option("Rulers"));
   expect(attr("Grid", "aria-checked")).toBe("true");
   expect(attr("Rulers", "aria-checked")).toBe("true");

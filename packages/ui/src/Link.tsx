@@ -6,8 +6,8 @@
 import { styled } from "styled-system/jsx";
 
 /**
- * Link — anchor styled to match Chakra's <Link> base (no underline until hover,
- * focus ring on keyboard focus). Accepts Panda style props for colour etc.
+ * Link — a styled anchor (no underline until hover, focus ring on keyboard
+ * focus). Accepts Panda style props for colour etc.
  */
 export const Link = styled("a", {
   base: {

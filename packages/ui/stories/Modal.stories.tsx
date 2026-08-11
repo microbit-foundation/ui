@@ -72,7 +72,6 @@ export const Basic: Story = {
   },
 };
 
-/** Chakra's AlertDialog: role="alertdialog" for interrupting confirmations. */
 /**
  * With a single trigger beside it, a dialog needs no state at all: wrap the
  * two in a `DialogTrigger` and react-aria holds it. A dialog opened from more
@@ -171,6 +170,7 @@ export const FullOverScrollingPage: Story = {
   },
 };
 
+/** role="alertdialog" for interrupting confirmations. */
 export const AlertDialog: Story = {
   render: () => {
     const [isOpen, setOpen] = useState(false);

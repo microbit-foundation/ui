@@ -6,24 +6,20 @@
 import { defineSlotRecipe } from "@pandacss/dev";
 
 /**
- * Avatar slot recipe — Chakra's avatar: a circle showing an image, the
- * initials of a name, or a generic person glyph, optionally with a badge
- * pinned to one corner.
+ * Avatar slot recipe — a circle showing an image, the initials of a name, or
+ * a generic person glyph, optionally with a badge pinned to one corner.
  *
  * The background and text colour come from `var(--avatar-bg)` and
  * `var(--avatar-color)` rather than being flat values, because the component
  * derives them from the name (see Avatar.tsx) and writes them as inline custom
- * properties — exactly as Chakra did. Two reasons, both about letting a call
- * site win with a plain `css={{ bg: …, color: … }}`: an inline *property*
- * would beat any class, where an inline *variable* only feeds this
- * declaration; and both must stay single-class selectors, since a state
- * selector like `&[data-light-bg]` outranks the call site's utility class on
- * specificity wherever cascade layers aren't in play — which is every app
- * still coexisting with Chakra (playbook gotcha #40).
+ * properties. Two reasons, both about letting a call site win with a plain
+ * `css={{ bg: …, color: … }}`: an inline *property* would beat any class,
+ * where an inline *variable* only feeds this declaration; and both must stay
+ * single-class selectors, since a state selector like `&[data-light-bg]`
+ * would outrank the call site's utility class on specificity.
  *
- * Sizes are Chakra's, with its `calc(size / 2.5)` font size resolved per size
- * so an app preset can restate either independently (classroom's avatars are
- * a grade larger than Chakra's).
+ * The `calc(size / 2.5)` font size is resolved per size so an app preset can
+ * restate either independently (classroom's avatars are a grade larger).
  *
  * Registered in the base preset (base-preset.ts), which also has the
  * `staticCss` entry that keeps the runtime-prop variants generated.
@@ -43,7 +39,7 @@ export const avatar = defineSlotRecipe({
       textTransform: "uppercase",
       fontWeight: "medium",
       borderRadius: "full",
-      // Chakra's no-name defaults; the name-derived pair arrives inline.
+      // The no-name defaults; the name-derived pair arrives inline.
       // gray.350 is the decorative-fill stop — 400+ are reserved for
       // accessible outlines and text (see the ramp in base-preset.ts).
       background: "var(--avatar-bg, token(colors.gray.350))",
@@ -72,12 +68,12 @@ export const avatar = defineSlotRecipe({
     },
   },
   variants: {
-    // Chakra's scale: the container size, and Chakra's `calc(size / 2.5)`
-    // font size kept as a calc over the same token so both track a preset
-    // that rescales `sizes` (the dense preset does, by 0.88).
+    // The container size, and the `calc(size / 2.5)` font size kept as a
+    // calc over the same token so both track a preset that rescales `sizes`
+    // (the dense preset does, by 0.88).
     //
-    // The font size lands on the root *and* the label, as Chakra's did
-    // (through one variable). They are separate declarations so an app can
+    // The font size lands on the root *and* the label. They are separate
+    // declarations so an app can
     // move one without the other: the root's is the em basis for a badge,
     // the label's is how big the initials are, and the two are not always
     // the same wish.
@@ -139,7 +135,7 @@ export const avatar = defineSlotRecipe({
         label: { fontSize: "calc(token(sizes.32) / 2.5)" },
       },
     },
-    /** Which corner the badge sits in. Chakra's placements, same offsets. */
+    /** Which corner the badge sits in. */
     placement: {
       "top-start": {
         badge: {

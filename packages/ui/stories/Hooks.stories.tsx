@@ -81,9 +81,9 @@ export const UseBreakpointValue: Story = {
 };
 
 /**
- * The controlled dialog shape every Chakra call site ports to, and the one a
- * dialog with more than one opener needs. A dialog with a single trigger
- * beside it can skip the hook entirely — see Overlays/Modal's "With Trigger".
+ * The controlled dialog shape a dialog with more than one opener needs. A
+ * dialog with a single trigger beside it can skip the hook entirely — see
+ * Overlays/Modal's "With Trigger".
  */
 export const UseDisclosure: Story = {
   name: "useDisclosure",

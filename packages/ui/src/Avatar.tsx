@@ -20,10 +20,10 @@ import { token } from "styled-system/tokens";
 import { SystemStyleObject } from "styled-system/types";
 
 /**
- * Chakra's `randomColor({ string })`, reproduced exactly: a djb2-style hash of
- * the name, its low three bytes read as a colour. Not random despite the name
- * — the same name is always the same colour, which is the point, and
- * reproducing the hash means avatars keep the colours they had under Chakra.
+ * A djb2-style hash of the name, its low three bytes read as a colour. The
+ * same name is always the same colour, and the exact hash is a compatibility
+ * contract: apps' existing avatar rosters keep the colours they have always
+ * had, so don't change it.
  */
 const colorFromName = (name: string): string => {
   let hash = 0;
@@ -40,8 +40,8 @@ const colorFromName = (name: string): string => {
 };
 
 /**
- * Chakra's contrast rule for the generated background: perceived brightness
- * (the classic 299/587/114 weighting) below 128 counts as dark, and dark
+ * Contrast rule for the generated background: perceived brightness (the
+ * classic 299/587/114 weighting) below 128 counts as dark, and dark
  * backgrounds take white text.
  */
 const isLight = (hex: string): boolean => {
@@ -52,9 +52,9 @@ const isLight = (hex: string): boolean => {
 };
 
 /**
- * Chakra's `initials`: first letter of the first and last words. Prefixed
- * because it is exported from the package root, where a bare `initials`
- * would be a broad name to claim.
+ * First letter of the first and last words. Prefixed because it is exported
+ * from the package root, where a bare `initials` would be a broad name to
+ * claim.
  */
 export const avatarInitials = (name: string): string => {
   const names = name.trim().split(" ");
@@ -66,9 +66,9 @@ export const avatarInitials = (name: string): string => {
 };
 
 /**
- * Chakra's generic person glyph, the fallback when there is no name. Chakra
- * hardcoded it white; here it inherits `currentColor`, which is the same white
- * on the no-name grey background and stays visible if a call site recolours.
+ * The generic person glyph, the fallback when there is no name. It inherits
+ * `currentColor` — white on the no-name grey background — so it stays visible
+ * if a call site recolours.
  */
 export const GenericAvatarIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 128 128" width="100%" height="100%" {...props}>
@@ -86,9 +86,9 @@ export const GenericAvatarIcon = (props: SVGProps<SVGSVGElement>) => (
 type ImageStatus = "pending" | "loading" | "loaded" | "failed";
 
 /**
- * Chakra's `useImage`: load the photo out of band and report how it went, so
- * the avatar can show the initials or the icon meanwhile and keep showing
- * them if it never arrives.
+ * Load the photo out of band and report how it went, so the avatar can show
+ * the initials or the icon meanwhile and keep showing them if it never
+ * arrives.
  *
  * The <img> element is only mounted once this says "loaded", which is what
  * keeps a broken URL from leaving the browser's broken-image glyph inside the
@@ -147,13 +147,13 @@ export interface AvatarProps
    */
   src?: string;
   srcSet?: string;
-  /** Shown when there is no name. Defaults to Chakra's person glyph. */
+  /** Shown when there is no name. Defaults to the generic person glyph. */
   icon?: ReactNode;
-  /** Accessible name for the icon fallback. Chakra's default was " avatar". */
+  /** Accessible name for the icon fallback. Defaults to " avatar". */
   iconLabel?: string;
   /** Override how a name becomes initials. */
   getInitials?: (name: string) => string;
-  /** Chakra's `showBorder`: a 2px ring in the avatar's border colour. */
+  /** A 2px ring in the avatar's border colour. */
   showBorder?: boolean;
   /** An `AvatarBadge`. */
   children?: ReactNode;
@@ -163,11 +163,11 @@ export interface AvatarProps
 }
 
 /**
- * Avatar — Chakra's <Avatar>: a circular identity marker showing a photo, the
- * initials of a name, or a generic glyph, in a colour derived from the name.
+ * Avatar — a circular identity marker showing a photo, the initials of a
+ * name, or a generic glyph, in a colour derived from the name.
  *
  * Decorative in most designs — pass `aria-hidden` where the name is already
- * beside it, as Chakra's call sites did.
+ * beside it.
  */
 export const Avatar = ({
   name,
@@ -187,7 +187,7 @@ export const Avatar = ({
   const status = useImageStatus(src, srcSet);
   const isLoaded = status === "loaded";
   const slots = avatar({ size });
-  // Only while the image isn't showing, matching Chakra's `:not([data-loaded])`.
+  // Only while the image isn't showing.
   const bg = name && !isLoaded ? colorFromName(name) : undefined;
   return (
     <span
@@ -204,7 +204,7 @@ export const Avatar = ({
           ? ({
               ...style,
               "--avatar-bg": bg,
-              // Chakra's contrast rule, as a variable rather than a state
+              // The contrast rule, as a variable rather than a state
               // selector so a call site's `css` colour still wins (see the
               // recipe).
               "--avatar-color": isLight(bg)
@@ -225,9 +225,9 @@ export const Avatar = ({
         <span role="img" aria-label={name} className={slots.label}>
           {getInitials(name)}
         </span>
-      ) : // The icon is labelled in place rather than wrapped, as Chakra did:
-      // a wrapper would make it an inline child with a line box of its own,
-      // where directly in the flex container it is a flex item and centres
+      ) : // The icon is labelled in place rather than wrapped: a wrapper
+      // would make it an inline child with a line box of its own, where
+      // directly in the flex container it is a flex item and centres
       // exactly.
       isValidElement(icon) ? (
         cloneElement(icon as ReactElement<Record<string, unknown>>, {
@@ -247,9 +247,8 @@ export interface AvatarBadgeProps
     Pick<AvatarVariantProps, "placement"> {
   children?: ReactNode;
   /**
-   * Per-instance style overrides. The badge has no size of its own — Chakra's
-   * didn't either, so call sites set one (`boxSize: "1.5em"` scales with the
-   * avatar).
+   * Per-instance style overrides. The badge has no size of its own — call
+   * sites set one (`boxSize: "1.5em"` scales with the avatar).
    */
   css?: SystemStyleObject;
   className?: string;

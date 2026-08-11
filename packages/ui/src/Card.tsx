@@ -16,7 +16,8 @@ export interface CardProps
 }
 
 /**
- * Card — Chakra's <Card> equivalent (md size). Place a CardBody inside.
+ * Card — a container styled with the `card` config recipe (md size). Place a
+ * CardBody inside.
  */
 export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
   { variant, css: cssProp, className, ...rest },

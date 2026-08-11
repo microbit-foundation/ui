@@ -6,9 +6,9 @@
 import { defineSlotRecipe } from "@pandacss/dev";
 
 /**
- * Menu slot recipe — Chakra's default Menu parts (light mode). `content` is the
- * dropdown card (react-aria-components' Popover), `list` the RAC Menu, `item` a
- * MenuItem, `icon` the leading-icon wrapper.
+ * Menu slot recipe. `content` is the dropdown card (react-aria-components'
+ * Popover), `list` the RAC Menu, `item` a MenuItem, `icon` the leading-icon
+ * wrapper.
  *
  * A config slot recipe (rather than an atomic `sva`) for consistency with
  * `dialog` and so presets can override it later if brands diverge.
@@ -38,15 +38,14 @@ export const menu = defineSlotRecipe({
       // `popover` (1500), not `dropdown` (1000): a RAC Popover always portals
       // to the body, so a menu opened from inside a Modal (zIndex `modal`,
       // 1400) escapes the modal's stacking context and would paint behind it.
-      // Chakra never hit this — its MenuList rendered inline unless explicitly
-      // portalled. Nothing else lives between 1400 and the toast/tooltip layer.
+      // Nothing else lives between 1400 and the toast/tooltip layer.
       zIndex: "popover",
       borderRadius: "md",
       borderWidth: "1px",
       borderColor: "gray.200",
       boxShadow: "sm",
-      // Approximate Chakra's menu fade/scale. RAC toggles data-entering/
-      // data-exiting on the Popover and waits for the transition before unmount.
+      // Fade/scale enter/exit. RAC toggles data-entering/data-exiting on the
+      // Popover and waits for the transition before unmount.
       transformOrigin: "top",
       opacity: 1,
       transform: "scale(1)",
@@ -71,15 +70,15 @@ export const menu = defineSlotRecipe({
       transitionDuration: "ultra-fast",
       transitionTimingFunction: "ease-in",
       // RAC highlights the active item (keyboard or pointer) with data-focused;
-      // data-pressed is the pressed state — mirrors Chakra's _focus/_active.
+      // data-pressed is the pressed state.
       "&[data-focused]": { bg: "gray.100" },
       "&[data-pressed]": { bg: "gray.200" },
       "&[data-disabled]": { opacity: 0.4, cursor: "not-allowed" },
     },
     label: {
-      // Chakra wraps an icon-item's children in a flex:1 span, so block
-      // children (e.g. two stacked <Text>s) lay out vertically rather than as
-      // flex-row siblings of the icon.
+      // A flex:1 wrapper around an icon-item's children, so block children
+      // (e.g. two stacked <Text>s) lay out vertically rather than as flex-row
+      // siblings of the icon.
       flex: "1",
     },
     icon: {
@@ -88,8 +87,8 @@ export const menu = defineSlotRecipe({
       justifyContent: "center",
       flexShrink: 0,
       marginEnd: "0.75rem",
-      // Chakra's MenuIcon shrinks glyphs to 0.8em; items passing an explicitly
-      // sized icon (e.g. h/w) override this.
+      // Glyphs shrink to 0.8em; items passing an explicitly sized icon
+      // (e.g. h/w) override this.
       fontSize: "0.8em",
     },
     divider: {
@@ -100,7 +99,7 @@ export const menu = defineSlotRecipe({
       opacity: 0.6,
     },
     group: {},
-    // Chakra's MenuGroup/MenuOptionGroup title.
+    // Title for a menu group or option group.
     groupTitle: {
       display: "block",
       mx: "4",
@@ -108,8 +107,8 @@ export const menu = defineSlotRecipe({
       fontWeight: "semibold",
       fontSize: "sm",
     },
-    // Check glyph slot for MenuItemOption: space always reserved (as Chakra
-    // does), visible only on the selected item (RAC sets data-selected on it).
+    // Check glyph slot for MenuItemOption: space always reserved, visible
+    // only on the selected item (RAC sets data-selected on it).
     itemIndicator: {
       display: "inline-flex",
       alignItems: "center",

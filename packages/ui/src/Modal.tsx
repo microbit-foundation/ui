@@ -55,11 +55,11 @@ export interface ModalOwnProps {
   size?: ModalSize;
   /** Allow closing by clicking the backdrop (default true; Escape always closes). */
   isDismissable?: boolean;
-  /** Disable the enter/exit transitions (Chakra's motionPreset="none"). */
+  /** Disable the enter/exit transitions. */
   motionless?: boolean;
-  /** Prevent Escape closing the dialog (Chakra's closeOnEsc={false}). */
+  /** Prevent Escape closing the dialog. */
   isKeyboardDismissDisabled?: boolean;
-  /** Style overrides for the dialog box (Chakra's ModalContent props). */
+  /** Style overrides for the dialog box. */
   contentCss?: SystemStyleObject;
   /**
    * Inline styles for the dialog box, for runtime-computed positioning that
@@ -68,25 +68,22 @@ export interface ModalOwnProps {
    */
   contentStyle?: CSSProperties;
   /**
-   * Style overrides for the backdrop (Chakra's ModalOverlay props), e.g. a
-   * transparent backdrop when something else provides the dimming.
+   * Style overrides for the backdrop, e.g. a transparent backdrop when
+   * something else provides the dimming.
    */
   overlayCss?: SystemStyleObject;
-  /**
-   * Use "alertdialog" for confirmations that interrupt the user (Chakra's
-   * AlertDialog).
-   */
+  /** Use "alertdialog" for confirmations that interrupt the user. */
   role?: "dialog" | "alertdialog";
-  /** Vertically centre the dialog (Chakra's `isCentered`). */
+  /** Vertically centre the dialog. */
   isCentered?: boolean;
   /**
    * Called after the dialog has fully closed (exit transition done and the
-   * dialog removed). Matches Chakra's `onCloseComplete`.
+   * dialog removed).
    */
   onCloseComplete?: () => void;
   /**
    * Element to focus when the dialog closes, instead of the element that was
-   * focused when it opened. Matches Chakra's `finalFocusRef`.
+   * focused when it opened.
    */
   finalFocusRef?: RefObject<HTMLElement>;
   /**
@@ -98,9 +95,9 @@ export interface ModalOwnProps {
   "aria-label"?: string;
   children: ReactNode;
   /**
-   * `data-*` attributes land on the dialog box (where Chakra's went, on
-   * ModalContent), so end-to-end tests can address a dialog. Shells that
-   * forward their caller's data attributes can spread them straight in.
+   * `data-*` attributes land on the dialog box, so end-to-end tests can
+   * address a dialog. Shells that forward their caller's data attributes can
+   * spread them straight in.
    */
   [key: `data-${string}`]: unknown;
 }
@@ -129,16 +126,14 @@ export type ModalProps =
   | (ModalOwnProps & { isOpen?: never; onClose?: never });
 
 /**
- * Modal — a focus-trapping dialog. Collapses Chakra's
- * Modal/ModalOverlay/ModalContent into a single shell; place ModalHeader,
+ * Modal — a focus-trapping dialog in a single shell; place ModalHeader,
  * ModalBody and ModalFooter inside.
  *
  * Two ways to drive it:
  *
- * - **Controlled** (`isOpen` + `onClose`), which is what a Chakra app ports
- *   to, and what any dialog with more than one opener needs — a menu item and
- *   a toolbar button opening the same dialog, or one opened from a handler
- *   after an async result.
+ * - **Controlled** (`isOpen` + `onClose`), which is what any dialog with more
+ *   than one opener needs — a menu item and a toolbar button opening the same
+ *   dialog, or one opened from a handler after an async result.
  * - **Inside a `DialogTrigger`**, with neither prop: react-aria holds the
  *   open state, the trigger opens it, and `ModalCloseButton` and the footer's
  *   `useDialogClose()` still close it. Prefer this where a dialog has exactly
@@ -259,7 +254,7 @@ interface SlotProps {
   children?: ReactNode;
   css?: SystemStyleObject;
   className?: string;
-  /** `data-*` attributes land on the slot element, as they did on Chakra's. */
+  /** `data-*` attributes land on the slot element. */
   [key: `data-${string}`]: unknown;
 }
 
@@ -340,8 +335,8 @@ export interface ModalCloseButtonProps {
 }
 
 /**
- * ModalCloseButton — the X in the dialog's top corner (Chakra's
- * ModalCloseButton at its default md size). Closes via the Modal's onClose.
+ * ModalCloseButton — the X in the dialog's top corner. Closes via the Modal's
+ * onClose.
  */
 export const ModalCloseButton = ({
   "aria-label": ariaLabel,

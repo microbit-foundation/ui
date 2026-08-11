@@ -13,7 +13,7 @@ const meta = {
   component: Text,
   args: {
     children:
-      "Body text using the Chakra v2 design language on Panda CSS. Text takes Panda style props for one-off size and colour tweaks.",
+      "Body text. Text takes Panda style props for one-off size and colour tweaks.",
   },
   argTypes: {
     size: { control: "select", options: textSizes },

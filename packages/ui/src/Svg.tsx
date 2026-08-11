@@ -6,10 +6,9 @@
 import { styled } from "styled-system/jsx";
 
 /**
- * Svg — a Panda-styled svg element with Chakra Icon's base sizing (1em,
+ * Svg — a Panda-styled svg element with Icon's base sizing (1em,
  * inline-block). For custom-path icons; react-icons glyphs use `Icon`.
- * As a styled-factory component its call-site style props are extracted
- * (unlike style props forwarded through a plain wrapper — gotcha #9).
+ * As a styled-factory component its call-site style props are extracted.
  */
 export const Svg = styled("svg", {
   base: {

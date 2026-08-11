@@ -30,9 +30,8 @@ it("isLoading shows a spinner and disables the button", () => {
 });
 
 it("isLoading keeps the label in the layout so the button holds its size", () => {
-  // Chakra's behaviour, which both consumers depend on (ml-trainer hand-rolled
-  // it, data-microbit-org's dialogs had it from Chakra): the label is hidden
-  // with opacity, not removed, so a row of buttons doesn't reflow mid-submit.
+  // The label is hidden with opacity, not removed, so a row of buttons
+  // doesn't reflow mid-submit.
   render(
     <IntlProvider locale="en">
       <Button isLoading leftIcon={<span>icon</span>}>

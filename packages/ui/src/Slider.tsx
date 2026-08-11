@@ -33,7 +33,7 @@ export interface SliderProps {
   thumbCss?: SystemStyleObject;
   /**
    * Positioned at the current value along the track and shown while the
-   * slider has focus (Chakra's SliderMark usage).
+   * slider has focus.
    */
   mark?: ReactNode;
   markCss?: SystemStyleObject;
@@ -45,8 +45,7 @@ export interface SliderProps {
    */
   children?: ReactNode;
   /**
-   * Tooltip-styled bubble anchored above the thumb (Chakra's
-   * Tooltip-around-SliderThumb pattern). Rendered only while
+   * Tooltip-styled bubble anchored above the thumb. Rendered only while
    * `isThumbTooltipOpen`; drive it from hover/focus, e.g. via
    * `onThumbFocusChange` and mouse handlers on an enclosing element.
    */
@@ -56,10 +55,7 @@ export interface SliderProps {
   onThumbFocusChange?: (isFocused: boolean) => void;
 }
 
-/**
- * Slider — react-aria-components <Slider> styled like Chakra's horizontal md
- * slider.
- */
+/** Slider — a styled horizontal react-aria-components <Slider>. */
 export const Slider = ({
   value,
   onChange,

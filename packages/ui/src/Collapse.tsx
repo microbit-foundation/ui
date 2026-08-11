@@ -15,13 +15,13 @@ import { css, cx } from "styled-system/css";
 import { SystemStyleObject } from "styled-system/types";
 
 export interface CollapseProps {
-  /** Expanded when true (Chakra's `in`). */
+  /** Expanded when true. */
   isOpen: boolean;
-  /** Height when collapsed (Chakra's `startingHeight`). */
+  /** Height when collapsed. */
   startingHeight?: number | string;
   /**
-   * Height when expanded (Chakra's `endingHeight`; defaults to the measured
-   * content height, tracked with a ResizeObserver so nested expansion works).
+   * Height when expanded (defaults to the measured content height, tracked
+   * with a ResizeObserver so nested expansion works).
    */
   endingHeight?: number | string;
   /** Remove the content from the DOM once the exit transition finishes. */
@@ -36,15 +36,14 @@ const toCssSize = (v: number | string) =>
   typeof v === "number" ? `${v}px` : v;
 
 /**
- * Collapse — Chakra's Collapse transition without framer-motion: the content
- * is measured and the wrapper's height (and opacity, when collapsing to zero)
- * transitions between the collapsed and expanded sizes. Content stays mounted
- * unless `unmountOnExit` is set.
+ * Collapse — an expand/collapse transition: the content is measured and the
+ * wrapper's height (and opacity, when collapsing to zero) transitions between
+ * the collapsed and expanded sizes. Content stays mounted unless
+ * `unmountOnExit` is set.
  *
- * As with framer-motion, only `isOpen` changes animate: initial mounts render
- * at rest, and height corrections (late measurement, content growth) snap —
- * otherwise a collapse mounted inside an entering view morphs during the
- * outer animation.
+ * Only `isOpen` changes animate: initial mounts render at rest, and height
+ * corrections (late measurement, content growth) snap — otherwise a collapse
+ * mounted inside an entering view morphs during the outer animation.
  */
 export const Collapse = ({
   isOpen,
@@ -155,8 +154,8 @@ export const Collapse = ({
         height: displayOpen ? expanded : collapsed,
         opacity: displayOpen || !hideWhenCollapsed ? 1 : 0,
         // At rest fully-collapsed, remove the content from the a11y tree
-        // and tab order, as Chakra did (kept visible while animating so
-        // the exit transition shows).
+        // and tab order (kept visible while animating so the exit
+        // transition shows).
         visibility:
           displayOpen || animating || !hideWhenCollapsed ? undefined : "hidden",
         ...style,

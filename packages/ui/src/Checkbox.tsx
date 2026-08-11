@@ -53,9 +53,8 @@ export interface CheckboxProps
 }
 
 /**
- * Checkbox — react-aria-components <Checkbox> styled like Chakra's checkbox.
- * Children render as the label; wrap them in a visually-hidden span for
- * icon-less checkboxes.
+ * Checkbox — a styled react-aria-components <Checkbox>. Children render as
+ * the label; wrap them in a visually-hidden span for icon-less checkboxes.
  */
 export const Checkbox = ({
   size,

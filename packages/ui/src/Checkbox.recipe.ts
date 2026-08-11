@@ -6,10 +6,9 @@
 import { defineSlotRecipe } from "@pandacss/dev";
 
 /**
- * Checkbox slot recipe — Chakra's checkbox with the default blue colorScheme
- * (light mode) and its sm/md/lg size scale. The control's
- * `borderColor: inherit` picks up a `borderColor` set on the root, matching
- * Chakra's convention for tinting the box from the call site.
+ * Checkbox slot recipe with an sm/md/lg size scale. The control's
+ * `borderColor: inherit` picks up a `borderColor` set on the root, so call
+ * sites can tint the box from there.
  *
  * State styling keys off data attributes stamped on the control by the
  * shared-ui Checkbox (react-aria provides the state via render props).
@@ -56,8 +55,8 @@ export const checkbox = defineSlotRecipe({
           borderColor: "controlCheckedHoverBg",
         },
       },
-      // Chakra's disabled greys; the selected block restates _hover so the
-      // widened native-:hover condition can't re-tint a disabled control.
+      // Disabled greys; the selected block restates _hover so the widened
+      // native-:hover condition can't re-tint a disabled control.
       "&[data-disabled]": {
         bg: "gray.100",
         borderColor: "gray.100",
@@ -83,9 +82,8 @@ export const checkbox = defineSlotRecipe({
     },
   },
   variants: {
-    // Chakra's Checkbox size scale. The icon dimensions are Chakra's
-    // 1.2em-wide check glyph at each size's icon fontSize (3xs/2xs/2xs),
-    // resolved to rem.
+    // The icon dimensions are the 1.2em-wide check glyph at each size's icon
+    // fontSize (3xs/2xs/2xs), resolved to rem.
     size: {
       sm: {
         control: { width: "3", height: "3" },

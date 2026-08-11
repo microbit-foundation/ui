@@ -83,11 +83,11 @@ export const toastQueue = new RACToastQueue<ToastContent>({
 // call onClose, so closeAll empties both.
 const keysById = new Map<string, string>();
 
-// Status icon matching Chakra's AlertIcon (filled glyphs, coloured by the
-// toast foreground = white here). Warning is a triangle, error a circle, as
-// in Chakra — the glyph must distinguish them because the colours alone
-// don't reliably. The glyph is also what carries the status for assistive
-// tech, via its accessible name (see ToastProvider).
+// Status icon (filled glyphs, coloured by the toast foreground = white
+// here). Warning is a triangle, error a circle — the glyph must distinguish
+// them because the colours alone don't reliably. The glyph is also what
+// carries the status for assistive tech, via its accessible name (see
+// ToastProvider).
 const statusIcon: Record<ToastStatus, IconType> = {
   info: RiInformationFill,
   success: RiCheckboxCircleFill,
@@ -183,19 +183,18 @@ export interface ToastFn {
    */
   isActive(id: string): boolean;
   /**
-   * Replace a queued toast's content (Chakra's toast.update). The toast is
-   * re-added, so unlike Chakra it re-animates, restarts any timeout, and
-   * takes its place at the front of the queue.
+   * Replace a queued toast's content. The toast is re-added: it re-animates,
+   * restarts any timeout, and takes its place at the front of the queue.
    */
   update(id: string, options: ToastOptions): void;
-  /** Dismiss every toast, queued as well as displayed (Chakra's toast.closeAll). */
+  /** Dismiss every toast, queued as well as displayed. */
   closeAll(): void;
 }
 
 /**
- * useToast — imperative toast trigger in the shape of Chakra's `useToast()`
- * call sites: `toast({ title, description, status, duration })`. Unlike
- * Chakra there is no `duration: null`; use `persistent: true` instead.
+ * useToast — imperative toast trigger:
+ * `toast({ title, description, status, duration })`. There is no
+ * `duration: null`; use `persistent: true` instead.
  */
 export const useToast = (): ToastFn =>
   useMemo(() => {
