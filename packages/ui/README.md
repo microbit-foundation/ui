@@ -210,15 +210,22 @@ Crowdin ZIP>` (config-driven over packages in
 `bin/update-translations.cjs`), after which you run `npm run i18n:tidy`
 from the root.
 
+`bin/i18n-packages.cjs` lists every locale a consuming app ships, so a string
+translated for one app is in place for the next. Until this package's Crowdin
+project is wired up the catalogs are seeded from those apps' own translations
+of the same strings (ml-trainer for the Crowdin locales, python-editor-v3 for
+de, ga-IE and zh-CN); `i18n:tidy` backfills anything missing from English, so
+an untranslated string renders English rather than blank.
+
 ### react-aria's own strings
 
 Separately from all of the above, react-aria has built-in strings of its own
 and translates them from catalogs it bundles, nothing to do with react-intl.
 `SharedUIProvider` hands it the app's locale so the two agree. It covers 32
-locales; of ours, ca, cy and ga-IE (and the `lol` pseudo-locale) are not among
-them and fall back to English, and there is no supported way to teach it more
-(the rest resolve, including where our id is less specific than react-aria's —
-`fr` finds its fr-FR).
+locales; of ours, ca, cy, ga-IE, lo and vi (and the `lol` pseudo-locale) are not
+among them and fall back to English, and there is no supported way to teach it
+more (the rest resolve, including where our id is less specific than
+react-aria's — `fr` finds its fr-FR).
 
 Where react-aria lets a prop replace one of those strings, the component
 passes our own react-intl message instead, so the string rides `lang/` and
@@ -239,9 +246,9 @@ Crowdin like everything else and the missing locales can catch up:
 Their non-English translations were pre-seeded from react-aria's own catalogs
 ([adobe/react-spectrum](https://github.com/adobe/react-spectrum) at tag
 `react-aria-components@1.19.0`, Apache 2.0 — see the notice in
-[LICENSE.md](LICENSE.md)) for the locales both sides cover, so only ca, cy and
-ga-IE wait on Crowdin. That provenance is recorded here rather than in `lang/`
-because Crowdin roundtrips rewrite those files.
+[LICENSE.md](LICENSE.md)) for the locales both sides cover, so only ca, cy,
+ga-IE, lo and vi wait on Crowdin. That provenance is recorded here rather than
+in `lang/` because Crowdin roundtrips rewrite those files.
 
 What react-aria does not expose as a prop — live announcements ("2 items
 selected"), its hidden dismiss buttons — still comes from its bundled catalogs
