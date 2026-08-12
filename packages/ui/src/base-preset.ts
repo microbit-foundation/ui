@@ -288,7 +288,8 @@ export const basePreset = definePreset({
       touchAction: "manipulation",
     },
     body: {
-      position: "relative",
+      // No `position: relative` (Chakra had it): it breaks react-aria's
+      // overlay positioning — see Tooltip's "In a scrolling page" story.
       minHeight: "100%",
       fontFeatureSettings: '"kern"',
       fontFamily: "body",
