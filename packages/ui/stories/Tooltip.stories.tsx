@@ -45,9 +45,9 @@ export const InAScrollingPage: Story = {
     <VStack alignItems="flex-start" gap={4} css={{ minHeight: "300vh" }}>
       <Text>
         Scroll down to the button. Its tooltip is held open and must sit
-        directly on it, arrow touching the button — if it sits below the
-        button or slides around as you scroll, something (probably a
-        `position` on `body`) has broken react-aria's overlay positioning.
+        directly on it, arrow touching the button — if it sits below the button
+        or slides around as you scroll, something (probably a `position` on
+        `body`) has broken react-aria's overlay positioning.
       </Text>
       <Box css={{ marginTop: "120vh" }}>
         <Tooltip label="Anchored to the button, not the page" hasArrow isOpen>
