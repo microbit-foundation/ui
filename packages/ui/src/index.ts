@@ -40,6 +40,7 @@ export * from "./Text";
 export * from "./TextField";
 export * from "./Heading";
 export * from "./Link";
+export * from "./ExternalLink";
 export * from "./Icon";
 export * from "./CloseButton";
 export * from "./CloseIcon";

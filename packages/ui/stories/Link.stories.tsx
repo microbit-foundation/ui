@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Link, Text } from "../src";
+import { ExternalLink, Link, Text } from "../src";
 
 const meta = {
   title: "Typography/Link",
@@ -22,6 +22,17 @@ export const InlineInText: Story = {
     <Text maxW="lg">
       Body text with an inline <Link href="#">link</Link>, matching the
       surrounding text size.
+    </Text>
+  ),
+};
+
+export const External: Story = {
+  render: () => (
+    <Text maxW="lg">
+      Prose with an{" "}
+      <ExternalLink href="https://microbit.org">external link</ExternalLink>{" "}
+      that opens a new tab: the glyph shows it and a visually hidden suffix
+      announces it.
     </Text>
   ),
 };
