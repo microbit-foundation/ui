@@ -5,7 +5,7 @@
  */
 import type { Preview } from "@storybook/react-vite";
 import { IntlProvider } from "react-intl";
-import { SharedUIProvider, ToastProvider } from "../src";
+import { SharedUIProvider, ToastProvider } from "@microbit/ui";
 // @pandacss/dev/postcss (postcss.config.cjs) generates Panda's CSS into this
 // file's cascade-layer declaration at build time — no separate styled-system.css.
 import "./layers.css";

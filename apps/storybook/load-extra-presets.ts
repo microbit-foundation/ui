@@ -36,7 +36,7 @@ export interface PresetStack {
 export const STACKS: Record<string, PresetStack> = {
   python: {
     presets: [
-      "./src/dense-preset.ts",
+      "../../packages/ui/src/dense-preset.ts",
       "../../../python-editor-v3/src/deployment/default/panda-preset.ts",
       "../../../python-editor-v3-microbit/src/panda-preset.ts",
     ],
@@ -52,7 +52,7 @@ export const STACKS: Record<string, PresetStack> = {
   },
   classroom: {
     presets: [
-      "./src/dense-preset.ts",
+      "../../packages/ui/src/dense-preset.ts",
       "../../../classroom/src/theme/panda-preset.ts",
     ],
     // Plain CSS despite the .scss extension (main.ts reads it as text).

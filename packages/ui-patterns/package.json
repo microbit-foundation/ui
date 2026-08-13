@@ -1,0 +1,36 @@
+{
+  "name": "@microbit/ui-patterns",
+  "version": "0.0.0",
+  "description": "Higher-level UI patterns composed from @microbit/ui primitives. Ships as source; see README for the consumption setup.",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": [
+    "src",
+    "README.md",
+    "LICENSE.md"
+  ],
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "panda": "panda codegen",
+    "typecheck": "npm run panda && tsc --noEmit"
+  },
+  "peerDependencies": {
+    "@microbit/ui": "*",
+    "@pandacss/dev": "^1.11.4",
+    "react": "^18.3.1"
+  },
+  "devDependencies": {
+    "@microbit/ui": "*",
+    "@pandacss/dev": "^1.11.4",
+    "@storybook/react-vite": "^10.5.2",
+    "@types/react": "^18.3.3",
+    "react": "^18.3.1",
+    "typescript": "^5.4.2"
+  }
+}

@@ -13,9 +13,8 @@ PostCSS plugin for the CSS).
 
 ## App-side installation
 
-This package's own Storybook (`.storybook/` + `panda.config.ts`) is a
-worked example of the setup below, minus the app/brand presets. Everything
-an app must do:
+The repo's Storybook harness (`apps/storybook`) is a worked example of the
+setup below, minus the app/brand presets. Everything an app must do:
 
 1. **Panda preset stack** (`panda.config.ts`): `@pandacss/preset-base`, then
    the **base preset** (`@microbit/ui/base-preset` — the complete micro:bit
@@ -42,7 +41,7 @@ an app must do:
 3. **Resolve `styled-system/*` onto the generated output** for all
    importers, this package's source included — a `styled-system` alias in
    both `tsconfig.json` `paths` and the bundler config (see the
-   `viteFinal` in `.storybook/main.ts`).
+   `viteFinal` in `apps/storybook`'s `.storybook/main.ts`).
 4. **Generate and load the CSS** with Panda's PostCSS plugin. Keep Vite's
    default transformer — do **not** set `css.transformer: "lightningcss"`,
    which disables PostCSS. Add a `postcss.config.cjs`:
@@ -72,8 +71,9 @@ an app must do:
    width but no colour render `currentColor` borders.
    The `vendor` layer is for third-party stylesheets: import any vendor CSS
    with `@import "..." layer(vendor)` so it beats the preflight reset but
-   loses to app styling. See `.storybook/{layers.css,preview.tsx,main.ts}` +
-   `postcss.config.cjs` for the worked example.
+   loses to app styling. See `apps/storybook`'s
+   `.storybook/{layers.css,preview.tsx,main.ts}` + `postcss.config.cjs` for
+   the worked example.
 
 5. **react-intl**: an `IntlProvider` above any shared-ui usage. English
    works with no setup (components carry inline `defaultMessage`); for

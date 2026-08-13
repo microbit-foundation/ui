@@ -6,8 +6,8 @@
     "apps/*"
   ],
   "scripts": {
-    "storybook": "npm run storybook -w @microbit/ui",
-    "build-storybook": "npm run build-storybook -w @microbit/ui",
+    "storybook": "npm run storybook -w @microbit/ui-storybook",
+    "build-storybook": "npm run build-storybook -w @microbit/ui-storybook",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
     "ci": "npm run typecheck && npm run test && npm run build-storybook",

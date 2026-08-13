@@ -22,8 +22,6 @@ It will be a while before this settles down as a component API, but in the short
 
 ## Packages
 
-One package for now:
-
 - [`@microbit/ui`](./packages/ui) — the component library. It also exposes,
   as a subpath export, the **base preset** (`@microbit/ui/base-preset`): the
   complete micro:bit design system (Chakra scales, recipes, the micro:bit
@@ -33,16 +31,27 @@ One package for now:
   builds. Ships as source; see the package README for the consumption setup
   (preset stack, `styled-system` alias, cascade layers, react-intl
   messages).
+- [`@microbit/ui-patterns`](./packages/ui-patterns) — higher-level patterns
+  composed from `@microbit/ui` primitives. Also ships as source, consumed
+  the same way; `@microbit/ui` is a peer dependency.
 
-(The monorepo layout anticipates more packages later.)
+## Releases
+
+Packages are versioned independently. To release one, create a GitHub
+release whose tag carries the package's prefix — `ui-vX.Y.Z` or
+`ui-patterns-vX.Y.Z` (bare `vX.Y.Z` still means `@microbit/ui`, the
+pre-monorepo convention). The build workflow routes the release to the
+package by prefix, derives the npm version from the tag's numeric part, and
+publishes that package alone; an unrecognised prefix fails the build.
 
 ## Storybook
 
-Components are developed and browsed in Storybook, which lives in
-`packages/ui` (config in `.storybook/`, stories in `packages/ui/stories/`).
-It uses the base preset alone, so it shows the components in the OSS default
-look (Chakra blue/gray) rather than a private brand, and is the CI build
-target.
+Components are developed and browsed in Storybook. The harness is its own
+private workspace, [`apps/storybook`](./apps/storybook), which depends on
+every package; stories stay next to the package they exercise (e.g.
+`packages/ui/stories/`) and are globbed in from there. It uses the base
+preset alone, so it shows the components in the OSS default look (Chakra
+blue/gray) rather than a private brand, and is the CI build target.
 
 ## Development
 

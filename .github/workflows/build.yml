@@ -20,11 +20,56 @@ jobs:
       - run: npm install -g npm@11
       - run: npm ci
       - run: npm run format:check
+      # Route a release to a package by its tag prefix: ui-vX.Y.Z or
+      # ui-patterns-vX.Y.Z (bare vX.Y.Z is the pre-monorepo @microbit/ui
+      # convention). The versioner derives the version from the tag's
+      # numeric part. Branch builds default to ui; nothing is published.
+      - name: Route release tag to a package
+        id: route
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          case "$TAG" in
+            "") PACKAGE="ui" ;;
+            ui-patterns-v[0-9]*) PACKAGE="ui-patterns" ;;
+            ui-v[0-9]* | v[0-9]*) PACKAGE="ui" ;;
+            *)
+              echo "Unrecognised release tag '$TAG' (expected ui-vX.Y.Z, ui-patterns-vX.Y.Z or legacy vX.Y.Z)" >&2
+              exit 1
+              ;;
+          esac
+          echo "package=$PACKAGE" >> "$GITHUB_OUTPUT"
       - uses: microbit-foundation/npm-package-versioner-action@v3
         with:
-          working-directory: packages/ui
+          working-directory: packages/${{ steps.route.outputs.package }}
       - run: npm run ci
-      - run: npm publish -w @microbit/ui --allow-directory=all
+      - run: npm publish -w @microbit/${{ steps.route.outputs.package }} --allow-directory=all
         if: github.event_name == 'release' && github.event.action == 'created'
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # On main, hand the Storybook this run just built and checked to the
+      # deploy job below. Releases are excluded naturally: their ref is a tag.
+      - uses: actions/configure-pages@v6
+        if: github.ref == 'refs/heads/main' && github.event_name != 'release'
+      - uses: actions/upload-pages-artifact@v5
+        if: github.ref == 'refs/heads/main' && github.event_name != 'release'
+        with:
+          path: apps/storybook/storybook-static
+  deploy-storybook:
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name != 'release'
+    runs-on: ubuntu-latest
+    # Allow the GITHUB_TOKEN to deploy to Pages.
+    permissions:
+      pages: write
+      id-token: write
+    # Allow one concurrent deployment; don't cancel in-progress runs.
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5
