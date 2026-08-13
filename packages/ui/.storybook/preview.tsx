@@ -9,6 +9,8 @@ import { SharedUIProvider, ToastProvider } from "../src";
 // @pandacss/dev/postcss (postcss.config.cjs) generates Panda's CSS into this
 // file's cascade-layer declaration at build time — no separate styled-system.css.
 import "./layers.css";
+// Brand @font-face rules when UI_PRESET_STACK is set; empty otherwise (main.ts).
+import "virtual:brand-fonts.css";
 
 /**
  * Wraps every story in the providers the README lists for consumers: an
