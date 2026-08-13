@@ -112,8 +112,16 @@ export const LanguageDialog = ({
   const fully = ordered.filter((l) => !isPartiallySupported(l));
   const partially = ordered.filter(isPartiallySupported);
   const hasPreviewLanguages = ordered.some((l) => l.preview);
+  // With only a handful of languages the family-size dialog rattles around
+  // (data.microbit.org offers two), so compact to two columns in a narrower
+  // modal. Beyond the threshold the third column starts paying its way.
+  const compact = languages.length <= 6;
   const languageGrid = (items: LanguageDialogLanguage[]) => (
-    <Grid width="100%" columns={{ base: 1, sm: 2, md: 3 }} gap={4}>
+    <Grid
+      width="100%"
+      columns={compact ? { base: 1, sm: 2 } : { base: 1, sm: 2, md: 3 }}
+      gap={4}
+    >
       {items.map((language) => (
         <LanguageCard
           key={language.id}
@@ -128,7 +136,7 @@ export const LanguageDialog = ({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      size={{ base: "full", md: "4xl" }}
+      size={compact ? { base: "full", md: "xl" } : { base: "full", md: "4xl" }}
       finalFocusRef={finalFocusRef}
     >
       <ModalHeader css={{ fontSize: "lg", fontWeight: "bold" }}>

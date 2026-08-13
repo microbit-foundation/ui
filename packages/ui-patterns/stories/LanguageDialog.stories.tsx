@@ -93,6 +93,15 @@ export const WithPartialSupport: Story = {
   },
 };
 
+/** Below the compact threshold (data.microbit.org's shape): narrower
+ * modal, two columns. */
+export const FewLanguages: Story = {
+  args: {
+    languages: [{ id: "en" }, { id: "cy" }],
+    translationLinkHref: "https://microbit.org/translate/",
+  },
+};
+
 /** Preview languages: asterisked English name plus the footnote. */
 export const WithPreviewLanguages: Story = {
   args: {
