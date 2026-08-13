@@ -10,7 +10,6 @@
 module.exports = [
   {
     dir: "packages/ui-patterns",
-    // Placeholder until the Crowdin project is wired up.
     crowdinDir: "new/packages/microbit-ui-patterns",
     // Mirrors packages/ui: every locale any consuming app ships.
     languages: [
@@ -37,7 +36,7 @@ module.exports = [
     // Package directory, relative to the repo root.
     dir: "packages/ui",
     // Where this package's strings sit within each language's Crowdin export
-    // dir. Placeholder until the Crowdin project is wired up.
+    // dir.
     crowdinDir: "new/packages/microbit-ui",
     // Every locale any consuming app ships, so a string translated for one
     // app is there for the next. The `lol` pseudo-locale sorts last.
