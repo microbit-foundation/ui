@@ -9,6 +9,14 @@ import path from "node:path";
 const config: StorybookConfig = {
   framework: "@storybook/react-vite",
   stories: ["../stories/**/*.stories.@(ts|tsx)"],
+  features: {
+    // No onboarding checklist in the sidebar or menu.
+    sidebarOnboardingChecklist: false,
+    menuOnboardingChecklist: false,
+  },
+  core: {
+    disableWhatsNewNotifications: true,
+  },
   viteFinal: (viteConfig) => {
     viteConfig.resolve ??= {};
     viteConfig.resolve.alias = {

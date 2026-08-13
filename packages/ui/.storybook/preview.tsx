@@ -29,7 +29,9 @@ const preview: Preview = {
     ),
   ],
   parameters: {
-    controls: { expanded: true },
+    // disableSaveFromUI hides the Controls-panel buttons that would write
+    // tweaked args back into the .stories.tsx files.
+    controls: { expanded: true, disableSaveFromUI: true },
     options: {
       storySort: {
         order: [
