@@ -27,9 +27,9 @@ blocks.
   the app allows to be auto-selected. The candidate set is the app's call —
   pass a narrowed set where landing a user in a language silently would be
   wrong (e.g. incomplete native-app translations).
-- **`useDocumentLang`** — keeps `<html lang>` in step with the app's language
-  setting. Deliberately opt-in per entry point: only the app knows whether it
-  owns the document it's mounted in.
+
+(`<html lang>` needs nothing from this package: `@microbit/ui`'s
+`SharedUIProvider` keeps it in step with the locale automatically.)
 
 ## Consumption
 

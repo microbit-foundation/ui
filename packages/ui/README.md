@@ -87,7 +87,10 @@ node_modules/@microbit/ui/lang/ui.fr.json --ast --out-file ...` (multiple
 6. **`SharedUIProvider`** inside the `IntlProvider`, wrapping the app. It
    passes the locale on to react-aria, which translates its own built-in
    strings (see [Strings](#strings)); without it those follow the browser
-   rather than the app's language setting. Also takes an optional
+   rather than the app's language setting. It also keeps `<html lang>` in
+   step with the locale so assistive tech announces the page in the app's
+   language — pass `setDocumentLang={false}` where the app doesn't own the
+   document it's mounted in (an embedded widget). Also takes an optional
    overlay-close registrar, so the app can dismiss open menus from outside
    the tree (e.g. the Android hardware back button).
 7. **`ToastProvider`** once near the root, inside the two providers above.

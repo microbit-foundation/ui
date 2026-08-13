@@ -3,7 +3,13 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { createContext, ReactNode, useContext, useMemo } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useMemo,
+} from "react";
 import { I18nProvider } from "react-aria-components";
 import { IntlContext } from "react-intl";
 import { racLocale } from "./rac-locale";
@@ -30,6 +36,14 @@ export interface SharedUIProviderProps {
    * two must differ.
    */
   locale?: string;
+  /**
+   * Keeps `<html lang>` in step with the locale, so assistive tech announces
+   * the page in the app's language. On by default; set false where the app
+   * doesn't own the document it's mounted in (an embedded widget), or when
+   * mounting more than one provider per page. The static `lang="en"` in
+   * index.html remains the pre-hydration default.
+   */
+  setDocumentLang?: boolean;
   children: ReactNode;
 }
 
@@ -48,20 +62,25 @@ export interface SharedUIProviderProps {
 export const SharedUIProvider = ({
   overlayCloseRegistrar,
   locale,
+  setDocumentLang = true,
   children,
 }: SharedUIProviderProps) => {
   // Read the context rather than calling useIntl(), which throws when there is
   // no IntlProvider: react-aria falls back to the browser locale, as before.
   const intlLocale = useContext(IntlContext)?.locale;
+  const appLocale = locale ?? intlLocale;
+  useEffect(() => {
+    if (setDocumentLang && appLocale) {
+      document.documentElement.lang = appLocale;
+    }
+  }, [setDocumentLang, appLocale]);
   const value = useMemo(
     () => ({ overlayCloseRegistrar }),
     [overlayCloseRegistrar],
   );
   return (
     <SharedUIContext.Provider value={value}>
-      <I18nProvider locale={racLocale(locale ?? intlLocale)}>
-        {children}
-      </I18nProvider>
+      <I18nProvider locale={racLocale(appLocale)}>{children}</I18nProvider>
     </SharedUIContext.Provider>
   );
 };
