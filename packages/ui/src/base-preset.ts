@@ -86,7 +86,7 @@ const gray = {
  * The base preset: the complete, working micro:bit design system. The base
  * token scales (base-tokens.ts), the micro:bit house style
  * (pill `radii.button`, `outline*` focus shadows, Helvetica fonts, the
- * `language`/`toolbar` button variants in Button.recipe.ts, the
+ * `toolbar` button variant in Button.recipe.ts, the
  * `languageText`/`toast*Bg`/`statusBarBg` semantic tokens), the shared-ui
  * component recipes, the react-aria condition widening, the `globalCss`
  * defaults, and the `staticCss` that keeps runtime-prop recipe
@@ -207,11 +207,12 @@ export const basePreset = definePreset({
           600: { value: "{colors.red.600}" },
           700: { value: "{colors.red.700}" },
         },
-        // The `language` button variant's text colour follows the primary
-        // interactive brand: every consumer resolves it to its `brand` ramp
-        // (CreateAI privately to brand.600 with no hover change,
-        // python-editor to brand.500/600 — the default). Semantic tokens so
-        // the recipe stays shared and a brand preset overrides only values.
+        // The language-dialog cards' text colour (@microbit/ui-patterns'
+        // LanguageDialog) follows the primary interactive brand: every
+        // consumer resolves it to its `brand` ramp (CreateAI privately to
+        // brand.600 with no hover change, python-editor to brand.500/600 —
+        // the default; data-microbit-org to black). Semantic tokens so the
+        // pattern stays shared and a brand preset overrides only values.
         languageText: { value: "{colors.brand.500}" },
         languageTextHover: { value: "{colors.brand.600}" },
         // The `label`/`subtitle` heading variants' colour (page-title chrome).

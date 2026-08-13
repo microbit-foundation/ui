@@ -154,20 +154,13 @@ export const button = defineRecipe({
         _hover: { bg: "danger.600", _disabled: { bg: "danger.500" } },
         _active: { bg: "danger.700" },
       },
-      // Family-wide variants (every censused app has language- and
-      // toolbar-class buttons).
+      // Family-wide variant (every censused app has toolbar-class buttons).
       toolbar: {
         color: "black",
         bg: "white",
         _hover: { bg: "whiteAlpha.900", _disabled: { bg: "white" } },
         _active: { bg: "whiteAlpha.800" },
         _focusVisible: { focusShadow: "outlineDark" },
-      },
-      language: {
-        borderWidth: "2px",
-        borderColor: "gray.200",
-        color: "languageText",
-        _hover: { color: "languageTextHover", bg: "gray.100" },
       },
     },
   },
