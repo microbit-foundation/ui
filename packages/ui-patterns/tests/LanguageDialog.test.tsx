@@ -56,8 +56,10 @@ it("splits into sections when a language is partially supported", () => {
       { id: "en" },
       {
         id: "ar",
-        fullySupported: false,
-        support: [{ name: "Microsoft MakeCode", supported: true }],
+        support: [
+          { name: "Microsoft MakeCode", supported: true },
+          { name: "My App", supported: false },
+        ],
       },
     ],
   });
@@ -134,7 +136,6 @@ it("toasts the support statement when a partially supported language is chosen",
       { id: "en" },
       {
         id: "ar",
-        fullySupported: false,
         support: [
           { name: "Microsoft MakeCode", supported: true },
           { name: "My App", supported: false },
@@ -165,4 +166,17 @@ it("sorts languages into registry order regardless of input order", () => {
     .getAllByTestId(/^(en|cy|fr)$/)
     .map((el) => el.getAttribute("data-testid"));
   expect(ids).toEqual(["en", "fr", "cy"]);
+});
+
+it("an all-supported checklist means fully supported: no sections, no warning", () => {
+  renderDialog({
+    languages: [
+      { id: "en", support: [{ name: "Microsoft MakeCode", supported: true }] },
+      { id: "cy", support: [{ name: "Microsoft MakeCode", supported: true }] },
+    ],
+  });
+  expect(screen.queryByRole("heading", { name: "Fully supported" })).toBeNull();
+  expect(
+    screen.queryByRole("button", { name: "Language not fully supported" }),
+  ).toBeNull();
 });

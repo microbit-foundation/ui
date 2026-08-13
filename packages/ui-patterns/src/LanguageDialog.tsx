@@ -43,14 +43,11 @@ export interface LanguageDialogSupportItem {
 export interface LanguageDialogLanguage {
   id: KnownLanguageId;
   /**
-   * When false the language is listed under a "Partially supported" heading,
-   * with a warning tooltip and a post-selection toast explaining `support`.
-   * Defaults to true.
-   */
-  fullySupported?: boolean;
-  /**
-   * Per-product translation coverage shown for a partially supported
-   * language. Only rendered when `fullySupported` is false.
+   * Per-product translation coverage. A language with any unsupported
+   * product is listed under a "Partially supported" heading, with a warning
+   * tooltip and a post-selection toast showing this checklist. Omit for
+   * apps without the support-tier concept (a flat grid), or pass it for
+   * every language and let the dialog derive the sections.
    */
   support?: LanguageDialogSupportItem[];
   /**
@@ -66,6 +63,9 @@ export interface LanguageDialogLanguage {
   name?: string;
   enName?: string;
 }
+
+const isPartiallySupported = (language: LanguageDialogLanguage): boolean =>
+  language.support?.some((item) => !item.supported) ?? false;
 
 export interface LanguageDialogProps {
   isOpen: boolean;
@@ -85,10 +85,10 @@ export interface LanguageDialogProps {
 
 /**
  * Language settings dialog — a grid of language cards (endonym over English
- * name), split into fully/partially supported sections when the app reports
- * partial support. Selection applies immediately: no confirm step, no page
- * reload expected. Endonyms carry their own `lang`/`dir` so assistive tech
- * pronounces them correctly.
+ * name), split into fully/partially supported sections when any language's
+ * support checklist has an unsupported product. Selection applies
+ * immediately: no confirm step, no page reload expected. Endonyms carry
+ * their own `lang`/`dir` so assistive tech pronounces them correctly.
  */
 export const LanguageDialog = ({
   isOpen,
@@ -109,8 +109,8 @@ export const LanguageDialog = ({
   const ordered = [...languages].sort(
     (a, b) => languageOrder(a.id) - languageOrder(b.id),
   );
-  const fully = ordered.filter((l) => l.fullySupported !== false);
-  const partially = ordered.filter((l) => l.fullySupported === false);
+  const fully = ordered.filter((l) => !isPartiallySupported(l));
+  const partially = ordered.filter(isPartiallySupported);
   const hasPreviewLanguages = ordered.some((l) => l.preview);
   const languageGrid = (items: LanguageDialogLanguage[]) => (
     <Grid width="100%" columns={{ base: 1, sm: 2, md: 3 }} gap={4}>
@@ -231,8 +231,7 @@ const LanguageCard = ({
   const enName = language.enName ?? registryEntry.enName;
   const nameId = useId();
   const enNameId = useId();
-  const showSupport =
-    language.fullySupported === false && (language.support?.length ?? 0) > 0;
+  const showSupport = isPartiallySupported(language);
   const handleSelect = useCallback(() => {
     void onChooseLanguage(language.id);
     if (showSupport) {
