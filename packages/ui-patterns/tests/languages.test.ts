@@ -17,9 +17,10 @@ it("ids are unique", () => {
   expect(new Set(ids).size).toBe(ids.length);
 });
 
-it("orders English first, then by English name", () => {
+it("orders the Englishes first, then by English name", () => {
   expect(languages[0].id).toBe("en");
-  const enNames = languages.slice(1).map((l) => l.enName);
+  expect(languages[1].id).toBe("en-US");
+  const enNames = languages.slice(2).map((l) => l.enName);
   expect(enNames).toEqual([...enNames].sort());
 });
 
