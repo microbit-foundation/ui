@@ -38,10 +38,6 @@ export const ExternalLink = ({ children, ...props }: ExternalLinkProps) => (
       {", "}
       <FormattedMessage {...uiMessage("ui.new-tab-notice")} />
     </VisuallyHidden>
-    <Icon
-      as={RiExternalLinkLine}
-      aria-hidden
-      css={{ verticalAlign: "text-bottom", ml: 1 }}
-    />
+    <Icon as={RiExternalLinkLine} aria-hidden css={{ ml: 1 }} />
   </Link>
 );
