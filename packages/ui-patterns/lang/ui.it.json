@@ -1,7 +1,23 @@
 {
+  "ui-patterns.help-translate": {
+    "defaultMessage": "Help translate",
+    "description": "Language dialog link to the translation project"
+  },
   "ui-patterns.language": {
     "defaultMessage": "Lingua",
     "description": "Language dialog title"
+  },
+  "ui-patterns.language-fully-supported-heading": {
+    "defaultMessage": "Fully supported",
+    "description": "Fully supported languages heading text"
+  },
+  "ui-patterns.language-partially-supported-heading": {
+    "defaultMessage": "Partially supported",
+    "description": "Partially supported languages heading text"
+  },
+  "ui-patterns.language-preview-notice": {
+    "defaultMessage": "* These languages are an early preview of in-progress translations.",
+    "description": "Language dialog footnote shown when preview languages are listed"
   },
   "ui-patterns.language-support-checked": {
     "defaultMessage": "Supportata",
