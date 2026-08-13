@@ -19,6 +19,10 @@
     "defaultMessage": "Cargando",
     "description": "Announced by screen readers for a button showing a loading spinner"
   },
+  "ui.new-tab-notice": {
+    "defaultMessage": "(opens in a new tab)",
+    "description": "Visually hidden suffix on links that open a new tab, announced by screen readers"
+  },
   "ui.numberfield-decrease": {
     "defaultMessage": "Reducir {fieldLabel}",
     "description": "Accessible label for a number field's decrement stepper; fieldLabel is the field's label and may be empty"
