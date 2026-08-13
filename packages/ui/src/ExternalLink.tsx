@@ -19,8 +19,12 @@ export type ExternalLinkProps = Omit<
 /**
  * ExternalLink — a Link that opens in a new tab and says so both ways: a
  * trailing external-link glyph for sighted users, and a visually hidden,
- * translated "(opens in a new tab)" for assistive tech. Use this rather than
+ * translated "opens in a new tab" for assistive tech. Use this rather than
  * restating `target="_blank"` + icon so the announcement can't be forgotten.
+ *
+ * For app chrome, where a new tab protects the user's session-only state.
+ * Content surfaces should prefer same-tab links, or a visible
+ * "(opens in new tab)" suffix and no icon.
  *
  * Inline-safe: the icon is 1em and follows the text colour, so the link can
  * sit in prose as well as stand alone.
