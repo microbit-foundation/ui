@@ -8,11 +8,11 @@
     "description": "Language dialog title"
   },
   "ui-patterns.language-fully-supported-heading": {
-    "defaultMessage": "Fully supported",
+    "defaultMessage": "Wedi'u cefnogi'n llawn",
     "description": "Fully supported languages heading text"
   },
   "ui-patterns.language-partially-supported-heading": {
-    "defaultMessage": "Partially supported",
+    "defaultMessage": "Wedi'u cefnogi'n rhannol",
     "description": "Partially supported languages heading text"
   },
   "ui-patterns.language-preview-notice": {
