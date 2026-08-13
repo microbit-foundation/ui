@@ -66,7 +66,7 @@ export const languages = [
   { id: "sv-SE", name: "Svenska", enName: "Swedish" },
   { id: "tr", name: "Türkçe", enName: "Turkish" },
   { id: "uk", name: "Українська", enName: "Ukrainian" },
-  { id: "vi", name: "Tiếng việt", enName: "Vietnamese" },
+  { id: "vi", name: "Tiếng việt", enName: "Vietnamese" },
   { id: "cy", name: "Cymraeg", enName: "Welsh" },
 ] as const satisfies readonly LanguageInfo[];
 
