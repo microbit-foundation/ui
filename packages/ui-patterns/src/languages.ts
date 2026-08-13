@@ -15,7 +15,7 @@ export interface LanguageInfo {
 
 /**
  * The family name-book: every language any micro:bit app lists, in the
- * dialog's display order (English first, then by English name). Broader than
+ * dialog's display order (the Englishes first, then by English name). Broader than
  * this package's own catalogs — apps list languages (e.g. MakeCode-only
  * ones) that have no UI translation anywhere.
  *
@@ -25,6 +25,9 @@ export interface LanguageInfo {
  */
 export const languages = [
   { id: "en", name: "English", enName: "English" },
+  // Next to `en`, not at "English (US)"'s alphabetical slot: a user choosing
+  // between the Englishes should see them side by side.
+  { id: "en-US", name: "English (US)", enName: "English (US)" },
   { id: "ar", name: "العربية", enName: "Arabic" },
   { id: "bg", name: "български", enName: "Bulgarian" },
   { id: "ca", name: "Català", enName: "Catalan" },
@@ -33,7 +36,6 @@ export const languages = [
   { id: "cs", name: "Čeština", enName: "Czech" },
   { id: "da", name: "Dansk", enName: "Danish" },
   { id: "nl", name: "Nederlands", enName: "Dutch" },
-  { id: "en-US", name: "English (US)", enName: "English (US)" },
   { id: "fi", name: "Suomi", enName: "Finnish" },
   { id: "fr", name: "Français", enName: "French" },
   { id: "de", name: "Deutsch", enName: "German" },
