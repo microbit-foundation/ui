@@ -15,8 +15,6 @@ export interface DefaultLanguageOptions {
    * language dialog, which explains its level of support.
    */
   autoSelectableIds: readonly string[];
-  /** Used when nothing matches, typically "en". */
-  fallbackId: string;
   /**
    * URL hint, e.g. from a `?l=` parameter (typically the site language passed
    * along when following a link from microbit.org). A first preference rather
@@ -44,11 +42,11 @@ const noMatch = "x-no-match";
 /**
  * The initial language for a first run: BCP 47 best-fit matching of the URL
  * hint (first) and the browser/OS language preferences against the ids the
- * app allows to be auto-selected.
+ * app allows to be auto-selected. Falls back to English — the family's
+ * source language, which every app ships.
  */
 export const getDefaultLanguageId = ({
   autoSelectableIds,
-  fallbackId,
   languageHint = null,
   requestedLanguages = navigator.languages,
 }: DefaultLanguageOptions): string => {
@@ -60,5 +58,5 @@ export const getDefaultLanguageId = ({
     [...autoSelectableIds],
     noMatch,
   );
-  return matched === noMatch ? fallbackId : matched;
+  return matched === noMatch ? "en" : matched;
 };
