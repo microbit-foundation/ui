@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    /* For .storybook/main.ts's import of load-extra-presets.ts: Storybook
+       resolves config imports as native ESM, so the extension is required. */
+    "allowImportingTsExtensions": true,
+    /* Panda CSS generated output (run `npm run panda`), imported as
+       styled-system/* by the package sources this program typechecks. */
+    "paths": {
+      "styled-system/*": ["./styled-system/*"]
+    }
+  },
+  "include": [".storybook", "load-extra-presets.ts", "panda.config.ts"]
+}

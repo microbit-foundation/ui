@@ -11,7 +11,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      // Panda CSS generated output (run `npm run panda`), as in .storybook/main.ts.
+      // Panda CSS generated output (run `npm run panda`), imported as styled-system/*.
       "styled-system": path.resolve(import.meta.dirname, "styled-system"),
     },
   },

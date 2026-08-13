@@ -27,15 +27,7 @@
     "panda": "panda codegen",
     "typecheck": "npm run panda && tsc --noEmit",
     "pretest": "npm run panda",
-    "test": "vitest run",
-    "prestorybook": "npm run panda",
-    "storybook": "storybook dev -p 6006 --no-open",
-    "storybook:python": "UI_PRESET_STACK=python npm run storybook",
-    "storybook:createai": "UI_PRESET_STACK=createai npm run storybook",
-    "storybook:classroom": "UI_PRESET_STACK=classroom npm run storybook",
-    "storybook:data": "UI_PRESET_STACK=data npm run storybook",
-    "prebuild-storybook": "npm run panda",
-    "build-storybook": "storybook build"
+    "test": "vitest run"
   },
   "peerDependencies": {
     "@pandacss/dev": "^1.11.4",
@@ -59,7 +51,6 @@
     "react-dom": "^18.3.1",
     "react-icons": "^4.12.0",
     "react-intl": "^6.6.8",
-    "storybook": "^10.5.2",
     "typescript": "^5.4.2",
     "vite": "^6.3.5",
     "vitest": "^4.1.10"

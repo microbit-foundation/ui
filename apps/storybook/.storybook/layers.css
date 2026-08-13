@@ -11,4 +11,4 @@
  */
 @layer reset, vendor, base, tokens, recipes, utilities;
 
-@import "../reset.css" layer(reset);
+@import "@microbit/ui/reset.css" layer(reset);

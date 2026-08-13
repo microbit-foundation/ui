@@ -48,7 +48,13 @@ const brandFontsPlugin = (): Plugin => ({
 
 const config: StorybookConfig = {
   framework: "@storybook/react-vite",
-  stories: ["../stories/**/*.stories.@(ts|tsx)"],
+  // One Storybook for the whole family: stories stay next to their packages
+  // and are globbed in here; panda.config.ts includes the same files so
+  // their styles are extracted into this build's CSS.
+  stories: [
+    "../../../packages/ui/stories/**/*.stories.@(ts|tsx)",
+    "../../../packages/ui-patterns/stories/**/*.stories.@(ts|tsx)",
+  ],
   features: {
     // No onboarding checklist in the sidebar or menu.
     sidebarOnboardingChecklist: false,
