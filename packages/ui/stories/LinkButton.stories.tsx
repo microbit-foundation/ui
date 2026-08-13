@@ -15,7 +15,6 @@ const variants = [
   "plain",
   "warning",
   "warningSolid",
-  "language",
   "toolbar",
 ] as const;
 
