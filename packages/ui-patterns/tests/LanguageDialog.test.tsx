@@ -61,10 +61,18 @@ it("splits into sections when a language is partially supported", () => {
       },
     ],
   });
-  expect(screen.getByRole("heading", { name: "Fully supported" })).toBeTruthy();
+  // h3: the dialog title is the h2.
   expect(
-    screen.getByRole("heading", { name: "Partially supported" }),
+    screen.getByRole("heading", { name: "Fully supported", level: 3 }),
   ).toBeTruthy();
+  expect(
+    screen.getByRole("heading", { name: "Partially supported", level: 3 }),
+  ).toBeTruthy();
+  // The warning trigger gets a short name; the statement is its description.
+  const warning = screen.getByRole("button", {
+    name: "Language not fully supported",
+  });
+  expect(warning).toBeTruthy();
 });
 
 it("selects on press: onSelectLanguage completes, then the dialog closes", async () => {
@@ -117,8 +125,13 @@ it("shows the preview footnote only when a preview language is listed", () => {
   expect(screen.queryByText(notice)).toBeNull();
   cleanup();
   renderDialog({ languages: [{ id: "en" }, { id: "fr", preview: true }] });
-  expect(screen.getByText(notice)).toBeTruthy();
-  expect(screen.getByText("French*")).toBeTruthy();
+  const noticeEl = screen.getByText(notice);
+  // The asterisk is visible but stays out of the accessible name; the
+  // footnote is linked as the preview card's description instead.
+  expect(screen.getByText("*")).toBeTruthy();
+  const button = screen.getByRole("button", { name: "Français French" });
+  expect(button.getAttribute("aria-describedby")).toBe(noticeEl.id);
+  expect(screen.getByTestId("en").getAttribute("aria-describedby")).toBeNull();
 });
 
 it("toasts the support statement when a partially supported language is chosen", async () => {

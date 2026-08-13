@@ -6,11 +6,11 @@
 import {
   Box,
   Button,
+  ExternalLink,
   Flex,
   Grid,
   HStack,
   Icon,
-  Link,
   List,
   ListItem,
   Modal,
@@ -30,7 +30,6 @@ import {
   RiCheckboxLine,
   RiCheckLine,
   RiErrorWarningLine,
-  RiExternalLinkLine,
 } from "react-icons/ri";
 import { FormattedMessage, useIntl } from "react-intl";
 import { KnownLanguageId, languageFromId, languageOrder } from "./languages";
@@ -110,6 +109,7 @@ export const LanguageDialog = ({
     },
     [onClose, onSelectLanguage],
   );
+  const previewNoticeId = useId();
   const ordered = [...languages].sort(
     (a, b) => languageOrder(a.id) - languageOrder(b.id),
   );
@@ -124,6 +124,7 @@ export const LanguageDialog = ({
           language={language}
           isCurrent={language.id === currentLanguageId}
           onChooseLanguage={handleChooseLanguage}
+          previewNoticeId={previewNoticeId}
         />
       ))}
     </Grid>
@@ -154,7 +155,12 @@ export const LanguageDialog = ({
             </>
           )}
           {hasPreviewLanguages && (
-            <Text fontSize="xs" alignSelf="flex-end" mt={1}>
+            <Text
+              id={previewNoticeId}
+              fontSize="xs"
+              alignSelf="flex-end"
+              mt={1}
+            >
               <FormattedMessage
                 {...uiPatternsMessage("ui-patterns.language-preview-notice")}
               />
@@ -171,14 +177,9 @@ export const LanguageDialog = ({
           width="100%"
         >
           {translationLinkHref && (
-            <Link
+            <ExternalLink
               href={translationLinkHref}
-              target="_blank"
-              rel="noopener"
               css={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 1,
                 fontSize: "md",
                 fontWeight: "semibold",
                 color: "brand.500",
@@ -187,8 +188,7 @@ export const LanguageDialog = ({
               <FormattedMessage
                 {...uiPatternsMessage("ui-patterns.help-translate")}
               />
-              <Icon as={RiExternalLinkLine} aria-hidden />
-            </Link>
+            </ExternalLink>
           )}
           <Button variant="primary" onPress={onClose} css={{ ml: "auto" }}>
             <FormattedMessage {...uiMessage("ui.close-action")} />
@@ -209,7 +209,8 @@ const SectionHeading = ({
   spaced?: boolean;
 }) => (
   <Text
-    as="h2"
+    // h3: the dialog's own title (ModalHeader) is the h2.
+    as="h3"
     fontSize="md"
     fontWeight="bold"
     textAlign="left"
@@ -224,12 +225,15 @@ interface LanguageCardProps {
   language: LanguageDialogLanguage;
   isCurrent: boolean;
   onChooseLanguage: (languageId: KnownLanguageId) => void | Promise<void>;
+  /** id of the dialog's preview footnote, described-by on preview cards. */
+  previewNoticeId: string;
 }
 
 const LanguageCard = ({
   language,
   isCurrent,
   onChooseLanguage,
+  previewNoticeId,
 }: LanguageCardProps) => {
   const intl = useIntl();
   const toast = useToast();
@@ -250,6 +254,9 @@ const LanguageCard = ({
         description: <SupportStatement support={language.support ?? []} />,
         status: "info",
         isClosable: true,
+        // The dialog (and its support tooltip) is gone by the time this
+        // shows, so give the checklist longer than the 5s default.
+        duration: 10_000,
       });
     }
   }, [
@@ -273,6 +280,7 @@ const LanguageCard = ({
       <Button
         variant="plain"
         aria-labelledby={`${nameId} ${enNameId}`}
+        aria-describedby={language.preview ? previewNoticeId : undefined}
         aria-current={isCurrent ? "true" : undefined}
         onPress={handleSelect}
         data-testid={language.id}
@@ -324,7 +332,9 @@ const LanguageCard = ({
             color="gray.700"
           >
             {enName}
-            {language.preview ? "*" : ""}
+            {/* Visual pointer to the footnote; the accessible link is the
+                button's aria-describedby, so keep the star out of the name. */}
+            {language.preview && <span aria-hidden="true">*</span>}
           </Text>
           {showSupport && (
             <Box
@@ -337,6 +347,11 @@ const LanguageCard = ({
               <TooltipButton
                 hasArrow
                 placement="top"
+                // A short name; the full statement stays the description
+                // rather than being read out as the button's name.
+                aria-label={intl.formatMessage(
+                  uiPatternsMessage("ui-patterns.language-toast-title"),
+                )}
                 css={{ px: 3, py: 3 }}
                 label={
                   <Stack>
