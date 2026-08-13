@@ -1,0 +1,34 @@
+{
+  "ui-patterns.help-translate": {
+    "defaultMessage": "Contribuer à la traduction",
+    "description": "Language dialog link to the translation project"
+  },
+  "ui-patterns.language": {
+    "defaultMessage": "Langue",
+    "description": "Language dialog title"
+  },
+  "ui-patterns.language-fully-supported-heading": {
+    "defaultMessage": "Entièrement pris en charge",
+    "description": "Fully supported languages heading text"
+  },
+  "ui-patterns.language-partially-supported-heading": {
+    "defaultMessage": "Partiellement pris en charge",
+    "description": "Partially supported languages heading text"
+  },
+  "ui-patterns.language-support-checked": {
+    "defaultMessage": "Pris en charge",
+    "description": "Aria label for ticked checkbox for language support"
+  },
+  "ui-patterns.language-support-unchecked": {
+    "defaultMessage": "Non pris en charge",
+    "description": "Aria label for unticked checkbox for language support"
+  },
+  "ui-patterns.language-supported-for": {
+    "defaultMessage": "Traductions prises en charge pour :",
+    "description": "Text introducing the list of translated products for a given language"
+  },
+  "ui-patterns.language-toast-title": {
+    "defaultMessage": "La langue n'est pas entièrement prise en charge",
+    "description": "Language support toast notification title"
+  }
+}

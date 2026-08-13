@@ -1,0 +1,34 @@
+{
+  "ui-patterns.help-translate": {
+    "defaultMessage": "ຊ່ວຍແປ",
+    "description": "Language dialog link to the translation project"
+  },
+  "ui-patterns.language": {
+    "defaultMessage": "ພາສາ",
+    "description": "Language dialog title"
+  },
+  "ui-patterns.language-fully-supported-heading": {
+    "defaultMessage": "ຮອງຮັບຢ່າງເຕັມທີ່",
+    "description": "Fully supported languages heading text"
+  },
+  "ui-patterns.language-partially-supported-heading": {
+    "defaultMessage": "ຮອງຮັບບາງສ່ວນ",
+    "description": "Partially supported languages heading text"
+  },
+  "ui-patterns.language-support-checked": {
+    "defaultMessage": "ຮອງຮັບ",
+    "description": "Aria label for ticked checkbox for language support"
+  },
+  "ui-patterns.language-support-unchecked": {
+    "defaultMessage": "ບໍ່ຮອງຮັບ",
+    "description": "Aria label for unticked checkbox for language support"
+  },
+  "ui-patterns.language-supported-for": {
+    "defaultMessage": "ຮອງຮັບການແປສຳລັບ:",
+    "description": "Text introducing the list of translated products for a given language"
+  },
+  "ui-patterns.language-toast-title": {
+    "defaultMessage": "ພາສາບໍ່ຮອງຮັບຢ່າງເຕັມທີ່",
+    "description": "Language support toast notification title"
+  }
+}

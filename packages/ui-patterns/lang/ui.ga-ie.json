@@ -1,0 +1,10 @@
+{
+  "ui-patterns.help-translate": {
+    "defaultMessage": "Cabhair a aistriú",
+    "description": "Language dialog link to the translation project"
+  },
+  "ui-patterns.language": {
+    "defaultMessage": "Teanga",
+    "description": "Language dialog title"
+  }
+}
