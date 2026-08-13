@@ -1,0 +1,34 @@
+{
+  "ui-patterns.help-translate": {
+    "defaultMessage": "說明翻譯",
+    "description": "Language dialog link to the translation project"
+  },
+  "ui-patterns.language": {
+    "defaultMessage": "語言",
+    "description": "Language dialog title"
+  },
+  "ui-patterns.language-fully-supported-heading": {
+    "defaultMessage": "完全支援",
+    "description": "Fully supported languages heading text"
+  },
+  "ui-patterns.language-partially-supported-heading": {
+    "defaultMessage": "部分支持",
+    "description": "Partially supported languages heading text"
+  },
+  "ui-patterns.language-support-checked": {
+    "defaultMessage": "支援",
+    "description": "Aria label for ticked checkbox for language support"
+  },
+  "ui-patterns.language-support-unchecked": {
+    "defaultMessage": "不支援",
+    "description": "Aria label for unticked checkbox for language support"
+  },
+  "ui-patterns.language-supported-for": {
+    "defaultMessage": "支援的翻譯：",
+    "description": "Text introducing the list of translated products for a given language"
+  },
+  "ui-patterns.language-toast-title": {
+    "defaultMessage": "語言未完全支持",
+    "description": "Language support toast notification title"
+  }
+}

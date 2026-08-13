@@ -1,0 +1,22 @@
+{
+  "ui-patterns.language": {
+    "defaultMessage": "Iaith",
+    "description": "Language dialog title"
+  },
+  "ui-patterns.language-support-checked": {
+    "defaultMessage": "cefnogi",
+    "description": "Aria label for ticked checkbox for language support"
+  },
+  "ui-patterns.language-support-unchecked": {
+    "defaultMessage": "heb gefnogaeth",
+    "description": "Aria label for unticked checkbox for language support"
+  },
+  "ui-patterns.language-supported-for": {
+    "defaultMessage": "Cyfieithiadau a gefnogir ar gyfer:",
+    "description": "Text introducing the list of translated products for a given language"
+  },
+  "ui-patterns.language-toast-title": {
+    "defaultMessage": "Iaith heb ei chefnogi'n llawn",
+    "description": "Language support toast notification title"
+  }
+}

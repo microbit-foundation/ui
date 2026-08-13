@@ -1,0 +1,26 @@
+{
+  "ui-patterns.help-translate": {
+    "defaultMessage": "Beim Übersetzen helfen",
+    "description": "Language dialog link to the translation project"
+  },
+  "ui-patterns.language": {
+    "defaultMessage": "Sprache",
+    "description": "Language dialog title"
+  },
+  "ui-patterns.language-support-checked": {
+    "defaultMessage": "Unterstützt",
+    "description": "Aria label for ticked checkbox for language support"
+  },
+  "ui-patterns.language-support-unchecked": {
+    "defaultMessage": "Nicht unterstützt",
+    "description": "Aria label for unticked checkbox for language support"
+  },
+  "ui-patterns.language-supported-for": {
+    "defaultMessage": "Übersetzungen unterstützt für:",
+    "description": "Text introducing the list of translated products for a given language"
+  },
+  "ui-patterns.language-toast-title": {
+    "defaultMessage": "Sprache nicht vollständig unterstützt",
+    "description": "Language support toast notification title"
+  }
+}

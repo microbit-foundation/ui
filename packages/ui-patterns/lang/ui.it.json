@@ -1,0 +1,22 @@
+{
+  "ui-patterns.language": {
+    "defaultMessage": "Lingua",
+    "description": "Language dialog title"
+  },
+  "ui-patterns.language-support-checked": {
+    "defaultMessage": "Supportata",
+    "description": "Aria label for ticked checkbox for language support"
+  },
+  "ui-patterns.language-support-unchecked": {
+    "defaultMessage": "Non supportata",
+    "description": "Aria label for unticked checkbox for language support"
+  },
+  "ui-patterns.language-supported-for": {
+    "defaultMessage": "Traduzioni supportate per:",
+    "description": "Text introducing the list of translated products for a given language"
+  },
+  "ui-patterns.language-toast-title": {
+    "defaultMessage": "Lingua non completamente supportata",
+    "description": "Language support toast notification title"
+  }
+}

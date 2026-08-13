@@ -1,0 +1,34 @@
+{
+  "ui-patterns.help-translate": {
+    "defaultMessage": "Ajuda a traduir",
+    "description": "Language dialog link to the translation project"
+  },
+  "ui-patterns.language": {
+    "defaultMessage": "Idioma",
+    "description": "Language dialog title"
+  },
+  "ui-patterns.language-fully-supported-heading": {
+    "defaultMessage": "Completament compatible",
+    "description": "Fully supported languages heading text"
+  },
+  "ui-patterns.language-partially-supported-heading": {
+    "defaultMessage": "Parcialment compatible",
+    "description": "Partially supported languages heading text"
+  },
+  "ui-patterns.language-support-checked": {
+    "defaultMessage": "Compatible",
+    "description": "Aria label for ticked checkbox for language support"
+  },
+  "ui-patterns.language-support-unchecked": {
+    "defaultMessage": "Incompatible",
+    "description": "Aria label for unticked checkbox for language support"
+  },
+  "ui-patterns.language-supported-for": {
+    "defaultMessage": "Traduccions compatibles per a:",
+    "description": "Text introducing the list of translated products for a given language"
+  },
+  "ui-patterns.language-toast-title": {
+    "defaultMessage": "L'idioma no està disponible totalment",
+    "description": "Language support toast notification title"
+  }
+}
