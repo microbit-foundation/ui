@@ -51,7 +51,11 @@ export const languages = [
   { id: "nn-NO", name: "Norsk nynorsk", enName: "Norwegian Nynorsk" },
   { id: "pl", name: "Polski", enName: "Polish" },
   { id: "pt-BR", name: "Português (Brasil)", enName: "Portuguese (Brazil)" },
-  { id: "pt-PT", name: "Português (Portugal)", enName: "Portuguese (Portugal)" },
+  {
+    id: "pt-PT",
+    name: "Português (Portugal)",
+    enName: "Portuguese (Portugal)",
+  },
   { id: "ru", name: "Русский", enName: "Russian" },
   { id: "sr", name: "Srpski", enName: "Serbian (Latin)" },
   { id: "si-LK", name: "සිංහල", enName: "Sinhala" },
