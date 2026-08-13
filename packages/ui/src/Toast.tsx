@@ -56,11 +56,20 @@ const wrapUpdate = (fn: () => void) => {
     activeTransitions++;
     document.documentElement.classList.add(TRANSITION_CLASS);
     const transition = document.startViewTransition(fn);
-    transition.finished.finally(() => {
+    // A transition is routinely skipped — another update starts one while
+    // this is still animating, or the tab is hidden — and the browser then
+    // rejects its promises with "AbortError: Transition was skipped". The
+    // DOM update has still run; only the animation is dropped. Settle on
+    // rejection too (`.finally()` would re-throw, surfacing routine skips
+    // as unhandled rejections in error reporting) and swallow `ready`,
+    // which some engines reject without marking handled.
+    transition.ready.catch(() => {});
+    const settle = () => {
       if (--activeTransitions === 0) {
         document.documentElement.classList.remove(TRANSITION_CLASS);
       }
-    });
+    };
+    transition.finished.then(settle, settle);
   } else {
     fn();
   }
