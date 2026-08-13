@@ -113,12 +113,6 @@ it("view-model name overrides beat the registry", () => {
   );
 });
 
-it("marks the current language", () => {
-  renderDialog({ currentLanguageId: "cy" });
-  expect(screen.getByTestId("cy").getAttribute("aria-current")).toBe("true");
-  expect(screen.getByTestId("en").getAttribute("aria-current")).toBeNull();
-});
-
 it("shows the preview footnote only when a preview language is listed", () => {
   const notice = /early preview of in-progress translations/;
   renderDialog();

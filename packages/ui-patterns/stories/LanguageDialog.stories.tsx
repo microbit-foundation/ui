@@ -18,25 +18,21 @@ import {
  * would on a real page.
  */
 const Harness = (
-  props: Omit<
-    LanguageDialogProps,
-    "isOpen" | "onClose" | "onSelectLanguage" | "currentLanguageId"
-  >,
+  props: Omit<LanguageDialogProps, "isOpen" | "onClose" | "onSelectLanguage">,
 ) => {
   const disclosure = useDisclosure();
   const buttonRef = useRef<HTMLButtonElement>(null);
-  const [currentLanguageId, setCurrentLanguageId] = useState<string>("en");
+  const [languageId, setLanguageId] = useState<string>("en");
   return (
     <Box height="100vh" p={4}>
       <Button variant="secondary" ref={buttonRef} onPress={disclosure.onOpen}>
-        Language: {currentLanguageId}
+        Language: {languageId}
       </Button>
       <LanguageDialog
         isOpen={disclosure.isOpen}
         onClose={disclosure.onClose}
         finalFocusRef={buttonRef}
-        currentLanguageId={currentLanguageId}
-        onSelectLanguage={(id) => setCurrentLanguageId(id)}
+        onSelectLanguage={(id) => setLanguageId(id)}
         {...props}
       />
     </Box>
