@@ -53,3 +53,28 @@ it("survives a malformed explicit locale", () => {
     0,
   );
 });
+
+it("keeps <html lang> in step with the locale", () => {
+  document.documentElement.lang = "en";
+  renderModal("fr");
+  expect(document.documentElement.lang).toBe("fr");
+  cleanup();
+  renderModal("fr", { locale: "de" });
+  expect(document.documentElement.lang).toBe("de");
+});
+
+it("leaves <html lang> alone when setDocumentLang is false", () => {
+  document.documentElement.lang = "en";
+  renderModal("fr", { setDocumentLang: false });
+  expect(document.documentElement.lang).toBe("en");
+});
+
+it("leaves <html lang> alone with no IntlProvider and no locale prop", () => {
+  document.documentElement.lang = "en";
+  render(
+    <SharedUIProvider>
+      <div>Body</div>
+    </SharedUIProvider>,
+  );
+  expect(document.documentElement.lang).toBe("en");
+});

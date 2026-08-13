@@ -4,7 +4,13 @@
  * SPDX-License-Identifier: MIT
  */
 import { SharedUIProvider, ToastProvider } from "@microbit/ui";
-import { cleanup, render, screen, waitFor, within } from "@testing-library/react";
+import {
+  cleanup,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { ReactNode } from "react";
 import { IntlProvider } from "react-intl";
@@ -55,9 +61,7 @@ it("splits into sections when a language is partially supported", () => {
       },
     ],
   });
-  expect(
-    screen.getByRole("heading", { name: "Fully supported" }),
-  ).toBeTruthy();
+  expect(screen.getByRole("heading", { name: "Fully supported" })).toBeTruthy();
   expect(
     screen.getByRole("heading", { name: "Partially supported" }),
   ).toBeTruthy();
@@ -133,9 +137,7 @@ it("toasts the support statement when a partially supported language is chosen",
   });
   await userEvent.click(screen.getByTestId("ar"));
   const toast = await screen.findByRole("alert");
-  expect(
-    within(toast).getByText("Language not fully supported"),
-  ).toBeTruthy();
+  expect(within(toast).getByText("Language not fully supported")).toBeTruthy();
   expect(within(toast).getByText("Microsoft MakeCode")).toBeTruthy();
   expect(within(toast).getByLabelText("Unsupported")).toBeTruthy();
 });

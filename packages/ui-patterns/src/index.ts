@@ -11,4 +11,3 @@ export * from "./LanguageDialog";
 export * from "./get-default-language";
 export * from "./languages";
 export { uiPatternsMessage } from "./messages";
-export * from "./use-document-lang";

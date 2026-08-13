@@ -252,7 +252,14 @@ const LanguageCard = ({
         isClosable: true,
       });
     }
-  }, [intl, language.id, language.support, onChooseLanguage, showSupport, toast]);
+  }, [
+    intl,
+    language.id,
+    language.support,
+    onChooseLanguage,
+    showSupport,
+    toast,
+  ]);
 
   // The selection button covers the whole card; the visible content sits
   // above it, and the warning tooltip trigger is a sibling.
@@ -335,7 +342,9 @@ const LanguageCard = ({
                   <Stack>
                     <Text fontWeight="bold">
                       <FormattedMessage
-                        {...uiPatternsMessage("ui-patterns.language-toast-title")}
+                        {...uiPatternsMessage(
+                          "ui-patterns.language-toast-title",
+                        )}
                       />
                     </Text>
                     <SupportStatement support={language.support ?? []} />
