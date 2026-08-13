@@ -10,7 +10,8 @@ blocks.
 
 - **`LanguageDialog`** — the language settings dialog every app in the family
   carries: a grid of language cards (endonym over English name), split into
-  fully/partially supported sections when the app reports partial support,
+  fully/partially supported sections derived from per-language support
+  checklists (a language with any unsupported product is partial),
   with a per-product support tooltip and toast, an optional preview footnote,
   an optional "Help translate" footer link, and a primary Close button.
   Selection applies immediately and the dialog closes; state stays with the

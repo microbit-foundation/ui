@@ -76,7 +76,6 @@ export const WithPartialSupport: Story = {
       { id: "ja" },
       {
         id: "ar",
-        fullySupported: false,
         support: [
           { name: "Microsoft MakeCode", supported: true },
           { name: "micro:bit CreateAI", supported: false },
@@ -84,7 +83,6 @@ export const WithPartialSupport: Story = {
       },
       {
         id: "bg",
-        fullySupported: false,
         support: [
           { name: "Microsoft MakeCode", supported: true },
           { name: "micro:bit CreateAI", supported: false },
