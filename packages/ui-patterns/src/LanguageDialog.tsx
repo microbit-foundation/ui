@@ -153,7 +153,7 @@ export const LanguageDialog = ({
             <Text
               id={previewNoticeId}
               fontSize="xs"
-              alignSelf="flex-end"
+              alignSelf="flex-start"
               mt={1}
             >
               <FormattedMessage
@@ -174,11 +174,7 @@ export const LanguageDialog = ({
           {translationLinkHref && (
             <ExternalLink
               href={translationLinkHref}
-              css={{
-                fontSize: "md",
-                fontWeight: "semibold",
-                color: "brand.500",
-              }}
+              css={{ fontSize: "md", color: "brand.500" }}
             >
               <FormattedMessage
                 {...uiPatternsMessage("ui-patterns.help-translate")}
