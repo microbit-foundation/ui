@@ -1,0 +1,34 @@
+{
+  "ui-patterns.help-translate": {
+    "defaultMessage": "Trợ giúp dịch thuật",
+    "description": "Language dialog link to the translation project"
+  },
+  "ui-patterns.language": {
+    "defaultMessage": "Ngôn ngữ",
+    "description": "Language dialog title"
+  },
+  "ui-patterns.language-fully-supported-heading": {
+    "defaultMessage": "Được hỗ trợ đầy đủ",
+    "description": "Fully supported languages heading text"
+  },
+  "ui-patterns.language-partially-supported-heading": {
+    "defaultMessage": "Được hỗ trợ một phần",
+    "description": "Partially supported languages heading text"
+  },
+  "ui-patterns.language-support-checked": {
+    "defaultMessage": "Được hỗ trợ",
+    "description": "Aria label for ticked checkbox for language support"
+  },
+  "ui-patterns.language-support-unchecked": {
+    "defaultMessage": "Không được hỗ trợ",
+    "description": "Aria label for unticked checkbox for language support"
+  },
+  "ui-patterns.language-supported-for": {
+    "defaultMessage": "Hỗ trợ dịch cho:",
+    "description": "Text introducing the list of translated products for a given language"
+  },
+  "ui-patterns.language-toast-title": {
+    "defaultMessage": "Ngôn ngữ không được hỗ trợ đầy đủ",
+    "description": "Language support toast notification title"
+  }
+}

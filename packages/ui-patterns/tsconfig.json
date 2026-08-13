@@ -6,5 +6,5 @@
       "styled-system/*": ["./styled-system/*"]
     }
   },
-  "include": ["src", "stories", "panda.config.ts"]
+  "include": ["src", "stories", "tests", "panda.config.ts", "vitest.config.ts"]
 }

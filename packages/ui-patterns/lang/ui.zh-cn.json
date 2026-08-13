@@ -1,0 +1,10 @@
+{
+  "ui-patterns.help-translate": {
+    "defaultMessage": "帮助翻译",
+    "description": "Language dialog link to the translation project"
+  },
+  "ui-patterns.language": {
+    "defaultMessage": "语言",
+    "description": "Language dialog title"
+  }
+}

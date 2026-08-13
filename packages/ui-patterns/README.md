@@ -6,9 +6,30 @@ design-system building blocks (buttons, fields, overlays), this package holds
 the larger assemblies apps share — recurring page furniture built from those
 blocks.
 
-The package currently contains only `PatternsDemo`, a placeholder that proves
-the packaging: it composes an `@microbit/ui` component and carries its own
-Panda styles. It will be deleted when the first real pattern lands.
+## What's here
+
+- **`LanguageDialog`** — the language settings dialog every app in the family
+  carries: a grid of language cards (endonym over English name), split into
+  fully/partially supported sections when the app reports partial support,
+  with a per-product support tooltip and toast, an optional preview footnote,
+  an optional "Help translate" footer link, and a primary Close button.
+  Selection applies immediately and the dialog closes; state stays with the
+  app (props and callbacks only, no store). The current language is marked,
+  and endonyms carry `lang`/`dir` attributes — with the card's accessible
+  name wired via `aria-labelledby` — so assistive tech pronounces them
+  correctly.
+- **`languages`** — the family name-book: every language any micro:bit app
+  lists, as `{ id, name, enName }` with canonical BCP 47 ids (which are also
+  the family's Crowdin codes). Apps indicate support by id — the
+  `KnownLanguageId` union makes a typo or mis-cased id a compile error.
+- **`getDefaultLanguageId`** — first-run language selection: BCP 47 best-fit
+  matching of a `?l=` URL hint and the browser/OS preferences against the ids
+  the app allows to be auto-selected. The candidate set is the app's call —
+  pass a narrowed set where landing a user in a language silently would be
+  wrong (e.g. incomplete native-app translations).
+- **`useDocumentLang`** — keeps `<html lang>` in step with the app's language
+  setting. Deliberately opt-in per entry point: only the app knows whether it
+  owns the document it's mounted in.
 
 ## Consumption
 
@@ -22,7 +43,8 @@ and style-extracted by the consuming app's build. Set up `@microbit/ui` first
    `*`: it is the one range npm accepts both for the published prerelease
    versions (a normal semver range refuses to match another package's
    prereleases) and for the in-repo workspace copy, which sits at `0.0.0`.
-   Apps pin exact versions anyway.
+   Apps pin exact versions anyway. `react-icons` and `react-intl` are peers
+   too, matching `@microbit/ui`'s expectations.
 2. Add this package's sources to your Panda `include`, alongside the
    `@microbit/ui` glob:
 
@@ -37,6 +59,11 @@ and style-extracted by the consuming app's build. Set up `@microbit/ui` first
    Miss the glob and the components render unstyled: Panda never sees their
    style calls, and there is no error.
 
+3. **Strings**: compile `lang/ui.<locale>.json` into your per-locale catalogs
+   exactly as you do `@microbit/ui`'s (message ids are namespaced
+   `ui-patterns.`). English needs no catalog — components carry inline
+   `defaultMessage`s.
+
 ## Development
 
 Stories live in `stories/` here but are rendered by the repo's Storybook
@@ -48,7 +75,8 @@ npm run storybook
 ```
 
 `npm run typecheck -w @microbit/ui-patterns` generates this package's own
-`styled-system/` output (from the same base preset) and runs `tsc`.
+`styled-system/` output (from the same base preset) and runs `tsc`;
+`npm run test -w @microbit/ui-patterns` runs the vitest suite.
 
 ## Releases
 
