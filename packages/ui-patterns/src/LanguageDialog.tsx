@@ -28,7 +28,6 @@ import { ReactNode, RefObject, useCallback, useId } from "react";
 import {
   RiCheckboxBlankLine,
   RiCheckboxLine,
-  RiCheckLine,
   RiErrorWarningLine,
 } from "react-icons/ri";
 import { FormattedMessage, useIntl } from "react-intl";
@@ -75,8 +74,6 @@ export interface LanguageDialogProps {
   finalFocusRef?: RefObject<HTMLElement>;
   /** Languages to offer, in any order; the dialog sorts by registry order. */
   languages: LanguageDialogLanguage[];
-  /** The active language, marked on its card. */
-  currentLanguageId?: string;
   /**
    * Applies the selection (store/settings write, editor reload, etc.). The
    * dialog closes once the returned promise settles.
@@ -90,15 +87,14 @@ export interface LanguageDialogProps {
  * Language settings dialog — a grid of language cards (endonym over English
  * name), split into fully/partially supported sections when the app reports
  * partial support. Selection applies immediately: no confirm step, no page
- * reload expected. The current language is marked; endonyms carry their own
- * `lang`/`dir` so assistive tech pronounces them correctly.
+ * reload expected. Endonyms carry their own `lang`/`dir` so assistive tech
+ * pronounces them correctly.
  */
 export const LanguageDialog = ({
   isOpen,
   onClose,
   finalFocusRef,
   languages,
-  currentLanguageId,
   onSelectLanguage,
   translationLinkHref,
 }: LanguageDialogProps) => {
@@ -122,7 +118,6 @@ export const LanguageDialog = ({
         <LanguageCard
           key={language.id}
           language={language}
-          isCurrent={language.id === currentLanguageId}
           onChooseLanguage={handleChooseLanguage}
           previewNoticeId={previewNoticeId}
         />
@@ -223,7 +218,6 @@ const SectionHeading = ({
 
 interface LanguageCardProps {
   language: LanguageDialogLanguage;
-  isCurrent: boolean;
   onChooseLanguage: (languageId: KnownLanguageId) => void | Promise<void>;
   /** id of the dialog's preview footnote, described-by on preview cards. */
   previewNoticeId: string;
@@ -231,7 +225,6 @@ interface LanguageCardProps {
 
 const LanguageCard = ({
   language,
-  isCurrent,
   onChooseLanguage,
   previewNoticeId,
 }: LanguageCardProps) => {
@@ -281,7 +274,6 @@ const LanguageCard = ({
         variant="plain"
         aria-labelledby={`${nameId} ${enNameId}`}
         aria-describedby={language.preview ? previewNoticeId : undefined}
-        aria-current={isCurrent ? "true" : undefined}
         onPress={handleSelect}
         data-testid={language.id}
         css={{
@@ -291,7 +283,7 @@ const LanguageCard = ({
           height: "100%",
           borderRadius: "xl",
           borderWidth: "2px",
-          borderColor: isCurrent ? "languageText" : "gray.200",
+          borderColor: "gray.200",
           _hover: { bg: "gray.100" },
         }}
       />
@@ -309,19 +301,16 @@ const LanguageCard = ({
           "button[data-hovered] + &": { color: "languageTextHover" },
         }}
       >
-        <HStack gap={2}>
-          <Text
-            id={nameId}
-            as="span"
-            lang={language.id}
-            dir="auto"
-            fontSize="xl"
-            fontWeight="semibold"
-          >
-            {name}
-          </Text>
-          {isCurrent && <Icon as={RiCheckLine} aria-hidden />}
-        </HStack>
+        <Text
+          id={nameId}
+          as="span"
+          lang={language.id}
+          dir="auto"
+          fontSize="xl"
+          fontWeight="semibold"
+        >
+          {name}
+        </Text>
         <HStack w="100%" justifyContent="space-between">
           <Text
             id={enNameId}

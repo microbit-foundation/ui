@@ -14,10 +14,9 @@ blocks.
   with a per-product support tooltip and toast, an optional preview footnote,
   an optional "Help translate" footer link, and a primary Close button.
   Selection applies immediately and the dialog closes; state stays with the
-  app (props and callbacks only, no store). The current language is marked,
-  and endonyms carry `lang`/`dir` attributes — with the card's accessible
-  name wired via `aria-labelledby` — so assistive tech pronounces them
-  correctly.
+  app (props and callbacks only, no store). Endonyms carry `lang`/`dir`
+  attributes — with the card's accessible name wired via `aria-labelledby` —
+  so assistive tech pronounces them correctly.
 - **`languages`** — the family name-book: every language any micro:bit app
   lists, as `{ id, name, enName }` with canonical BCP 47 ids (which are also
   the family's Crowdin codes). Apps indicate support by id — the
