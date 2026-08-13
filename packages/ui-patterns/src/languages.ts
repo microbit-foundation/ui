@@ -59,7 +59,11 @@ export const languages = [
     enName: "Portuguese (Portugal)",
   },
   { id: "ru", name: "Русский", enName: "Russian" },
-  { id: "sr", name: "Srpski", enName: "Serbian (Latin)" },
+  // Cyrillic, matching both bare `sr`'s BCP 47 default script and what
+  // MakeCode (the one product supporting Serbian) actually renders. The
+  // apps' lists said "Srpski"/"Serbian (Latin)", mislabelling the
+  // destination; Latin Serbian would be a separate `sr-Latn` entry.
+  { id: "sr", name: "Српски", enName: "Serbian (Cyrillic)" },
   { id: "si-LK", name: "සිංහල", enName: "Sinhala" },
   { id: "sk", name: "Slovenčina", enName: "Slovak" },
   { id: "es-ES", name: "Español", enName: "Spanish" },
