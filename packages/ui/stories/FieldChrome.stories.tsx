@@ -220,6 +220,16 @@ export const SideLabels: Story = {
         >
           {options}
         </Select>
+        {/* Translation-length label: must wrap beside the control, not push
+            it onto its own line (the label's flex basis is 0 for this). */}
+        <Select
+          label="Highlight code structure when the translation runs long"
+          labelPosition="side"
+          defaultSelectedKey="Apple"
+          triggerCss={{ width: "28ch" }}
+        >
+          {options}
+        </Select>
         <ComboBox
           label="Preferred fruit"
           labelPosition="side"

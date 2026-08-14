@@ -97,7 +97,11 @@ export const field = defineSlotRecipe({
           // their own line below the label/control pair.
           flexWrap: "wrap",
         },
-        label: { mb: "0", flex: "1 1 auto" },
+        // Basis 0, not auto: the wrap container breaks lines on hypothetical
+        // sizes, and an auto basis is the label's max-content — a long
+        // translated label would push the control onto its own line instead
+        // of wrapping its text beside it.
+        label: { mb: "0", flex: "1 1 0" },
         helperText: { width: "100%" },
         errorMessage: { width: "100%" },
       },
