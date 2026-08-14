@@ -46,10 +46,12 @@ export const input = defineRecipe({
     // gray.300, deliberately below 3:1: a labelled field's resting boundary
     // is decorative under WCAG 1.4.11 — identification comes from the
     // label — so at this weight the border trades contrast for lightness.
-    // This RELIES on every field being labelled; Checkbox/Radio keep
-    // gray.400, since their box IS the identifier. Rationale and history in
-    // ui-private's docs/a11y-positions.md (the 400 rest was an over-reading
-    // of the 3:1 rule).
+    // This RELIES on every field being visually identified by something
+    // other than the boundary — a label, or a >=3:1 icon/placeholder (a
+    // search box's magnifier). Checkbox/Radio keep gray.400, since their
+    // box IS the identifier. Rationale and history in ui-private's
+    // docs/a11y-positions.md (the 400 rest was an over-reading of the 3:1
+    // rule).
     borderColor: "gray.300",
     bg: "inherit",
     color: "inherit",
