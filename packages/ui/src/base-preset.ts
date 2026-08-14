@@ -305,6 +305,14 @@ export const basePreset = definePreset({
     html: {
       textRendering: "optimizeLegibility",
       touchAction: "manipulation",
+      // Point @pandacss/preset-base's ring plumbing at our ring colour.
+      // Its `focusVisibleRing`/`focusRingColor`/… utilities are still in
+      // the API surface (extend-merge can't remove them) with a #005FCC
+      // default — don't use them: their focus selector lacks our
+      // :not([data-rac]) gating, and this alias resolves here on <html>,
+      // so it's the base ink with no dark-surface awareness. It only makes
+      // a stray use render in the family colour instead of blue.
+      "--global-color-focus-ring": "var(--colors-focus-ring)",
     },
     body: {
       // No `position: relative` (Chakra had it): it breaks react-aria's
