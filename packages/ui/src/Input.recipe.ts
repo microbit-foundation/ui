@@ -7,8 +7,6 @@ import { defineRecipe } from "@pandacss/dev";
 
 // The common transition-property list, inlined (Panda has no
 // transitionProperty token category).
-// No box-shadow: nothing in this recipe uses one, and the focus ring's
-// layers must never fade in.
 const transitionCommon =
   "background-color, border-color, color, fill, stroke, opacity, transform";
 
@@ -44,10 +42,6 @@ export const input = defineRecipe({
     font: "inherit",
     transitionProperty: transitionCommon,
     transitionDuration: "normal",
-    // 2px like S2's fields (and our Checkbox/Radio): focus changes only
-    // the border's colour, so the stroke must carry its full weight at
-    // rest — a 1px border made the pointer-focus state half the weight of
-    // the old border+shadow treatment.
     border: "2px solid",
     // The accessible outline stops: gray.400 is the ramp's 3:1-on-white
     // boundary grey (WCAG 1.4.11), and hover steps darker, never lighter.
@@ -58,24 +52,11 @@ export const input = defineRecipe({
     // hover < focused < invalid, as a specificity ladder (repeated `&`):
     // Panda sorts state rules by its own pseudo-class table, not
     // declaration order, so borderColor ties can't rely on position.
-    //
-    // Any focus — pointer included — takes the border to the dark brand
-    // `focusBorder`: the quiet "you are here" alongside the caret (S2
-    // darkens via isFocusWithin; we add the brand tint). Red keeps the
-    // border when invalid and focused apply together; the keyboard ring
-    // below is disjoint and composes.
     "&&:is(:focus, [data-focused])": { borderColor: "focusBorder" },
-    // Border colour alone — the 2px border carries the weight, and the
-    // non-colour cue is the field's error message (WCAG 1.4.1), as S2.
     "&&&:is([data-invalid], :user-invalid)": {
       borderColor: "danger.500",
     },
-    // The standard family ring, keyboard focus only: react-aria's
-    // data-focus-visible treats text inputs specially — pointer focus
-    // never sets it, and while typing only Tab/Escape do. Native
-    // :focus-visible is deliberately not matched: for text inputs the
-    // native heuristic fires on any focus, click included. zIndex so the
-    // ring paints over attached-group neighbours.
+    // zIndex so the ring paints over attached-group neighbours.
     "&&&[data-focus-visible]": {
       zIndex: 1,
       focusRing: "outline",

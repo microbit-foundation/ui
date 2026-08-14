@@ -64,8 +64,6 @@ export const select = defineSlotRecipe({
       cursor: "pointer",
       transitionProperty: transitionCommon,
       transitionDuration: "normal",
-      // 2px as the input recipe (see there — focus is a colour change, so
-      // the stroke carries its weight at rest).
       border: "2px solid",
       // As the input recipe: the ramp's accessible outline stop, with hover
       // stepping darker. The dropdown card below keeps the light gray.200 —
@@ -87,10 +85,6 @@ export const select = defineSlotRecipe({
       // and invalid all set `borderColor`, and Panda sorts state rules by its
       // own pseudo-class table rather than declaration order, so hover would
       // win these ties. The specificity ladder is hover < focused < invalid.
-      //
-      // Any focus — pointer included — takes the border to the dark brand
-      // `focusBorder`, as the input recipe (both arms: Select's trigger via
-      // RAC's attribute, ComboBox's wrapped input via native :focus).
       "&&:is([data-focused], :has(input:focus))": {
         borderColor: "focusBorder",
       },
