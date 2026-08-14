@@ -42,6 +42,11 @@ export interface SharedUIProviderProps {
    * doesn't own the document it's mounted in (an embedded widget), or when
    * mounting more than one provider per page. The static `lang="en"` in
    * index.html remains the pre-hydration default.
+   *
+   * Correct only when the IntlProvider locale is the language the app
+   * actually renders in — an app falling back wholesale to its English
+   * catalog should claim `en` there, not the user's language setting (see
+   * the README's react-intl step).
    */
   setDocumentLang?: boolean;
   children: ReactNode;

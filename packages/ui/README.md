@@ -84,6 +84,18 @@ node_modules/@microbit/ui/lang/ui.fr.json --ast --out-file ...` (multiple
    input files merge; ids are `ui.`-namespaced so they can't collide). This
    keeps the strings in the app's lazily loaded locale chunks rather than
    an eagerly bundled catalog-of-all-locales.
+
+   The `locale` you pass must be the language the app actually renders in,
+   which is not always the user's language setting: apps that list languages
+   only an embedded product (e.g. MakeCode) is translated into fall back to
+   their English catalog for those, and should then pass `en`, keeping the
+   chosen language in their own settings for the embed. Everything downstream
+   reads this locale as a statement about the rendered page — `<html lang>`
+   via `SharedUIProvider`, react-aria's text direction and built-in strings,
+   `Intl` number/date formatting and plural rules. A catalog that loads but
+   has per-message gaps (an incomplete translation) is still that language;
+   only a wholesale fallback to the English catalog should claim `en`.
+
 6. **`SharedUIProvider`** inside the `IntlProvider`, wrapping the app. It
    passes the locale on to react-aria, which translates its own built-in
    strings (see [Strings](#strings)); without it those follow the browser
