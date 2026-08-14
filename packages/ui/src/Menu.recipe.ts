@@ -66,9 +66,10 @@ export const menu = defineSlotRecipe({
       color: "inherit",
       textDecoration: "none",
       outline: "none",
-      transitionProperty: "background",
-      transitionDuration: "ultra-fast",
-      transitionTimingFunction: "ease-in",
+      // No background transition: the focused-item highlight moves with
+      // keyboard navigation, so it is focus indication and must snap in
+      // step with the ring (a fading highlight under an instant ring reads
+      // as jank; native menus snap).
       // RAC highlights the active item (keyboard or pointer) with data-focused;
       // data-pressed is the pressed state. The background alone is not a
       // focus indicator (gray.100 is ~1.07:1 against white) — keyboard

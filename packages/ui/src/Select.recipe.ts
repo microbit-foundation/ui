@@ -186,9 +186,8 @@ export const select = defineSlotRecipe({
       cursor: "pointer",
       color: "inherit",
       outline: "none",
-      transitionProperty: "background",
-      transitionDuration: "ultra-fast",
-      transitionTimingFunction: "ease-in",
+      // No background transition, as the menu recipe: the focused-item
+      // highlight is focus indication and snaps with the ring.
       "&[data-focused]": { bg: "gray.100" },
       // As the menu recipe: the background alone is no focus indicator;
       // keyboard navigation gets the family ring, inset because the rows
