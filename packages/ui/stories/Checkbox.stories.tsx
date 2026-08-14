@@ -101,7 +101,7 @@ export const WithoutTheBox: Story = {
             borderWidth: "2px",
             borderColor: "gray.200",
             "&[data-selected]": { borderColor: "brand.500", bg: "brand.50" },
-            "&[data-focus-visible]": { focusShadow: "outline" },
+            "&[data-focus-visible]": { focusRing: "outline" },
           }}
         >
           {({ isSelected }) => (

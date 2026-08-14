@@ -56,7 +56,7 @@ const triggerStyle: SystemStyleObject = {
   lineHeight: "1",
   cursor: "pointer",
   borderRadius: "50%",
-  _focusVisible: { focusShadow: "outline" },
+  _focusVisible: { focusRing: "outline" },
 };
 
 export interface TooltipButtonProps {

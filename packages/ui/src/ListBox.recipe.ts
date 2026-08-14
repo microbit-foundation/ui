@@ -36,7 +36,7 @@ export const listBox = defineSlotRecipe({
       transitionTimingFunction: "ease-in",
       _hover: { bg: "gray.50" },
       "&[data-selected]": { bg: "gray.100", _hover: { bg: "gray.100" } },
-      "&[data-focus-visible]": { focusShadow: "outline" },
+      "&[data-focus-visible]": { focusRing: "outline" },
       "&[data-disabled]": { opacity: 0.4, cursor: "not-allowed" },
     },
   },

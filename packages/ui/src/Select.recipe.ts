@@ -111,7 +111,7 @@ export const select = defineSlotRecipe({
       // :focus-visible is no escape, since for text inputs it also fires on
       // any focus. Select's trigger holds no input, so it can't match.
       "&&&[data-focus-visible], &&&:has(input:focus)": {
-        focusShadow: "outline",
+        focusRing: "outline",
       },
       "&[data-disabled]": { opacity: 0.4, cursor: "not-allowed" },
     },
@@ -197,7 +197,7 @@ export const select = defineSlotRecipe({
       // As the menu recipe: the background alone is no focus indicator;
       // keyboard navigation gets the family ring, inset because the rows
       // are full-bleed in the popover.
-      "&[data-focus-visible]": { focusShadow: "outlineInset" },
+      "&[data-focus-visible]": { focusRing: "outlineInset" },
       "&[data-pressed]": { bg: "gray.200" },
       "&[data-disabled]": { opacity: 0.4, cursor: "not-allowed" },
     },

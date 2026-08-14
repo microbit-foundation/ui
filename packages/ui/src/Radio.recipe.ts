@@ -76,7 +76,7 @@ export const radio = defineSlotRecipe({
         _hover: { bg: "gray.200", borderColor: "gray.200" },
       },
       "&[data-focus-visible]": {
-        focusShadow: "outline",
+        focusRing: "outline",
       },
     },
     label: {

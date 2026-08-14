@@ -48,7 +48,7 @@ export const button = defineRecipe({
     verticalAlign: "middle",
     outline: "none",
     _focusVisible: {
-      focusShadow: "outline",
+      focusRing: "outline",
     },
     _disabled: {
       opacity: 0.4,

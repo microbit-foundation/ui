@@ -50,7 +50,7 @@ export const gridList = defineSlotRecipe({
         _hover: { bg: "gray.100" },
         "&:has([aria-expanded=true])": { bg: "gray.100" },
       },
-      "&[data-focus-visible]": { focusShadow: "outline" },
+      "&[data-focus-visible]": { focusRing: "outline" },
       "&[data-disabled]": { opacity: 0.4, cursor: "not-allowed" },
     },
   },

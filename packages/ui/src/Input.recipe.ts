@@ -78,7 +78,7 @@ export const input = defineRecipe({
     // ring paints over attached-group neighbours.
     "&&&[data-focus-visible]": {
       zIndex: 1,
-      focusShadow: "outline",
+      focusRing: "outline",
     },
     "&:is(:disabled, [data-disabled])": {
       opacity: 0.4,

@@ -59,7 +59,7 @@ export const NativeSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(
               // decides the modality — like ComboBox, that can include
               // pointer focus; unlike text inputs, a select has no caret to
               // carry the state, so that's the right side to err on.
-              _focusVisible: { zIndex: 1, focusShadow: "outline" },
+              _focusVisible: { zIndex: 1, focusRing: "outline" },
             },
             // Room for the chevron overlay (constant across sizes).
             hideChevron ? undefined : { paddingRight: "8" },

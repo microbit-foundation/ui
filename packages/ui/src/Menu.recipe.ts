@@ -76,7 +76,7 @@ export const menu = defineSlotRecipe({
       // menus do.
       "&[data-focused]": { bg: "gray.100" },
       // Inset: a full-bleed row's outward ring would overhang the popover.
-      "&[data-focus-visible]": { focusShadow: "outlineInset" },
+      "&[data-focus-visible]": { focusRing: "outlineInset" },
       "&[data-pressed]": { bg: "gray.200" },
       "&[data-disabled]": { opacity: 0.4, cursor: "not-allowed" },
     },

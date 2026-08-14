@@ -140,7 +140,7 @@ it("ComboBox shows an empty state and can drop the indicator", () => {
 const triggerRules = () =>
   select.base?.trigger as Record<
     string,
-    { borderColor?: string; focusShadow?: string } | undefined
+    { borderColor?: string; focusRing?: string } | undefined
   >;
 
 const ruleFor = (borderColor: string) => {
@@ -156,7 +156,7 @@ const ruleFor = (borderColor: string) => {
 const focusRule = () => {
   const rules = triggerRules();
   const selector = Object.keys(rules).find(
-    (k) => rules[k]?.focusShadow === "outline",
+    (k) => rules[k]?.focusRing === "outline",
   );
   expect(selector).toBeDefined();
   return selector!;

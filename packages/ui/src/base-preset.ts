@@ -85,7 +85,8 @@ const gray = {
 /**
  * The base preset: the complete, working micro:bit design system. The base
  * token scales (base-tokens.ts), the micro:bit house style
- * (pill `radii.button`, `outline*` focus shadows, Helvetica fonts, the
+ * (pill `radii.button`, the `focusRing` utility/token pair, Helvetica
+ * fonts, the
  * `toolbar` button variant in Button.recipe.ts, the
  * `languageText`/`toast*Bg`/`statusBarBg` semantic tokens), the shared-ui
  * component recipes, the react-aria condition widening, the `globalCss`
@@ -197,7 +198,7 @@ export const basePreset = definePreset({
         focusBorder: {
           value: { base: "{colors.brand.600}", _onDark: "{colors.white}" },
         },
-        // The focus ring colour (see the `focusShadow` utility): ink by
+        // The focus ring colour (see the `focusRing` utility): ink by
         // default, white inside a surface tagged `data-surface="dark"`
         // (the `onDark` condition scopes this var to the tag). Custom
         // properties inherit, so tagging the bar element is enough for
@@ -420,11 +421,13 @@ export const basePreset = definePreset({
       // real outline, so forced-colors modes (which strip box-shadows but
       // recolour outlines to a visible system colour) keep a ring for
       // free. Longhands, not the `outline` shorthand: Panda resolves
-      // tokens per-property. (The utility name is the shadow-era one, kept
-      // to avoid preset-base's `focusRing` utility, whose values would
-      // break this transform; revisit at the contract freeze.)
-      focusShadow: {
-        className: "focus-shadow",
+      // tokens per-property. (Deliberately shadows @pandacss/preset-base's
+      // `focusRing` utility. Panda's extend-merge REPLACES the transform —
+      // verified in the emitted CSS — but UNIONS the values arrays, so
+      // preset-base's outside/inside/mixed/none still typecheck; they fall
+      // through this transform to the standard ring. Don't use them.)
+      focusRing: {
+        className: "focus-ring",
         // `outline` is the standard ring, offset outward. `outlineInset`
         // draws the same ring just inside the element instead — for
         // full-bleed rows (menu/select options) whose outward ring would

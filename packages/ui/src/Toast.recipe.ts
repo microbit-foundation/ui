@@ -115,7 +115,7 @@ export const toast = defineSlotRecipe({
       // Hover is a subtle dark overlay (blackAlpha), not a bright highlight.
       _hover: { bg: "blackAlpha.100" },
       _active: { bg: "blackAlpha.200" },
-      _focusVisible: { focusShadow: "outline" },
+      _focusVisible: { focusRing: "outline" },
     },
   },
   variants: {
