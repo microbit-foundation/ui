@@ -31,10 +31,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
   // groups to the recipe (classroom adds `variant`), and cherry-picking would
   // silently drop them onto the DOM as unknown attributes instead.
   const [variantProps, rest] = input.splitVariantProps(props);
-  // A native input gets no RAC attributes, and the recipe's focus ring keys
-  // off data-focus-visible (native :focus-visible fires on ANY focus for
-  // text inputs — see the recipe). Track modality ourselves so a bare Input
-  // rings exactly like a TextField's: keyboard only.
+  // A native input never gets RAC's data-focus-visible, which the recipe's
+  // ring keys off — track modality ourselves, as TextField's input does.
   const { isFocusVisible, focusProps } = useFocusRing({ isTextInput: true });
   return (
     <input

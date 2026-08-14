@@ -65,27 +65,19 @@ export const select = defineSlotRecipe({
       transitionProperty: transitionCommon,
       transitionDuration: "normal",
       border: "2px solid",
-      // As the input recipe: a deliberately light resting boundary (the
-      // label identifies the field — see the rationale there), stepping
-      // darker on hover. The dropdown card below keeps the light gray.200 —
-      // it's a surface edge, not a form-control boundary.
+      // As the input recipe (rationale there). The dropdown card below
+      // keeps gray.200 — a surface edge, not a form-control boundary.
       borderColor: "gray.300",
       bg: "white",
       color: "inherit",
-      // As the input recipe, so a Select, a NativeSelect and a TextField in one
-      // form all tint together on hover. (react-aria's TextField has no hover
-      // effect, but matching the family beats matching their docs.)
+      // As the input recipe, so mixed fields tint together on hover.
       _hover: { borderColor: "gray.500" },
       // `data-invalid` lands on the root — and, in a ComboBox, on the input —
       // but never on the trigger: a RAC Button has no validity state, and our
       // ComboBox control is a plain div. So it comes down from the parent.
       // `> &` rather than a descendant selector, so an app's own invalid form
-      // wrapper cannot paint every control inside it red.
-      //
-      // Repeated `&` for the same reason as the input recipe: hover, focused
-      // and invalid all set `borderColor`, and Panda sorts state rules by its
-      // own pseudo-class table rather than declaration order, so hover would
-      // win these ties. The specificity ladder is hover < focused < invalid.
+      // wrapper cannot paint every control inside it red. Repeated `&`: the
+      // hover < focused < invalid specificity ladder, as the input recipe.
       "&&:is([data-focused], :has(input:focus))": {
         borderColor: "focusBorder",
       },
@@ -93,19 +85,12 @@ export const select = defineSlotRecipe({
       "[data-invalid] > &&&": {
         borderColor: "danger.500",
       },
-      // Two ring cases. `data-focus-visible` is Select's button on keyboard
-      // focus only (RAC leaves it unset for mouse, matching the react-aria
-      // docs' Select). The second arm is ComboBox: its control is a plain
-      // div wrapping an input, so it gets no RAC attributes itself, and the
-      // input's own attributes are unusable — react-aria dispatches a
-      // synthetic blur at the input whenever virtual focus moves to an
-      // option (aria-activedescendant), stripping them while the list has
-      // an active option, real focus never having left. So the arm combines
-      // the two signals that DO survive that blur: native `:focus` on the
-      // input, and the global keyboard-modality attribute the ComboBox
-      // component renders (useFocusVisible — see ComboBox.tsx). Together:
-      // keyboard-only, like TextField, with no flicker during navigation.
-      // Select's trigger holds no input, so the arm can't match it.
+      // Keyboard-only ring, two cases. Select's button: RAC's attribute.
+      // ComboBox: the input's RAC attributes are stripped by react-aria's
+      // synthetic blur during virtual focus, so its case combines the two
+      // signals that survive — native :focus plus the global-modality
+      // attribute the component renders (see ComboBox.tsx). No flicker
+      // during list navigation; can't match Select (no input).
       "&&&[data-focus-visible], &&&[data-keyboard-modality]:has(input:focus)": {
         focusRing: "outline",
       },
@@ -186,12 +171,10 @@ export const select = defineSlotRecipe({
       cursor: "pointer",
       color: "inherit",
       outline: "none",
-      // No background transition, as the menu recipe: the focused-item
-      // highlight is focus indication and snaps with the ring.
+      // As the menu recipe: the highlight is focus indication (no
+      // transition — it snaps with the ring, which keyboard nav adds;
+      // inset, the rows being full-bleed).
       "&[data-focused]": { bg: "gray.100" },
-      // As the menu recipe: the background alone is no focus indicator;
-      // keyboard navigation gets the family ring, inset because the rows
-      // are full-bleed in the popover.
       "&[data-focus-visible]": { focusRing: "outlineInset" },
       "&[data-pressed]": { bg: "gray.200" },
       "&[data-disabled]": { opacity: 0.4, cursor: "not-allowed" },

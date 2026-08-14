@@ -14,19 +14,10 @@ const transitionCommon =
  * Input recipe — the outline text field with an sm/md/lg size scale. Used by
  * the shared-ui Input and NativeSelect, and by TextField's input slot.
  *
- * Focus matches both native `:focus-visible` (plain inputs; browsers treat any
- * focus in a text field as focus-visible) and react-aria's `data-focused`
- * (inputs inside RAC TextField).
- *
- * Hover, invalid and focus all set `borderColor`, so their precedence has to be
- * hover < invalid < focus. Declaration order will not buy that: Panda sorts a
- * recipe's state rules itself, ranking selectors against a fixed
- * link/visited/focus/hover/active table, which puts `_hover` *after* focus and
- * after anything the table doesn't mention (`[data-invalid]`). Equal-specificity
- * rules then leave hover winning. So the ladder is spelled with repeated `&`
- * instead — `&&` and `&&&` emit `.input.input` and `.input.input.input`, making
- * precedence specificity rather than order, which nothing downstream can
- * resort. Variants still override freely; they land in a later cascade layer.
+ * hover < focused < invalid is a specificity ladder (`&&`, `&&&`): Panda
+ * sorts state rules against its own pseudo-class table, not declaration
+ * order, so equal-specificity borderColor ties would leave hover winning.
+ * Variants still override freely (later cascade layer).
  *
  * Registered in the base preset (base-preset.ts), which also has the
  * `staticCss` entry that keeps the runtime-prop size variants generated.
@@ -43,22 +34,15 @@ export const input = defineRecipe({
     transitionProperty: transitionCommon,
     transitionDuration: "normal",
     border: "2px solid",
-    // gray.300, deliberately below 3:1: a labelled field's resting boundary
-    // is decorative under WCAG 1.4.11 — identification comes from the
-    // label — so at this weight the border trades contrast for lightness.
-    // This RELIES on every field being visually identified by something
-    // other than the boundary — a label, or a >=3:1 icon/placeholder (a
-    // search box's magnifier). Checkbox/Radio keep gray.400, since their
-    // box IS the identifier. Rationale and history in ui-private's
-    // docs/a11y-positions.md (the 400 rest was an over-reading of the 3:1
-    // rule).
+    // Deliberately below 3:1 — valid while something else visually
+    // identifies the field (label, or a ≥3:1 icon/placeholder).
+    // Checkbox/Radio keep gray.400: their box IS the identifier.
+    // Rationale: ui-private docs/a11y-positions.md.
     borderColor: "gray.300",
     bg: "inherit",
     color: "inherit",
     _hover: { borderColor: "gray.500" },
-    // hover < focused < invalid, as a specificity ladder (repeated `&`):
-    // Panda sorts state rules by its own pseudo-class table, not
-    // declaration order, so borderColor ties can't rely on position.
+    // Any focus, pointer included; the keyboard ring composes on top.
     "&&:is(:focus, [data-focused])": { borderColor: "focusBorder" },
     "&&&:is([data-invalid], :user-invalid)": {
       borderColor: "danger.500",

@@ -152,7 +152,7 @@ const ruleFor = (borderColor: string) => {
   return selector!;
 };
 
-// The focus rule carries the standard family ring, not a border tint.
+// The focus rule carries the focus ring, not a border tint.
 const focusRule = () => {
   const rules = triggerRules();
   const selector = Object.keys(rules).find(

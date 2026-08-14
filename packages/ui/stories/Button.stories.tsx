@@ -36,11 +36,8 @@ type Story = StoryObj<typeof meta>;
 export const Playground: Story = {};
 
 /**
- * Every variant on a light and a dark surface. The dark strip is tagged
- * with `darkSurface`, which flips the focus ring from ink to white (the
- * `focusRing` semantic token in base-preset.ts) — tab through both strips
- * to see it. Dark surfaces MUST carry the tag or the ring is
- * near-invisible on them.
+ * Every variant on a light and a tagged-dark surface — tab through both
+ * strips to see the focus ring flip ink/white.
  */
 export const Variants: Story = {
   render: (args) => (

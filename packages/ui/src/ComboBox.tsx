@@ -137,13 +137,9 @@ const ComboBoxInner = <T extends object>(
   const fieldSlots = field({ size: variantProps.size, labelPosition });
   // Anchor the card to the whole control, not to the bare input inside it —
   // otherwise it hangs off the text baseline and is as narrow as the input.
-  // Global interaction modality, with the text-input key filter (only
-  // Tab/Escape count while typing). This is the half of "keyboard focus"
-  // that SURVIVES the synthetic blur react-aria dispatches at the input
-  // while virtual focus is on an option — the input's own data attributes
-  // don't (see the select recipe's ring rule). Paired there with native
-  // :has(input:focus), which also survives, the trigger's ring is
-  // keyboard-only without flickering during list navigation.
+  // Global modality (text-input key filter): unlike the input's own RAC
+  // attributes, it survives react-aria's synthetic blur during virtual
+  // focus — the select recipe's ring rule pairs it with :has(input:focus).
   const { isFocusVisible } = useFocusVisible({ isTextInput: true });
   const triggerRef = useRef<HTMLDivElement>(null);
   // RAC's --trigger-width measures the input it anchors a ComboBox to, which

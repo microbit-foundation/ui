@@ -6,9 +6,8 @@
 import { defineRecipe } from "@pandacss/dev";
 
 // The common transition-property list, inlined (Panda has no
-// transitionProperty token category). Deliberately no box-shadow: the
-// focus ring's inner layer is a box-shadow and a focus indicator must
-// appear instantly, not fade in behind its outline.
+// transitionProperty token category). No box-shadow: focus indication
+// must never fade in.
 const transitionCommon =
   "background-color, border-color, color, fill, stroke, opacity, transform";
 

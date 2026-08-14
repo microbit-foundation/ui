@@ -66,17 +66,10 @@ export const menu = defineSlotRecipe({
       color: "inherit",
       textDecoration: "none",
       outline: "none",
-      // No background transition: the focused-item highlight moves with
-      // keyboard navigation, so it is focus indication and must snap in
-      // step with the ring (a fading highlight under an instant ring reads
-      // as jank; native menus snap).
-      // RAC highlights the active item (keyboard or pointer) with data-focused;
-      // data-pressed is the pressed state. The background alone is not a
-      // focus indicator (gray.100 is ~1.07:1 against white) — keyboard
-      // navigation additionally gets the family ring, as ListBox and S2's
-      // menus do.
+      // data-focused is RAC's active item, either modality. The highlight
+      // is focus indication: no transition (it snaps with the ring, which
+      // keyboard nav adds; inset, the rows being full-bleed).
       "&[data-focused]": { bg: "gray.100" },
-      // Inset: a full-bleed row's outward ring would overhang the popover.
       "&[data-focus-visible]": { focusRing: "outlineInset" },
       "&[data-pressed]": { bg: "gray.200" },
       "&[data-disabled]": { opacity: 0.4, cursor: "not-allowed" },
