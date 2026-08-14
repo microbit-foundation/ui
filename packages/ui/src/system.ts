@@ -43,3 +43,22 @@ export {
   Wrap,
   styled,
 } from "styled-system/jsx";
+
+/**
+ * Spread onto a surface element that is dark by design — a black toolbar,
+ * a coloured sidebar header — so the focus indicators inside it flip to
+ * their on-dark colours: `<header {...darkSurface}>`.
+ *
+ * "Dark" describes the surface's own luminance, not anything relative to
+ * the app's overall look. That is also what would let the tag survive a
+ * dark mode if we ever ship one: designed-dark surfaces stay dark and keep
+ * their tags, while a dark mode would flip the *untagged* defaults via
+ * token conditions, never via markup.
+ *
+ * Mechanism: one data attribute that the `onDark` condition scopes
+ * semantic-token overrides to (`focusRing`, `focusBorder` — see
+ * base-preset.ts). Custom properties inherit, so tagging the bar element
+ * covers every control inside it, and portalled overlays (e.g. a modal
+ * opened from a dark toolbar) escape the tag with the DOM, which is correct.
+ */
+export const darkSurface = { "data-surface": "dark" } as const;

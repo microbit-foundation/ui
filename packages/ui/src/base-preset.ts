@@ -166,11 +166,6 @@ export const basePreset = definePreset({
       },
       shadows: {
         ...shadows,
-        // The 4px focus outline shadow, plus dark/light-surface
-        // companions. Consumed via the `focusShadow` utility.
-        outline: { value: "0 0 0 4px rgba(66, 153, 225, 0.6)" },
-        outlineDark: { value: "0 0 0 4px rgba(0, 0, 0, 0.5)" },
-        outlineLight: { value: "0 0 0 4px rgba(255, 255, 255, 0.8)" },
       },
       fonts: {
         // Helvetica heading/body (4/4 apps); a brand preset leaves these and
@@ -189,13 +184,35 @@ export const basePreset = definePreset({
     },
     semanticTokens: {
       colors: {
-        // Checked/focus states of form controls: Checkbox/Switch/Radio
-        // checked backgrounds and the Input/Select focus border. Semantic
-        // so a brand can diverge them from its ramp — e.g. a light
-        // brand.500 needing a darker 3:1 focus border.
+        // Checked states of form controls: Checkbox/Switch/Radio checked
+        // backgrounds. Semantic so a brand can diverge them from its ramp.
         controlCheckedBg: { value: "{colors.brand.500}" },
         controlCheckedHoverBg: { value: "{colors.brand.600}" },
-        focusBorder: { value: "{colors.brand.500}" },
+        // The focused form control's border (any modality, pointer
+        // included) — the dark brand stop, so a focused field keeps some
+        // brand interest for everyone while the keyboard-only ring stays
+        // neutral ink. An all-ink pairing (ink border + ink ring) read as
+        // flat black-on-black. Flips white inside `data-surface="dark"`,
+        // like `focusRing`.
+        focusBorder: {
+          value: { base: "{colors.brand.600}", _onDark: "{colors.white}" },
+        },
+        // The focus ring colour (see the `focusShadow` utility): ink by
+        // default, white inside a surface tagged `data-surface="dark"`
+        // (the `onDark` condition scopes this var to the tag). Custom
+        // properties inherit, so tagging the bar element is enough for
+        // every control inside it, and a portalled overlay (e.g. a modal
+        // opened from a dark toolbar) escapes the tag with the DOM, which
+        // is correct. The tag is REQUIRED on dark surfaces — the ink ring
+        // is near-invisible there. The Button "Variants" story shows both
+        // tag states; apps verify their own coloured surfaces.
+        // Opaque deliberately: classroom's 2023 accessibility feedback
+        // (#780 there) found translucent rings washed out on dark
+        // surfaces. Rule of thumb: tag any surface without 3:1 contrast
+        // against ink (darker than roughly the grey ramp's 500).
+        focusRing: {
+          value: { base: "{colors.gray.900}", _onDark: "{colors.white}" },
+        },
         // Error/destructive ramp. Destructive button variants,
         // field error states and the error toast; the record* button
         // variants deliberately stay on red.* (recording vocabulary, not
@@ -391,18 +408,33 @@ export const basePreset = definePreset({
   },
   utilities: {
     extend: {
-      // The app-wide focus indicator, usually inside `_focusVisible`. Values
-      // are the outline* shadow token names. The transparent outline is for
-      // forced-colors modes, which strip box-shadows but recolour outlines to
-      // a visible system colour. (Named to avoid preset-base's outline-based
-      // `focusRing` utility, whose values would break this transform.)
+      // The app-wide focus indicator, usually inside `_focusVisible`: a
+      // single 2px `focusRing`-coloured outline offset 2px, so the surface
+      // shows through the gap and separates the ring from the control.
+      // (2px matches the family's button borders and current practice —
+      // S2/RAC/Radix. WCAG AA sets no thickness, only visibility + 3:1
+      // contrast; even AAA 2.4.13's area metric passes at 2px because the
+      // offset ring's perimeter exceeds the control's own.) The
+      // ring colour flips via the dark-surface tag (see `focusRing` in
+      // semanticTokens) — call sites never pick a ring per background. A
+      // real outline, so forced-colors modes (which strip box-shadows but
+      // recolour outlines to a visible system colour) keep a ring for
+      // free. Longhands, not the `outline` shorthand: Panda resolves
+      // tokens per-property. (The utility name is the shadow-era one, kept
+      // to avoid preset-base's `focusRing` utility, whose values would
+      // break this transform; revisit at the contract freeze.)
       focusShadow: {
         className: "focus-shadow",
-        values: ["outline", "outlineDark", "outlineLight"],
+        // `outline` is the standard ring, offset outward. `outlineInset`
+        // draws the same ring just inside the element instead — for
+        // full-bleed rows (menu/select options) whose outward ring would
+        // overhang their popover panel.
+        values: ["outline", "outlineInset"],
         transform: (value: string, { token }) => ({
-          outline: "2px solid transparent",
-          outlineOffset: "2px",
-          boxShadow: token(`shadows.${value}`),
+          outlineStyle: "solid",
+          outlineWidth: "2px",
+          outlineColor: token("colors.focusRing"),
+          outlineOffset: value === "outlineInset" ? "-2px" : "2px",
         }),
       },
     },
@@ -414,9 +446,26 @@ export const basePreset = definePreset({
     extend: {
       hover: "&:is(:hover, [data-hovered])",
       active: "&:is(:active, [data-pressed])",
-      focusVisible: "&:is(:focus-visible, [data-focus-visible])",
+      // Native :focus-visible counts only on elements RAC does not manage
+      // (`data-rac`): react-aria tracks interaction modality itself and is
+      // deliberately stricter than the browser — e.g. when focus returns to
+      // a menu's trigger after a mouse-only interaction, browsers mark the
+      // programmatic focus :focus-visible but RAC correctly does not, and
+      // matching the native pseudo would ring it anyway.
+      focusVisible:
+        "&:is(:focus-visible:not([data-rac]), [data-focus-visible])",
       disabled:
         "&:is(:disabled, [disabled], [data-disabled], [aria-disabled=true])",
+      // A dark surface, tagged by the app (spread the exported
+      // `darkSurface` constant onto the bar/banner element). Scopes the
+      // `focusRing`/`focusBorder` semantic-token flips — and dark surfaces
+      // MUST tag, or the ink focus ring is near-invisible on them. "Dark"
+      // is the surface's own luminance: tag surfaces that are dark by
+      // design, nothing theme-relative. If a dark mode ever ships,
+      // designed-dark surfaces keep their tags and the untagged defaults
+      // flip via a `_dark` condition on the tokens' base values, never via
+      // markup.
+      onDark: '[data-surface="dark"] &',
       // High-contrast/forced-palette modes (e.g. Windows High Contrast), which
       // strip author backgrounds and box-shadows.
       forcedColors: "@media (forced-colors: active)",

@@ -70,8 +70,13 @@ export const menu = defineSlotRecipe({
       transitionDuration: "ultra-fast",
       transitionTimingFunction: "ease-in",
       // RAC highlights the active item (keyboard or pointer) with data-focused;
-      // data-pressed is the pressed state.
+      // data-pressed is the pressed state. The background alone is not a
+      // focus indicator (gray.100 is ~1.07:1 against white) — keyboard
+      // navigation additionally gets the family ring, as ListBox and S2's
+      // menus do.
       "&[data-focused]": { bg: "gray.100" },
+      // Inset: a full-bleed row's outward ring would overhang the popover.
+      "&[data-focus-visible]": { focusShadow: "outlineInset" },
       "&[data-pressed]": { bg: "gray.200" },
       "&[data-disabled]": { opacity: 0.4, cursor: "not-allowed" },
     },

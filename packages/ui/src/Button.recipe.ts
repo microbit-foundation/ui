@@ -6,9 +6,11 @@
 import { defineRecipe } from "@pandacss/dev";
 
 // The common transition-property list, inlined (Panda has no
-// transitionProperty token category).
+// transitionProperty token category). Deliberately no box-shadow: the
+// focus ring's inner layer is a box-shadow and a focus indicator must
+// appear instantly, not fade in behind its outline.
 const transitionCommon =
-  "background-color, border-color, color, fill, stroke, opacity, box-shadow, transform";
+  "background-color, border-color, color, fill, stroke, opacity, transform";
 
 /**
  * Button recipe — the family button base + sizes, with the house
@@ -160,7 +162,6 @@ export const button = defineRecipe({
         bg: "white",
         _hover: { bg: "whiteAlpha.900", _disabled: { bg: "white" } },
         _active: { bg: "whiteAlpha.800" },
-        _focusVisible: { focusShadow: "outlineDark" },
       },
     },
   },

@@ -7,8 +7,10 @@ import { defineSlotRecipe } from "@pandacss/dev";
 
 // The common transition-property list, inlined (Panda has no
 // transitionProperty token category).
+// No box-shadow: nothing in this recipe uses one, and the focus ring's
+// layers must never fade in.
 const transitionCommon =
-  "background-color, border-color, color, fill, stroke, opacity, box-shadow, transform";
+  "background-color, border-color, color, fill, stroke, opacity, transform";
 
 /**
  * Select slot recipe — the dropdown pair, shared by `Select` (a listbox behind
@@ -62,7 +64,9 @@ export const select = defineSlotRecipe({
       cursor: "pointer",
       transitionProperty: transitionCommon,
       transitionDuration: "normal",
-      border: "1px solid",
+      // 2px as the input recipe (see there — focus is a colour change, so
+      // the stroke carries its weight at rest).
+      border: "2px solid",
       // As the input recipe: the ramp's accessible outline stop, with hover
       // stepping darker. The dropdown card below keeps the light gray.200 —
       // it's a surface edge, not a form-control boundary.
@@ -79,30 +83,35 @@ export const select = defineSlotRecipe({
       // `> &` rather than a descendant selector, so an app's own invalid form
       // wrapper cannot paint every control inside it red.
       //
-      // Doubled `&` for the same reason as the input recipe: hover, invalid and
-      // focus all set `borderColor`, and Panda sorts state rules by its own
-      // pseudo-class table rather than declaration order, so hover would win
-      // these ties. The repeated `&` makes the hover < invalid < focus ladder a
-      // matter of specificity instead.
-      "[data-invalid] > &&": {
-        borderColor: "danger.500",
-        boxShadow: "0 0 0 1px token(colors.danger.500)",
+      // Repeated `&` for the same reason as the input recipe: hover, focused
+      // and invalid all set `borderColor`, and Panda sorts state rules by its
+      // own pseudo-class table rather than declaration order, so hover would
+      // win these ties. The specificity ladder is hover < focused < invalid.
+      //
+      // Any focus — pointer included — takes the border to the dark brand
+      // `focusBorder`, as the input recipe (both arms: Select's trigger via
+      // RAC's attribute, ComboBox's wrapped input via native :focus).
+      "&&:is([data-focused], :has(input:focus))": {
+        borderColor: "focusBorder",
       },
-      // Two focus cases. `data-focus-visible` is Select's button on keyboard
+      // Border colour alone, as the input recipe.
+      "[data-invalid] > &&&": {
+        borderColor: "danger.500",
+      },
+      // Two ring cases. `data-focus-visible` is Select's button on keyboard
       // focus only (RAC leaves it unset for mouse, matching the react-aria
       // docs' Select). The `:has()` arm is ComboBox: its control is a plain
-      // div wrapping an input, so it gets no RAC attributes itself, and as a
-      // text field it should show focus on any modality. That arm watches
-      // native `:focus` rather than the input's `data-focused`, because
-      // react-aria dispatches a synthetic blur at the input whenever virtual
-      // focus moves to an option (aria-activedescendant) — which strips RAC's
-      // attribute for as long as the list has an active option, real focus
-      // never having left. Select's trigger holds no input, so it can't match.
+      // div wrapping an input, so it gets no RAC attributes itself. That arm
+      // watches native `:focus` rather than the input's RAC attributes,
+      // because react-aria dispatches a synthetic blur at the input whenever
+      // virtual focus moves to an option (aria-activedescendant) — which
+      // strips them for as long as the list has an active option, real focus
+      // never having left. The cost: ComboBox shows the ring on pointer
+      // focus too, unlike TextField's keyboard-only ring — native
+      // :focus-visible is no escape, since for text inputs it also fires on
+      // any focus. Select's trigger holds no input, so it can't match.
       "&&&[data-focus-visible], &&&:has(input:focus)": {
-        boxShadow: "0 0 0 1px token(colors.focusBorder)",
-        borderColor: "focusBorder",
-        outline: "2px solid transparent",
-        outlineOffset: "2px",
+        focusShadow: "outline",
       },
       "&[data-disabled]": { opacity: 0.4, cursor: "not-allowed" },
     },
@@ -185,6 +194,10 @@ export const select = defineSlotRecipe({
       transitionDuration: "ultra-fast",
       transitionTimingFunction: "ease-in",
       "&[data-focused]": { bg: "gray.100" },
+      // As the menu recipe: the background alone is no focus indicator;
+      // keyboard navigation gets the family ring, inset because the rows
+      // are full-bleed in the popover.
+      "&[data-focus-visible]": { focusShadow: "outlineInset" },
       "&[data-pressed]": { bg: "gray.200" },
       "&[data-disabled]": { opacity: 0.4, cursor: "not-allowed" },
     },
