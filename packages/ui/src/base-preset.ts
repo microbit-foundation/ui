@@ -55,10 +55,13 @@ import { toast } from "./Toast.recipe";
 // - 350 is the decorative/state fill stop (~2.1:1): avatar discs, skeleton
 //   pulse, pressed fills. Never text or boundaries.
 // - 400–900 are ink stops (outlines, placeholders, text) with a contrast
-//   contract on white: 400 ≥ 3:1, the accessible form-outline stop
-//   (WCAG 1.4.11); 500 ≥ 4.5:1, text-safe secondary (placeholders, muted
-//   icons). Presets may re-tint these only luminance-matched — the
-//   contrast figures are the contract, hue is free.
+//   contract on white: 400 ≥ 3:1, the accessible boundary stop — the
+//   floor for boundaries that IDENTIFY a control (Checkbox/Radio boxes;
+//   WCAG 1.4.11). Labelled text fields rest lighter by position (see the
+//   input recipe and ui-private's docs/a11y-positions.md). 500 ≥ 4.5:1,
+//   text-safe secondary (placeholders, muted icons). Presets may re-tint
+//   these only luminance-matched — the contrast figures are the contract,
+//   hue is free.
 //
 // Override values, never names: raw var(--colors-gray-*) references and
 // paired private presets depend on the names, so a rename is a breaking

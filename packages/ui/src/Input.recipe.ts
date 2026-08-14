@@ -49,9 +49,14 @@ export const input = defineRecipe({
     // rest — a 1px border made the pointer-focus state half the weight of
     // the old border+shadow treatment.
     border: "2px solid",
-    // The accessible outline stops: gray.400 is the ramp's 3:1-on-white
-    // boundary grey (WCAG 1.4.11), and hover steps darker, never lighter.
-    borderColor: "gray.400",
+    // gray.300, deliberately below 3:1: a labelled field's resting boundary
+    // is decorative under WCAG 1.4.11 — identification comes from the
+    // label — so at this weight the border trades contrast for lightness.
+    // This RELIES on every field being labelled; Checkbox/Radio keep
+    // gray.400, since their box IS the identifier. Rationale and history in
+    // ui-private's docs/a11y-positions.md (the 400 rest was an over-reading
+    // of the 3:1 rule).
+    borderColor: "gray.300",
     bg: "inherit",
     color: "inherit",
     _hover: { borderColor: "gray.500" },

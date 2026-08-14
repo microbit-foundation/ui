@@ -67,10 +67,11 @@ export const select = defineSlotRecipe({
       // 2px as the input recipe (see there — focus is a colour change, so
       // the stroke carries its weight at rest).
       border: "2px solid",
-      // As the input recipe: the ramp's accessible outline stop, with hover
-      // stepping darker. The dropdown card below keeps the light gray.200 —
+      // As the input recipe: a deliberately light resting boundary (the
+      // label identifies the field — see the rationale there), stepping
+      // darker on hover. The dropdown card below keeps the light gray.200 —
       // it's a surface edge, not a form-control boundary.
-      borderColor: "gray.400",
+      borderColor: "gray.300",
       bg: "white",
       color: "inherit",
       // As the input recipe, so a Select, a NativeSelect and a TextField in one
