@@ -5,7 +5,15 @@
  */
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { RiSettings2Line } from "react-icons/ri";
-import { CloseButton, HStack, IconButton, Text, VStack } from "../src";
+import {
+  CloseButton,
+  darkSurface,
+  HStack,
+  IconButton,
+  Stack,
+  Text,
+  VStack,
+} from "../src";
 
 const variants = ["primary", "secondary", "ghost", "plain", "toolbar"] as const;
 
@@ -32,20 +40,40 @@ type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {};
 
+// The label colour is a ternary of literals at the JSX site, not a
+// forwarded prop: Panda can't extract a style prop through a wrapper.
+const VariantRow = ({ onDark }: { onDark?: boolean }) => (
+  <HStack gap={6} alignItems="start">
+    {variants.map((variant) => (
+      <VStack key={variant} gap={2}>
+        <IconButton aria-label="Settings" variant={variant}>
+          <RiSettings2Line />
+        </IconButton>
+        <Text fontSize="xs" color={onDark ? "gray.300" : "gray.600"}>
+          {variant}
+        </Text>
+      </VStack>
+    ))}
+  </HStack>
+);
+
+/**
+ * Both surfaces, as in Button's Variants — which explains why `ghost`,
+ * `plain` and `toolbar` only separate on the dark strip.
+ */
 export const Variants: Story = {
   render: () => (
-    <HStack gap={6} alignItems="start">
-      {variants.map((variant) => (
-        <VStack key={variant} gap={2}>
-          <IconButton aria-label="Settings" variant={variant}>
-            <RiSettings2Line />
-          </IconButton>
-          <Text fontSize="xs" color="gray.600">
-            {variant}
-          </Text>
-        </VStack>
-      ))}
-    </HStack>
+    <Stack gap={4} alignItems="stretch">
+      <HStack css={{ p: "4" }}>
+        <VariantRow />
+      </HStack>
+      <HStack
+        css={{ p: "4", bg: "black", borderRadius: "md" }}
+        {...darkSurface}
+      >
+        <VariantRow onDark />
+      </HStack>
+    </Stack>
   ),
 };
 

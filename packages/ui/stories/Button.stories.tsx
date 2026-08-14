@@ -38,6 +38,11 @@ export const Playground: Story = {};
 /**
  * Every variant on a light and a tagged-dark surface — tab through both
  * strips to see the focus ring flip ink/white.
+ *
+ * `ghost`, `plain` and `toolbar` are indistinguishable on the light strip
+ * and only separate on the dark one, where `ghost` is black on black and
+ * `plain` takes the page's text colour unless the bar sets one. Both are
+ * light-surface variants; `toolbar` is the on-dark one.
  */
 export const Variants: Story = {
   render: (args) => (

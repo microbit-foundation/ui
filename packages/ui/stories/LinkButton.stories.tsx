@@ -5,7 +5,7 @@
  */
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { RiExternalLinkLine } from "react-icons/ri";
-import { Button, HStack, Icon, LinkButton } from "../src";
+import { Button, darkSurface, HStack, Icon, LinkButton, Stack } from "../src";
 
 const variants = [
   "primary",
@@ -39,15 +39,33 @@ type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {};
 
+/**
+ * Both surfaces, as in Button's Variants — which explains why `ghost`,
+ * `plain` and `toolbar` only separate on the dark strip.
+ */
 export const Variants: Story = {
   render: (args) => (
-    <HStack gap={4} flexWrap="wrap">
-      {variants.map((variant) => (
-        <LinkButton key={variant} {...args} variant={variant}>
-          {variant}
-        </LinkButton>
-      ))}
-    </HStack>
+    <Stack gap={4} alignItems="stretch">
+      <HStack gap={4} flexWrap="wrap" css={{ p: "4" }}>
+        {variants.map((variant) => (
+          <LinkButton key={variant} {...args} variant={variant}>
+            {variant}
+          </LinkButton>
+        ))}
+      </HStack>
+      <HStack
+        gap={4}
+        flexWrap="wrap"
+        css={{ p: "4", bg: "black", borderRadius: "md" }}
+        {...darkSurface}
+      >
+        {variants.map((variant) => (
+          <LinkButton key={variant} {...args} variant={variant}>
+            {variant}
+          </LinkButton>
+        ))}
+      </HStack>
+    </Stack>
   ),
 };
 
