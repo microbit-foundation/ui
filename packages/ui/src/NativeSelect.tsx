@@ -52,13 +52,6 @@ export const NativeSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(
               cursor: "pointer",
               paddingBottom: "1px",
               _disabled: { cursor: "not-allowed" },
-              // The input recipe's ring rule keys off RAC's
-              // data-focus-visible, which a native <select> never gets, so
-              // the ring comes back via native :focus-visible here (the
-              // _focusVisible condition matches both). The browser heuristic
-              // decides the modality — like ComboBox, that can include
-              // pointer focus; unlike text inputs, a select has no caret to
-              // carry the state, so that's the right side to err on.
               _focusVisible: { zIndex: 1, focusRing: "outline" },
             },
             // Room for the chevron overlay (constant across sizes).
