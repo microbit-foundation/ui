@@ -197,6 +197,50 @@ Semantic tokens (`languageText`, `statusBarBg`, `danger.*`, `toast*Bg`,
 brand presets override; they resolve through var indirection, so overrides
 apply wherever the token is consumed.
 
+`focusRing` and `focusBorder` need more care: their values are condition
+objects and a merge replaces a value wholesale, so the flat form drops the
+on-dark flip below. Keep the shape:
+
+```ts
+focusBorder: { value: { base: "{colors.brand.700}", _onDark: "{colors.white}" } };
+```
+
+## Dark surfaces
+
+Focus indicators are surface-aware through one tag. The default focus ring
+is ink; on a dark surface it must be white, so tag the surface element by
+spreading the exported constant:
+
+```tsx
+import { darkSurface } from "@microbit/ui";
+
+<header {...darkSurface}>…</header>; // a black toolbar, a coloured sidebar bar
+```
+
+Custom properties inherit, so tagging the bar covers the bar itself and
+every control inside it — including ones added later. If the tagged element
+is focusable, tag one level in instead: its own ring is drawn _outside_ it,
+on whatever is behind it. (The Toast does this — the card is dark and
+focusable, so the tag sits on its close button.) Portalled overlays (a
+modal opened from a dark toolbar) escape the tag with the DOM, which is
+correct. Under the hood it is `data-surface="dark"`, which the preset's
+`onDark` condition scopes the `focusRing`/`focusBorder` token flips to.
+
+Two rules:
+
+- **Dark surfaces must tag** — the ink ring is near-invisible on them, and
+  there is no automatic detection.
+- **Tag surfaces, not themes**: "dark" describes the surface's own
+  luminance, so tag surfaces that are dark by design (a black toolbar, a
+  coloured sidebar bar) rather than anything relative to the app's overall
+  look. This is what will let the tag survive a dark mode if we ship one:
+  designed-dark surfaces stay dark and keep their tags; everything else
+  stays untagged, and a dark mode would flip the untagged defaults via
+  token conditions, never via markup.
+
+Rule of thumb for coloured bars: tag when the surface lacks 3:1 contrast
+against ink — roughly, darker than the grey ramp's 500.
+
 ## Runtime token lookups
 
 For values that feed _computation_ rather than stylesheets (canvas painting,

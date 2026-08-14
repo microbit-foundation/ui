@@ -138,12 +138,25 @@ it("ComboBox shows an empty state and can drop the indicator", () => {
  * against.
  */
 const triggerRules = () =>
-  select.base?.trigger as Record<string, { borderColor?: string } | undefined>;
+  select.base?.trigger as Record<
+    string,
+    { borderColor?: string; focusRing?: string } | undefined
+  >;
 
 const ruleFor = (borderColor: string) => {
   const rules = triggerRules();
   const selector = Object.keys(rules).find(
     (k) => rules[k]?.borderColor === borderColor,
+  );
+  expect(selector).toBeDefined();
+  return selector!;
+};
+
+// The focus rule carries the focus ring, not a border tint.
+const focusRule = () => {
+  const rules = triggerRules();
+  const selector = Object.keys(rules).find(
+    (k) => rules[k]?.focusRing === "outline",
   );
   expect(selector).toBeDefined();
   return selector!;
@@ -156,7 +169,7 @@ const ruleFor = (borderColor: string) => {
  * drops it even though real focus never left.
  */
 const isTriggerFocusStyled = (el: Element) =>
-  el.matches(ruleFor("focusBorder").replaceAll("&", "*"));
+  el.matches(focusRule().replaceAll("&", "*"));
 
 /** Fails if the invalid rule goes back to a `data-invalid` RAC never sets. */
 const isTriggerInvalidStyled = (el: Element) =>
@@ -267,15 +280,15 @@ it("a valid control is not painted red", () => {
 });
 
 // jsdom applies no CSS, so the cascade can only be checked as declaration
-// order: equal-specificity rules, so the last one wins. The order the input
-// recipe documents: red beats hover, the focus ring beats red.
-it("orders the trigger's state rules hover, invalid, focus", () => {
+// order: equal-specificity rules, so the last one wins. Red must beat hover
+// (both set borderColor). The focus ring is an outline, disjoint from both,
+// so invalid + focused compose (red border under the ring) rather than
+// needing an order.
+it("orders the trigger's state rules hover before invalid", () => {
   const keys = Object.keys(triggerRules());
   const hover = keys.indexOf(ruleFor("gray.500"));
   const invalid = keys.indexOf(ruleFor("danger.500"));
-  const focus = keys.indexOf(ruleFor("focusBorder"));
   expect(hover).toBeLessThan(invalid);
-  expect(invalid).toBeLessThan(focus);
 });
 
 it("drops the chevron when asked, rather than silently keeping it", () => {

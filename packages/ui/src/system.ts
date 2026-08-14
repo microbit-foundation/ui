@@ -43,3 +43,15 @@ export {
   Wrap,
   styled,
 } from "styled-system/jsx";
+
+/**
+ * Spread onto a surface element that is dark by design — a black toolbar,
+ * a coloured sidebar header — so focus indicators inside it flip to their
+ * on-dark colours: `<header {...darkSurface}>`.
+ *
+ * Tag a surface's own designed luminance, never anything theme-relative
+ * (a future dark mode flips untagged defaults via token conditions, not
+ * markup). One inherited data attribute (the `onDark` condition): tag the
+ * bar, cover its controls; portalled overlays escape with the DOM.
+ */
+export const darkSurface = { "data-surface": "dark" } as const;

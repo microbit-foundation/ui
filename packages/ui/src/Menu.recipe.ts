@@ -66,12 +66,11 @@ export const menu = defineSlotRecipe({
       color: "inherit",
       textDecoration: "none",
       outline: "none",
-      transitionProperty: "background",
-      transitionDuration: "ultra-fast",
-      transitionTimingFunction: "ease-in",
-      // RAC highlights the active item (keyboard or pointer) with data-focused;
-      // data-pressed is the pressed state.
+      // data-focused is RAC's active item, either modality. The highlight
+      // is focus indication: no transition (it snaps with the ring, which
+      // keyboard nav adds; inset, the rows being full-bleed).
       "&[data-focused]": { bg: "gray.100" },
+      "&[data-focus-visible]": { focusRing: "outlineInset" },
       "&[data-pressed]": { bg: "gray.200" },
       "&[data-disabled]": { opacity: 0.4, cursor: "not-allowed" },
     },

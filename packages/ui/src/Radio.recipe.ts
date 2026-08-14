@@ -38,8 +38,6 @@ export const radio = defineSlotRecipe({
       alignItems: "center",
       justifyContent: "center",
       flexShrink: 0,
-      transitionProperty: "box-shadow",
-      transitionDuration: "normal",
       borderWidth: "2px",
       borderStyle: "solid",
       borderRadius: "full",
@@ -78,7 +76,7 @@ export const radio = defineSlotRecipe({
         _hover: { bg: "gray.200", borderColor: "gray.200" },
       },
       "&[data-focus-visible]": {
-        focusShadow: "outline",
+        focusRing: "outline",
       },
     },
     label: {

@@ -42,7 +42,7 @@ export const switchRecipe = defineSlotRecipe({
         bg: "controlCheckedBg",
       },
       "&[data-focus-visible]": {
-        focusShadow: "outline",
+        focusRing: "outline",
       },
       "&[data-disabled]": { opacity: 0.4 },
       // Forced-colors modes strip author backgrounds, flattening track and

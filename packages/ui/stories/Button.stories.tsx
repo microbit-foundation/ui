@@ -6,7 +6,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { RiDownload2Line } from "react-icons/ri";
-import { Button, ButtonGroup, HStack, Stack } from "../src";
+import { Button, ButtonGroup, darkSurface, HStack, Stack } from "../src";
 
 const variants = [
   "primary",
@@ -35,15 +35,33 @@ type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {};
 
+/**
+ * Every variant on a light and a tagged-dark surface — tab through both
+ * strips to see the focus ring flip ink/white.
+ */
 export const Variants: Story = {
   render: (args) => (
-    <HStack gap={4} flexWrap="wrap">
-      {variants.map((variant) => (
-        <Button key={variant} {...args} variant={variant}>
-          {variant}
-        </Button>
-      ))}
-    </HStack>
+    <Stack gap={4} alignItems="stretch">
+      <HStack gap={4} flexWrap="wrap" css={{ p: "4" }}>
+        {variants.map((variant) => (
+          <Button key={variant} {...args} variant={variant}>
+            {variant}
+          </Button>
+        ))}
+      </HStack>
+      <HStack
+        gap={4}
+        flexWrap="wrap"
+        css={{ p: "4", bg: "black", borderRadius: "md" }}
+        {...darkSurface}
+      >
+        {variants.map((variant) => (
+          <Button key={variant} {...args} variant={variant}>
+            {variant}
+          </Button>
+        ))}
+      </HStack>
+    </Stack>
   ),
 };
 

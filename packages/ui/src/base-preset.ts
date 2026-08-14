@@ -55,10 +55,11 @@ import { toast } from "./Toast.recipe";
 // - 350 is the decorative/state fill stop (~2.1:1): avatar discs, skeleton
 //   pulse, pressed fills. Never text or boundaries.
 // - 400–900 are ink stops (outlines, placeholders, text) with a contrast
-//   contract on white: 400 ≥ 3:1, the accessible form-outline stop
-//   (WCAG 1.4.11); 500 ≥ 4.5:1, text-safe secondary (placeholders, muted
-//   icons). Presets may re-tint these only luminance-matched — the
-//   contrast figures are the contract, hue is free.
+//   contract on white: 400 ≥ 3:1, the floor for boundaries that identify
+//   a control (checkbox-family boxes; fields rest lighter — see the input
+//   recipe); 500 ≥ 4.5:1, text-safe secondary. Presets may re-tint these
+//   only luminance-matched — the contrast figures are the contract, hue
+//   is free.
 //
 // Override values, never names: raw var(--colors-gray-*) references and
 // paired private presets depend on the names, so a rename is a breaking
@@ -85,7 +86,8 @@ const gray = {
 /**
  * The base preset: the complete, working micro:bit design system. The base
  * token scales (base-tokens.ts), the micro:bit house style
- * (pill `radii.button`, `outline*` focus shadows, Helvetica fonts, the
+ * (pill `radii.button`, the `focusRing` utility/token pair, Helvetica
+ * fonts, the
  * `toolbar` button variant in Button.recipe.ts, the
  * `languageText`/`toast*Bg`/`statusBarBg` semantic tokens), the shared-ui
  * component recipes, the react-aria condition widening, the `globalCss`
@@ -166,11 +168,6 @@ export const basePreset = definePreset({
       },
       shadows: {
         ...shadows,
-        // The 4px focus outline shadow, plus dark/light-surface
-        // companions. Consumed via the `focusShadow` utility.
-        outline: { value: "0 0 0 4px rgba(66, 153, 225, 0.6)" },
-        outlineDark: { value: "0 0 0 4px rgba(0, 0, 0, 0.5)" },
-        outlineLight: { value: "0 0 0 4px rgba(255, 255, 255, 0.8)" },
       },
       fonts: {
         // Helvetica heading/body (4/4 apps); a brand preset leaves these and
@@ -189,13 +186,28 @@ export const basePreset = definePreset({
     },
     semanticTokens: {
       colors: {
-        // Checked/focus states of form controls: Checkbox/Switch/Radio
-        // checked backgrounds and the Input/Select focus border. Semantic
-        // so a brand can diverge them from its ramp — e.g. a light
-        // brand.500 needing a darker 3:1 focus border.
+        // Checked states of form controls: Checkbox/Switch/Radio checked
+        // backgrounds. Semantic so a brand can diverge them from its ramp.
         controlCheckedBg: { value: "{colors.brand.500}" },
         controlCheckedHoverBg: { value: "{colors.brand.600}" },
-        focusBorder: { value: "{colors.brand.500}" },
+        // Focused form-control border, any modality: the dark brand stop
+        // (all-ink read flat next to the ink ring). Flips white under the
+        // dark-surface tag, like `focusRing`.
+        // Both flips are condition objects, and a merge replaces a token
+        // value wholesale: an override must keep the `{ base, _onDark }`
+        // shape or silently lose the flip.
+        focusBorder: {
+          value: { base: "{colors.brand.600}", _onDark: "{colors.white}" },
+        },
+        // The focus ring colour: ink, or white inside `data-surface="dark"`
+        // (the `onDark` condition). The var inherits — tag the bar, cover
+        // its controls; portalled overlays escape with the DOM. Dark
+        // surfaces MUST tag (ink is near-invisible there). Opaque
+        // deliberately: translucent rings washed out (classroom #780).
+        // Both tag states: the Button "Variants" story.
+        focusRing: {
+          value: { base: "{colors.gray.900}", _onDark: "{colors.white}" },
+        },
         // Error/destructive ramp. Destructive button variants,
         // field error states and the error toast; the record* button
         // variants deliberately stay on red.* (recording vocabulary, not
@@ -287,6 +299,11 @@ export const basePreset = definePreset({
     html: {
       textRendering: "optimizeLegibility",
       touchAction: "manipulation",
+      // Alias preset-base's ring plumbing to our colour, so a stray use
+      // of its focusVisibleRing/focusRing* utilities renders in our
+      // ink rather than #005FCC. Still don't use them: un-gated focus
+      // selector, and this alias resolves on <html> (no tag awareness).
+      "--global-color-focus-ring": "var(--colors-focus-ring)",
     },
     body: {
       // No `position: relative` (Chakra had it): it breaks react-aria's
@@ -391,19 +408,51 @@ export const basePreset = definePreset({
   },
   utilities: {
     extend: {
-      // The app-wide focus indicator, usually inside `_focusVisible`. Values
-      // are the outline* shadow token names. The transparent outline is for
-      // forced-colors modes, which strip box-shadows but recolour outlines to
-      // a visible system colour. (Named to avoid preset-base's outline-based
-      // `focusRing` utility, whose values would break this transform.)
-      focusShadow: {
-        className: "focus-shadow",
-        values: ["outline", "outlineDark", "outlineLight"],
-        transform: (value: string, { token }) => ({
-          outline: "2px solid transparent",
-          outlineOffset: "2px",
-          boxShadow: token(`shadows.${value}`),
-        }),
+      // The app-wide focus indicator, usually inside `_focusVisible`: a
+      // 2px `focusRing`-coloured outline at 2px offset — the surface shows
+      // through the gap, and call sites never pick a ring per background.
+      // A real outline, so forced-colors modes keep a ring; longhands
+      // because Panda resolves tokens per-property. Thickness/contrast
+      // rationale: ui-private docs/a11y-positions.md. Shadows
+      // preset-base's `focusRing`: our transform replaces theirs, but the
+      // values arrays union, so its outside/inside/mixed/none typecheck
+      // here. `none` is honoured — the alternative is a permanent un-gated
+      // ring; the other three fall through to the standard one. Don't use
+      // them.
+      focusRing: {
+        className: "focus-ring",
+        // `outlineInset` draws the ring just inside — for full-bleed rows
+        // whose outward ring would overhang their popover.
+        values: ["outline", "outlineInset"],
+        transform: (value: string, { token }) =>
+          value === "none"
+            ? { outlineStyle: "none" }
+            : {
+                outlineStyle: "solid",
+                outlineWidth: "2px",
+                outlineColor: token("colors.focusRing"),
+                outlineOffset: value === "outlineInset" ? "-2px" : "2px",
+              },
+      },
+      // preset-base's remaining ring plumbing sets --focus-ring-* custom
+      // properties only its own utilities read. Repointed at the outline
+      // longhands ours draws with, rather than left as no-ops that read
+      // like working knobs.
+      focusRingWidth: {
+        className: "focus-ring-w",
+        values: "borderWidths",
+        transform: (value: string) => ({ outlineWidth: value }),
+      },
+      focusRingOffset: {
+        className: "focus-ring-o",
+        values: "spacing",
+        transform: (value: string) => ({ outlineOffset: value }),
+      },
+      focusRingStyle: {
+        className: "focus-ring-s",
+        values: "borderStyles",
+        // `outlineStyle` is a keyword union, hence the cast.
+        transform: (value: string) => ({ outlineStyle: value as "solid" }),
       },
     },
   },
@@ -414,9 +463,18 @@ export const basePreset = definePreset({
     extend: {
       hover: "&:is(:hover, [data-hovered])",
       active: "&:is(:active, [data-pressed])",
-      focusVisible: "&:is(:focus-visible, [data-focus-visible])",
+      // Native :focus-visible counts only on elements RAC doesn't manage:
+      // react-aria's modality tracking is stricter than the browser's
+      // (e.g. focus restored from a menu after mouse-only use).
+      focusVisible:
+        "&:is(:focus-visible:not([data-rac]), [data-focus-visible])",
       disabled:
         "&:is(:disabled, [disabled], [data-disabled], [aria-disabled=true])",
+      // A dark-by-design surface (spread the exported `darkSurface` onto
+      // the bar element); scopes the focusRing/focusBorder flips. Never
+      // theme-relative: a future dark mode flips untagged defaults via
+      // token conditions, not markup.
+      onDark: '[data-surface="dark"] &',
       // High-contrast/forced-palette modes (e.g. Windows High Contrast), which
       // strip author backgrounds and box-shadows.
       forcedColors: "@media (forced-colors: active)",

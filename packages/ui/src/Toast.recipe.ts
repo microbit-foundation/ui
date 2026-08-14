@@ -67,6 +67,11 @@ export const toast = defineSlotRecipe({
       color: "white",
       maxW: "sm",
       pointerEvents: "auto",
+      // The card is focusable (RAC gives it tabindex), so it takes the
+      // house ring rather than the UA default. Ink, because the ring is
+      // drawn on the page, not the card — Toast.tsx tags the close button.
+      outline: "none",
+      _focusVisible: { focusRing: "outline" },
     },
     // The icon has to be inside the alert region to be announced with the
     // message, so this row — not the root — is what lays the two out.
@@ -115,7 +120,7 @@ export const toast = defineSlotRecipe({
       // Hover is a subtle dark overlay (blackAlpha), not a bright highlight.
       _hover: { bg: "blackAlpha.100" },
       _active: { bg: "blackAlpha.200" },
-      _focusVisible: { focusShadow: "outline" },
+      _focusVisible: { focusRing: "outline" },
     },
   },
   variants: {

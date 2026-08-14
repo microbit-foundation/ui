@@ -6,9 +6,10 @@
 import { defineRecipe } from "@pandacss/dev";
 
 // The common transition-property list, inlined (Panda has no
-// transitionProperty token category).
+// transitionProperty token category). No box-shadow: focus indication
+// must never fade in.
 const transitionCommon =
-  "background-color, border-color, color, fill, stroke, opacity, box-shadow, transform";
+  "background-color, border-color, color, fill, stroke, opacity, transform";
 
 /**
  * Button recipe — the family button base + sizes, with the house
@@ -46,7 +47,7 @@ export const button = defineRecipe({
     verticalAlign: "middle",
     outline: "none",
     _focusVisible: {
-      focusShadow: "outline",
+      focusRing: "outline",
     },
     _disabled: {
       opacity: 0.4,
@@ -155,12 +156,13 @@ export const button = defineRecipe({
         _active: { bg: "danger.700" },
       },
       // Family-wide variant (every censused app has toolbar-class buttons).
+      // No ring override: the bar decides, and a dark one must spread
+      // `darkSurface` — an app adopting this variant needs the tag with it.
       toolbar: {
         color: "black",
         bg: "white",
         _hover: { bg: "whiteAlpha.900", _disabled: { bg: "white" } },
         _active: { bg: "whiteAlpha.800" },
-        _focusVisible: { focusShadow: "outlineDark" },
       },
     },
   },

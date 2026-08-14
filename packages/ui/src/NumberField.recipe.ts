@@ -25,6 +25,15 @@ export const numberField = defineSlotRecipe({
     group: {
       position: "relative",
       zIndex: 0,
+      // The stepper overlays the input as a sibling, so the input's own
+      // :hover misses it — the group carries the hover tint. The :not()
+      // list is required: slot recipes layer above plain recipes
+      // (recipes.slots), so this would otherwise override focused/invalid
+      // (see docs/hints.md). :user-invalid takes its own :not(): :not() is
+      // not forgiving, so one list would drop the whole selector on a
+      // browser that doesn't know the pseudo-class (Safari < 16.5).
+      "&:hover input:not(:focus, [data-focused], [data-invalid]):not(:user-invalid)":
+        { borderColor: "gray.500" },
     },
     // A column overlaying the input's right edge, inset by the input border.
     stepper: {
@@ -33,8 +42,8 @@ export const numberField = defineSlotRecipe({
       position: "absolute",
       insetEnd: "0",
       top: "0",
-      height: "calc(100% - 2px)",
-      margin: "1px",
+      height: "calc(100% - 4px)",
+      margin: "2px",
       width: "6",
       zIndex: 1,
     },
@@ -52,18 +61,18 @@ export const numberField = defineSlotRecipe({
       borderColor: "gray.200",
       transitionProperty: "background",
       transitionDuration: "ultra-fast",
-      // Follow the input's corners, less the 1px border the stepper is inset
+      // Follow the input's corners, less the 2px border the stepper is inset
       // by, so the hover and pressed fills curve away with the border instead
       // of squaring off over its arc. Radii track the input recipe's size
       // scale, so the `sm` variant restates them.
       "&:first-child": {
-        borderStartEndRadius: "calc(token(radii.md) - 1px)",
+        borderStartEndRadius: "calc(token(radii.md) - 2px)",
       },
       "&:last-child": {
         borderTop: "1px solid",
         borderTopColor: "gray.200",
         marginTop: "-1px",
-        borderEndEndRadius: "calc(token(radii.md) - 1px)",
+        borderEndEndRadius: "calc(token(radii.md) - 2px)",
       },
       "&[data-hovered]": { bg: "gray.100" },
       "&[data-pressed]": { bg: "gray.200" },
@@ -84,10 +93,10 @@ export const numberField = defineSlotRecipe({
         stepperButton: {
           fontSize: "calc(token(fontSizes.sm) * 0.75)",
           "&:first-child": {
-            borderStartEndRadius: "calc(token(radii.sm) - 1px)",
+            borderStartEndRadius: "calc(token(radii.sm) - 2px)",
           },
           "&:last-child": {
-            borderEndEndRadius: "calc(token(radii.sm) - 1px)",
+            borderEndEndRadius: "calc(token(radii.sm) - 2px)",
           },
         },
       },

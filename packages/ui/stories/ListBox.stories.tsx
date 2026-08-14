@@ -76,7 +76,7 @@ export const CustomSelectedState: Story = {
           gap: 3,
           p: 1,
           borderRadius: "md",
-          "&[data-focus-visible]": { focusShadow: "outline" },
+          "&[data-focus-visible]": { focusRing: "outline" },
         }}
       >
         {({ isSelected }) => (

@@ -52,7 +52,8 @@ export const field = defineSlotRecipe({
     },
     requiredIndicator: {
       marginStart: "1",
-      color: "danger.500",
+      // 600: red-as-text needs 4.5:1; danger.500 is border-grade (~4.1:1).
+      color: "danger.600",
     },
     helperText: {
       // RAC's Text renders a span, and RadioGroup/CheckboxGroup roots are not
@@ -70,7 +71,8 @@ export const field = defineSlotRecipe({
       mt: "2",
       fontSize: "sm",
       lineHeight: "normal",
-      color: "danger.500",
+      // 600: red-as-text needs 4.5:1 (the invalid border stays 500).
+      color: "danger.600",
     },
   },
   variants: {

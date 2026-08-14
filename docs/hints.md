@@ -62,6 +62,14 @@ work. Consumption setup and the CSS-variable contract are in
   property the base declaration reads (`color: var(--avatar-color, …)`),
   not in a higher-specificity state selector that outguns a call-site
   `css`.
+- **Slot recipes outrank plain recipes as a layer, not by specificity.**
+  Panda emits slot recipes into `@layer recipes.slots`, ordered after
+  `recipes`, so a slot-recipe rule that reaches into another recipe's
+  element (`"&:hover input"` in a slot recipe, targeting the `input`
+  recipe's element) beats every rule of that recipe outright — no
+  specificity can save the focused/invalid states. Such cross-recipe rules
+  must exclude the states they'd override in a `:not()` list (see the
+  numberField group's hover).
 
 ## react-aria-components
 
