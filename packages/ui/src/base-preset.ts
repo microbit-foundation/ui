@@ -193,6 +193,9 @@ export const basePreset = definePreset({
         // Focused form-control border, any modality: the dark brand stop
         // (all-ink read flat next to the ink ring). Flips white under the
         // dark-surface tag, like `focusRing`.
+        // Both flips are condition objects, and a merge replaces a token
+        // value wholesale: an override must keep the `{ base, _onDark }`
+        // shape or silently lose the flip.
         focusBorder: {
           value: { base: "{colors.brand.600}", _onDark: "{colors.white}" },
         },
@@ -412,19 +415,44 @@ export const basePreset = definePreset({
       // because Panda resolves tokens per-property. Thickness/contrast
       // rationale: ui-private docs/a11y-positions.md. Shadows
       // preset-base's `focusRing`: our transform replaces theirs, but the
-      // values arrays union — its outside/inside/mixed/none typecheck and
-      // fall through to the standard ring; don't use them.
+      // values arrays union, so its outside/inside/mixed/none typecheck
+      // here. `none` is honoured — the alternative is a permanent un-gated
+      // ring; the other three fall through to the standard one. Don't use
+      // them.
       focusRing: {
         className: "focus-ring",
         // `outlineInset` draws the ring just inside — for full-bleed rows
         // whose outward ring would overhang their popover.
         values: ["outline", "outlineInset"],
-        transform: (value: string, { token }) => ({
-          outlineStyle: "solid",
-          outlineWidth: "2px",
-          outlineColor: token("colors.focusRing"),
-          outlineOffset: value === "outlineInset" ? "-2px" : "2px",
-        }),
+        transform: (value: string, { token }) =>
+          value === "none"
+            ? { outlineStyle: "none" }
+            : {
+                outlineStyle: "solid",
+                outlineWidth: "2px",
+                outlineColor: token("colors.focusRing"),
+                outlineOffset: value === "outlineInset" ? "-2px" : "2px",
+              },
+      },
+      // preset-base's remaining ring plumbing sets --focus-ring-* custom
+      // properties only its own utilities read. Repointed at the outline
+      // longhands ours draws with, rather than left as no-ops that read
+      // like working knobs.
+      focusRingWidth: {
+        className: "focus-ring-w",
+        values: "borderWidths",
+        transform: (value: string) => ({ outlineWidth: value }),
+      },
+      focusRingOffset: {
+        className: "focus-ring-o",
+        values: "spacing",
+        transform: (value: string) => ({ outlineOffset: value }),
+      },
+      focusRingStyle: {
+        className: "focus-ring-s",
+        values: "borderStyles",
+        // `outlineStyle` is a keyword union, hence the cast.
+        transform: (value: string) => ({ outlineStyle: value as "solid" }),
       },
     },
   },

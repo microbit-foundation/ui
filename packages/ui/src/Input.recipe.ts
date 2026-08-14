@@ -43,15 +43,20 @@ export const input = defineRecipe({
     color: "inherit",
     _hover: { borderColor: "gray.500" },
     // Any focus, pointer included; the keyboard ring composes on top.
-    "&&:is(:focus, [data-focused])": { borderColor: "focusBorder" },
+    // zIndex so the border — and the ring with it — paint over
+    // attached-group neighbours.
+    "&&:is(:focus, [data-focused])": { zIndex: 1, borderColor: "focusBorder" },
     "&&&:is([data-invalid], :user-invalid)": {
       borderColor: "danger.500",
     },
-    // zIndex so the ring paints over attached-group neighbours.
-    "&&&[data-focus-visible]": {
-      zIndex: 1,
-      focusRing: "outline",
-    },
+    // Modality-tracked: RAC's attribute, or Input.tsx's. Native
+    // :focus-visible is the fallback for a bare element wearing the recipe,
+    // but not text-entry ones — browsers match it there on a pointer click,
+    // which is what the tracking exists to exclude.
+    "&&&:is([data-focus-visible], :focus-visible:not([data-rac], input, textarea))":
+      {
+        focusRing: "outline",
+      },
     "&:is(:disabled, [data-disabled])": {
       opacity: 0.4,
       cursor: "not-allowed",

@@ -52,7 +52,6 @@ export const NativeSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(
               cursor: "pointer",
               paddingBottom: "1px",
               _disabled: { cursor: "not-allowed" },
-              _focusVisible: { zIndex: 1, focusRing: "outline" },
             },
             // Room for the chevron overlay (constant across sizes).
             hideChevron ? undefined : { paddingRight: "8" },

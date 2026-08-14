@@ -29,8 +29,10 @@ export const numberField = defineSlotRecipe({
       // :hover misses it — the group carries the hover tint. The :not()
       // list is required: slot recipes layer above plain recipes
       // (recipes.slots), so this would otherwise override focused/invalid
-      // (see docs/hints.md).
-      "&:hover input:not(:focus, [data-focused], [data-invalid], :user-invalid)":
+      // (see docs/hints.md). :user-invalid takes its own :not(): :not() is
+      // not forgiving, so one list would drop the whole selector on a
+      // browser that doesn't know the pseudo-class (Safari < 16.5).
+      "&:hover input:not(:focus, [data-focused], [data-invalid]):not(:user-invalid)":
         { borderColor: "gray.500" },
     },
     // A column overlaying the input's right edge, inset by the input border.

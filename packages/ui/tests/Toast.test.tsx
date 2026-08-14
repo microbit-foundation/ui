@@ -57,6 +57,20 @@ it("names the status icon, inside the region that gets announced", () => {
   expect(alert.getAttribute("aria-atomic")).toBe("true");
 });
 
+it("tags the close button as being on a dark surface", () => {
+  renderProvider();
+  act(() => toast({ title: "Saved", isClosable: true }));
+  // The card is dark at every status, and no app can tag a surface the
+  // package ships. Not the card itself: it is focusable too, and its own
+  // ring is drawn outside it, on the page.
+  expect(
+    screen.getByRole("button", { name: "Close" }).getAttribute("data-surface"),
+  ).toBe("dark");
+  expect(
+    screen.getByRole("alertdialog").getAttribute("data-surface"),
+  ).toBeNull();
+});
+
 it("honours an explicit duration", () => {
   vi.useFakeTimers();
   renderProvider();

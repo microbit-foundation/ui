@@ -23,6 +23,7 @@ import { toast as toastRecipe } from "styled-system/recipes";
 import { CloseIcon } from "./CloseIcon";
 import { Icon } from "./Icon";
 import { uiMessage } from "./messages";
+import { darkSurface } from "./system";
 
 export type ToastStatus = "info" | "success" | "warning" | "error";
 
@@ -162,6 +163,11 @@ export const ToastProvider = () => {
               <RACButton
                 slot="close"
                 aria-label={intl.formatMessage(uiMessage("ui.close-action"))}
+                // The card is dark at every status, and no app can tag a
+                // surface the package ships. Tagged here, not on the card:
+                // the tag covers the element it sits on, whose own ring is
+                // drawn outside it, on the page.
+                {...darkSurface}
                 className={slots.closeButton}
               >
                 <CloseIcon />

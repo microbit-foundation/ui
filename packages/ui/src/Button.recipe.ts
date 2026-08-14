@@ -156,6 +156,8 @@ export const button = defineRecipe({
         _active: { bg: "danger.700" },
       },
       // Family-wide variant (every censused app has toolbar-class buttons).
+      // No ring override: the bar decides, and a dark one must spread
+      // `darkSurface` — an app adopting this variant needs the tag with it.
       toolbar: {
         color: "black",
         bg: "white",
