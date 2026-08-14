@@ -25,6 +25,16 @@ export const numberField = defineSlotRecipe({
     group: {
       position: "relative",
       zIndex: 0,
+      // The stepper column overlays the input as a sibling, so the input's
+      // own :hover never fires while the pointer is over it. The field is
+      // one control: hover anywhere in the group tints the border, same
+      // value as the input recipe's hover. The :not() list restates the
+      // input recipe's focused/invalid states because specificity CANNOT
+      // do the job here: slot-recipe rules land in @layer recipes.slots,
+      // which beats the plain recipes layer outright, so this rule must
+      // exclude the states it would otherwise override.
+      "&:hover input:not(:focus, [data-focused], [data-invalid], :user-invalid)":
+        { borderColor: "gray.500" },
     },
     // A column overlaying the input's right edge, inset by the input border.
     stepper: {
