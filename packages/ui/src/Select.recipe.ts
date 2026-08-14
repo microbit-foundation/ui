@@ -101,17 +101,18 @@ export const select = defineSlotRecipe({
       },
       // Two ring cases. `data-focus-visible` is Select's button on keyboard
       // focus only (RAC leaves it unset for mouse, matching the react-aria
-      // docs' Select). The `:has()` arm is ComboBox: its control is a plain
-      // div wrapping an input, so it gets no RAC attributes itself. That arm
-      // watches native `:focus` rather than the input's RAC attributes,
-      // because react-aria dispatches a synthetic blur at the input whenever
-      // virtual focus moves to an option (aria-activedescendant) — which
-      // strips them for as long as the list has an active option, real focus
-      // never having left. The cost: ComboBox shows the ring on pointer
-      // focus too, unlike TextField's keyboard-only ring — native
-      // :focus-visible is no escape, since for text inputs it also fires on
-      // any focus. Select's trigger holds no input, so it can't match.
-      "&&&[data-focus-visible], &&&:has(input:focus)": {
+      // docs' Select). The second arm is ComboBox: its control is a plain
+      // div wrapping an input, so it gets no RAC attributes itself, and the
+      // input's own attributes are unusable — react-aria dispatches a
+      // synthetic blur at the input whenever virtual focus moves to an
+      // option (aria-activedescendant), stripping them while the list has
+      // an active option, real focus never having left. So the arm combines
+      // the two signals that DO survive that blur: native `:focus` on the
+      // input, and the global keyboard-modality attribute the ComboBox
+      // component renders (useFocusVisible — see ComboBox.tsx). Together:
+      // keyboard-only, like TextField, with no flicker during navigation.
+      // Select's trigger holds no input, so the arm can't match it.
+      "&&&[data-focus-visible], &&&[data-keyboard-modality]:has(input:focus)": {
         focusRing: "outline",
       },
       "&[data-disabled]": { opacity: 0.4, cursor: "not-allowed" },

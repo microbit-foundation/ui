@@ -20,6 +20,7 @@ import {
   Popover,
   PopoverProps,
 } from "react-aria-components";
+import { useFocusVisible } from "react-aria";
 import { useIntl } from "react-intl";
 import { RiArrowDownSLine } from "react-icons/ri";
 import { css, cx } from "styled-system/css";
@@ -136,6 +137,14 @@ const ComboBoxInner = <T extends object>(
   const fieldSlots = field({ size: variantProps.size, labelPosition });
   // Anchor the card to the whole control, not to the bare input inside it —
   // otherwise it hangs off the text baseline and is as narrow as the input.
+  // Global interaction modality, with the text-input key filter (only
+  // Tab/Escape count while typing). This is the half of "keyboard focus"
+  // that SURVIVES the synthetic blur react-aria dispatches at the input
+  // while virtual focus is on an option — the input's own data attributes
+  // don't (see the select recipe's ring rule). Paired there with native
+  // :has(input:focus), which also survives, the trigger's ring is
+  // keyboard-only without flickering during list navigation.
+  const { isFocusVisible } = useFocusVisible({ isTextInput: true });
   const triggerRef = useRef<HTMLDivElement>(null);
   // RAC's --trigger-width measures the input it anchors a ComboBox to, which
   // is the control's content box — so a card sized from it is narrower than
@@ -176,6 +185,7 @@ const ComboBoxInner = <T extends object>(
         )}
         <div
           ref={triggerRef}
+          data-keyboard-modality={isFocusVisible || undefined}
           className={cx(
             slots.trigger,
             triggerCss ? css(triggerCss) : undefined,
