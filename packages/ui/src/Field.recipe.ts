@@ -52,7 +52,7 @@ export const field = defineSlotRecipe({
     },
     requiredIndicator: {
       marginStart: "1",
-      // 600: red-as-text needs 4.5:1; danger.500 is border-grade (~4.1:1).
+      // 600 for headroom as text; the invalid border stays 500.
       color: "danger.600",
     },
     helperText: {
