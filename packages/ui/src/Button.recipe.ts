@@ -151,9 +151,12 @@ export const button = defineRecipe({
         },
         _active: { bg: "colorPalette.700" },
       },
-      // 2px to match `secondary`, the family's other outline. Text at 600
-      // rather than 500: 500 is the palette's white-text fill stop, which is
-      // not reliably readable *as* text on white.
+      // 2px to match `secondary`, the family's other outline. The border is
+      // the palette's 500 and the label its 600: a 2px boundary needs 3:1
+      // and 500 clears it, while 500 as *text* does not reliably read on
+      // white. Keeping the border at 500 also keeps a toggle pair coherent
+      // — ml-trainer's record button is this outline when off and `solid`
+      // when on, and both then show the same red edge.
       //
       // Two further outline shapes are restated per call site in classroom —
       // a neutral outline (1px gray.200, inherited text, gray.50/gray.100
@@ -162,10 +165,10 @@ export const button = defineRecipe({
       // one, and neither has a second consumer yet; promote when one appears.
       outline: {
         borderWidth: "2px",
-        borderColor: "colorPalette.600",
+        borderColor: "colorPalette.500",
         color: "colorPalette.600",
         bg: "transparent",
-        _hover: { borderColor: "colorPalette.700", color: "colorPalette.700" },
+        _hover: { borderColor: "colorPalette.600", color: "colorPalette.700" },
         _active: { bg: "colorPalette.50" },
       },
       // The grey filled button (python-editor's zoom/undo pills,
