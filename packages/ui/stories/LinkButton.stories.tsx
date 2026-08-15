@@ -13,8 +13,9 @@ const variants = [
   "ghost",
   "link",
   "plain",
-  "warning",
-  "warningSolid",
+  "neutral",
+  "solid",
+  "outline",
   "toolbar",
 ] as const;
 

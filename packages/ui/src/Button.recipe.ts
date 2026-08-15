@@ -20,11 +20,9 @@ const transitionCommon =
  *
  * A config recipe (not a component cva): styles land in the `recipes` layer so
  * call sites can override with plain style props, and presets extend the
- * variants. This file holds the brand-independent variant set — the core
- * variants plus the family-wide `language`/`toolbar` variants; a
- * consuming app's preset extends it with app vocabulary (e.g. ml-trainer's
- * `led`/`record*`/`secondary-disabled`). Brand divergence within a variant is
- * token-driven (see the `button.*` and `languageText` semantic tokens).
+ * variants. Colour reaches a variant either through the `button.*` semantic
+ * tokens (the app's button idiom) or through `tone`, never through a per-app
+ * fork of a shape.
  *
  * Registered in the base preset (base-preset.ts).
  */
@@ -131,29 +129,40 @@ export const button = defineRecipe({
         },
         _active: { bg: "button.primaryActiveBg" },
       },
-      // The *destructive* outline (text darker than 500 for contrast).
-      // Two other outline shapes are currently restated per call site in
-      // classroom — a neutral outline (1px gray.200, inherited text,
-      // gray.50/gray.100 hover/press) and an on-colour outline (white 2px +
-      // white text over a coloured bar, whiteAlpha hover/press) — worth
-      // considering as variants if a second consumer wants them.
-      warning: {
-        borderWidth: "2px",
-        borderColor: "danger.600",
-        color: "danger.600",
-        bg: "transparent",
-        _hover: { borderColor: "danger.700", color: "danger.700" },
-        _active: { bg: "danger.50" },
-      },
-      // The destructive solid (confirm buttons). Same values as ml-trainer's
-      // `record` today, but a separate variant so recording UI and
-      // destructive actions can diverge - hence danger tokens here, red.*
-      // literals there.
-      warningSolid: {
+      // `solid`/`outline` are coloured by `tone`, and reference only the
+      // stops it guarantees (50/500/600/700). They are not `primary`/
+      // `secondary` in another colour: those follow the app's button idiom,
+      // which is black-on-white in half the family and so can't be a palette.
+      solid: {
         color: "white",
-        bg: "danger.500",
-        _hover: { bg: "danger.600", _disabled: { bg: "danger.500" } },
-        _active: { bg: "danger.700" },
+        bg: "colorPalette.500",
+        _hover: {
+          bg: "colorPalette.600",
+          _disabled: { bg: "colorPalette.500" },
+        },
+        _active: { bg: "colorPalette.700" },
+      },
+      // Border at 500 (a boundary needs only 3:1) so a `solid`/`outline`
+      // toggle pair shows the same edge either way; the label needs 600.
+      //
+      // Classroom restates two other outlines per call site — a neutral 1px
+      // grey one and a white-on-colour one. Promote either if a second
+      // consumer appears.
+      outline: {
+        borderWidth: "2px",
+        borderColor: "colorPalette.500",
+        color: "colorPalette.600",
+        bg: "transparent",
+        _hover: { borderColor: "colorPalette.600", color: "colorPalette.700" },
+        _active: { bg: "colorPalette.50" },
+      },
+      // Not a palette shape: a light fill under dark text is a different
+      // button from `solid`, and 350 exists in no other ramp.
+      neutral: {
+        color: "gray.800",
+        bg: "gray.100",
+        _hover: { bg: "gray.300", _disabled: { bg: "gray.100" } },
+        _active: { bg: "gray.350" },
       },
       // Family-wide variant (every censused app has toolbar-class buttons).
       // No ring override: the bar decides, and a dark one must spread
@@ -165,9 +174,27 @@ export const button = defineRecipe({
         _active: { bg: "whiteAlpha.800" },
       },
     },
+    /**
+     * The palette behind `solid`/`outline`. An allowlist rather than Panda's
+     * open `colorPalette` prop, because a palette missing a stop a shape
+     * reads renders it as nothing at all, with no error anywhere
+     * (docs/hints.md): this is where a palette is vetted. A tone should
+     * alias a whole ramp, so it has nowhere to fall through. Apps may add
+     * their own.
+     */
+    tone: {
+      brand: { colorPalette: "brand" },
+      // The destructive role, which a brand preset can re-point.
+      danger: { colorPalette: "danger" },
+      // Conventional red that isn't destructive (record buttons), so
+      // deliberately not following a brand's error colour.
+      red: { colorPalette: "red" },
+    },
   },
   defaultVariants: {
     variant: "secondary",
     size: "md",
+    // Never absent: a shape with no palette renders nothing.
+    tone: "brand",
   },
 });

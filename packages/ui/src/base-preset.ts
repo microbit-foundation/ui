@@ -83,6 +83,25 @@ const gray = {
   900: { value: "#1a1a1a" },
 };
 
+// The family red, on the gray ramp's ladder — it is the conventional colour
+// for errors and recording, not a brand colour, so it can be graded rather
+// than negotiated. 400 was already exactly gray's 3:1 and stays verbatim,
+// anchoring the hue and saturation the darker stops hold while their
+// lightness solves for gray's ratio. The washes have no contract and keep
+// their values.
+const red = {
+  50: { value: "#FFF5F5" },
+  100: { value: "#FED7D7" },
+  200: { value: "#FEB2B2" },
+  300: { value: "#FC8181" },
+  400: { value: "#F56565" }, // 3.03:1
+  500: { value: "#e22b2b" }, // 4.55:1 — the white-text fill stop
+  600: { value: "#ac1818" },
+  700: { value: "#811212" },
+  800: { value: "#4f0b0b" },
+  900: { value: "#380808" },
+};
+
 /**
  * The base preset: the complete, working micro:bit design system. The base
  * token scales (base-tokens.ts), the micro:bit house style
@@ -141,6 +160,7 @@ export const basePreset = definePreset({
       colors: {
         ...colors,
         gray,
+        red,
         // OSS default brand ramps (see the brand contract above). `brand`
         // aliases the blue ramp; `brand2` is a frozen legacy alias of the
         // slate gray in base-tokens, deliberately decoupled from the neutral
@@ -208,16 +228,20 @@ export const basePreset = definePreset({
         focusRing: {
           value: { base: "{colors.gray.900}", _onDark: "{colors.white}" },
         },
-        // Error/destructive ramp. Destructive button variants,
-        // field error states and the error toast; the record* button
-        // variants deliberately stay on red.* (recording vocabulary, not
-        // danger).
+        // Error/destructive ramp: field error states, the error toast, and
+        // the `danger` button tone. Aliased whole, not just at the stops in
+        // use, so a tone has nowhere to fall through (Button.recipe.ts).
         danger: {
           50: { value: "{colors.red.50}" },
           100: { value: "{colors.red.100}" },
+          200: { value: "{colors.red.200}" },
+          300: { value: "{colors.red.300}" },
+          400: { value: "{colors.red.400}" },
           500: { value: "{colors.red.500}" },
           600: { value: "{colors.red.600}" },
           700: { value: "{colors.red.700}" },
+          800: { value: "{colors.red.800}" },
+          900: { value: "{colors.red.900}" },
         },
         // The language-dialog cards' text colour (@microbit/ui-patterns'
         // LanguageDialog) follows the primary interactive brand: every
@@ -259,7 +283,9 @@ export const basePreset = definePreset({
         toastInfoBg: { value: "{colors.teal.800}" },
         toastSuccessBg: { value: "{colors.teal.800}" },
         toastWarningBg: { value: "{colors.teal.800}" },
-        toastErrorBg: { value: "{colors.danger.600}" },
+        // 500, the text-safe stop, rather than following the teal toasts'
+        // 800: white on it is 4.55:1 and an error toast should read as red.
+        toastErrorBg: { value: "{colors.danger.500}" },
         // The native app's status-bar area colour, shared by the ActionBar
         // and the full-size dialog's safe-area gradient.
         statusBarBg: { value: "{colors.brand2.500}" },
@@ -384,7 +410,13 @@ export const basePreset = definePreset({
       // too — otherwise the class lands on the element with no rule behind it
       // and the button silently falls back to the base size.
       avatar: ["*"],
-      button: [{ size: ["*"], responsive: true }, { variant: ["*"] }],
+      // `tone` generates as its own rule, not crossed with `variant`: it
+      // only assigns the palette custom properties a shape reads.
+      button: [
+        { size: ["*"], responsive: true },
+        { variant: ["*"] },
+        { tone: ["*"] },
+      ],
       checkbox: ["*"],
       heading: ["*"],
       card: ["*"],
