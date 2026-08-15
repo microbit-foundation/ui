@@ -238,15 +238,23 @@ export const basePreset = definePreset({
           value: { base: "{colors.gray.900}", _onDark: "{colors.white}" },
         },
         // Error/destructive ramp: field error states, the error toast, and
-        // the `danger` button tone. Carries 50/500/600/700 because the
-        // button palette contract requires them (Button.recipe.ts) — 100 is
-        // the one stop here that predates it.
+        // the `danger` button tone. Aliased whole rather than at the stops
+        // something uses today — a role a shape can reach for should have
+        // nowhere to fall through, and a missing stop renders as nothing at
+        // all with no error (see the palette contract in Button.recipe.ts).
+        // Nothing needs a danger wash at 300 yet; the point is that it
+        // cannot be a hole.
         danger: {
           50: { value: "{colors.red.50}" },
           100: { value: "{colors.red.100}" },
+          200: { value: "{colors.red.200}" },
+          300: { value: "{colors.red.300}" },
+          400: { value: "{colors.red.400}" },
           500: { value: "{colors.red.500}" },
           600: { value: "{colors.red.600}" },
           700: { value: "{colors.red.700}" },
+          800: { value: "{colors.red.800}" },
+          900: { value: "{colors.red.900}" },
         },
         // The language-dialog cards' text colour (@microbit/ui-patterns'
         // LanguageDialog) follows the primary interactive brand: every
