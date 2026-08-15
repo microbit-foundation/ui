@@ -176,10 +176,10 @@ export const button = defineRecipe({
     },
     /**
      * The palette behind `solid`/`outline`. An allowlist rather than Panda's
-     * open `colorPalette` prop, because a palette missing a stop a shape
-     * reads renders it as nothing at all, with no error anywhere
-     * (docs/hints.md): this is where a palette is vetted. A tone should
-     * alias a whole ramp, so it has nowhere to fall through. Apps may add
+     * open `colorPalette` prop: if a shape reads a stop the palette doesn't
+     * define, the button renders as nothing at all, with no error anywhere
+     * (docs/hints.md). This is where a palette is vetted, and a tone should
+     * alias a whole ramp so it has nowhere to fall through. Apps may add
      * their own.
      */
     tone: {
