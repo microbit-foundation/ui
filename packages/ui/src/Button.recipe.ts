@@ -154,6 +154,12 @@ export const button = defineRecipe({
       // 2px to match `secondary`, the family's other outline. Text at 600
       // rather than 500: 500 is the palette's white-text fill stop, which is
       // not reliably readable *as* text on white.
+      //
+      // Two further outline shapes are restated per call site in classroom —
+      // a neutral outline (1px gray.200, inherited text, gray.50/gray.100
+      // hover/press) and an on-colour outline (white 2px + white text over a
+      // coloured bar, whiteAlpha hover/press). Neither is a palette of this
+      // one, and neither has a second consumer yet; promote when one appears.
       outline: {
         borderWidth: "2px",
         borderColor: "colorPalette.600",

@@ -83,6 +83,34 @@ const gray = {
   900: { value: "#1a1a1a" },
 };
 
+// The family red, on the same measured ladder as the gray above: 400 ≥ 3:1,
+// 500 ≥ 4.5:1, and the darker stops matched to gray's contrast at the same
+// name. Not a brand colour — red is the conventional colour for errors and
+// for recording, so it is graded rather than negotiated.
+//
+// Only the ink stops move. 50–300 are washes with no contrast contract (the
+// field error tint, the `outline` shape's press) and keep the values they
+// have always had; 400 already measured 3.03:1, exactly gray's, so it stays
+// verbatim. The rest hold 400's hue and HSL saturation and solve lightness
+// for gray's ratio, which keeps the ramp one colour as it darkens — 800 and
+// 900 have no consumer in the family today and are graded for consistency.
+//
+// The stop that mattered: 500 was #E53E3E at 4.13:1, so white text on a
+// destructive or record button missed AA. It is the fill for `solid` and the
+// text-safe stop, both of which the 4.5:1 grade now earns.
+const red = {
+  50: { value: "#FFF5F5" },
+  100: { value: "#FED7D7" },
+  200: { value: "#FEB2B2" },
+  300: { value: "#FC8181" },
+  400: { value: "#F56565" }, // 3.03:1 — unchanged, already on the ladder
+  500: { value: "#e22b2b" }, // 4.55:1 — white-text fill, text-safe
+  600: { value: "#ac1818" }, // 7.25:1
+  700: { value: "#811212" }, // 10.35:1
+  800: { value: "#4f0b0b" }, // 15.16:1
+  900: { value: "#380808" }, // 17.41:1
+};
+
 /**
  * The base preset: the complete, working micro:bit design system. The base
  * token scales (base-tokens.ts), the micro:bit house style
@@ -141,6 +169,7 @@ export const basePreset = definePreset({
       colors: {
         ...colors,
         gray,
+        red,
         // OSS default brand ramps (see the brand contract above). `brand`
         // aliases the blue ramp; `brand2` is a frozen legacy alias of the
         // slate gray in base-tokens, deliberately decoupled from the neutral
