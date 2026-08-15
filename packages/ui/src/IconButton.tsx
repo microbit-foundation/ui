@@ -10,13 +10,6 @@ export interface IconButtonProps
   extends Omit<ButtonProps, "leftIcon" | "rightIcon"> {
   /** Icon-only buttons have no visible label, so this is required. */
   "aria-label": string;
-  /**
-   * Circular rather than the recipe's border-radius.
-   * Usually a visual no-op here: the 2rem `button` radius already renders
-   * square icon buttons as circles. Kept for ported call sites and for
-   * variants/overrides with a smaller radius (e.g. `unstyled`).
-   */
-  isRound?: boolean;
 }
 
 /**
@@ -24,19 +17,16 @@ export interface IconButtonProps
  * padding (its size variants add `px`, which would squeeze a single glyph in a
  * fixed-width button) and keeps the `minW` from the size so the box stays
  * square. Pass the icon as children.
+ *
+ * Circular at every size without asking: the 2rem `button` radius exceeds half
+ * the tallest size (3rem), so CSS clamps it to a full round. Override
+ * `borderRadius` per instance for anything else — an attached group or a
+ * button that sits in a card corner needs per-corner control, not a shape flag.
  */
 export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
-  function IconButton({ isRound, css: cssProp, children, ...rest }, ref) {
+  function IconButton({ css: cssProp, children, ...rest }, ref) {
     return (
-      <Button
-        ref={ref}
-        css={{
-          px: 0,
-          ...(isRound ? { borderRadius: "full" } : {}),
-          ...cssProp,
-        }}
-        {...rest}
-      >
+      <Button ref={ref} css={{ px: 0, ...cssProp }} {...rest}>
         {children}
       </Button>
     );
