@@ -208,10 +208,10 @@ export const basePreset = definePreset({
         focusRing: {
           value: { base: "{colors.gray.900}", _onDark: "{colors.white}" },
         },
-        // Error/destructive ramp. Destructive button variants,
-        // field error states and the error toast; the record* button
-        // variants deliberately stay on red.* (recording vocabulary, not
-        // danger).
+        // Error/destructive ramp: field error states, the error toast, and
+        // the `danger` button tone. Carries 50/500/600/700 because the
+        // button palette contract requires them (Button.recipe.ts) — 100 is
+        // the one stop here that predates it.
         danger: {
           50: { value: "{colors.red.50}" },
           100: { value: "{colors.red.100}" },
@@ -384,7 +384,14 @@ export const basePreset = definePreset({
       // too — otherwise the class lands on the element with no rule behind it
       // and the button silently falls back to the base size.
       avatar: ["*"],
-      button: [{ size: ["*"], responsive: true }, { variant: ["*"] }],
+      // `tone` is generated as its own rule, not crossed with `variant`: a
+      // tone only assigns the colour-palette custom properties and a shape
+      // only reads them, so the pair composes on the element.
+      button: [
+        { size: ["*"], responsive: true },
+        { variant: ["*"] },
+        { tone: ["*"] },
+      ],
       checkbox: ["*"],
       heading: ["*"],
       card: ["*"],

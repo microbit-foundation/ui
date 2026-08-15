@@ -176,7 +176,7 @@ export const AlertDialog: Story = {
     const [isOpen, setOpen] = useState(false);
     return (
       <>
-        <Button variant="warning" onPress={() => setOpen(true)}>
+        <Button variant="outline" tone="danger" onPress={() => setOpen(true)}>
           Delete project
         </Button>
         <Modal
@@ -194,7 +194,11 @@ export const AlertDialog: Story = {
               <Button variant="secondary" onPress={() => setOpen(false)}>
                 Cancel
               </Button>
-              <Button variant="warningSolid" onPress={() => setOpen(false)}>
+              <Button
+                variant="solid"
+                tone="danger"
+                onPress={() => setOpen(false)}
+              >
                 Delete
               </Button>
             </ButtonGroup>

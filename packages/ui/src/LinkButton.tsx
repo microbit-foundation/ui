@@ -48,6 +48,7 @@ export const LinkButton = forwardRef<HTMLAnchorElement, LinkButtonProps>(
     {
       variant,
       size,
+      tone,
       css: cssProp,
       className,
       leftIcon,
@@ -61,7 +62,7 @@ export const LinkButton = forwardRef<HTMLAnchorElement, LinkButtonProps>(
       <RACLink
         ref={ref}
         className={cx(
-          button({ variant, size }),
+          button({ variant, size, tone }),
           css(linkReset, cssProp),
           className,
         )}

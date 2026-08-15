@@ -14,10 +14,13 @@ const variants = [
   "ghost",
   "link",
   "plain",
-  "warning",
-  "warningSolid",
+  "neutral",
+  "solid",
+  "outline",
   "toolbar",
 ] as const;
+
+const tones = ["brand", "danger"] as const;
 
 const meta = {
   title: "Buttons/Button",
@@ -25,6 +28,7 @@ const meta = {
   args: { children: "Button", variant: "secondary" },
   argTypes: {
     variant: { control: "select", options: variants },
+    tone: { control: "select", options: tones },
     size: { control: "select", options: ["xs", "sm", "md", "lg"] },
     isDisabled: { control: "boolean" },
   },
@@ -43,6 +47,8 @@ export const Playground: Story = {};
  * and only separate on the dark one, where `ghost` is black on black and
  * `plain` takes the page's text colour unless the bar sets one. Both are
  * light-surface variants; `toolbar` is the on-dark one.
+ *
+ * `solid` and `outline` show their default `brand` tone here — see Tones.
  */
 export const Variants: Story = {
   render: (args) => (
@@ -66,6 +72,29 @@ export const Variants: Story = {
           </Button>
         ))}
       </HStack>
+    </Stack>
+  ),
+};
+
+/**
+ * `tone` picks the palette behind the `solid` and `outline` shapes; every
+ * other variant ignores it. Apps add their own tones in their preset (each
+ * palette must carry the 50/500/600/700 stops the shapes read — see
+ * Button.recipe.ts).
+ */
+export const Tones: Story = {
+  render: (args) => (
+    <Stack gap={4} alignItems="start">
+      {tones.map((tone) => (
+        <HStack key={tone} gap={4} alignItems="center">
+          <Button {...args} variant="solid" tone={tone}>
+            solid {tone}
+          </Button>
+          <Button {...args} variant="outline" tone={tone}>
+            outline {tone}
+          </Button>
+        </HStack>
+      ))}
     </Stack>
   ),
 };

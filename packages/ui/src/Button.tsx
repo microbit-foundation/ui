@@ -71,6 +71,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     {
       variant,
       size,
+      tone,
       css: cssProp,
       className,
       leftIcon,
@@ -96,7 +97,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       <RACButton
         ref={ref}
         className={cx(
-          button({ variant, size }),
+          button({ variant, size, tone }),
           cssProp ? css(cssProp) : undefined,
           className,
         )}

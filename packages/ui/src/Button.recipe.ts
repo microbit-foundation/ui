@@ -20,11 +20,12 @@ const transitionCommon =
  *
  * A config recipe (not a component cva): styles land in the `recipes` layer so
  * call sites can override with plain style props, and presets extend the
- * variants. This file holds the brand-independent variant set — the core
- * variants plus the family-wide `language`/`toolbar` variants; a
- * consuming app's preset extends it with app vocabulary (e.g. ml-trainer's
- * `led`/`record*`/`secondary-disabled`). Brand divergence within a variant is
- * token-driven (see the `button.*` and `languageText` semantic tokens).
+ * variants. This file holds the brand-independent variant set; a consuming
+ * app's preset extends it with app vocabulary (e.g. ml-trainer's
+ * `secondary-disabled`, classroom's `active`). Colour reaches a variant two
+ * ways, neither of them a per-app fork of the shape: the `button.*` and
+ * `languageText` semantic tokens for the app's button idiom, and the `tone`
+ * variant's palette for `solid`/`outline`.
  *
  * Registered in the base preset (base-preset.ts).
  */
@@ -131,29 +132,47 @@ export const button = defineRecipe({
         },
         _active: { bg: "button.primaryActiveBg" },
       },
-      // The *destructive* outline (text darker than 500 for contrast).
-      // Two other outline shapes are currently restated per call site in
-      // classroom — a neutral outline (1px gray.200, inherited text,
-      // gray.50/gray.100 hover/press) and an on-colour outline (white 2px +
-      // white text over a coloured bar, whiteAlpha hover/press) — worth
-      // considering as variants if a second consumer wants them.
-      warning: {
-        borderWidth: "2px",
-        borderColor: "danger.600",
-        color: "danger.600",
-        bg: "transparent",
-        _hover: { borderColor: "danger.700", color: "danger.700" },
-        _active: { bg: "danger.50" },
-      },
-      // The destructive solid (confirm buttons). Same values as ml-trainer's
-      // `record` today, but a separate variant so recording UI and
-      // destructive actions can diverge - hence danger tokens here, red.*
-      // literals there.
-      warningSolid: {
+      // ── The palette shapes ──────────────────────────────────────────────
+      // `solid` and `outline` take their colour from the `tone` variant's
+      // palette, so one shape serves every meaning an app has (destructive,
+      // recording, …). They reference ONLY the four stops the palette
+      // contract guarantees — see `tone` below before adding a fifth.
+      //
+      // Distinct from `primary`/`secondary`, which follow the app's button
+      // *idiom* through the `button.*` tokens and are black-on-white in half
+      // the family. A palette can't express that, and an idiom button
+      // shouldn't change colour with a tone.
+      solid: {
         color: "white",
-        bg: "danger.500",
-        _hover: { bg: "danger.600", _disabled: { bg: "danger.500" } },
-        _active: { bg: "danger.700" },
+        bg: "colorPalette.500",
+        _hover: {
+          bg: "colorPalette.600",
+          _disabled: { bg: "colorPalette.500" },
+        },
+        _active: { bg: "colorPalette.700" },
+      },
+      // 2px to match `secondary`, the family's other outline. Text at 600
+      // rather than 500: 500 is the palette's white-text fill stop, which is
+      // not reliably readable *as* text on white.
+      outline: {
+        borderWidth: "2px",
+        borderColor: "colorPalette.600",
+        color: "colorPalette.600",
+        bg: "transparent",
+        _hover: { borderColor: "colorPalette.700", color: "colorPalette.700" },
+        _active: { bg: "colorPalette.50" },
+      },
+      // The grey filled button (python-editor's zoom/undo pills,
+      // data-microbit-org's copy and rating buttons). Deliberately NOT a
+      // palette shape: it is a light fill under dark text, and its press stop
+      // (350) exists only in the gray ramp — `tone="gray"` on a palette shape
+      // would be a different button, and any palette shape reaching for 350
+      // would render nothing in every other palette.
+      neutral: {
+        color: "gray.800",
+        bg: "gray.100",
+        _hover: { bg: "gray.300", _disabled: { bg: "gray.100" } },
+        _active: { bg: "gray.350" },
       },
       // Family-wide variant (every censused app has toolbar-class buttons).
       // No ring override: the bar decides, and a dark one must spread
@@ -165,9 +184,36 @@ export const button = defineRecipe({
         _active: { bg: "whiteAlpha.800" },
       },
     },
+    /**
+     * The palette behind `solid`/`outline`. Each entry sets Panda's
+     * `colorPalette`, which aliases `--colors-color-palette-*` to that ramp's
+     * stops; the shapes read the aliases.
+     *
+     * ── The palette contract ────────────────────────────────────────────
+     * A tone's palette MUST define 50, 500, 600 and 700, and only those
+     * four may be referenced by a shape. Panda's `colorPalette` key space is
+     * the union of every stop name across all colour tokens, so
+     * `colorPalette.200` under a palette that has no 200 typechecks, emits
+     * `var(--colors-color-palette-200)`, resolves to nothing, and the
+     * declaration is dropped — an invisible button, with no error anywhere.
+     * `danger` has five stops for exactly this reason; `gray`'s private 10/75
+     * /350 are why it is not a tone.
+     *
+     * An allowlist rather than Panda's open `colorPalette` prop: this is the
+     * gate where a palette is checked against that contract. Apps extend it
+     * with their own vocabulary (ml-trainer's `recording`) by adding a tone
+     * here in their preset.
+     */
+    tone: {
+      brand: { colorPalette: "brand" },
+      danger: { colorPalette: "danger" },
+    },
   },
   defaultVariants: {
     variant: "secondary",
     size: "md",
+    // Never absent: a shape with no palette behind it would render its
+    // background and border as nothing at all.
+    tone: "brand",
   },
 });
