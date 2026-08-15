@@ -199,23 +199,28 @@ export const button = defineRecipe({
      * stops; the shapes read the aliases.
      *
      * ── The palette contract ────────────────────────────────────────────
-     * A tone's palette MUST define 50, 500, 600 and 700, and only those
-     * four may be referenced by a shape. Panda's `colorPalette` key space is
-     * the union of every stop name across all colour tokens, so
+     * The shapes reference 50, 500, 600 and 700, and a tone's palette must
+     * define at least those. Prefer a whole ramp: Panda's `colorPalette` key
+     * space is the union of every stop name across all colour tokens, so
      * `colorPalette.200` under a palette that has no 200 typechecks, emits
      * `var(--colors-color-palette-200)`, resolves to nothing, and the
      * declaration is dropped — an invisible button, with no error anywhere.
-     * `danger` has five stops for exactly this reason; `gray`'s private 10/75
-     * /350 are why it is not a tone.
+     * A complete palette costs nothing and has nowhere to fall through,
+     * which is why `danger` aliases red whole rather than at the four stops
+     * in use. `gray`'s private 10/75/350 are why it is not a tone.
      *
      * An allowlist rather than Panda's open `colorPalette` prop: this is the
-     * gate where a palette is checked against that contract. Apps extend it
-     * with their own vocabulary (ml-trainer's `recording`) by adding a tone
-     * here in their preset.
+     * gate where a palette is checked against that contract. An app can add
+     * a tone in its own preset if it has vocabulary the family doesn't.
      */
     tone: {
       brand: { colorPalette: "brand" },
+      // The destructive *role*, which a brand preset can re-point.
       danger: { colorPalette: "danger" },
+      // The ramp itself, for the conventional red that isn't destructive —
+      // ml-trainer's record buttons. Distinct from `danger` precisely
+      // because it should not follow a brand's idea of an error colour.
+      red: { colorPalette: "red" },
     },
   },
   defaultVariants: {
