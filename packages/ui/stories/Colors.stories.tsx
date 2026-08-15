@@ -82,12 +82,9 @@ const Swatch = ({ ramp, stop }: { ramp: string; stop: number | string }) => {
   );
 };
 
-// Every ramp is laid out over the same column set — the union of the stop
-// names any of them uses — so a stop can be read down the stack and a ramp
-// that doesn't define one leaves the column empty. Fixed-width columns, not
-// fractional: a ramp missing a stop then reads as a gap in the ladder rather
-// than as a row of wider swatches, and a ramp that wraps lines up with the
-// ramp above it.
+// Every ramp lays out over the same columns, so a stop reads down the stack
+// and a ramp without one leaves a gap. Fixed widths, not fractional, so the
+// rows stay aligned when a ramp is short or wraps.
 const allStops = [10, 50, 75, 100, 200, 300, 350, 400, 500, 600, 700, 800, 900];
 
 const Ramp = ({

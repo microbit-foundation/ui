@@ -63,13 +63,12 @@ work. Consumption setup and the CSS-variable contract are in
   not in a higher-specificity state selector that outguns a call-site
   `css`.
 - **`colorPalette.<stop>` typechecks for stops the palette doesn't have,
-  and renders nothing.** Panda's `colorPalette` key space is the union of
-  every stop name across all colour tokens, so `gray`'s private 10/75/350
-  and even the `button.*` semantic sub-names are offered under every
-  palette. A miss emits `var(--colors-color-palette-350)`, which resolves
-  to nothing and drops the declaration — an invisible control, no error at
-  build or runtime. Anything palette-driven states which stops it requires
-  and is fed only from a vetted allowlist (the Button recipe's `tone`).
+  and renders nothing.** The key space is the union of every stop name
+  across all colour tokens, so `gray`'s private 10/75/350 and the
+  `button.*` sub-names are offered under every palette. A miss emits a var
+  that resolves to nothing and the declaration is dropped — an invisible
+  control, no error at build or runtime. Feed anything palette-driven from
+  a vetted allowlist (the Button recipe's `tone`).
 - **Slot recipes outrank plain recipes as a layer, not by specificity.**
   Panda emits slot recipes into `@layer recipes.slots`, ordered after
   `recipes`, so a slot-recipe rule that reaches into another recipe's

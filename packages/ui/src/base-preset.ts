@@ -83,32 +83,23 @@ const gray = {
   900: { value: "#1a1a1a" },
 };
 
-// The family red, on the same measured ladder as the gray above: 400 ≥ 3:1,
-// 500 ≥ 4.5:1, and the darker stops matched to gray's contrast at the same
-// name. Not a brand colour — red is the conventional colour for errors and
-// for recording, so it is graded rather than negotiated.
-//
-// Only the ink stops move. 50–300 are washes with no contrast contract (the
-// field error tint, the `outline` shape's press) and keep the values they
-// have always had; 400 already measured 3.03:1, exactly gray's, so it stays
-// verbatim. The rest hold 400's hue and HSL saturation and solve lightness
-// for gray's ratio, which keeps the ramp one colour as it darkens — 800 and
-// 900 have no consumer in the family today and are graded for consistency.
-//
-// The stop that mattered: 500 was #E53E3E at 4.13:1, so white text on a
-// destructive or record button missed AA. It is the fill for `solid` and the
-// text-safe stop, both of which the 4.5:1 grade now earns.
+// The family red, on the gray ramp's ladder — it is the conventional colour
+// for errors and recording, not a brand colour, so it can be graded rather
+// than negotiated. 400 was already exactly gray's 3:1 and stays verbatim,
+// anchoring the hue and saturation the darker stops hold while their
+// lightness solves for gray's ratio. The washes have no contract and keep
+// their values.
 const red = {
   50: { value: "#FFF5F5" },
   100: { value: "#FED7D7" },
   200: { value: "#FEB2B2" },
   300: { value: "#FC8181" },
-  400: { value: "#F56565" }, // 3.03:1 — unchanged, already on the ladder
-  500: { value: "#e22b2b" }, // 4.55:1 — white-text fill, text-safe
-  600: { value: "#ac1818" }, // 7.25:1
-  700: { value: "#811212" }, // 10.35:1
-  800: { value: "#4f0b0b" }, // 15.16:1
-  900: { value: "#380808" }, // 17.41:1
+  400: { value: "#F56565" }, // 3.03:1
+  500: { value: "#e22b2b" }, // 4.55:1 — the white-text fill stop
+  600: { value: "#ac1818" },
+  700: { value: "#811212" },
+  800: { value: "#4f0b0b" },
+  900: { value: "#380808" },
 };
 
 /**
@@ -238,12 +229,8 @@ export const basePreset = definePreset({
           value: { base: "{colors.gray.900}", _onDark: "{colors.white}" },
         },
         // Error/destructive ramp: field error states, the error toast, and
-        // the `danger` button tone. Aliased whole rather than at the stops
-        // something uses today — a role a shape can reach for should have
-        // nowhere to fall through, and a missing stop renders as nothing at
-        // all with no error (see the palette contract in Button.recipe.ts).
-        // Nothing needs a danger wash at 300 yet; the point is that it
-        // cannot be a hole.
+        // the `danger` button tone. Aliased whole, not just at the stops in
+        // use, so a tone has nowhere to fall through (Button.recipe.ts).
         danger: {
           50: { value: "{colors.red.50}" },
           100: { value: "{colors.red.100}" },
@@ -421,9 +408,8 @@ export const basePreset = definePreset({
       // too — otherwise the class lands on the element with no rule behind it
       // and the button silently falls back to the base size.
       avatar: ["*"],
-      // `tone` is generated as its own rule, not crossed with `variant`: a
-      // tone only assigns the colour-palette custom properties and a shape
-      // only reads them, so the pair composes on the element.
+      // `tone` generates as its own rule, not crossed with `variant`: it
+      // only assigns the palette custom properties a shape reads.
       button: [
         { size: ["*"], responsive: true },
         { variant: ["*"] },
