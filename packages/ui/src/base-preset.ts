@@ -283,7 +283,9 @@ export const basePreset = definePreset({
         toastInfoBg: { value: "{colors.teal.800}" },
         toastSuccessBg: { value: "{colors.teal.800}" },
         toastWarningBg: { value: "{colors.teal.800}" },
-        toastErrorBg: { value: "{colors.danger.600}" },
+        // 500, the text-safe stop, rather than following the teal toasts'
+        // 800: white on it is 4.55:1 and an error toast should read as red.
+        toastErrorBg: { value: "{colors.danger.500}" },
         // The native app's status-bar area colour, shared by the ActionBar
         // and the full-size dialog's safe-area gradient.
         statusBarBg: { value: "{colors.brand2.500}" },
