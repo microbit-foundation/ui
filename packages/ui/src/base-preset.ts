@@ -409,12 +409,24 @@ export const basePreset = definePreset({
           bgActive: { value: "{colors.whiteAlpha.800}" },
         },
 
-        // The language-dialog cards' text colour (@microbit/ui-patterns'
-        // LanguageDialog). A component token, not `fg.link`: every
-        // consumer resolves it differently and not always to a link
-        // colour (CreateAI privately to brand.600 with no hover change,
-        // python-editor to brand.500/600 — the default; data-microbit-org
-        // to black, while its actual links stay blue).
+        // The language-dialog cards' name text (@microbit/ui-patterns'
+        // LanguageDialog). The brand colour, so the name reads as the
+        // choice being offered rather than as body copy.
+        //
+        // A component token rather than a role, because consumers really
+        // do diverge and along their own idiom, not this component's:
+        // classroom, python-editor and ml-trainer take the default;
+        // CreateAI flattens to brand.600; data-microbit-org uses black,
+        // which is its emphasis colour throughout (black buttons, black
+        // outlines) while its actual links stay blue. So this must not
+        // fold into `fg.link` — data would lose that distinction.
+        //
+        // `fgHover` is the one part with no live justification: it dates
+        // from when this was a text link with no background, and the card
+        // now hovers its own background (`surface.highlight`), which is
+        // why both overriding presets set it equal to `fg`. Kept because
+        // dropping it is a visible change in the three apps still on the
+        // default. See ui-private docs/role-tokens.md.
         languageDialog: {
           fg: { value: "{colors.brand.500}" },
           fgHover: { value: "{colors.brand.600}" },
