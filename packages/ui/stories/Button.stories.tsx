@@ -4,9 +4,21 @@
  * SPDX-License-Identifier: MIT
  */
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { RiDownload2Line } from "react-icons/ri";
-import { Button, ButtonGroup, darkSurface, HStack, Stack } from "../src";
+import {
+  Button,
+  ButtonGroup,
+  darkSurface,
+  Grid,
+  HStack,
+  MenuItem,
+  MenuList,
+  MenuTrigger,
+  MoreMenuButton,
+  Stack,
+  Text,
+} from "../src";
 
 const variants = [
   "primary",
@@ -160,6 +172,15 @@ export const Loading: Story = {
   },
 };
 
+/**
+ * Attached, the buttons divide by a hairline while the variant's own border
+ * stays as the group's outline — compare `secondary`'s 2px edge with its 1px
+ * seams. A variant with no border divides by a gap instead, so the last
+ * group's seams are the dark surface showing through.
+ *
+ * Tab through: each button keeps its own border, so the ring sits square on
+ * the one it belongs to, and flips to white on the tagged surface.
+ */
 export const Grouped: Story = {
   render: () => (
     <Stack gap={4} alignItems="start">
@@ -172,6 +193,121 @@ export const Grouped: Story = {
         <Button variant="secondary">Middle</Button>
         <Button variant="secondary">Right</Button>
       </ButtonGroup>
+      <ButtonGroup isAttached>
+        <Button variant="primary">Left</Button>
+        <Button variant="primary">Middle</Button>
+        <Button variant="primary">Right</Button>
+      </ButtonGroup>
+      <ButtonGroup isAttached>
+        <Button variant="neutral">Left</Button>
+        <Button variant="neutral">Middle</Button>
+        <Button variant="neutral">Right</Button>
+      </ButtonGroup>
+      <HStack
+        css={{ p: 4, bg: "brand.600", borderRadius: "md" }}
+        {...darkSurface}
+      >
+        <ButtonGroup isAttached>
+          <Button variant="neutral">Left</Button>
+          <Button variant="neutral">Middle</Button>
+          <Button variant="neutral">Right</Button>
+        </ButtonGroup>
+      </HStack>
     </Stack>
+  ),
+};
+
+/**
+ * A split button: a main action plus a MoreMenuButton in a MenuTrigger, both
+ * in an attached group and both on the same variant. The seam needs no
+ * per-call-site styling.
+ */
+export const Split: Story = {
+  render: (args) => (
+    <Stack gap={4} alignItems="start">
+      {(["secondary", "primary"] as const).map((variant) => (
+        <ButtonGroup key={variant} isAttached>
+          <Button {...args} variant={variant} leftIcon={<RiDownload2Line />}>
+            Save
+          </Button>
+          <MenuTrigger>
+            <MoreMenuButton variant={variant} aria-label="More save options" />
+            <MenuList>
+              <MenuItem>Save Python script</MenuItem>
+            </MenuList>
+          </MenuTrigger>
+        </ButtonGroup>
+      ))}
+    </Stack>
+  ),
+};
+
+const sizes = ["xs", "sm", "md", "lg"] as const;
+
+const MoreMenu = ({ size }: { size: (typeof sizes)[number] }) => (
+  <MenuTrigger>
+    <MoreMenuButton
+      variant="secondary"
+      size={size}
+      aria-label="More save options"
+    />
+    <MenuList>
+      <MenuItem>Save Python script</MenuItem>
+    </MenuList>
+  </MenuTrigger>
+);
+
+/**
+ * MoreMenuButton's glyph is optically centred against whichever corners the
+ * group has squared, so the dots sit in the middle of the ink rather than of
+ * the box. Trailing (the usual arrangement) and leading lean towards their
+ * flat edge; middle and alone are symmetric and stay put.
+ *
+ * The correction is a share of the width, not a length, so it holds at every
+ * size — the shape is the same at all four.
+ */
+export const SplitSizes: Story = {
+  render: () => (
+    <Grid
+      gridTemplateColumns="repeat(5, max-content)"
+      gap={6}
+      alignItems="center"
+      justifyItems="start"
+    >
+      {["", "trailing", "leading", "middle", "alone"].map((heading) => (
+        <Text key={heading} fontSize="xs" color="gray.600">
+          {heading}
+        </Text>
+      ))}
+      {sizes.map((size) => (
+        <Fragment key={size}>
+          <Text fontSize="xs" color="gray.600">
+            {size}
+          </Text>
+          <ButtonGroup isAttached>
+            <Button variant="secondary" size={size}>
+              Save
+            </Button>
+            <MoreMenu size={size} />
+          </ButtonGroup>
+          <ButtonGroup isAttached>
+            <MoreMenu size={size} />
+            <Button variant="secondary" size={size}>
+              Save
+            </Button>
+          </ButtonGroup>
+          <ButtonGroup isAttached>
+            <Button variant="secondary" size={size}>
+              Save
+            </Button>
+            <MoreMenu size={size} />
+            <Button variant="secondary" size={size}>
+              Export
+            </Button>
+          </ButtonGroup>
+          <MoreMenu size={size} />
+        </Fragment>
+      ))}
+    </Grid>
   ),
 };

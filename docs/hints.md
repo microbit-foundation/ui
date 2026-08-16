@@ -57,6 +57,27 @@ work. Consumption setup and the CSS-variable contract are in
   recipe. The fix is a doubled selector in the variant that must win:
   `"&&": { fontSize: "4xl" }`. Don't reason about emit order — it tracks
   extraction order, not the recipe; read it out of `panda cssgen`.
+- **A container style that a child's recipe should be able to override has
+  to live in `globalCss`, not the container's `css()`.** A container styling
+  its children from `utilities` outranks every variant, so a "default unless
+  the variant says otherwise" rule inverts. `globalCss` emits into `base`,
+  below `recipes`, which is where the attached ButtonGroup's fallback seam
+  colour sits (`[data-attached] > *` in base-preset.ts): a variant with its
+  own border wins, a borderless one keeps the transparent gap. Logical and
+  physical properties resolve against each other by layer, so the base rule's
+  `borderInlineColor` still loses to a recipe's `borderColor`.
+- **CSS can never read a used value back, so a rule that needs to do
+  arithmetic on a length either gets it as a custom property or must be
+  designed not to need it.** An attached ButtonGroup overlaps adjacent
+  buttons by their border width so the two coincide as one seam. Plumbing
+  each variant's width through a property was the first fix; fixing the seam
+  at 1px removed the question, and made a better-looking group than matching
+  the outline did.
+- **Prefer geometry a focus ring can follow.** `focusRing` draws a real
+  `outline`, which tracks the border box: any layout that makes an element's
+  border box differ from the shape you see (dropping the border on one side
+  of a seam, say) puts the ring off centre by that much, and at 2px it lands
+  exactly on top of what it was meant to sit outside.
 - **A recipe declaration that call sites are expected to override must stay
   at single-class specificity.** State-derived values belong in a custom
   property the base declaration reads (`color: var(--avatar-color, …)`),
