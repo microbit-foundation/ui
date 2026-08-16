@@ -168,10 +168,13 @@ export const button = defineRecipe({
       // No ring override: the bar decides, and a dark one must spread
       // `darkSurface` — an app adopting this variant needs the tag with it.
       toolbar: {
-        color: "fg.strong",
-        bg: "fill.inverse",
-        _hover: { bg: "fill.inverseHover", _disabled: { bg: "fill.inverse" } },
-        _active: { bg: "fill.inverseActive" },
+        color: "buttonToolbar.fg",
+        bg: "buttonToolbar.bg",
+        _hover: {
+          bg: "buttonToolbar.bgHover",
+          _disabled: { bg: "buttonToolbar.bg" },
+        },
+        _active: { bg: "buttonToolbar.bgActive" },
       },
     },
     /**

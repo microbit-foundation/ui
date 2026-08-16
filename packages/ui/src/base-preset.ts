@@ -225,8 +225,13 @@ export const basePreset = definePreset({
         fg: {
           default: { value: "{colors.gray.800}" },
           // Full black, for the buttons that want more weight than body
-          // text on a light fill (`ghost`, `toolbar`).
-          strong: { value: "{colors.black}" },
+          // text on a light fill (`ghost`, `toolbar`). Flips on a tagged
+          // dark surface, which is what lets `ghost` work on dark chrome
+          // without a per-app variant. Condition object — an override must
+          // keep the `{ base, _onDark }` shape or silently lose the flip.
+          strong: {
+            value: { base: "{colors.black}", _onDark: "{colors.white}" },
+          },
           muted: { value: "{colors.gray.600}" },
           // Three roles at one value, three jobs: tertiary content, an
           // empty field, an unavailable control. A dark mode and any
@@ -301,12 +306,22 @@ export const basePreset = definePreset({
           // Translucent because they must work over an unknown
           // background; the only place this library uses translucency
           // for state.
-          transparentHover: { value: "{colors.blackAlpha.50}" },
-          transparentActive: { value: "{colors.blackAlpha.100}" },
-          // A control on `surface.inverse`-grade chrome (`toolbar`).
-          inverse: { value: "{colors.white}" },
-          inverseHover: { value: "{colors.whiteAlpha.900}" },
-          inverseActive: { value: "{colors.whiteAlpha.800}" },
+          // Alphas are not mirrored: a white wash reads weaker than a
+          // black one at equal alpha, so the on-dark pair is two ramp
+          // steps up (0.08/0.16 against 0.04/0.06). 0.08 is also
+          // Material's hover figure.
+          transparentHover: {
+            value: {
+              base: "{colors.blackAlpha.50}",
+              _onDark: "{colors.whiteAlpha.200}",
+            },
+          },
+          transparentActive: {
+            value: {
+              base: "{colors.blackAlpha.100}",
+              _onDark: "{colors.whiteAlpha.300}",
+            },
+          },
           // The resting background of a control that contains something:
           // the Checkbox/Radio box, an Input, a Select trigger. White like
           // `surface.raised` today and not the same thing — one is a
@@ -381,6 +396,19 @@ export const basePreset = definePreset({
           },
         },
 
+        // The `toolbar` button: a white pill that lives ON dark chrome, so
+        // it must NOT follow the dark-surface tag — its own fill is light
+        // whatever it sits on, and a flipping `fg` role would render it
+        // white on white. Component tokens rather than `fill.*`/`fg.*` for
+        // exactly that reason: anything that paints against the surface
+        // has to opt out of the flips.
+        buttonToolbar: {
+          fg: { value: "{colors.black}" },
+          bg: { value: "{colors.white}" },
+          bgHover: { value: "{colors.whiteAlpha.900}" },
+          bgActive: { value: "{colors.whiteAlpha.800}" },
+        },
+
         // The language-dialog cards' text colour (@microbit/ui-patterns'
         // LanguageDialog). A component token, not `fg.link`: every
         // consumer resolves it differently and not always to a link
@@ -397,8 +425,18 @@ export const basePreset = definePreset({
         // white dialog and on a dark toast alike, which is also why this
         // is the pair that wants the on-dark flip (docs/role-tokens.md).
         closeButton: {
-          bgHover: { value: "{colors.blackAlpha.100}" },
-          bgActive: { value: "{colors.blackAlpha.200}" },
+          bgHover: {
+            value: {
+              base: "{colors.blackAlpha.100}",
+              _onDark: "{colors.whiteAlpha.300}",
+            },
+          },
+          bgActive: {
+            value: {
+              base: "{colors.blackAlpha.200}",
+              _onDark: "{colors.whiteAlpha.400}",
+            },
+          },
         },
 
         // Focused form-control border, any modality: the dark brand stop
