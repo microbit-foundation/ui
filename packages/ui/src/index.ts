@@ -19,6 +19,7 @@ export * from "./Checkbox";
 export * from "./CheckboxGroup";
 export * from "./Field";
 export * from "./IconButton";
+export * from "./MoreMenuButton";
 export * from "./Image";
 export * from "./Input";
 export * from "./InputGroup";

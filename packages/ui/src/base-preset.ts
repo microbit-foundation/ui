@@ -363,6 +363,19 @@ export const basePreset = definePreset({
     "h1, h2, h3, h4, h5, h6": {
       textWrap: "wrap",
     },
+    // The colour of the seams an attached ButtonGroup draws (ButtonGroup.tsx).
+    // Transparent, so a variant with no border of its own divides by letting
+    // the surface show through rather than by a line in the text colour.
+    //
+    // From `base`, so a variant that does bring a border colours its seams
+    // from `recipes` (as the cursor rule above is overridden). Longhands
+    // because Panda resolves `transparent` to a token, and the logical
+    // *shorthand* with a var() value is the one Safari 14.x drops — the
+    // postcss-legacy-safari shim does not cover the border ones.
+    "[data-attached] > *": {
+      borderInlineStartColor: "transparent",
+      borderInlineEndColor: "transparent",
+    },
     // While a full-size dialog is open (the Modal stamps data-fullsize on
     // its overlay), release the scrollbar gutter that react-aria's scroll
     // lock reserves on the root. The reserved strip is scrollbar chrome to
