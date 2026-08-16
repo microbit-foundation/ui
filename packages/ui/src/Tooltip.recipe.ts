@@ -18,8 +18,8 @@ import { defineRecipe } from "@pandacss/dev";
 export const tooltip = defineRecipe({
   className: "tooltip",
   base: {
-    bg: "gray.700",
-    color: "whiteAlpha.900",
+    bg: "surface.inverse",
+    color: "fg.onInverse",
     px: "2",
     py: "0.5",
     borderRadius: "sm",

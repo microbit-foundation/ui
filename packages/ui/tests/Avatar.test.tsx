@@ -44,13 +44,13 @@ it("darkens the text over a light derived background", () => {
     (light.firstElementChild as HTMLElement).style.getPropertyValue(
       "--avatar-color",
     ),
-  ).toBe(token("colors.gray.800"));
+  ).toBe(token("colors.fg.default"));
   const { container: dark } = render(<Avatar name="Ada Lovelace" />);
   expect(
     (dark.firstElementChild as HTMLElement).style.getPropertyValue(
       "--avatar-color",
     ),
-  ).toBe(token("colors.white"));
+  ).toBe(token("colors.fg.onEmphasis"));
 });
 
 it("labels a supplied icon in place rather than wrapping it", () => {

@@ -38,16 +38,16 @@ export const input = defineRecipe({
     // identifies the field (label, or a ≥3:1 icon/placeholder).
     // Checkbox/Radio keep gray.400: their box IS the identifier.
     // Rationale: ui-private docs/a11y-positions.md.
-    borderColor: "gray.300",
+    borderColor: "border.control",
     bg: "inherit",
     color: "inherit",
-    _hover: { borderColor: "gray.500" },
+    _hover: { borderColor: "border.controlHover" },
     // Any focus, pointer included; the keyboard ring composes on top.
     // zIndex so the border — and the ring with it — paint over
     // attached-group neighbours.
     "&&:is(:focus, [data-focused])": { zIndex: 1, borderColor: "focusBorder" },
     "&&&:is([data-invalid], :user-invalid)": {
-      borderColor: "danger.500",
+      borderColor: "border.danger",
     },
     // Modality-tracked: RAC's attribute, or Input.tsx's. Native
     // :focus-visible is the fallback for a bare element wearing the recipe,

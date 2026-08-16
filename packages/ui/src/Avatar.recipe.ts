@@ -42,9 +42,9 @@ export const avatar = defineSlotRecipe({
       // The no-name defaults; the name-derived pair arrives inline.
       // gray.350 is the decorative-fill stop — 400+ are reserved for
       // accessible outlines and text (see the ramp in base-preset.ts).
-      background: "var(--avatar-bg, token(colors.gray.350))",
+      background: "var(--avatar-bg, token(colors.fill.decorative))",
       color: "var(--avatar-color, token(colors.white))",
-      borderColor: "white",
+      borderColor: "border.onEmphasis",
     },
     label: {
       lineHeight: "1",
@@ -64,7 +64,7 @@ export const avatar = defineSlotRecipe({
       // em-relative, so a badge keeps its proportions at every avatar size.
       borderWidth: "0.2em",
       borderStyle: "solid",
-      borderColor: "white",
+      borderColor: "border.onEmphasis",
     },
   },
   variants: {

@@ -41,7 +41,7 @@ export interface PopoverArrowProps {
    * the gap. Defaults to the proportions of an 8px square rotated 45°.
    */
   size?: number;
-  /** Styles merged after the base, e.g. `{ "& svg": { fill: "white" } }`. */
+  /** Styles merged after the base, e.g. `{ "& svg": { fill: "surface.raised" } }`. */
   css?: SystemStyleObject;
   className?: string;
 }

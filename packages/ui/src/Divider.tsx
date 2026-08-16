@@ -9,7 +9,7 @@ import { styled } from "styled-system/jsx";
 const StyledDivider = styled("hr", {
   base: {
     border: 0,
-    borderColor: "gray.200",
+    borderColor: "border.default",
     opacity: 0.6,
   },
   variants: {

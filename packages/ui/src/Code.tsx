@@ -14,7 +14,7 @@ export const Code = styled("code", {
     fontSize: "sm",
     px: "0.2em",
     borderRadius: "sm",
-    bg: "gray.100",
-    color: "gray.800",
+    bg: "surface.inset",
+    color: "fg.default",
   },
 });

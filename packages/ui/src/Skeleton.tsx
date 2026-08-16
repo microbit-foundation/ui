@@ -15,9 +15,9 @@ import { SystemStyleObject } from "styled-system/types";
  * retint one skeleton without knowing how the animation works.
  */
 const skeletonBase: SystemStyleObject = {
-  "--skeleton-start-color": "token(colors.gray.100)",
+  "--skeleton-start-color": "token(colors.surface.inset)",
   // gray.350, the decorative-fill stop, as the Avatar default.
-  "--skeleton-end-color": "token(colors.gray.350)",
+  "--skeleton-end-color": "token(colors.fill.decorative)",
   background: "var(--skeleton-start-color)",
   borderColor: "var(--skeleton-end-color)",
   opacity: 0.7,

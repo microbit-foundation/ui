@@ -107,7 +107,9 @@ export const Tooltip = ({
       offset={hasArrow ? 8 : 4}
       className={cx(tooltip(), cssProp ? css(cssProp) : undefined)}
     >
-      {hasArrow && <PopoverArrow css={{ "& svg": { fill: "gray.700" } }} />}
+      {hasArrow && (
+        <PopoverArrow css={{ "& svg": { fill: "surface.inverse" } }} />
+      )}
       {label}
     </RACTooltip>
   </TooltipTrigger>

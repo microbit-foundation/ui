@@ -117,8 +117,8 @@ export const Slider = ({
             position: "absolute",
             bottom: "calc(50% + token(sizes.3.5))",
             transform: "translateX(-50%)",
-            bg: "gray.700",
-            color: "white",
+            bg: "surface.inverse",
+            color: "fg.onInverse",
             px: "2",
             py: "1",
             borderRadius: "md",
@@ -141,7 +141,7 @@ export const Slider = ({
               // shorthands (they emit verbatim and the browser drops the
               // invalid declaration).
               borderColor: "transparent",
-              borderTopColor: "gray.700",
+              borderTopColor: "surface.inverse",
             },
           })}
           style={{ left: `${percent}%` }}

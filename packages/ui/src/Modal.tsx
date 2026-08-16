@@ -366,8 +366,8 @@ export const ModalCloseButton = ({
           outline: "none",
           transitionProperty: "background-color, box-shadow",
           transitionDuration: "normal",
-          _hover: { bg: "blackAlpha.100" },
-          _active: { bg: "blackAlpha.200" },
+          _hover: { bg: "closeButton.bgHover" },
+          _active: { bg: "closeButton.bgActive" },
           _focusVisible: { focusRing: "outline" },
         }),
       )}
