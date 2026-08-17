@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { SharedUIProvider, ToastProvider } from "@microbit/ui";
+import { SharedUIProvider, ToastProvider, toastQueue } from "@microbit/ui";
 import {
   cleanup,
   render,
@@ -12,12 +12,16 @@ import {
   within,
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import { IntlProvider } from "react-intl";
 import { afterEach, expect, it, vi } from "vitest";
 import { LanguageDialog, LanguageDialogProps } from "../src";
 
 afterEach(cleanup);
+// The queue is module-level, so unmounting the region leaves its toasts
+// behind: without this a 10s toast from one test is still showing in the
+// next, and `getByRole("alert")` finds two.
+afterEach(() => toastQueue.clear());
 
 const Providers = ({ children }: { children: ReactNode }) => (
   <IntlProvider locale="en">
@@ -148,6 +152,56 @@ it("toasts the support statement when a partially supported language is chosen",
   expect(within(toast).getByText("Language not fully supported")).toBeTruthy();
   expect(within(toast).getByText("Microsoft MakeCode")).toBeTruthy();
   expect(within(toast).getByLabelText("Unsupported")).toBeTruthy();
+});
+
+// The card opens the toast without waiting for onSelectLanguage, so the
+// locale can land after it is already on screen. Formatting the title to a
+// string would freeze the language being left; an element re-renders when
+// the IntlProvider's value changes.
+it("moves the toast title to the new language when the locale lands late", async () => {
+  const Harness = () => {
+    const [locale, setLocale] = useState("en");
+    return (
+      <IntlProvider
+        locale={locale}
+        messages={
+          locale === "fr"
+            ? { "ui-patterns.language-toast-title": "Langue incomplète" }
+            : undefined
+        }
+        onError={() => undefined}
+      >
+        <SharedUIProvider>
+          <LanguageDialog
+            isOpen
+            onClose={() => undefined}
+            languages={[
+              { id: "en" },
+              {
+                id: "fr",
+                support: [
+                  { name: "Microsoft MakeCode", supported: true },
+                  { name: "My App", supported: false },
+                ],
+              },
+            ]}
+            onSelectLanguage={async () => {
+              await Promise.resolve();
+              setLocale("fr");
+            }}
+          />
+          <ToastProvider />
+        </SharedUIProvider>
+      </IntlProvider>
+    );
+  };
+  render(<Harness />);
+  await userEvent.click(screen.getByTestId("fr"));
+  const toast = await screen.findByRole("alert");
+  await waitFor(() =>
+    expect(within(toast).getByText("Langue incomplète")).toBeTruthy(),
+  );
+  expect(within(toast).queryByText("Language not fully supported")).toBeNull();
 });
 
 it("shows the help-translate link only when a href is given", () => {
