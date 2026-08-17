@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { ExternalLink, Link, Text } from "../src";
+import { ExternalLink, Link, proseClass, Text } from "../src";
 
 const meta = {
   title: "Typography/Link",
@@ -45,5 +45,18 @@ export const Standalone: Story = {
     <Link href="#" variant="standalone">
       A standalone link (nav, menu, card) — underline on hover only
     </Link>
+  ),
+};
+
+export const RenderedContent: Story = {
+  render: () => (
+    <Text
+      maxW="lg"
+      className={proseClass}
+      dangerouslySetInnerHTML={{
+        __html:
+          'Content from markdown or a CMS, where anchors like <a href="#">this one</a> are not Link components: proseClass on the container restores the underline.',
+      }}
+    />
   ),
 };
