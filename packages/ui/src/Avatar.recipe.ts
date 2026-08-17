@@ -65,6 +65,19 @@ export const avatar = defineSlotRecipe({
       borderWidth: "0.2em",
       borderStyle: "solid",
       borderColor: "white",
+      // The corner variants pin the badge with logical insets but nudge it
+      // out over the edge with a transform, which is physical — so the
+      // outward direction is a variable the RTL rule negates. Without it a
+      // `start` badge would sit at the right corner and nudge left, i.e.
+      // inwards over the avatar.
+      // Fallbacks carry a unit: `calc(-1 * 0)` is a number, which is invalid
+      // where a length is wanted, and would drop the RTL transform whole.
+      transform:
+        "translate(var(--avatar-badge-x, 0px), var(--avatar-badge-y, 0px))",
+      _rtl: {
+        transform:
+          "translate(calc(-1 * var(--avatar-badge-x, 0px)), var(--avatar-badge-y, 0px))",
+      },
     },
   },
   variants: {
@@ -141,21 +154,33 @@ export const avatar = defineSlotRecipe({
         badge: {
           top: "0",
           insetStart: "0",
-          transform: "translate(-25%, -25%)",
+          "--avatar-badge-x": "-25%",
+          "--avatar-badge-y": "-25%",
         },
       },
       "top-end": {
-        badge: { top: "0", insetEnd: "0", transform: "translate(25%, -25%)" },
+        badge: {
+          top: "0",
+          insetEnd: "0",
+          "--avatar-badge-x": "25%",
+          "--avatar-badge-y": "-25%",
+        },
       },
       "bottom-start": {
         badge: {
           bottom: "0",
           insetStart: "0",
-          transform: "translate(-25%, 25%)",
+          "--avatar-badge-x": "-25%",
+          "--avatar-badge-y": "25%",
         },
       },
       "bottom-end": {
-        badge: { bottom: "0", insetEnd: "0", transform: "translate(25%, 25%)" },
+        badge: {
+          bottom: "0",
+          insetEnd: "0",
+          "--avatar-badge-x": "25%",
+          "--avatar-badge-y": "25%",
+        },
       },
     },
   },

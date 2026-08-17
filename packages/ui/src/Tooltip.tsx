@@ -19,15 +19,32 @@ export interface TooltipProps {
   label: ReactNode;
   /** A single focusable trigger element (e.g. a Button). */
   children: ReactElement;
+  /**
+   * Which side of the trigger the tooltip prefers. A preference, not a
+   * promise: react-aria flips it at runtime when the tooltip would leave the
+   * viewport, so pick the side that reads right rather than one that dodges
+   * an edge.
+   *
+   * `top`/`bottom` are direction-neutral and suit most tooltips.
+   * `start`/`end` follow reading order and mirror in RTL. `left`/`right` are
+   * screen sides and never mirror — reach for them only when the trigger is
+   * pinned to a physical edge.
+   */
   placement?:
     | "top"
     | "bottom"
+    | "start"
+    | "end"
     | "left"
     | "right"
     | "top start"
     | "top end"
     | "bottom start"
     | "bottom end"
+    | "start top"
+    | "start bottom"
+    | "end top"
+    | "end bottom"
     | "left top"
     | "left bottom"
     | "right top"

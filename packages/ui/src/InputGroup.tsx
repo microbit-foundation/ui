@@ -7,7 +7,8 @@ import { styled } from "styled-system/jsx";
 
 /**
  * InputGroup — relative wrapper for an Input with addon elements. Pad the
- * input (`pl`/`pr`) to make room for the elements.
+ * input (`ps`/`pe`) to make room for the elements; the elements sit on the
+ * reading-order sides, so physical padding lands opposite them in RTL.
  */
 export const InputGroup = styled("div", {
   base: { position: "relative", width: "100%", display: "flex" },
@@ -19,11 +20,11 @@ export const InputGroup = styled("div", {
 // size; pass the same `size` as the grouped Input.
 
 /** Element overlaying the start of an InputGroup. */
-export const InputLeftElement = styled("div", {
+export const InputStartElement = styled("div", {
   base: {
     position: "absolute",
     top: 0,
-    left: 0,
+    insetStart: 0,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -40,11 +41,11 @@ export const InputLeftElement = styled("div", {
 });
 
 /** Element overlaying the end of an InputGroup. */
-export const InputRightElement = styled("div", {
+export const InputEndElement = styled("div", {
   base: {
     position: "absolute",
     top: 0,
-    right: 0,
+    insetEnd: 0,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",

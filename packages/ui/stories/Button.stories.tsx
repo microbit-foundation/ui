@@ -126,7 +126,7 @@ export const Sizes: Story = {
 export const WithIcon: Story = {
   args: {
     variant: "primary",
-    leftIcon: <RiDownload2Line />,
+    startIcon: <RiDownload2Line />,
     children: "Download",
   },
 };
@@ -158,7 +158,7 @@ export const Loading: Story = {
           </Button>
           <Button
             variant="secondary"
-            leftIcon={<RiDownload2Line />}
+            startIcon={<RiDownload2Line />}
             isLoading={isLoading}
           >
             Download
@@ -227,7 +227,7 @@ export const Split: Story = {
     <Stack gap={4} alignItems="start">
       {(["secondary", "primary"] as const).map((variant) => (
         <ButtonGroup key={variant} isAttached>
-          <Button {...args} variant={variant} leftIcon={<RiDownload2Line />}>
+          <Button {...args} variant={variant} startIcon={<RiDownload2Line />}>
             Save
           </Button>
           <MenuTrigger>

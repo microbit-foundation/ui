@@ -60,7 +60,9 @@ export const slider = defineSlotRecipe({
     filledTrack: {
       position: "absolute",
       top: 0,
-      left: 0,
+      // Logical, unlike the thumb: the fill grows from the track's start, so
+      // in RTL it fills from the right and the two still meet.
+      insetStart: 0,
       height: "100%",
       // Fill colour is set per call site via `filledTrackCss`.
       bg: "brand.500",

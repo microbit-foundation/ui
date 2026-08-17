@@ -76,22 +76,34 @@ export const drawer = defineSlotRecipe({
     },
   },
   variants: {
+    // Reading-order sides, so a drawer keeps its relationship to the content
+    // in an RTL locale rather than its screen position. The slide-out
+    // transforms are physical, so each needs mirroring under `dir=rtl` to
+    // travel towards its own edge.
     placement: {
-      left: {
+      start: {
         content: {
-          left: 0,
+          insetStart: 0,
           "&[data-entering]": { transform: "translateX(-100%)" },
           "&[data-exiting]": { transform: "translateX(-100%)" },
+          _rtl: {
+            "&[data-entering]": { transform: "translateX(100%)" },
+            "&[data-exiting]": { transform: "translateX(100%)" },
+          },
         },
       },
-      right: {
+      end: {
         content: {
-          right: 0,
+          insetEnd: 0,
           "&[data-entering]": { transform: "translateX(100%)" },
           "&[data-exiting]": { transform: "translateX(100%)" },
+          _rtl: {
+            "&[data-entering]": { transform: "translateX(-100%)" },
+            "&[data-exiting]": { transform: "translateX(-100%)" },
+          },
         },
       },
     },
   },
-  defaultVariants: { placement: "left" },
+  defaultVariants: { placement: "start" },
 });

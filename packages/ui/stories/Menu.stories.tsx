@@ -26,7 +26,7 @@ type Story = StoryObj<typeof meta>;
 export const Basic: Story = {
   render: () => (
     <MenuTrigger>
-      <Button variant="secondary" leftIcon={<RiSettings2Line />}>
+      <Button variant="secondary" startIcon={<RiSettings2Line />}>
         Menu
       </Button>
       <MenuList>
