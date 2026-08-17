@@ -54,7 +54,7 @@ export const NativeSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(
               _disabled: { cursor: "not-allowed" },
             },
             // Room for the chevron overlay (constant across sizes).
-            hideChevron ? undefined : { paddingRight: "8" },
+            hideChevron ? undefined : { paddingEnd: "8" },
             cssProp,
           ),
           className,
@@ -83,7 +83,7 @@ export const NativeSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(
           aria-hidden
           className={css({
             position: "absolute",
-            right: "2",
+            insetEnd: "2",
             top: "50%",
             transform: "translateY(-50%)",
             width: "5",

@@ -139,6 +139,17 @@ work. Consumption setup and the CSS-variable contract are in
   arguments breaks the preset extension point: an app preset that adds a
   variant group gets nothing applied and the prop lands on the DOM,
   silently.
+- **RAC does not position everything logically.** Where a component reads
+  `useLocale().direction` and mirrors a physical property itself, anything
+  you position alongside it has to mirror the same way — `Slider`'s thumb
+  is a physical `left` that react-aria flips in RTL, so a logical
+  `insetStart` on the mark lands it across the track from the thumb. Check
+  what the component actually emits before reaching for logical properties —
+  it is not consistent even within one RAC file: `SliderThumb` uses `left`
+  where `SliderFill`, alongside it, uses `insetInlineStart`. (We render our
+  own filled track rather than `SliderFill`, so ours is the `filledTrack`
+  slot in `Slider.recipe.ts`.) Everything that is ours and not tracking a
+  RAC element should be logical.
 
 ## Tests and stories
 

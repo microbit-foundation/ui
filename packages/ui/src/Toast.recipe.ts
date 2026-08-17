@@ -59,9 +59,9 @@ export const toast = defineSlotRecipe({
       p: "4",
       // Leave room for the absolutely-positioned close button plus breathing
       // space so its hover area never overlaps the title text (24px button at
-      // 4px inset spans ~4-28px from the right; content stops at 40px for a
-      // ~12px gap).
-      paddingRight: "10",
+      // 4px inset spans ~4-28px from the end edge; content stops at 40px for
+      // a ~12px gap). Logical, like the button's own inset.
+      paddingEnd: "10",
       borderRadius: "md",
       boxShadow: "lg",
       color: "white",

@@ -48,9 +48,9 @@ export interface ButtonProps
   css?: SystemStyleObject;
   className?: string;
   /** Icon rendered before the label. */
-  leftIcon?: ReactNode;
+  startIcon?: ReactNode;
   /** Icon rendered after the label. */
-  rightIcon?: ReactNode;
+  endIcon?: ReactNode;
   /**
    * Show a spinner in place of the label and disable interaction: the label
    * stays in the layout but invisible, so the button keeps its size, and the
@@ -74,8 +74,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       tone,
       css: cssProp,
       className,
-      leftIcon,
-      rightIcon,
+      startIcon,
+      endIcon,
       isLoading,
       children,
       ...rest
@@ -84,12 +84,12 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ) {
     const label = (
       <>
-        {leftIcon ? (
-          <span className={buttonIcon({ side: "left" })}>{leftIcon}</span>
+        {startIcon ? (
+          <span className={buttonIcon({ side: "start" })}>{startIcon}</span>
         ) : null}
         {children}
-        {rightIcon ? (
-          <span className={buttonIcon({ side: "right" })}>{rightIcon}</span>
+        {endIcon ? (
+          <span className={buttonIcon({ side: "end" })}>{endIcon}</span>
         ) : null}
       </>
     );

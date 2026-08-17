@@ -10,6 +10,7 @@ import {
   useEffect,
   useMemo,
 } from "react";
+import { isRTL } from "react-aria";
 import { I18nProvider } from "react-aria-components";
 import { IntlContext } from "react-intl";
 import { racLocale } from "./rac-locale";
@@ -37,11 +38,17 @@ export interface SharedUIProviderProps {
    */
   locale?: string;
   /**
-   * Keeps `<html lang>` in step with the locale, so assistive tech announces
-   * the page in the app's language. On by default; set false where the app
-   * doesn't own the document it's mounted in (an embedded widget), or when
-   * mounting more than one provider per page. The static `lang="en"` in
-   * index.html remains the pre-hydration default.
+   * Keeps `<html lang>` and `<html dir>` in step with the locale, so assistive
+   * tech announces the page in the app's language and the layout runs the
+   * right way round. On by default; set false where the app doesn't own the
+   * document it's mounted in (an embedded widget), or when mounting more than
+   * one provider per page. The static `lang="en"` in index.html remains the
+   * pre-hydration default.
+   *
+   * Turning it off in an RTL locale means the app must set `dir` itself above
+   * the components, or the UI half-mirrors: react-aria mirrors from the locale
+   * in JS whatever the DOM says, while logical properties and `_rtl` rules
+   * read `dir` (see the README's RTL note).
    *
    * Correct only when the IntlProvider locale is the language the app
    * actually renders in — an app falling back wholesale to its English
@@ -74,18 +81,23 @@ export const SharedUIProvider = ({
   // no IntlProvider: react-aria falls back to the browser locale, as before.
   const intlLocale = useContext(IntlContext)?.locale;
   const appLocale = locale ?? intlLocale;
+  // The tag react-aria gets, so the document's direction and the components'
+  // cannot disagree; also the only form isRTL can be handed safely, as it
+  // throws on a malformed tag.
+  const sanitizedLocale = racLocale(appLocale);
   useEffect(() => {
-    if (setDocumentLang && appLocale) {
+    if (setDocumentLang && appLocale && sanitizedLocale) {
       document.documentElement.lang = appLocale;
+      document.documentElement.dir = isRTL(sanitizedLocale) ? "rtl" : "ltr";
     }
-  }, [setDocumentLang, appLocale]);
+  }, [setDocumentLang, appLocale, sanitizedLocale]);
   const value = useMemo(
     () => ({ overlayCloseRegistrar }),
     [overlayCloseRegistrar],
   );
   return (
     <SharedUIContext.Provider value={value}>
-      <I18nProvider locale={racLocale(appLocale)}>{children}</I18nProvider>
+      <I18nProvider locale={sanitizedLocale}>{children}</I18nProvider>
     </SharedUIContext.Provider>
   );
 };

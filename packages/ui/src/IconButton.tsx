@@ -7,7 +7,7 @@ import { forwardRef } from "react";
 import { Button, ButtonProps } from "./Button";
 
 export interface IconButtonProps
-  extends Omit<ButtonProps, "leftIcon" | "rightIcon"> {
+  extends Omit<ButtonProps, "startIcon" | "endIcon"> {
   /** Icon-only buttons have no visible label, so this is required. */
   "aria-label": string;
 }

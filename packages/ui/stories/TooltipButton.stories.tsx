@@ -34,7 +34,7 @@ export const Basic: Story = {
       <Heading size="lg">My projects</Heading>
       <TooltipButton
         aria-label="About project storage"
-        placement="right"
+        placement="end"
         hasArrow
         css={{ px: 3, py: 3 }}
         label={

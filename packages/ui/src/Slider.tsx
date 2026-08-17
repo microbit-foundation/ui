@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 import { ReactNode } from "react";
+import { useLocale } from "react-aria";
 import {
   Slider as RACSlider,
   SliderThumb,
@@ -40,8 +41,13 @@ export interface SliderProps {
   /**
    * Additional positioned overlays rendered inside the slider root
    * (always-visible value labels, threshold markers, ...). The root is
-   * position: relative; position children absolutely, typically with a
-   * percentage `left` for the track position.
+   * position: relative; position children absolutely.
+   *
+   * Anything sitting at a *value* along the track takes a percentage `left`,
+   * physical and mirrored by hand in RTL as the thumb is (see `offset`
+   * below), never `insetInlineStart`. Anything pinned to the track's *ends*
+   * — min/max labels and the like — is ordinary layout and should be
+   * logical, so `insetStart`/`insetEnd`.
    */
   children?: ReactNode;
   /**
@@ -76,7 +82,13 @@ export const Slider = ({
   onThumbFocusChange,
 }: SliderProps) => {
   const slots = slider();
+  const { direction } = useLocale();
   const percent = ((value - minValue) / (maxValue - minValue)) * 100;
+  // react-aria positions the thumb with a physical `left` that it mirrors
+  // itself in RTL (useSliderThumb), so anything tracking the thumb has to
+  // mirror the same way rather than going logical — `insetInlineStart` would
+  // put these on the opposite side of the track from the thumb.
+  const offset = direction === "rtl" ? 100 - percent : percent;
   return (
     <RACSlider
       value={value}
@@ -92,7 +104,7 @@ export const Slider = ({
         <div
           data-part="mark"
           className={cx(slots.mark, markCss ? css(markCss) : undefined)}
-          style={{ left: `${percent}%` }}
+          style={{ left: `${offset}%` }}
         >
           {mark}
         </div>
@@ -144,7 +156,7 @@ export const Slider = ({
               borderTopColor: "gray.700",
             },
           })}
-          style={{ left: `${percent}%` }}
+          style={{ left: `${offset}%` }}
         >
           {thumbTooltip}
         </div>

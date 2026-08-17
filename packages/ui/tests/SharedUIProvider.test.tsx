@@ -54,8 +54,13 @@ it("survives a malformed explicit locale", () => {
   );
 });
 
-it("keeps <html lang> in step with the locale", () => {
+const resetDocument = () => {
   document.documentElement.lang = "en";
+  document.documentElement.dir = "";
+};
+
+it("keeps <html lang> in step with the locale", () => {
+  resetDocument();
   renderModal("fr");
   expect(document.documentElement.lang).toBe("fr");
   cleanup();
@@ -63,18 +68,37 @@ it("keeps <html lang> in step with the locale", () => {
   expect(document.documentElement.lang).toBe("de");
 });
 
-it("leaves <html lang> alone when setDocumentLang is false", () => {
-  document.documentElement.lang = "en";
-  renderModal("fr", { setDocumentLang: false });
-  expect(document.documentElement.lang).toBe("en");
+it("keeps <html dir> in step with the locale", () => {
+  resetDocument();
+  renderModal("ar");
+  expect(document.documentElement.dir).toBe("rtl");
+  cleanup();
+  renderModal("fr");
+  expect(document.documentElement.dir).toBe("ltr");
 });
 
-it("leaves <html lang> alone with no IntlProvider and no locale prop", () => {
-  document.documentElement.lang = "en";
+// racLocale's "en-GB" fallback also keeps isRTL, which throws on a bad tag,
+// off the malformed value.
+it("falls back to ltr for a malformed locale", () => {
+  resetDocument();
+  renderModal("en", { locale: "en_GB" });
+  expect(document.documentElement.dir).toBe("ltr");
+});
+
+it("leaves <html lang> and <html dir> alone when setDocumentLang is false", () => {
+  resetDocument();
+  renderModal("ar", { setDocumentLang: false });
+  expect(document.documentElement.lang).toBe("en");
+  expect(document.documentElement.dir).toBe("");
+});
+
+it("leaves <html lang> and <html dir> alone with no IntlProvider and no locale prop", () => {
+  resetDocument();
   render(
     <SharedUIProvider>
       <div>Body</div>
     </SharedUIProvider>,
   );
   expect(document.documentElement.lang).toBe("en");
+  expect(document.documentElement.dir).toBe("");
 });

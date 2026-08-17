@@ -15,8 +15,8 @@ export const buttonIcon = cva({
   },
   variants: {
     side: {
-      left: { marginEnd: "2" },
-      right: { marginStart: "2" },
+      start: { marginEnd: "2" },
+      end: { marginStart: "2" },
     },
   },
 });

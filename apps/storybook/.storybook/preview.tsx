@@ -6,6 +6,7 @@
 import type { Preview } from "@storybook/react-vite";
 import { IntlProvider } from "react-intl";
 import { SharedUIProvider, ToastProvider } from "@microbit/ui";
+import { defaultLocale, localeOrDefault, locales } from "./locales";
 // @pandacss/dev/postcss (postcss.config.cjs) generates Panda's CSS into this
 // file's cascade-layer declaration at build time — no separate styled-system.css.
 import "./layers.css";
@@ -14,21 +15,40 @@ import "virtual:brand-fonts.css";
 
 /**
  * Wraps every story in the providers the README lists for consumers: an
- * IntlProvider for the components' internal strings (English needs no
- * catalog), a SharedUIProvider so react-aria's built-in strings follow that
- * locale rather than the browser's, and a single ToastProvider region so toast
- * stories work.
+ * IntlProvider for the components' internal strings, a SharedUIProvider so
+ * react-aria's built-in strings follow that locale rather than the browser's,
+ * and a single ToastProvider region so toast stories work.
+ *
+ * The toolbar's locale picker drives both. SharedUIProvider's `setDocumentLang`
+ * puts `lang` and `dir` on the preview iframe's `<html>`, so picking Arabic
+ * flips the canvas to RTL exactly as it would flip a real app.
  */
 const preview: Preview = {
+  globalTypes: {
+    locale: {
+      description: "Locale for the components' own strings",
+      toolbar: {
+        icon: "globe",
+        items: locales.map(({ id, title }) => ({ value: id, title })),
+        dynamicTitle: true,
+      },
+    },
+  },
+  initialGlobals: {
+    locale: defaultLocale,
+  },
   decorators: [
-    (Story) => (
-      <IntlProvider locale="en">
-        <SharedUIProvider>
-          <Story />
-          <ToastProvider />
-        </SharedUIProvider>
-      </IntlProvider>
-    ),
+    (Story, { globals }) => {
+      const locale = localeOrDefault(globals.locale);
+      return (
+        <IntlProvider locale={locale.id} messages={locale.messages}>
+          <SharedUIProvider>
+            <Story />
+            <ToastProvider />
+          </SharedUIProvider>
+        </IntlProvider>
+      );
+    },
   ],
   parameters: {
     // disableSaveFromUI hides the Controls-panel buttons that would write
