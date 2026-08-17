@@ -244,8 +244,14 @@ const LanguageCard = ({
     void onChooseLanguage(language.id);
     if (showSupport) {
       toast({
-        title: intl.formatMessage(
-          uiPatternsMessage("ui-patterns.language-toast-title"),
+        // An element rather than `intl.formatMessage`: this runs in the same
+        // tick as the language change, so a formatted string would freeze the
+        // language the user just left, leaving the title in the old language
+        // above a description that had already re-rendered in the new one.
+        title: (
+          <FormattedMessage
+            {...uiPatternsMessage("ui-patterns.language-toast-title")}
+          />
         ),
         description: <SupportStatement support={language.support ?? []} />,
         status: "info",
@@ -255,14 +261,7 @@ const LanguageCard = ({
         duration: 10_000,
       });
     }
-  }, [
-    intl,
-    language.id,
-    language.support,
-    onChooseLanguage,
-    showSupport,
-    toast,
-  ]);
+  }, [language.id, language.support, onChooseLanguage, showSupport, toast]);
 
   // The selection button covers the whole card; the visible content sits
   // above it, and the warning tooltip trigger is a sibling.
