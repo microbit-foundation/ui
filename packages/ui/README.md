@@ -223,20 +223,32 @@ brand-coloured and black-on-white — and this is the seam between them),
 `buttonToolbar.*`, `closeButton.*`, `languageDialog.*`. `focusRing`,
 `focusBorder` and the whole-ramp alias `danger` keep their own names.
 
-**`base-preset.ts` is authoritative for the inventory.** Do not rely on a
-list in this file — an earlier one went stale and cost a brand preset its
-toast colours, for the reason immediately below.
+**`base-preset.ts` is authoritative for the inventory**, and carries the
+reasoning for each role in comments.
 
 ### Panda does not check these names
 
 **An unknown `semanticTokens` key is accepted silently.** It typechecks, it
-generates, and the override simply never applies — the token keeps the base
-preset's value, with no error at build or at runtime. This has bitten
-twice: an app whose black buttons reverted to brand blue, and a brand
-preset whose toast colours fell back to the library's after a rename.
+generates, and the override never applies — the token keeps the base
+preset's value, with no error at build or at runtime.
 
-A green typecheck is not verification of a preset change. Resolve the
-generated CSS and read the values back:
+So assert your preset's keys in a test:
+
+```ts
+import { unknownSemanticTokens } from "@microbit/ui/preset-lint";
+
+it("overrides only semantic tokens @microbit/ui defines", () => {
+  // `introduces` declares the tokens this preset adds rather than overrides.
+  expect(unknownSemanticTokens(appPreset, { introduces })).toEqual([]);
+});
+```
+
+Check a paired private brand preset from the app too, when it is linked:
+the brand repo stays free of a dependency on this package, and the check
+runs where the presets actually merge.
+
+That covers names. For values, a green typecheck verifies nothing: resolve
+the generated CSS and read them back.
 
 ```sh
 rm -rf styled-system && npx panda cssgen --outfile after.css
