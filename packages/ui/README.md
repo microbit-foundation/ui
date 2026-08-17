@@ -287,9 +287,9 @@ blank.
 Until this package's Crowdin project is wired up, the non-English catalogs are
 pre-Crowdin seeds — some strings AI-drafted, all of them for Crowdin to review
 — credited as follows. Translations of the same strings elsewhere in the
-micro:bit translation programme: ml-trainer and python-editor-v3, and
-MakeCode's editor strings, which are not in the pxt repo but can be fetched per
-locale from
+micro:bit translation programme: ml-trainer, python-editor-v3 and classroom,
+and MakeCode's editor strings, which are not in the pxt repo but can be fetched
+per locale from
 `https://makecode.microbit.org/api/translations?lang=<locale>&filename=strings.json&approved=true`.
 The `ui.toast-status-*` words come from Spectrum 2's InlineAlert catalogs
 (`@react-spectrum/s2/intl/*.json`, keys `inlinealert.informative` / `notice` /

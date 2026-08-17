@@ -14,6 +14,7 @@
 // Every locale any consuming app ships, so a string translated for one app is
 // there for the next. The `lol` pseudo-locale sorts last.
 const languages = [
+  "ar",
   "ca",
   "cy",
   "de",
