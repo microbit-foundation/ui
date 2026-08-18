@@ -29,10 +29,15 @@ const isObject = (v: unknown): v is Unknown =>
  * value itself may be a string or a condition object (`{ base, _onDark }`),
  * so we stop at `value` rather than recursing into it.
  */
-const leafPaths = (node: unknown, prefix: string[] = []): string[] => {
+const leafEntries = (
+  node: unknown,
+  prefix: string[] = [],
+): [string, unknown][] => {
   if (!isObject(node)) return [];
-  if ("value" in node) return [prefix.join(".")];
-  return Object.entries(node).flatMap(([k, v]) => leafPaths(v, [...prefix, k]));
+  if ("value" in node) return [[prefix.join("."), node.value]];
+  return Object.entries(node).flatMap(([k, v]) =>
+    leafEntries(v, [...prefix, k]),
+  );
 };
 
 /**
@@ -40,15 +45,18 @@ const leafPaths = (node: unknown, prefix: string[] = []): string[] => {
  * brand presets sometimes use `theme.semanticTokens`. Accept both, and merge
  * rather than picking one, so a preset using both is fully checked.
  */
-const semanticTokensOf = (preset: unknown): string[] => {
+const semanticEntriesOf = (preset: unknown): [string, unknown][] => {
   if (!isObject(preset)) return [];
   const theme = isObject(preset.theme) ? preset.theme : {};
   const extend = isObject(theme.extend) ? theme.extend : {};
   return [
-    ...leafPaths(theme.semanticTokens),
-    ...leafPaths(extend.semanticTokens),
+    ...leafEntries(theme.semanticTokens),
+    ...leafEntries(extend.semanticTokens),
   ];
 };
+
+const semanticTokensOf = (preset: unknown): string[] =>
+  semanticEntriesOf(preset).map(([path]) => path);
 
 export interface SemanticTokenCheckOptions {
   /**
@@ -76,6 +84,34 @@ export const unknownSemanticTokens = (
   return semanticTokensOf(preset)
     .filter((path) => !known.has(path) && !declared.has(path))
     .sort();
+};
+
+/**
+ * The paths where a preset's override loses a condition the base preset's
+ * value carries.
+ *
+ * Some base-preset tokens hold a condition object rather than a flat value —
+ * `{ base, _onDark }`, the dark-surface flips. A token merge replaces the
+ * value wholesale, so overriding one of these with a flat value (or a
+ * condition object missing a key) silently drops the flip: the same failure
+ * mode as an unknown key, one door over. A preset that genuinely wants no
+ * flip states it — `{ base: X, _onDark: X }`.
+ *
+ * Empty means every conditional token the preset touches keeps all of the
+ * base preset's condition keys.
+ */
+export const droppedConditionTokens = (preset: unknown): string[] => {
+  const conditional = new Map(
+    semanticEntriesOf(basePreset).filter(([, value]) => isObject(value)),
+  );
+  const dropped = new Set<string>();
+  for (const [path, value] of semanticEntriesOf(preset)) {
+    const base = conditional.get(path);
+    if (!base) continue;
+    const keeps = isObject(value) && Object.keys(base).every((k) => k in value);
+    if (!keeps) dropped.add(path);
+  }
+  return [...dropped].sort();
 };
 
 /**

@@ -6,6 +6,7 @@
 import { describe, expect, it } from "vitest";
 import { basePreset } from "../src/base-preset";
 import {
+  droppedConditionTokens,
   reservedSemanticTokens,
   unknownSemanticTokens,
 } from "../src/preset-lint";
@@ -89,6 +90,72 @@ describe("unknownSemanticTokens", () => {
 
   it("tolerates a preset with no semantic tokens", () => {
     expect(unknownSemanticTokens({ name: "empty", theme: {} })).toEqual([]);
+  });
+});
+
+describe("droppedConditionTokens", () => {
+  it("catches a flat override of a condition-object token", () => {
+    expect(
+      droppedConditionTokens(
+        preset({ colors: { focusRing: { value: "#000" } } }),
+      ),
+    ).toEqual(["colors.focusRing"]);
+  });
+
+  it("catches a condition object missing a key the base value has", () => {
+    expect(
+      droppedConditionTokens(
+        preset({ colors: { focusRing: { value: { base: "#000" } } } }),
+      ),
+    ).toEqual(["colors.focusRing"]);
+  });
+
+  it("accepts an override keeping the full condition shape", () => {
+    expect(
+      droppedConditionTokens(
+        preset({
+          colors: {
+            focusRing: { value: { base: "#000", _onDark: "#fff" } },
+          },
+        }),
+      ),
+    ).toEqual([]);
+  });
+
+  it("accepts a deliberate no-flip stated as equal values", () => {
+    expect(
+      droppedConditionTokens(
+        preset({
+          colors: {
+            fg: { strong: { value: { base: "#000", _onDark: "#000" } } },
+          },
+        }),
+      ),
+    ).toEqual([]);
+  });
+
+  it("ignores flat tokens overridden flat", () => {
+    expect(
+      droppedConditionTokens(
+        preset({ colors: { fg: { link: { value: "#000" } } } }),
+      ),
+    ).toEqual([]);
+  });
+
+  it("allows a preset to add conditions to a flat token", () => {
+    expect(
+      droppedConditionTokens(
+        preset({
+          colors: {
+            fg: { link: { value: { base: "#000", _onDark: "#fff" } } },
+          },
+        }),
+      ),
+    ).toEqual([]);
+  });
+
+  it("reports nothing for the base preset against itself", () => {
+    expect(droppedConditionTokens(basePreset)).toEqual([]);
   });
 });
 

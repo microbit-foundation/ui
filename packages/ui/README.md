@@ -297,6 +297,20 @@ Keep the shape:
 focusBorder: { value: { base: "{colors.brand.600}", _onDark: "{colors.white}" } };
 ```
 
+This is the same silent failure as an unknown key, and it has the same
+guard — assert it alongside `unknownSemanticTokens`:
+
+```ts
+import { droppedConditionTokens } from "@microbit/ui/preset-lint";
+
+it("keeps every condition the base preset's tokens carry", () => {
+  expect(droppedConditionTokens(appPreset)).toEqual([]);
+});
+```
+
+A preset that genuinely wants no flip states it, with both keys equal:
+`{ base: X, _onDark: X }`.
+
 Those seven are the whole of the dark-surface mechanism — one
 `[data-surface="dark"]` block redefining seven custom properties, and every
 component inside it recolours with no per-component rules. The corollary is
