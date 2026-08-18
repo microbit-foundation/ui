@@ -83,35 +83,35 @@ export const button = defineRecipe({
         lineHeight: "normal",
         verticalAlign: "baseline",
         borderWidth: "0",
-        color: "brand.600",
+        color: "fg.link",
         fontWeight: "normal",
         bg: "transparent",
         _hover: {
           textDecoration: "underline",
         },
       },
-      // Colours come from the `button.*` semantic tokens so the family's two
-      // button idioms (brand-coloured vs black-on-white) share this recipe —
-      // see the token block in base-preset.ts.
+      // Colours come from the `button.*` component tokens so the family's
+      // two button idioms (brand-coloured vs black-on-white) share this
+      // recipe — see the token block in base-preset.ts.
       secondary: {
         borderWidth: "2px",
-        borderColor: "button.secondaryBorder",
-        color: "button.secondaryText",
+        borderColor: "button.secondary.border",
+        color: "button.secondary.fg",
         bg: "transparent",
         _hover: {
-          borderColor: "button.secondaryHoverBorder",
-          bg: "button.secondaryHoverBg",
+          borderColor: "button.secondary.borderHover",
+          bg: "button.secondary.bgHover",
         },
         _active: {
-          bg: "button.secondaryActiveBg",
-          borderColor: "button.secondaryActiveBorder",
+          bg: "button.secondary.bgActive",
+          borderColor: "button.secondary.borderActive",
         },
       },
       ghost: {
-        color: "black",
+        color: "fg.strong",
         bg: "transparent",
-        _hover: { bg: "blackAlpha.50" },
-        _active: { bg: "blackAlpha.100" },
+        _hover: { bg: "fill.transparentHover" },
+        _active: { bg: "fill.transparentActive" },
       },
       // Base-only styling: a transparent, colour-inheriting button. Used for
       // the action-bar icon-button menu triggers (settings/help), which supply
@@ -121,20 +121,20 @@ export const button = defineRecipe({
         color: "inherit",
       },
       primary: {
-        color: "white",
-        bg: "button.primaryBg",
+        color: "fg.onEmphasis",
+        bg: "button.primary.bg",
         _hover: {
-          bg: "button.primaryHoverBg",
-          _disabled: { bg: "button.primaryBg" },
+          bg: "button.primary.bgHover",
+          _disabled: { bg: "button.primary.bg" },
         },
-        _active: { bg: "button.primaryActiveBg" },
+        _active: { bg: "button.primary.bgActive" },
       },
       // `solid`/`outline` are coloured by `tone`, and reference only the
       // stops it guarantees (50/500/600/700). They are not `primary`/
       // `secondary` in another colour: those follow the app's button idiom,
       // which is black-on-white in half the family and so can't be a palette.
       solid: {
-        color: "white",
+        color: "fg.onEmphasis",
         bg: "colorPalette.500",
         _hover: {
           bg: "colorPalette.600",
@@ -159,19 +159,22 @@ export const button = defineRecipe({
       // Not a palette shape: a light fill under dark text is a different
       // button from `solid`, and 350 exists in no other ramp.
       neutral: {
-        color: "gray.800",
-        bg: "gray.100",
-        _hover: { bg: "gray.300", _disabled: { bg: "gray.100" } },
-        _active: { bg: "gray.350" },
+        color: "fg.default",
+        bg: "fill.neutral",
+        _hover: { bg: "fill.neutralHover", _disabled: { bg: "fill.neutral" } },
+        _active: { bg: "fill.neutralActive" },
       },
       // Family-wide variant (every censused app has toolbar-class buttons).
       // No ring override: the bar decides, and a dark one must spread
       // `darkSurface` — an app adopting this variant needs the tag with it.
       toolbar: {
-        color: "black",
-        bg: "white",
-        _hover: { bg: "whiteAlpha.900", _disabled: { bg: "white" } },
-        _active: { bg: "whiteAlpha.800" },
+        color: "buttonToolbar.fg",
+        bg: "buttonToolbar.bg",
+        _hover: {
+          bg: "buttonToolbar.bgHover",
+          _disabled: { bg: "buttonToolbar.bg" },
+        },
+        _active: { bg: "buttonToolbar.bgActive" },
       },
     },
     /**

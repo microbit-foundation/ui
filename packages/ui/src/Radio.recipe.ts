@@ -30,7 +30,7 @@ export const radio = defineSlotRecipe({
       // As the checkbox: the accessible outline stop (WCAG 1.4.11), on the
       // root so the control's `borderColor: inherit` reads it and call
       // sites can still tint at the root.
-      borderColor: "gray.400",
+      borderColor: "border.controlEmphasis",
       "&[data-disabled]": { cursor: "not-allowed" },
     },
     control: {
@@ -42,15 +42,15 @@ export const radio = defineSlotRecipe({
       borderStyle: "solid",
       borderRadius: "full",
       borderColor: "inherit",
-      color: "white",
-      bg: "white",
+      color: "fg.onEmphasis",
+      bg: "fill.control",
       "&[data-selected]": {
-        bg: "controlCheckedBg",
-        borderColor: "controlCheckedBg",
-        color: "white",
+        bg: "fill.accent",
+        borderColor: "fill.accent",
+        color: "fg.onEmphasis",
         _hover: {
-          bg: "controlCheckedHoverBg",
-          borderColor: "controlCheckedHoverBg",
+          bg: "fill.accentHover",
+          borderColor: "fill.accentHover",
         },
         // The radio dot.
         _before: {
@@ -66,14 +66,17 @@ export const radio = defineSlotRecipe({
       // Disabled greys; the selected block restates _hover so the widened
       // native-:hover condition can't re-tint a disabled control.
       "&[data-disabled]": {
-        bg: "gray.100",
-        borderColor: "gray.100",
+        bg: "fill.disabled",
+        borderColor: "border.disabled",
       },
       "&[data-selected][data-disabled]": {
-        bg: "gray.200",
-        borderColor: "gray.200",
-        color: "gray.500",
-        _hover: { bg: "gray.200", borderColor: "gray.200" },
+        bg: "fill.disabledEmphasis",
+        borderColor: "border.disabledEmphasis",
+        color: "fg.disabled",
+        _hover: {
+          bg: "fill.disabledEmphasis",
+          borderColor: "border.disabledEmphasis",
+        },
       },
       "&[data-focus-visible]": {
         focusRing: "outline",

@@ -37,9 +37,9 @@ export const switchRecipe = defineSlotRecipe({
       p: "0.5",
       transitionProperty: "background-color",
       transitionDuration: "fast",
-      bg: "gray.300",
+      bg: "fill.trackEmphasis",
       "&[data-selected]": {
-        bg: "controlCheckedBg",
+        bg: "fill.accent",
       },
       "&[data-focus-visible]": {
         focusRing: "outline",
@@ -55,7 +55,7 @@ export const switchRecipe = defineSlotRecipe({
       },
     },
     thumb: {
-      bg: "white",
+      bg: "fill.knob",
       transitionProperty: "transform",
       transitionDuration: "normal",
       borderRadius: "inherit",

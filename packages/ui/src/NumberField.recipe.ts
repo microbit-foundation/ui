@@ -33,7 +33,7 @@ export const numberField = defineSlotRecipe({
       // not forgiving, so one list would drop the whole selector on a
       // browser that doesn't know the pseudo-class (Safari < 16.5).
       "&:hover input:not(:focus, [data-focused], [data-invalid]):not(:user-invalid)":
-        { borderColor: "gray.500" },
+        { borderColor: "border.controlHover" },
     },
     // A column overlaying the input's right edge, inset by the input border.
     stepper: {
@@ -58,7 +58,7 @@ export const numberField = defineSlotRecipe({
       color: "inherit",
       bg: "transparent",
       borderStart: "1px solid",
-      borderColor: "gray.200",
+      borderColor: "border.default",
       transitionProperty: "background",
       transitionDuration: "ultra-fast",
       // Follow the input's corners, less the 2px border the stepper is inset
@@ -70,12 +70,12 @@ export const numberField = defineSlotRecipe({
       },
       "&:last-child": {
         borderTop: "1px solid",
-        borderTopColor: "gray.200",
+        borderTopColor: "border.default",
         marginTop: "-1px",
         borderEndEndRadius: "calc(token(radii.md) - 2px)",
       },
-      "&[data-hovered]": { bg: "gray.100" },
-      "&[data-pressed]": { bg: "gray.200" },
+      "&[data-hovered]": { bg: "surface.highlight" },
+      "&[data-pressed]": { bg: "surface.active" },
       "&[data-disabled]": { opacity: 0.4, cursor: "not-allowed" },
     },
   },

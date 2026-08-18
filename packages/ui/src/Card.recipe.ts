@@ -21,7 +21,7 @@ export const card = defineSlotRecipe({
       position: "relative",
       minWidth: 0,
       wordWrap: "break-word",
-      bg: "white",
+      bg: "surface.raised",
       borderRadius: "md",
       color: "inherit",
     },
@@ -39,7 +39,7 @@ export const card = defineSlotRecipe({
         container: {
           borderWidth: "1px",
           borderStyle: "solid",
-          borderColor: "gray.200",
+          borderColor: "border.default",
         },
       },
     },

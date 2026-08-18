@@ -67,11 +67,11 @@ export const select = defineSlotRecipe({
       border: "2px solid",
       // As the input recipe (rationale there). The dropdown card below
       // keeps gray.200 — a surface edge, not a form-control boundary.
-      borderColor: "gray.300",
-      bg: "white",
+      borderColor: "border.control",
+      bg: "fill.control",
       color: "inherit",
       // As the input recipe, so mixed fields tint together on hover.
-      _hover: { borderColor: "gray.500" },
+      _hover: { borderColor: "border.controlHover" },
       // `data-invalid` lands on the root — and, in a ComboBox, on the input —
       // but never on the trigger: a RAC Button has no validity state, and our
       // ComboBox control is a plain div. So it comes down from the parent.
@@ -83,7 +83,7 @@ export const select = defineSlotRecipe({
       },
       // Border colour alone, as the input recipe.
       "[data-invalid] > &&&": {
-        borderColor: "danger.500",
+        borderColor: "border.danger",
       },
       // Keyboard-only ring, two cases. Select's button: RAC's attribute.
       // ComboBox: the input's RAC attributes are stripped by react-aria's
@@ -111,8 +111,8 @@ export const select = defineSlotRecipe({
       font: "inherit",
       // RAC sets data-placeholder on SelectValue when nothing is chosen; the
       // ComboBox input uses the real placeholder attribute.
-      "&[data-placeholder]": { color: "gray.500" },
-      _placeholder: { color: "gray.500" },
+      "&[data-placeholder]": { color: "fg.placeholder" },
+      _placeholder: { color: "fg.placeholder" },
     },
     indicator: {
       display: "inline-flex",
@@ -141,13 +141,13 @@ export const select = defineSlotRecipe({
       minWidth: "var(--trigger-width)",
       display: "flex",
       flexDirection: "column",
-      bg: "white",
+      bg: "surface.raised",
       color: "inherit",
       py: "2",
       zIndex: "popover",
       borderRadius: "md",
       borderWidth: "1px",
-      borderColor: "gray.200",
+      borderColor: "border.default",
       boxShadow: "sm",
       // Matches the menu recipe's fade/scale.
       transformOrigin: "top",
@@ -174,9 +174,9 @@ export const select = defineSlotRecipe({
       // As the menu recipe: the highlight is focus indication (no
       // transition — it snaps with the ring, which keyboard nav adds;
       // inset, the rows being full-bleed).
-      "&[data-focused]": { bg: "gray.100" },
+      "&[data-focused]": { bg: "surface.highlight" },
       "&[data-focus-visible]": { focusRing: "outlineInset" },
-      "&[data-pressed]": { bg: "gray.200" },
+      "&[data-pressed]": { bg: "surface.active" },
       "&[data-disabled]": { opacity: 0.4, cursor: "not-allowed" },
     },
     optionIndicator: {
@@ -192,7 +192,7 @@ export const select = defineSlotRecipe({
     empty: {
       px: "3",
       py: "2",
-      color: "gray.600",
+      color: "fg.muted",
     },
   },
   variants: {

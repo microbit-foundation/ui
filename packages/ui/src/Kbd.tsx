@@ -10,11 +10,11 @@ import { styled } from "styled-system/jsx";
  */
 export const Kbd = styled("kbd", {
   base: {
-    bg: "gray.100",
+    bg: "surface.inset",
     borderRadius: "md",
     borderWidth: "1px",
     borderStyle: "solid",
-    borderColor: "gray.200",
+    borderColor: "border.default",
     borderBottomWidth: "3px",
     fontFamily: "mono",
     fontSize: "0.8em",
