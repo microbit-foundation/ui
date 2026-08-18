@@ -532,14 +532,14 @@ export const basePreset = definePreset({
       minHeight: "100%",
       fontFeatureSettings: '"kern"',
       fontFamily: "body",
-      color: "gray.800",
-      bg: "white",
+      color: "fg.default",
+      bg: "surface.canvas",
       transitionProperty: "background-color",
       transitionDuration: "normal",
       lineHeight: "base",
     },
     "*::placeholder": {
-      color: "gray.500",
+      color: "fg.placeholder",
     },
     // The `* { border-color; word-wrap }` defaults live in ../reset.css,
     // imported into the `reset` layer by consumers' layers.css — NOT here:
