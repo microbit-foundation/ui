@@ -80,7 +80,7 @@ export const AmongButtons: Story = {
       <LinkButton
         {...args}
         size="lg"
-        rightIcon={<Icon as={RiExternalLinkLine} />}
+        endIcon={<Icon as={RiExternalLinkLine} />}
       >
         Update firmware
       </LinkButton>

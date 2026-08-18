@@ -34,7 +34,7 @@ it("isLoading keeps the label in the layout so the button holds its size", () =>
   // doesn't reflow mid-submit.
   render(
     <IntlProvider locale="en">
-      <Button isLoading leftIcon={<span>icon</span>}>
+      <Button isLoading startIcon={<span>icon</span>}>
         Save
       </Button>
     </IntlProvider>,

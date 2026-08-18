@@ -34,6 +34,12 @@ export const breadcrumb = defineSlotRecipe({
     },
     separator: {
       mx: "2",
+      // A chevron separator points along the trail, so it has to turn round
+      // in RTL. Scoped to an svg because the default separator is the text
+      // "/", which would become "\": a caller passing a glyph owns its
+      // direction, one passing an icon gets it handled. Override via the
+      // separator slot's css for an icon that shouldn't turn.
+      _rtl: { "& svg": { transform: "scaleX(-1)" } },
     },
   },
 });

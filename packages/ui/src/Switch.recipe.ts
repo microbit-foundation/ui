@@ -59,6 +59,19 @@ export const switchRecipe = defineSlotRecipe({
       transitionProperty: "transform",
       transitionDuration: "normal",
       borderRadius: "inherit",
+      // The thumb rests at the track's start and slides to its end, so the
+      // travel has to reverse in RTL — a transform is physical however the
+      // rest of the switch is laid out. Distance is per size, below.
+      // Fallbacks carry a unit: `calc(-1 * 0)` is a number, which is invalid
+      // where a length is wanted, and would drop the RTL transform whole.
+      "&[data-selected]": {
+        transform: "translateX(var(--switch-travel, 0px))",
+      },
+      _rtl: {
+        "&[data-selected]": {
+          transform: "translateX(calc(-1 * var(--switch-travel, 0px)))",
+        },
+      },
       _forcedColors: {
         bg: "ButtonText",
         "&[data-selected]": { bg: "SelectedItemText" },
@@ -89,32 +102,20 @@ export const switchRecipe = defineSlotRecipe({
         label: { marginStart: "0", marginEnd: "3" },
       },
     },
-    // Track width x height per size; the selected-thumb translate is the
-    // difference between them.
+    // Track width x height per size; the thumb's travel is the difference
+    // between them.
     size: {
       sm: {
         track: { width: "1.375rem", height: "3" },
-        thumb: {
-          width: "3",
-          height: "3",
-          "&[data-selected]": { transform: "translateX(0.625rem)" },
-        },
+        thumb: { width: "3", height: "3", "--switch-travel": "0.625rem" },
       },
       md: {
         track: { width: "1.875rem", height: "4" },
-        thumb: {
-          width: "4",
-          height: "4",
-          "&[data-selected]": { transform: "translateX(0.875rem)" },
-        },
+        thumb: { width: "4", height: "4", "--switch-travel": "0.875rem" },
       },
       lg: {
         track: { width: "2.875rem", height: "6" },
-        thumb: {
-          width: "6",
-          height: "6",
-          "&[data-selected]": { transform: "translateX(1.375rem)" },
-        },
+        thumb: { width: "6", height: "6", "--switch-travel": "1.375rem" },
       },
     },
   },

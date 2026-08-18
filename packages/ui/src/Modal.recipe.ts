@@ -33,6 +33,9 @@ const dialogBox = {
 };
 
 // The `full` variant also styles these slots; same symmetry requirement.
+// The header's padding stays physical to pair with that variant's
+// window-controls inset, which is a screen position rather than a
+// reading-order one; the base `px` covers the start side either way.
 const dialogSlots = {
   header: { pl: "6" },
   body: { overflowY: "visible" },

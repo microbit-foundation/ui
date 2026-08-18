@@ -9,8 +9,8 @@ import {
   Icon,
   Input,
   InputGroup,
-  InputLeftElement,
-  InputRightElement,
+  InputStartElement,
+  InputEndElement,
   Kbd,
   Stack,
   TextField,
@@ -64,7 +64,7 @@ export const States: Story = {
 
 /**
  * Input adornments use the raw Input + InputGroup parts
- * (InputLeftElement/InputRightElement); pad the input to make room. The
+ * (InputStartElement/InputEndElement); pad the input to make room. The
  * elements take the same `size` as the input so the overlay box tracks the
  * field height.
  */
@@ -72,9 +72,9 @@ export const Adornments: Story = {
   render: () => (
     <Stack gap={6} maxW="md">
       <InputGroup>
-        <InputLeftElement>
+        <InputStartElement>
           <Icon as={RiSearchLine} css={{ color: "gray.400" }} />
-        </InputLeftElement>
+        </InputStartElement>
         <Input
           aria-label="Search"
           placeholder="Search"
@@ -87,14 +87,14 @@ export const Adornments: Story = {
           placeholder="Search"
           css={{ paddingEnd: "10" }}
         />
-        <InputRightElement>
+        <InputEndElement>
           <Kbd>/</Kbd>
-        </InputRightElement>
+        </InputEndElement>
       </InputGroup>
       <InputGroup>
-        <InputLeftElement size="sm">
+        <InputStartElement size="sm">
           <Icon as={RiSearchLine} css={{ color: "gray.400" }} />
-        </InputLeftElement>
+        </InputStartElement>
         <Input
           aria-label="Search"
           placeholder="Search (sm)"

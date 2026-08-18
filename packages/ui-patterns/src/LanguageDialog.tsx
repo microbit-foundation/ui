@@ -189,7 +189,7 @@ export const LanguageDialog = ({
               />
             </ExternalLink>
           )}
-          <Button variant="primary" onPress={onClose} css={{ ml: "auto" }}>
+          <Button variant="primary" onPress={onClose} css={{ ms: "auto" }}>
             <FormattedMessage {...uiMessage("ui.close-action")} />
           </Button>
         </Flex>
@@ -212,7 +212,7 @@ const SectionHeading = ({
     as="h3"
     fontSize="md"
     fontWeight="bold"
-    textAlign="left"
+    textAlign="start"
     width="100%"
     marginTop={spaced ? "1em" : "0"}
   >

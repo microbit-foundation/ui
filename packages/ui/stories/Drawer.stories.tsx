@@ -16,9 +16,9 @@ import {
 
 const meta = {
   title: "Overlays/Drawer",
-  args: { placement: "left" as "left" | "right" },
+  args: { placement: "start" as "start" | "end" },
   argTypes: {
-    placement: { control: "select", options: ["left", "right"] },
+    placement: { control: "select", options: ["start", "end"] },
   },
 } satisfies Meta;
 export default meta;

@@ -91,20 +91,31 @@ node_modules/@microbit/ui/lang/ui.fr.json --ast --out-file ...` (multiple
    their English catalog for those, and should then pass `en`, keeping the
    chosen language in their own settings for the embed. Everything downstream
    reads this locale as a statement about the rendered page — `<html lang>`
-   via `SharedUIProvider`, react-aria's text direction and built-in strings,
-   `Intl` number/date formatting and plural rules. A catalog that loads but
-   has per-message gaps (an incomplete translation) is still that language;
-   only a wholesale fallback to the English catalog should claim `en`.
+   and `<html dir>` via `SharedUIProvider`, react-aria's text direction and
+   built-in strings, `Intl` number/date formatting and plural rules. A catalog
+   that loads but has per-message gaps (an incomplete translation) is still
+   that language; only a wholesale fallback to the English catalog should
+   claim `en`.
 
 6. **`SharedUIProvider`** inside the `IntlProvider`, wrapping the app. It
    passes the locale on to react-aria, which translates its own built-in
    strings (see [Strings](#strings)); without it those follow the browser
-   rather than the app's language setting. It also keeps `<html lang>` in
-   step with the locale so assistive tech announces the page in the app's
-   language — pass `setDocumentLang={false}` where the app doesn't own the
-   document it's mounted in (an embedded widget). Also takes an optional
-   overlay-close registrar, so the app can dismiss open menus from outside
-   the tree (e.g. the Android hardware back button).
+   rather than the app's language setting. It also keeps `<html lang>` and
+   `<html dir>` in step with the locale, so assistive tech announces the page
+   in the app's language and an RTL language lays out the right way round —
+   pass `setDocumentLang={false}` where the app doesn't own the document it's
+   mounted in (an embedded widget). Also takes an optional overlay-close
+   registrar, so the app can dismiss open menus from outside the tree (e.g.
+   the Android hardware back button).
+
+   An app that passes `setDocumentLang={false}` **must set `dir` itself**,
+   on whatever element it mounts into, if it offers an RTL language. The two
+   halves of mirroring read the direction from different places: react-aria
+   takes it from the provider locale in JS and mirrors regardless of the DOM,
+   while logical properties and Panda's `_rtl` rules match on `dir`. With one
+   side mirrored and the other not, components that combine both come apart —
+   `Slider`'s thumb moves to the mirrored end while its filled track stays.
+
 7. **`ToastProvider`** once near the root, inside the two providers above.
 
 ## Upgrading in an app
@@ -175,6 +186,18 @@ build: {
 To drop it all: raise `BUILD_TARGETS`/`browserslist` past the affected
 browsers, then remove the two PostCSS plugins (and this package's
 `postcss-legacy-safari` export).
+
+RTL is fine at this floor, with one thing to know. Panda's `_rtl` condition
+emits `:where([dir=rtl], :dir(rtl))`, and `:dir()` is Safari 16.4. At the
+pinned targets lightningcss rewrites that arm into a `:lang()` list, leaving
+the `[dir=rtl]` arm — which is the one `SharedUIProvider` sets — intact. So
+the legacy build matches on `dir` as intended, and additionally on
+`lang="ar"` and friends, which modern builds don't. Everything else the
+mirroring uses (logical longhands, `text-align: start`, custom properties in
+`calc()`) passes through untouched; only logical _shorthands_ need the shim,
+as before. `:where()` contributes no specificity, so the RTL rules win on
+source order — de-layering preserves it, since it pads later layers rather
+than reordering within one.
 
 ## The CSS-variable contract
 
@@ -366,9 +389,9 @@ blank.
 Until this package's Crowdin project is wired up, the non-English catalogs are
 pre-Crowdin seeds — some strings AI-drafted, all of them for Crowdin to review
 — credited as follows. Translations of the same strings elsewhere in the
-micro:bit translation programme: ml-trainer and python-editor-v3, and
-MakeCode's editor strings, which are not in the pxt repo but can be fetched per
-locale from
+micro:bit translation programme: ml-trainer, python-editor-v3 and classroom,
+and MakeCode's editor strings, which are not in the pxt repo but can be fetched
+per locale from
 `https://makecode.microbit.org/api/translations?lang=<locale>&filename=strings.json&approved=true`.
 The `ui.toast-status-*` words come from Spectrum 2's InlineAlert catalogs
 (`@react-spectrum/s2/intl/*.json`, keys `inlinealert.informative` / `notice` /

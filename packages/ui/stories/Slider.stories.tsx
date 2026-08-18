@@ -102,7 +102,7 @@ export const OverlayChildren: Story = {
             css={{
               position: "absolute",
               top: "6",
-              left: 0,
+              insetStart: 0,
               fontSize: "sm",
               color: "gray.600",
             }}
@@ -113,7 +113,7 @@ export const OverlayChildren: Story = {
             css={{
               position: "absolute",
               top: "6",
-              right: 0,
+              insetEnd: 0,
               fontSize: "sm",
               color: "gray.600",
             }}
