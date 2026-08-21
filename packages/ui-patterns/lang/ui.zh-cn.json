@@ -8,11 +8,11 @@
     "description": "Language dialog title"
   },
   "ui-patterns.language-fully-supported-heading": {
-    "defaultMessage": "Fully supported",
+    "defaultMessage": "完全支持",
     "description": "Fully supported languages heading text"
   },
   "ui-patterns.language-partially-supported-heading": {
-    "defaultMessage": "Partially supported",
+    "defaultMessage": "部分支持",
     "description": "Partially supported languages heading text"
   },
   "ui-patterns.language-preview-notice": {
@@ -20,19 +20,19 @@
     "description": "Language dialog footnote shown when preview languages are listed"
   },
   "ui-patterns.language-support-checked": {
-    "defaultMessage": "Supported",
+    "defaultMessage": "支持",
     "description": "Aria label for ticked checkbox for language support"
   },
   "ui-patterns.language-support-unchecked": {
-    "defaultMessage": "Unsupported",
+    "defaultMessage": "不支持",
     "description": "Aria label for unticked checkbox for language support"
   },
   "ui-patterns.language-supported-for": {
-    "defaultMessage": "Translations supported for:",
+    "defaultMessage": "翻译支持:",
     "description": "Text introducing the list of translated products for a given language"
   },
   "ui-patterns.language-toast-title": {
-    "defaultMessage": "Language not fully supported",
+    "defaultMessage": "该语言没有完全支持",
     "description": "Language support toast notification title"
   }
 }

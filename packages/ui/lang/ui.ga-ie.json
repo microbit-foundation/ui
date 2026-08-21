@@ -1,6 +1,6 @@
 {
   "ui.breadcrumb": {
-    "defaultMessage": "Mionrian",
+    "defaultMessage": "Grabhróg aráin",
     "description": "Accessible label for the breadcrumb navigation trail (the WAI-ARIA APG's conventional name)"
   },
   "ui.close-action": {
@@ -8,11 +8,11 @@
     "description": "Close button text or label"
   },
   "ui.combobox-listbox": {
-    "defaultMessage": "Suggestions",
+    "defaultMessage": "Moltaí",
     "description": "Accessible label for a ComboBox's dropdown list of suggestions"
   },
   "ui.combobox-trigger": {
-    "defaultMessage": "Show suggestions",
+    "defaultMessage": "Taispeáin moltaí",
     "description": "Accessible label for the button that opens a ComboBox's suggestions dropdown"
   },
   "ui.loading": {
@@ -24,15 +24,15 @@
     "description": "Visually hidden suffix on links that open a new tab, announced by screen readers"
   },
   "ui.numberfield-decrease": {
-    "defaultMessage": "Decrease {fieldLabel}",
+    "defaultMessage": "Laghdaigh {fieldLabel}",
     "description": "Accessible label for a number field's decrement stepper; fieldLabel is the field's label and may be empty"
   },
   "ui.numberfield-increase": {
-    "defaultMessage": "Increase {fieldLabel}",
+    "defaultMessage": "Méadaigh {fieldLabel}",
     "description": "Accessible label for a number field's increment stepper; fieldLabel is the field's label and may be empty"
   },
   "ui.select-placeholder": {
-    "defaultMessage": "Select an item",
+    "defaultMessage": "Roghnaigh mír",
     "description": "Shown in a Select's trigger while nothing is chosen and the app supplies no placeholder"
   },
   "ui.select-row-action": {
@@ -40,7 +40,7 @@
     "description": "Accessible label for a row-selection checkbox in a list or table; screen readers read it together with the row's content"
   },
   "ui.toast-region": {
-    "defaultMessage": "{count, plural, one {# notification} other {# notifications}}.",
+    "defaultMessage": "{count, plural, one {# fógra} two {# fhógra} few {# fógraí} many {# notifications} other {# fógraí}}.",
     "description": "Accessible label for the notifications area; count is the number of notifications showing"
   },
   "ui.toast-status-error": {
@@ -48,11 +48,11 @@
     "description": "Announced by screen readers before an error notification"
   },
   "ui.toast-status-info": {
-    "defaultMessage": "Information",
+    "defaultMessage": "Eolas",
     "description": "Announced by screen readers before an informational notification"
   },
   "ui.toast-status-success": {
-    "defaultMessage": "D'éirigh leis",
+    "defaultMessage": "Rath",
     "description": "Announced by screen readers before a success notification"
   },
   "ui.toast-status-warning": {

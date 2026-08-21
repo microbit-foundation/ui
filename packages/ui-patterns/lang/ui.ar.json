@@ -1,6 +1,6 @@
 {
   "ui-patterns.help-translate": {
-    "defaultMessage": "ساعد في الترجمة",
+    "defaultMessage": "ساعدنا في الترجمة",
     "description": "Language dialog link to the translation project"
   },
   "ui-patterns.language": {
@@ -32,7 +32,7 @@
     "description": "Text introducing the list of translated products for a given language"
   },
   "ui-patterns.language-toast-title": {
-    "defaultMessage": "اللغة غير مدعومة بالكامل",
+    "defaultMessage": "اللغة غير مدعومة بشكل كامل",
     "description": "Language support toast notification title"
   }
 }

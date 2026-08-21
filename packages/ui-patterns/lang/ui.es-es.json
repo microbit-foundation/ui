@@ -16,7 +16,7 @@
     "description": "Partially supported languages heading text"
   },
   "ui-patterns.language-preview-notice": {
-    "defaultMessage": "* These languages are an early preview of in-progress translations.",
+    "defaultMessage": "Estos idiomas son una vista previa temprana de traducciones en curso.",
     "description": "Language dialog footnote shown when preview languages are listed"
   },
   "ui-patterns.language-support-checked": {
