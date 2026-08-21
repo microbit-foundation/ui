@@ -40,12 +40,12 @@ module.exports = [
     dir: "packages/ui-patterns",
     // Where this package's strings sit within each language's Crowdin export
     // dir.
-    crowdinDir: "new/packages/microbit-ui-patterns",
+    crowdinDir: "new/packages/ui-patterns",
     languages,
   },
   {
     dir: "packages/ui",
-    crowdinDir: "new/packages/microbit-ui",
+    crowdinDir: "new/packages/ui",
     languages,
   },
 ];

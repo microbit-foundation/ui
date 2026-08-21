@@ -1,6 +1,6 @@
 {
   "ui-patterns.help-translate": {
-    "defaultMessage": "Help translate",
+    "defaultMessage": "Aiutaci a tradurre",
     "description": "Language dialog link to the translation project"
   },
   "ui-patterns.language": {

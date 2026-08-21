@@ -36,7 +36,7 @@
     "description": "Shown in a Select's trigger while nothing is chosen and the app supplies no placeholder"
   },
   "ui.select-row-action": {
-    "defaultMessage": "تحديد",
+    "defaultMessage": "حدّد",
     "description": "Accessible label for a row-selection checkbox in a list or table; screen readers read it together with the row's content"
   },
   "ui.toast-region": {

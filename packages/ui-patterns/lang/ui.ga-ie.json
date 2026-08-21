@@ -8,31 +8,31 @@
     "description": "Language dialog title"
   },
   "ui-patterns.language-fully-supported-heading": {
-    "defaultMessage": "Fully supported",
+    "defaultMessage": "Tacaíocht iomlán",
     "description": "Fully supported languages heading text"
   },
   "ui-patterns.language-partially-supported-heading": {
-    "defaultMessage": "Partially supported",
+    "defaultMessage": "Tacaithe go páirteach",
     "description": "Partially supported languages heading text"
   },
   "ui-patterns.language-preview-notice": {
-    "defaultMessage": "* These languages are an early preview of in-progress translations.",
+    "defaultMessage": "* Is réamhamharc luath ar aistriúcháin atá ar siúl iad na teangacha seo.",
     "description": "Language dialog footnote shown when preview languages are listed"
   },
   "ui-patterns.language-support-checked": {
-    "defaultMessage": "Supported",
+    "defaultMessage": "Tacaithe",
     "description": "Aria label for ticked checkbox for language support"
   },
   "ui-patterns.language-support-unchecked": {
-    "defaultMessage": "Unsupported",
+    "defaultMessage": "Gan tacaíocht",
     "description": "Aria label for unticked checkbox for language support"
   },
   "ui-patterns.language-supported-for": {
-    "defaultMessage": "Translations supported for:",
+    "defaultMessage": "Aistriúcháin a dtacaítear leo le haghaidh:",
     "description": "Text introducing the list of translated products for a given language"
   },
   "ui-patterns.language-toast-title": {
-    "defaultMessage": "Language not fully supported",
+    "defaultMessage": "Teanga nach dtacaítear go hiomlán léi",
     "description": "Language support toast notification title"
   }
 }

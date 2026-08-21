@@ -1,38 +1,38 @@
 {
   "ui-patterns.help-translate": {
-    "defaultMessage": "Help translate",
+    "defaultMessage": "crwdns370126:0crwdne370126:0",
     "description": "Language dialog link to the translation project"
   },
   "ui-patterns.language": {
-    "defaultMessage": "Language",
+    "defaultMessage": "crwdns370128:0crwdne370128:0",
     "description": "Language dialog title"
   },
   "ui-patterns.language-fully-supported-heading": {
-    "defaultMessage": "Fully supported",
+    "defaultMessage": "crwdns370130:0crwdne370130:0",
     "description": "Fully supported languages heading text"
   },
   "ui-patterns.language-partially-supported-heading": {
-    "defaultMessage": "Partially supported",
+    "defaultMessage": "crwdns370132:0crwdne370132:0",
     "description": "Partially supported languages heading text"
   },
   "ui-patterns.language-preview-notice": {
-    "defaultMessage": "* These languages are an early preview of in-progress translations.",
+    "defaultMessage": "crwdns370134:0crwdne370134:0",
     "description": "Language dialog footnote shown when preview languages are listed"
   },
   "ui-patterns.language-support-checked": {
-    "defaultMessage": "Supported",
+    "defaultMessage": "crwdns370136:0crwdne370136:0",
     "description": "Aria label for ticked checkbox for language support"
   },
   "ui-patterns.language-support-unchecked": {
-    "defaultMessage": "Unsupported",
+    "defaultMessage": "crwdns370138:0crwdne370138:0",
     "description": "Aria label for unticked checkbox for language support"
   },
   "ui-patterns.language-supported-for": {
-    "defaultMessage": "Translations supported for:",
+    "defaultMessage": "crwdns370140:0crwdne370140:0",
     "description": "Text introducing the list of translated products for a given language"
   },
   "ui-patterns.language-toast-title": {
-    "defaultMessage": "Language not fully supported",
+    "defaultMessage": "crwdns370142:0crwdne370142:0",
     "description": "Language support toast notification title"
   }
 }
