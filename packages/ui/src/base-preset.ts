@@ -33,6 +33,7 @@ import { drawer } from "./Drawer.recipe";
 import { gridList } from "./GridList.recipe";
 import { heading } from "./Heading.recipe";
 import { input } from "./Input.recipe";
+import { link } from "./Link.recipe";
 import { listBox } from "./ListBox.recipe";
 import { numberField } from "./NumberField.recipe";
 import { menu } from "./Menu.recipe";
@@ -295,6 +296,7 @@ export const basePreset = definePreset({
       button,
       heading,
       input,
+      link,
       text,
       tooltip,
     },
@@ -439,6 +441,7 @@ export const basePreset = definePreset({
       drawer: ["*"],
       field: ["*"],
       gridList: ["*"],
+      link: ["*"],
       listBox: ["*"],
       input: ["*"],
       numberField: ["*"],

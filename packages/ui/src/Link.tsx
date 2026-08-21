@@ -4,20 +4,11 @@
  * SPDX-License-Identifier: MIT
  */
 import { styled } from "styled-system/jsx";
+import { link } from "styled-system/recipes";
 
 /**
- * Link — a styled anchor (no underline until hover, focus ring on keyboard
- * focus). Accepts Panda style props for colour etc.
+ * Link — a styled anchor, underlined by default (see Link.recipe.ts).
+ * Pass `variant="standalone"` for links whose context already shows they
+ * are links. Accepts Panda style props for colour etc.
  */
-export const Link = styled("a", {
-  base: {
-    cursor: "pointer",
-    textDecoration: "none",
-    outline: "none",
-    transitionProperty:
-      "background-color, border-color, color, fill, stroke, opacity, box-shadow, transform",
-    transitionDuration: "normal",
-    _hover: { textDecoration: "underline" },
-    _focusVisible: { focusRing: "outline" },
-  },
-});
+export const Link = styled("a", link);

@@ -110,5 +110,6 @@ export const BreadcrumbLink = (props: BreadcrumbLinkProps) => {
       </CurrentPageText>
     );
   }
-  return <Link {...props} />;
+  // The trail is navigation, so the prose underline stays off by default.
+  return <Link variant="standalone" {...props} />;
 };
