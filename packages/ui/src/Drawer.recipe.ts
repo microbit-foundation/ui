@@ -10,6 +10,13 @@ import { defineSlotRecipe } from "@pandacss/dev";
  * Drawer, which maps the slots onto react-aria-components' ModalOverlay /
  * Modal / Dialog.
  *
+ * The panel spans the full viewport height, so like the full-size dialog it
+ * pads by the safe-area insets and paints the status-bar strip with the
+ * brand `statusBarBg` gradient. The inline inset is applied per placement,
+ * since only the screen edge the drawer touches needs it, and uses the
+ * nav-side safe-area tokens (README: CSS-variable contract) so content can
+ * flow under a camera cutout.
+ *
  * The enter transition is a decelerating tween; the exit a 0.15s ease-in-out
  * tween.
  *
@@ -41,7 +48,12 @@ export const drawer = defineSlotRecipe({
       maxWidth: "xs",
       maxH: "100dvh",
       color: "inherit",
-      bg: "white",
+      // brand colour in the status-bar area, white below (matches the
+      // full-size dialog)
+      background:
+        "linear-gradient(to bottom, token(colors.statusBarBg) token(spacing.safeAreaTop), white token(spacing.safeAreaTop))",
+      paddingTop: "safeAreaTop",
+      paddingBottom: "safeAreaBottom",
       boxShadow: "lg",
       display: "flex",
       flexDirection: "column",
@@ -78,15 +90,18 @@ export const drawer = defineSlotRecipe({
   variants: {
     // Reading-order sides, so a drawer keeps its relationship to the content
     // in an RTL locale rather than its screen position. The slide-out
-    // transforms are physical, so each needs mirroring under `dir=rtl` to
-    // travel towards its own edge.
+    // transforms and the safe-area inline padding are physical, so each
+    // needs mirroring under `dir=rtl` to track its own screen edge.
     placement: {
       start: {
         content: {
           insetStart: 0,
+          paddingLeft: "safeAreaNavLeft",
           "&[data-entering]": { transform: "translateX(-100%)" },
           "&[data-exiting]": { transform: "translateX(-100%)" },
           _rtl: {
+            paddingLeft: "0px",
+            paddingRight: "safeAreaNavRight",
             "&[data-entering]": { transform: "translateX(100%)" },
             "&[data-exiting]": { transform: "translateX(100%)" },
           },
@@ -95,9 +110,12 @@ export const drawer = defineSlotRecipe({
       end: {
         content: {
           insetEnd: 0,
+          paddingRight: "safeAreaNavRight",
           "&[data-entering]": { transform: "translateX(100%)" },
           "&[data-exiting]": { transform: "translateX(100%)" },
           _rtl: {
+            paddingRight: "0px",
+            paddingLeft: "safeAreaNavLeft",
             "&[data-entering]": { transform: "translateX(-100%)" },
             "&[data-exiting]": { transform: "translateX(-100%)" },
           },
