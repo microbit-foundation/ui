@@ -63,6 +63,10 @@ export * from "./Tooltip";
 export * from "./TooltipButton";
 export * from "./Toast";
 export * from "./VisuallyHidden";
+export type {
+  SafeAreaNavInsets,
+  SafeAreaNavSource,
+} from "./hooks/useSafeAreaNav";
 export { useBreakpointValue } from "./hooks/useBreakpointValue";
 export { useClipboard } from "./hooks/useClipboard";
 export { useDisclosure } from "./hooks/useDisclosure";

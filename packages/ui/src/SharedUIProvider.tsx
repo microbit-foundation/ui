@@ -13,6 +13,7 @@ import {
 import { isRTL } from "react-aria";
 import { I18nProvider } from "react-aria-components";
 import { IntlContext } from "react-intl";
+import { SafeAreaNavSource, useSafeAreaNav } from "./hooks/useSafeAreaNav";
 import { racLocale } from "./rac-locale";
 
 /**
@@ -56,13 +57,22 @@ export interface SharedUIProviderProps {
    * the README's react-intl step).
    */
   setDocumentLang?: boolean;
+  /**
+   * The source for the `--safe-area-nav-*` variables (see the README's
+   * CSS-variable contract): a native shell with real inset metadata (e.g.
+   * Android's WindowInsets API via a Capacitor plugin). Pass it only in the
+   * app shell that provides it; without a source the variables stay unset
+   * and consumers fall back to the raw `env()` insets. Keep its identity
+   * stable.
+   */
+  safeAreaNavSource?: SafeAreaNavSource;
   children: ReactNode;
 }
 
 /**
  * SharedUIProvider — the app-side installation point for shared-ui
- * integrations: the optional overlay-close registrar, and the locale for
- * react-aria's built-in strings.
+ * integrations: the optional overlay-close registrar, the locale for
+ * react-aria's built-in strings, and the safe-area nav variables.
  *
  * This package's own strings come from react-intl, so an IntlProvider must be
  * mounted above shared-ui components (see the package README). react-aria
@@ -75,8 +85,10 @@ export const SharedUIProvider = ({
   overlayCloseRegistrar,
   locale,
   setDocumentLang = true,
+  safeAreaNavSource,
   children,
 }: SharedUIProviderProps) => {
+  useSafeAreaNav(safeAreaNavSource);
   // Read the context rather than calling useIntl(), which throws when there is
   // no IntlProvider: react-aria falls back to the browser locale, as before.
   const intlLocale = useContext(IntlContext)?.locale;

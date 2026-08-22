@@ -171,7 +171,22 @@ export const basePreset = definePreset({
         brand: colors.blue,
         brand2: colors.gray,
       },
-      spacing,
+      spacing: {
+        ...spacing,
+        // The safe-area inset expressions, defined once (README: CSS-variable
+        // contract). The nav sides read the runtime `--safe-area-nav-*`
+        // variables with the raw env() insets as the fallback, so contexts
+        // without a SharedUIProvider safeAreaNavSource degrade to padding
+        // for every inset.
+        safeAreaTop: { value: "env(safe-area-inset-top)" },
+        safeAreaBottom: { value: "env(safe-area-inset-bottom)" },
+        safeAreaNavLeft: {
+          value: "var(--safe-area-nav-left, env(safe-area-inset-left))",
+        },
+        safeAreaNavRight: {
+          value: "var(--safe-area-nav-right, env(safe-area-inset-right))",
+        },
+      },
       sizes,
       fontSizes,
       fontWeights,
