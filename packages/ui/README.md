@@ -228,6 +228,38 @@ on-dark flip below. Keep the shape:
 focusBorder: { value: { base: "{colors.brand.700}", _onDark: "{colors.white}" } };
 ```
 
+### Runtime inset variables
+
+Recipes also read a few custom properties that are set at runtime rather
+than emitted by Panda. Their names are API in the same way:
+
+- `--safe-area-nav-left` / `--safe-area-nav-right` — the horizontal
+  safe-area insets content must stay clear of, as distinct from a camera
+  cutout content may flow under. Set by `SharedUIProvider` from an
+  app-supplied `safeAreaNavSource`: a native shell with real inset
+  metadata (e.g. Android's WindowInsets API via a Capacitor plugin, as in
+  ml-trainer), which can tell the navigation bar from a display cutout.
+  Consumers read them with the raw `env(safe-area-inset-*)` value as the
+  fallback, so contexts without a source — the web included — degrade to
+  padding for every inset: conservative, never occluded. Exactly one
+  source owns the variables, and the provider is always the writer.
+
+  Don't spell those `var(…, env(…))` expressions out: the spacing tokens
+  `safeAreaTop`, `safeAreaBottom`, `safeAreaNavLeft` and `safeAreaNavRight`
+  define them once, fallbacks included — `paddingLeft: "safeAreaNavLeft"`,
+  or `token(spacing.safeAreaNavLeft)` inside `calc()`/`max()` expressions.
+  The raw variable names remain API for styling outside Panda.
+
+- `--window-controls-left` — the width of a shell's window-controls region
+  overlapping the top-left of the page (today: iPadOS 26's corner
+  adaptation, injected by ml-trainer's native shell). Read with a `0px`
+  fallback.
+
+All of these are deliberately physical: they describe screen positions, so
+they must not flip with the reading direction. Rules that consume them per
+reading-order side mirror them explicitly under `dir=rtl` (see the drawer
+recipe's placement variants).
+
 ## Dark surfaces
 
 Focus indicators are surface-aware through one tag. The default focus ring
