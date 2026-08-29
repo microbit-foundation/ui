@@ -36,7 +36,7 @@ export const ProgressBar = ({
       {
         width: "100%",
         height: 3,
-        bg: "gray.100",
+        bg: "surface.inset",
         overflow: "hidden",
         borderRadius: "sm",
       },
@@ -48,7 +48,7 @@ export const ProgressBar = ({
         className={css(
           {
             height: "100%",
-            bg: "brand.500",
+            bg: "fill.accent",
           },
           barCss,
         )}

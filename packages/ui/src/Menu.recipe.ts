@@ -31,7 +31,7 @@ export const menu = defineSlotRecipe({
   ],
   base: {
     content: {
-      bg: "white",
+      bg: "surface.raised",
       color: "inherit",
       minWidth: "3xs",
       py: "2",
@@ -42,7 +42,7 @@ export const menu = defineSlotRecipe({
       zIndex: "popover",
       borderRadius: "md",
       borderWidth: "1px",
-      borderColor: "gray.200",
+      borderColor: "border.default",
       boxShadow: "sm",
       // Fade/scale enter/exit. RAC toggles data-entering/data-exiting on the
       // Popover and waits for the transition before unmount.
@@ -69,9 +69,9 @@ export const menu = defineSlotRecipe({
       // data-focused is RAC's active item, either modality. The highlight
       // is focus indication: no transition (it snaps with the ring, which
       // keyboard nav adds; inset, the rows being full-bleed).
-      "&[data-focused]": { bg: "gray.100" },
+      "&[data-focused]": { bg: "surface.highlight" },
       "&[data-focus-visible]": { focusRing: "outlineInset" },
-      "&[data-pressed]": { bg: "gray.200" },
+      "&[data-pressed]": { bg: "surface.active" },
       "&[data-disabled]": { opacity: 0.4, cursor: "not-allowed" },
     },
     label: {
@@ -93,7 +93,7 @@ export const menu = defineSlotRecipe({
     divider: {
       border: 0,
       borderBottom: "1px solid",
-      borderColor: "gray.200",
+      borderColor: "border.default",
       my: "2",
       opacity: 0.6,
     },

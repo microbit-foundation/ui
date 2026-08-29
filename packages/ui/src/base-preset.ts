@@ -109,7 +109,7 @@ const red = {
  * (pill `radii.button`, the `focusRing` utility/token pair, Helvetica
  * fonts, the
  * `toolbar` button variant in Button.recipe.ts, the
- * `languageText`/`toast*Bg`/`statusBarBg` semantic tokens), the shared-ui
+ * `fg`/`surface`/`fill`/`border` role tokens), the shared-ui
  * component recipes, the react-aria condition widening, the `globalCss`
  * defaults, and the `staticCss` that keeps runtime-prop recipe
  * variants generated. Used alone it renders in the OSS default look.
@@ -165,7 +165,7 @@ export const basePreset = definePreset({
         // OSS default brand ramps (see the brand contract above). `brand`
         // aliases the blue ramp; `brand2` is a frozen legacy alias of the
         // slate gray in base-tokens, deliberately decoupled from the neutral
-        // `gray` above so ml-trainer's OSS look and `statusBarBg`'s default
+        // `gray` above so ml-trainer's OSS look and `surface.statusBar`'s default
         // don't move.
         // Removing the slot is a follow-up needing an ml-trainer lockstep.
         brand: colors.blue,
@@ -207,10 +207,251 @@ export const basePreset = definePreset({
     },
     semanticTokens: {
       colors: {
-        // Checked states of form controls: Checkbox/Switch/Radio checked
-        // backgrounds. Semantic so a brand can diverge them from its ramp.
-        controlCheckedBg: { value: "{colors.brand.500}" },
-        controlCheckedHoverBg: { value: "{colors.brand.600}" },
+        // ── Role tokens ────────────────────────────────────────────────
+        // Recipes and apps consume these, not ramp stops. Grouped by the
+        // property they belong to, so a foreground role can't be used as
+        // a background: `fg` (text and icons), `surface` (the background
+        // of a container), `fill` (the background of a control sitting
+        // ON a surface), `border`. The surface/fill split is why the two
+        // grey state ladders below are both right — rows on a raised
+        // surface hover to 50, a grey button fill hovers to 300.
+        // Rationale and the systems this follows: ui-private
+        // docs/role-tokens.md.
+        //
+        // Several roles share a value today. That is the point: a dark
+        // mode is a second value per role here, and nothing else.
+
+        // Text and icons. No separate icon group — icons take
+        // currentColor everywhere in this library.
+        fg: {
+          default: { value: "{colors.gray.800}" },
+          // Full black, for the buttons that want more weight than body
+          // text on a light fill (`ghost`, `toolbar`). Flips on a tagged
+          // dark surface, which is what lets `ghost` work on dark chrome
+          // without a per-app variant. Condition object — an override must
+          // keep the `{ base, _onDark }` shape or silently lose the flip.
+          strong: {
+            value: { base: "{colors.black}", _onDark: "{colors.white}" },
+          },
+          muted: { value: "{colors.gray.600}" },
+          // Three roles at one value, three jobs: tertiary content, an
+          // empty field, an unavailable control. A dark mode and any
+          // future contrast work will want them apart.
+          subtle: { value: "{colors.gray.500}" },
+          placeholder: { value: "{colors.gray.500}" },
+          disabled: { value: "{colors.gray.500}" },
+          // On a solid `fill.accent`/status fill.
+          onEmphasis: { value: "{colors.white}" },
+          // On `surface.inverse`.
+          onInverse: { value: "{colors.whiteAlpha.900}" },
+          // Decorative brand accent: the `label`/`subtitle` heading
+          // variants. classroom and data-microbit-org carried
+          // byte-identical variants with a hardcoded #cd0365 — the brand
+          // deep pink, which is data's `pink.500`; both override this.
+          accent: { value: "{colors.brand.500}" },
+          link: { value: "{colors.brand.600}" },
+          danger: { value: "{colors.danger.500}" },
+        },
+
+        // Backgrounds of containers, and the state fills that go over
+        // them. The state fills are opaque greys, so they are only valid
+        // over `canvas`/`raised` — over anything coloured, use the
+        // translucent `fill.transparent*` pair.
+        surface: {
+          canvas: { value: "{colors.white}" },
+          raised: { value: "{colors.white}" },
+          // Filled panels punched into a surface: Code, Kbd, the
+          // ProgressBar track, the Skeleton base.
+          inset: { value: "{colors.gray.100}" },
+          inverse: { value: "{colors.gray.700}" },
+          overlay: { value: "{colors.blackAlpha.600}" },
+          // Two hover weights, not an inconsistency. Large row targets
+          // (ListBox, GridList) take the light one; small targets whose
+          // hover has to read at a glance — an option in an overlay, a
+          // NumberField stepper — take `highlight`, which is also the
+          // keyboard highlight in a Menu or Select. `selected` shares
+          // `highlight`'s value and differs in job: it persists.
+          hover: { value: "{colors.gray.50}" },
+          highlight: { value: "{colors.gray.100}" },
+          selected: { value: "{colors.gray.100}" },
+          active: { value: "{colors.gray.200}" },
+          // Toast statuses. Three roles at one value is deliberate: the
+          // family has decided not to differentiate info/success/warning,
+          // and that decision belongs where an app can undo it.
+          info: { value: "{colors.teal.800}" },
+          success: { value: "{colors.teal.800}" },
+          warning: { value: "{colors.teal.800}" },
+          // 500, the text-safe stop, rather than following the teal
+          // toasts' 800: white on it is 4.55:1 and an error toast should
+          // read as red.
+          danger: { value: "{colors.danger.500}" },
+          // The native app's status-bar area, shared by the ActionBar and
+          // the full-size dialog's safe-area gradient.
+          statusBar: { value: "{colors.brand2.500}" },
+        },
+
+        // Backgrounds of controls sitting on a surface.
+        fill: {
+          // Checked Checkbox/Switch/Radio, the Slider range, the
+          // ProgressBar bar. Brand-coloured in every app including the
+          // black-on-white ones — this is not the button idiom.
+          accent: { value: "{colors.brand.500}" },
+          accentHover: { value: "{colors.brand.600}" },
+          // The grey filled button. Not `accent` in another palette: a
+          // light fill under dark text is a different button, and 350
+          // exists in no other ramp.
+          neutral: { value: "{colors.gray.100}" },
+          neutralHover: { value: "{colors.gray.300}" },
+          neutralActive: { value: "{colors.gray.350}" },
+          // Washes for controls with no fill of their own (`ghost`).
+          // Translucent because they must work over an unknown
+          // background; the only place this library uses translucency
+          // for state.
+          // Alphas are not mirrored: a white wash reads weaker than a
+          // black one at equal alpha, so the on-dark pair is two ramp
+          // steps up (0.08/0.16 against 0.04/0.06). 0.08 is also
+          // Material's hover figure.
+          transparentHover: {
+            value: {
+              base: "{colors.blackAlpha.50}",
+              _onDark: "{colors.whiteAlpha.200}",
+            },
+          },
+          transparentActive: {
+            value: {
+              base: "{colors.blackAlpha.100}",
+              _onDark: "{colors.whiteAlpha.300}",
+            },
+          },
+          // The resting background of a control that contains something:
+          // the Checkbox/Radio box, an Input, a Select trigger. White like
+          // `surface.raised` today and not the same thing — one is a
+          // container, the other is a control on it.
+          control: { value: "{colors.white}" },
+          disabled: { value: "{colors.gray.100}" },
+          // A disabled control that is also checked, which needs to stay
+          // distinguishable from a disabled unchecked one.
+          disabledEmphasis: { value: "{colors.gray.200}" },
+          track: { value: "{colors.gray.200}" },
+          trackEmphasis: { value: "{colors.gray.300}" },
+          knob: { value: "{colors.white}" },
+          // Darker than `fill.disabled`: a knob has to stay visible
+          // against the track it sits on.
+          knobDisabled: { value: "{colors.gray.300}" },
+          // gray.350, the ramp's documented decorative/state fill stop
+          // (~2.1:1): the Avatar disc, the Skeleton pulse. Never text or
+          // boundaries.
+          decorative: { value: "{colors.gray.350}" },
+        },
+
+        border: {
+          // Surface edges: Card, popover, Menu separators, Divider, Kbd.
+          default: { value: "{colors.gray.200}" },
+          // Fields rest lighter than the 3:1 control stop — they are
+          // identified by their label (a11y-positions.md №1).
+          control: { value: "{colors.gray.300}" },
+          controlHover: { value: "{colors.gray.500}" },
+          // The 3:1 floor, for boundaries that ARE the control's
+          // identifier: the Checkbox/Radio box.
+          controlEmphasis: { value: "{colors.gray.400}" },
+          // A disabled control's border matches its fill, so the box reads
+          // as one flat shape rather than an outlined empty one.
+          disabled: { value: "{colors.gray.100}" },
+          disabledEmphasis: { value: "{colors.gray.200}" },
+          danger: { value: "{colors.danger.500}" },
+          // A ring separating a control from a busy background: the
+          // Avatar.
+          onEmphasis: { value: "{colors.white}" },
+        },
+
+        // ── Component tokens ───────────────────────────────────────────
+        // Not roles: groups whose *shape*, not just values, is an app
+        // choice. Primer and Carbon both keep button tokens separate from
+        // their role layer for the same reason.
+
+        // The `primary`/`secondary` button variants. Two brand idioms
+        // exist in the family: brand-coloured buttons (ml-trainer,
+        // python-editor — the defaults below) and a black-on-white system
+        // (classroom, data-microbit-org: black solid, black outline, no
+        // border colour change on hover but a blackAlpha wash instead).
+        // The two differ in structure, not just hue — one darkens the
+        // border and keeps the background clear, the other holds the
+        // border and washes the background — so no palette expresses
+        // both, and these stay tokens rather than a `tone`.
+        // `primary`'s text colour is `fg.onEmphasis`: every app in the
+        // family puts white on a dark solid. `ghost` needs no tokens
+        // (black + blackAlpha in all four apps).
+        button: {
+          primary: {
+            bg: { value: "{colors.brand.500}" },
+            bgHover: { value: "{colors.brand.600}" },
+            bgActive: { value: "{colors.brand.700}" },
+          },
+          secondary: {
+            fg: { value: "{colors.brand.700}" },
+            border: { value: "{colors.brand.500}" },
+            borderHover: { value: "{colors.brand.600}" },
+            bgHover: { value: "transparent" },
+            borderActive: { value: "{colors.brand.700}" },
+            bgActive: { value: "{colors.brand.50}" },
+          },
+        },
+
+        // The `toolbar` button: a white pill that lives ON dark chrome, so
+        // it must NOT follow the dark-surface tag — its own fill is light
+        // whatever it sits on, and a flipping `fg` role would render it
+        // white on white. Component tokens rather than `fill.*`/`fg.*` for
+        // exactly that reason: anything that paints against the surface
+        // has to opt out of the flips.
+        buttonToolbar: {
+          fg: { value: "{colors.black}" },
+          bg: { value: "{colors.white}" },
+          bgHover: { value: "{colors.whiteAlpha.900}" },
+          bgActive: { value: "{colors.whiteAlpha.800}" },
+        },
+
+        // The language-dialog cards' name text (@microbit/ui-patterns'
+        // LanguageDialog). The brand colour, so the name reads as the
+        // choice being offered rather than as body copy.
+        //
+        // A component token rather than a role, because consumers really
+        // do diverge and along their own idiom, not this component's:
+        // classroom, python-editor and ml-trainer take the default;
+        // CreateAI flattens to brand.600; data-microbit-org uses black,
+        // which is its emphasis colour throughout (black buttons, black
+        // outlines) while its actual links stay blue. So this must not
+        // fold into `fg.link` — data would lose that distinction.
+        //
+        // `fgHover` is the one part with no live justification: it dates
+        // from when this was a text link with no background, and the card
+        // now hovers its own background (`surface.highlight`), which is
+        // why both overriding presets set it equal to `fg`. Kept because
+        // dropping it is a visible change in the three apps still on the
+        // default. See ui-private docs/role-tokens.md.
+        languageDialog: {
+          fg: { value: "{colors.brand.500}" },
+          fgHover: { value: "{colors.brand.600}" },
+        },
+
+        // The close buttons on the Modal and the Toast. A step stronger
+        // than `fill.transparent*` — a close button has to read on a
+        // white dialog and on a dark toast alike, which is also why this
+        // is the pair that wants the on-dark flip (docs/role-tokens.md).
+        closeButton: {
+          bgHover: {
+            value: {
+              base: "{colors.blackAlpha.100}",
+              _onDark: "{colors.whiteAlpha.300}",
+            },
+          },
+          bgActive: {
+            value: {
+              base: "{colors.blackAlpha.200}",
+              _onDark: "{colors.whiteAlpha.400}",
+            },
+          },
+        },
+
         // Focused form-control border, any modality: the dark brand stop
         // (all-ink read flat next to the ink ring). Flips white under the
         // dark-surface tag, like `focusRing`.
@@ -244,52 +485,6 @@ export const basePreset = definePreset({
           800: { value: "{colors.red.800}" },
           900: { value: "{colors.red.900}" },
         },
-        // The language-dialog cards' text colour (@microbit/ui-patterns'
-        // LanguageDialog) follows the primary interactive brand: every
-        // consumer resolves it to its `brand` ramp (CreateAI privately to
-        // brand.600 with no hover change, python-editor to brand.500/600 —
-        // the default; data-microbit-org to black). Semantic tokens so the
-        // pattern stays shared and a brand preset overrides only values.
-        languageText: { value: "{colors.brand.500}" },
-        languageTextHover: { value: "{colors.brand.600}" },
-        // The `label`/`subtitle` heading variants' colour (page-title chrome).
-        // classroom and data-microbit-org carried byte-identical variants with
-        // a hardcoded #cd0365 — the brand deep pink, which is data's
-        // `pink.500`; both override this to it. The OSS default follows the
-        // languageText precedent: the primary interactive brand.
-        headingAccent: { value: "{colors.brand.500}" },
-        // The `primary`/`secondary` button variants' colours. Two brand
-        // idioms exist in the family: brand-coloured buttons (ml-trainer,
-        // python-editor — the defaults below) and a black-on-white system
-        // (classroom, data-microbit-org: black solid, black outline, no
-        // border colour change on hover but a blackAlpha wash instead).
-        // Tokens rather than per-app recipe overrides so both idioms share
-        // one recipe — a `variant` fork would be duplicated by every app on
-        // the far side of it. `primary`'s text colour stays a literal
-        // `white`: every app in the family puts white on a dark solid.
-        // `ghost` needs no tokens (black + blackAlpha in all four apps).
-        button: {
-          primaryBg: { value: "{colors.brand.500}" },
-          primaryHoverBg: { value: "{colors.brand.600}" },
-          primaryActiveBg: { value: "{colors.brand.700}" },
-          secondaryText: { value: "{colors.brand.700}" },
-          secondaryBorder: { value: "{colors.brand.500}" },
-          secondaryHoverBorder: { value: "{colors.brand.600}" },
-          secondaryHoverBg: { value: "transparent" },
-          secondaryActiveBorder: { value: "{colors.brand.700}" },
-          secondaryActiveBg: { value: "{colors.brand.50}" },
-        },
-        // Toast status colours (teal for every status except error), shared
-        // across the app family.
-        toastInfoBg: { value: "{colors.teal.800}" },
-        toastSuccessBg: { value: "{colors.teal.800}" },
-        toastWarningBg: { value: "{colors.teal.800}" },
-        // 500, the text-safe stop, rather than following the teal toasts'
-        // 800: white on it is 4.55:1 and an error toast should read as red.
-        toastErrorBg: { value: "{colors.danger.500}" },
-        // The native app's status-bar area colour, shared by the ActionBar
-        // and the full-size dialog's safe-area gradient.
-        statusBarBg: { value: "{colors.brand2.500}" },
       },
     },
     recipes: {
@@ -339,14 +534,14 @@ export const basePreset = definePreset({
       minHeight: "100%",
       fontFeatureSettings: '"kern"',
       fontFamily: "body",
-      color: "gray.800",
-      bg: "white",
+      color: "fg.default",
+      bg: "surface.canvas",
       transitionProperty: "background-color",
       transitionDuration: "normal",
       lineHeight: "base",
     },
     "*::placeholder": {
-      color: "gray.500",
+      color: "fg.placeholder",
     },
     // The `* { border-color; word-wrap }` defaults live in ../reset.css,
     // imported into the `reset` layer by consumers' layers.css — NOT here:

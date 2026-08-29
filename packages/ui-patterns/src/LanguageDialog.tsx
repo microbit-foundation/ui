@@ -182,7 +182,7 @@ export const LanguageDialog = ({
           {translationLinkHref && (
             <ExternalLink
               href={translationLinkHref}
-              css={{ fontSize: "md", color: "brand.500" }}
+              css={{ fontSize: "md", color: "fg.link" }}
             >
               <FormattedMessage
                 {...uiPatternsMessage("ui-patterns.help-translate")}
@@ -285,8 +285,8 @@ const LanguageCard = ({
           height: "100%",
           borderRadius: "xl",
           borderWidth: "2px",
-          borderColor: "gray.200",
-          _hover: { bg: "gray.100" },
+          borderColor: "border.default",
+          _hover: { bg: "surface.highlight" },
         }}
       />
       <VStack
@@ -297,10 +297,10 @@ const LanguageCard = ({
           pointerEvents: "none",
           py: 4,
           px: 5,
-          color: "languageText",
+          color: "languageDialog.fg",
           // The visible content is a sibling of the button, not a child, so
           // the hover recolour needs an explicit sibling selector.
-          "button[data-hovered] + &": { color: "languageTextHover" },
+          "button[data-hovered] + &": { color: "languageDialog.fgHover" },
         }}
       >
         <Text
@@ -320,7 +320,7 @@ const LanguageCard = ({
             lang="en"
             fontWeight="normal"
             fontSize="sm"
-            color="gray.700"
+            color="fg.muted"
           >
             {enName}
             {/* Visual pointer to the footnote; the accessible link is the
@@ -331,7 +331,7 @@ const LanguageCard = ({
             <Box
               css={{
                 pointerEvents: "auto",
-                color: "gray.500",
+                color: "fg.subtle",
                 display: "inline-flex",
               }}
             >

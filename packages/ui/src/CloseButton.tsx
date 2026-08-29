@@ -55,8 +55,8 @@ export const CloseButton = forwardRef<HTMLButtonElement, CloseButtonProps>(
               borderRadius: "md",
               transitionProperty: "background-color, box-shadow",
               transitionDuration: "normal",
-              _hover: { bg: "blackAlpha.100" },
-              _active: { bg: "blackAlpha.200" },
+              _hover: { bg: "closeButton.bgHover" },
+              _active: { bg: "closeButton.bgActive" },
               _focusVisible: { focusRing: "outline" },
             },
             size === "sm"

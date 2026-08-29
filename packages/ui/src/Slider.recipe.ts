@@ -50,10 +50,10 @@ export const slider = defineSlotRecipe({
       height: "1",
       overflow: "hidden",
       borderRadius: "sm",
-      bg: "gray.200",
+      bg: "fill.track",
       cursor: "pointer",
       "[data-disabled] &": {
-        bg: "gray.300",
+        bg: "fill.trackEmphasis",
         cursor: "default",
       },
     },
@@ -65,7 +65,7 @@ export const slider = defineSlotRecipe({
       insetStart: 0,
       height: "100%",
       // Fill colour is set per call site via `filledTrackCss`.
-      bg: "brand.500",
+      bg: "fill.accent",
     },
     thumb: {
       position: "absolute",
@@ -78,7 +78,7 @@ export const slider = defineSlotRecipe({
       outline: "none",
       zIndex: 1,
       borderRadius: "full",
-      bg: "white",
+      bg: "fill.knob",
       boxShadow: "base",
       transitionProperty: "transform",
       transitionDuration: "normal",
@@ -90,7 +90,7 @@ export const slider = defineSlotRecipe({
         focusRing: "outline",
       },
       "&[data-disabled]": {
-        bg: "gray.300",
+        bg: "fill.knobDisabled",
       },
     },
     mark: {

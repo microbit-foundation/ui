@@ -173,7 +173,7 @@ const isTriggerFocusStyled = (el: Element) =>
 
 /** Fails if the invalid rule goes back to a `data-invalid` RAC never sets. */
 const isTriggerInvalidStyled = (el: Element) =>
-  el.matches(ruleFor("danger.500").replaceAll("&", "*"));
+  el.matches(ruleFor("border.danger").replaceAll("&", "*"));
 
 it("ComboBox keeps its focus styling while an option is active", () => {
   render(
@@ -286,8 +286,8 @@ it("a valid control is not painted red", () => {
 // needing an order.
 it("orders the trigger's state rules hover before invalid", () => {
   const keys = Object.keys(triggerRules());
-  const hover = keys.indexOf(ruleFor("gray.500"));
-  const invalid = keys.indexOf(ruleFor("danger.500"));
+  const hover = keys.indexOf(ruleFor("border.controlHover"));
+  const invalid = keys.indexOf(ruleFor("border.danger"));
   expect(hover).toBeLessThan(invalid);
 });
 

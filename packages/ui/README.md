@@ -205,7 +205,7 @@ Panda emits every token as a CSS custom property with its default naming —
 `{category}-{path}` with dots become dashes, camelCase becomes kebab-case:
 
 - `colors.brand.500` → `var(--colors-brand-500)`
-- `colors.statusBarBg` → `var(--colors-status-bar-bg)`
+- `colors.surface.statusBar` → `var(--colors-surface-status-bar)`
 - `fonts.display` → `var(--fonts-display)`
 
 These names are **API** for styling that lives outside React/Panda — e.g.
@@ -215,18 +215,108 @@ keep them stable:
 - Never set `hashing` or `prefix` in `panda.config.ts`.
 - Brand/app presets may change token _values_, never token _names_.
 
-Semantic tokens (`languageText`, `statusBarBg`, `danger.*`, `toast*Bg`,
-`button.*`, `controlCheckedBg`, `focusBorder`, …) are the extension points
-brand presets override; they resolve through var indirection, so overrides
-apply wherever the token is consumed.
+### What a preset overrides
 
-`focusRing` and `focusBorder` need more care: their values are condition
-objects and a merge replaces a value wholesale, so the flat form drops the
-on-dark flip below. Keep the shape:
+Colour comes in two layers, overridden for different reasons.
+
+**Ramps** — `gray`, `brand`, `brand2`, `red` and the rest of the base
+scales. Rebrand by changing their _values_. `gray` additionally carries a
+per-stop contrast contract; re-tint it only luminance-matched, and read the
+comment on the ramp in `base-preset.ts` before you do.
+
+**Roles** — what the recipes actually reference, so a value set here
+applies wherever the role is consumed. Four groups, namespaced by the CSS
+property they belong to:
+
+| group       | what it colours                                              |
+| ----------- | ------------------------------------------------------------ |
+| `fg.*`      | text and icons                                               |
+| `surface.*` | container backgrounds, and the state fills that go over them |
+| `fill.*`    | backgrounds of controls _sitting on_ a surface               |
+| `border.*`  | borders and control outlines                                 |
+
+A foreground role is not usable as a background, and vice versa — the
+surface/fill split is the one that does the real work, so a row's hover
+(`surface.*`) and a grey button's hover (`fill.*`) climb different ladders
+on purpose.
+
+Plus four component groups, for idioms that are a component fact rather
+than a role: `button.*` (the family ships two button idioms —
+brand-coloured and black-on-white — and this is the seam between them),
+`buttonToolbar.*`, `closeButton.*`, `languageDialog.*`. `focusRing`,
+`focusBorder` and the whole-ramp alias `danger` keep their own names.
+
+**`base-preset.ts` is authoritative for the inventory**, and carries the
+reasoning for each role in comments.
+
+### Panda does not check these names
+
+**An unknown `semanticTokens` key is accepted silently.** It typechecks, it
+generates, and the override never applies — the token keeps the base
+preset's value, with no error at build or at runtime.
+
+So assert your preset's keys in a test:
 
 ```ts
-focusBorder: { value: { base: "{colors.brand.700}", _onDark: "{colors.white}" } };
+import { unknownSemanticTokens } from "@microbit/ui/preset-lint";
+
+it("overrides only semantic tokens @microbit/ui defines", () => {
+  // `introduces` declares the tokens this preset adds rather than overrides.
+  expect(unknownSemanticTokens(appPreset, { introduces })).toEqual([]);
+});
 ```
+
+Check a paired private brand preset from the app too, when it is linked:
+the brand repo stays free of a dependency on this package, and the check
+runs where the presets actually merge.
+
+That covers names. For values, a green typecheck verifies nothing: resolve
+the generated CSS and read them back.
+
+```sh
+rm -rf styled-system && npx panda cssgen --outfile after.css
+```
+
+The same applies to `colorPalette`: Panda derives its key space from the
+union of every stop name across all colour tokens, so a miss emits a var
+that resolves to nothing and the declaration is dropped, again silently.
+See `docs/hints.md`.
+
+### Tokens whose value is a condition object
+
+Seven tokens hold `{ base, _onDark }` rather than a flat value. A merge
+replaces the value _wholesale_, so writing the flat form silently drops the
+on-dark flip:
+
+`fg.strong`, `fill.transparentHover`, `fill.transparentActive`,
+`closeButton.bgHover`, `closeButton.bgActive`, `focusBorder`, `focusRing`.
+
+Keep the shape:
+
+```ts
+focusBorder: { value: { base: "{colors.brand.600}", _onDark: "{colors.white}" } };
+```
+
+This is the same silent failure as an unknown key, and it has the same
+guard — assert it alongside `unknownSemanticTokens`:
+
+```ts
+import { droppedConditionTokens } from "@microbit/ui/preset-lint";
+
+it("keeps every condition the base preset's tokens carry", () => {
+  expect(droppedConditionTokens(appPreset)).toEqual([]);
+});
+```
+
+A preset that genuinely wants no flip states it, with both keys equal:
+`{ base: X, _onDark: X }`.
+
+Those seven are the whole of the dark-surface mechanism — one
+`[data-surface="dark"]` block redefining seven custom properties, and every
+component inside it recolours with no per-component rules. The corollary is
+that a component painting its own contrasting fill must _not_ consume them:
+it sits inside the tag while being light itself. That is what
+`buttonToolbar.*` exists for — static values that do not flip.
 
 ## Dark surfaces
 
@@ -247,7 +337,10 @@ on whatever is behind it. (The Toast does this — the card is dark and
 focusable, so the tag sits on its close button.) Portalled overlays (a
 modal opened from a dark toolbar) escape the tag with the DOM, which is
 correct. Under the hood it is `data-surface="dark"`, which the preset's
-`onDark` condition scopes the `focusRing`/`focusBorder` token flips to.
+`onDark` condition scopes the seven token flips to (listed under
+[the CSS-variable contract](#tokens-whose-value-is-a-condition-object)).
+The tag does more than focus: inside it, `ghost` buttons and both close
+buttons recolour too.
 
 Two rules:
 
@@ -273,8 +366,8 @@ extraction can't see), import the runtime lookup:
 ```ts
 import { token } from "@microbit/ui"; // re-exports styled-system/tokens
 
-token("colors.brand.500"); // "#007dbc" — raw value, safe for colour math
-token("colors.statusBarBg"); // "var(--colors-brand2-500)" — CSS contexts only
+token("colors.brand.500"); // "#3182ce" — raw value, safe for colour math
+token("colors.surface.statusBar"); // "var(--colors-brand2-500)" — CSS contexts only
 ```
 
 Base tokens resolve to raw values; **semantic tokens resolve to `var()`

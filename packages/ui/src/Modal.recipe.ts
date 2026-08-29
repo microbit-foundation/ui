@@ -27,7 +27,7 @@ const dialogBox = {
   my: "16",
   mx: "2",
   borderRadius: "md",
-  background: "white",
+  background: "surface.raised",
   minHeight: "auto",
   padding: "0",
 };
@@ -65,7 +65,7 @@ export const dialog = defineSlotRecipe({
       // the real viewport edge.
       w: "100vw",
       h: "100%",
-      bg: "blackAlpha.600",
+      bg: "surface.overlay",
       zIndex: "modal",
       display: "flex",
       justifyContent: "center",
@@ -153,9 +153,10 @@ export const dialog = defineSlotRecipe({
           paddingBottom: "env(safe-area-inset-bottom)",
           paddingLeft: "env(safe-area-inset-left)",
           paddingRight: "env(safe-area-inset-right)",
-          // brand colour in the status-bar area, white below (matches ActionBar)
+          // The status-bar surface above the notch, the dialog's own surface
+          // below, so the gradient can't diverge from the panel it caps.
           background:
-            "linear-gradient(to bottom, token(colors.statusBarBg) env(safe-area-inset-top), white env(safe-area-inset-top))",
+            "linear-gradient(to bottom, token(colors.surface.statusBar) env(safe-area-inset-top), token(colors.surface.raised) env(safe-area-inset-top))",
         },
         header: {
           pl: "calc(var(--window-controls-left, 0px) + token(spacing.6))",

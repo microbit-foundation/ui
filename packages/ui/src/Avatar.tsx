@@ -211,8 +211,8 @@ export const Avatar = ({
               // selector so a call site's `css` colour still wins (see the
               // recipe).
               "--avatar-color": isLight(bg)
-                ? token("colors.gray.800")
-                : token("colors.white"),
+                ? token("colors.fg.default")
+                : token("colors.fg.onEmphasis"),
             } as CSSProperties)
           : style
       }

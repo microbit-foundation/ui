@@ -52,7 +52,7 @@ export const field = defineSlotRecipe({
     },
     requiredIndicator: {
       marginStart: "1",
-      color: "danger.500",
+      color: "fg.danger",
     },
     helperText: {
       // RAC's Text renders a span, and RadioGroup/CheckboxGroup roots are not
@@ -62,7 +62,7 @@ export const field = defineSlotRecipe({
       mt: "2",
       fontSize: "sm",
       lineHeight: "normal",
-      color: "gray.600",
+      color: "fg.muted",
     },
     errorMessage: {
       display: "flex",
@@ -70,7 +70,7 @@ export const field = defineSlotRecipe({
       mt: "2",
       fontSize: "sm",
       lineHeight: "normal",
-      color: "danger.500",
+      color: "fg.danger",
     },
   },
   variants: {

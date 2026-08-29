@@ -44,7 +44,7 @@ export const heading = defineRecipe({
     // GT Walsheim in the private preset.
     variant: {
       marketing: { fontFamily: "display" },
-      // Page-title chrome in the accent colour (`headingAccent` — see
+      // Page-title chrome in the accent colour (`fg.accent` — see
       // base-preset.ts). Converged from classroom and data-microbit-org,
       // which carried these two byte-identically app-side.
       //
@@ -56,12 +56,12 @@ export const heading = defineRecipe({
       // width instead.
       label: {
         "&&": { fontSize: "4xl" },
-        color: "headingAccent",
+        color: "fg.accent",
       },
       subtitle: {
         "&&": { fontSize: "xl" },
         fontWeight: "normal",
-        color: "headingAccent",
+        color: "fg.accent",
       },
     },
   },
