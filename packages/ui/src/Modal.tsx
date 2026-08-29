@@ -9,6 +9,8 @@ import {
   ReactNode,
   RefObject,
   useContext,
+  useEffect,
+  useRef,
 } from "react";
 import {
   Button as RACButton,
@@ -27,6 +29,92 @@ import { CloseIcon } from "./CloseIcon";
 import { dataAttrs } from "./data-attrs";
 import { uiMessage } from "./messages";
 import { UnmountCallback } from "./UnmountCallback";
+
+// react-aria's tabbable selector, which it doesn't export. It special-cases
+// radio groups (only the checked radio is tabbable) where this doesn't — an
+// acceptable divergence for the shim below, whose worst case on a miss is
+// standing aside and leaving the keystroke to FocusScope, as without it.
+const TABBABLE_SELECTOR = [
+  "input:not([disabled]):not([type=hidden])",
+  "select:not([disabled])",
+  "textarea:not([disabled])",
+  "button:not([disabled])",
+  "a[href]",
+  "area[href]",
+  "summary",
+  "iframe",
+  "object",
+  "embed",
+  "audio[controls]",
+  "video[controls]",
+  "[contenteditable]:not([contenteditable^='false'])",
+  "[tabindex]:not([disabled])",
+]
+  .map((s) => `${s}:not([hidden]):not([tabindex='-1'])`)
+  .join(",");
+
+const isTabbable = (element: Element) =>
+  !element.closest("[inert]") &&
+  (element.checkVisibility?.({ visibilityProperty: true }) ?? true);
+
+/**
+ * Tab handling for iframes in the dialog, which react-aria's focus
+ * containment gets wrong in Firefox: FocusScope re-implements Tab as a
+ * synchronous programmatic focus of the next tabbable element, and Firefox
+ * silently drops a synchronous focus() of a cross-origin iframe made during
+ * key event dispatch — the keystroke appears to do nothing. The same call
+ * deferred to the next frame works, so this capture-phase listener (which
+ * runs before FocusScope's bubble-phase one) claims the keystroke whenever
+ * the element Tab would move to is an iframe, and performs the move
+ * deferred. Every other Tab is left to FocusScope. Remove if react-aria
+ * defers iframe focus itself.
+ */
+const IframeTabShim = ({
+  containerRef,
+}: {
+  containerRef: RefObject<HTMLElement | null>;
+}) => {
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (
+        e.key !== "Tab" ||
+        e.altKey ||
+        e.ctrlKey ||
+        e.metaKey ||
+        e.isComposing
+      ) {
+        return;
+      }
+      const container = containerRef.current;
+      const active = container?.ownerDocument.activeElement;
+      if (!container || !active || !container.contains(active)) {
+        return;
+      }
+      const tabbables = Array.from(
+        container.querySelectorAll<HTMLElement>(TABBABLE_SELECTOR),
+      ).filter(isTabbable);
+      const index = tabbables.indexOf(active as HTMLElement);
+      if (index === -1) {
+        return;
+      }
+      const target =
+        tabbables[
+          (index + (e.shiftKey ? -1 : 1) + tabbables.length) % tabbables.length
+        ];
+      if (!(target instanceof HTMLIFrameElement)) {
+        return;
+      }
+      e.preventDefault();
+      // Keep FocusScope's own document-level handler from also acting.
+      e.stopImmediatePropagation();
+      requestAnimationFrame(() => target.focus());
+    };
+    const doc = containerRef.current?.ownerDocument ?? document;
+    doc.addEventListener("keydown", onKeyDown, true);
+    return () => doc.removeEventListener("keydown", onKeyDown, true);
+  }, [containerRef]);
+  return null;
+};
 
 type DialogSlots = ReturnType<typeof dialog>;
 
@@ -163,6 +251,7 @@ export const Modal = ({
   // prop over the context, and so do we for the close function.
   const triggerState = useContext(OverlayTriggerStateContext);
   const close = onClose ?? (() => triggerState?.close());
+  const contentRef = useRef<HTMLDivElement>(null);
   const dataProps = dataAttrs(rest);
   const slots = dialog({ size, centered: isCentered });
   const motionlessClass = motionless
@@ -205,6 +294,7 @@ export const Modal = ({
       <UnmountCallback callback={handleUnmount} />
       <RACModal
         {...dataProps}
+        ref={contentRef}
         style={contentStyle}
         className={cx(
           slots.content,
@@ -213,6 +303,7 @@ export const Modal = ({
         )}
       >
         <Dialog role={role} aria-label={ariaLabel} className={slots.inner}>
+          <IframeTabShim containerRef={contentRef} />
           <SlotContext.Provider value={{ slots, onClose: close }}>
             {children}
           </SlotContext.Provider>
