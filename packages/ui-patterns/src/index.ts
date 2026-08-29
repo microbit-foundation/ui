@@ -8,6 +8,7 @@
  * shared across the micro:bit app family.
  */
 export * from "./LanguageDialog";
+export * from "./YoutubeVideoEmbed";
 export * from "./get-default-language";
 export * from "./languages";
 export { uiPatternsMessage } from "./messages";
