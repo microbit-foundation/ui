@@ -34,5 +34,9 @@
   "ui-patterns.language-toast-title": {
     "defaultMessage": "Iaith heb ei chefnogi'n llawn",
     "description": "Language support toast notification title"
+  },
+  "ui-patterns.play-video": {
+    "defaultMessage": "Play video: {title}",
+    "description": "Accessible label for the play button shown over a video preview image; title is the video's title"
   }
 }
