@@ -100,3 +100,33 @@ it("a controlled Modal ignores an ambient trigger state", () => {
   fireEvent.click(screen.getByRole("button", { name: /close/i }));
   expect(onClose).toHaveBeenCalledTimes(1);
 });
+
+it("hands Tab onto an iframe itself, deferred, instead of FocusScope", async () => {
+  // FocusScope's synchronous focus of a cross-origin iframe is dropped by
+  // Firefox; the Modal's capture-phase shim claims exactly this keystroke
+  // and moves focus a frame later. Both directions land on the iframe.
+  render(
+    <IntlProvider locale="en">
+      <Modal isOpen onClose={() => undefined} aria-label="Video">
+        <ModalCloseButton />
+        <ModalBody>
+          <iframe title="the video" src="https://example.com/embed" />
+        </ModalBody>
+        <Button>Done</Button>
+      </Modal>
+    </IntlProvider>,
+  );
+  const iframe = screen.getByTitle("the video");
+  const close = screen.getByRole("button", { name: /close/i });
+  close.focus();
+  fireEvent.keyDown(close, { key: "Tab" });
+  // Deferred: not yet moved within this frame...
+  expect(document.activeElement).toBe(close);
+  // ...but on the iframe after the rAF.
+  await waitFor(() => expect(document.activeElement).toBe(iframe));
+
+  const done = screen.getByRole("button", { name: "Done" });
+  done.focus();
+  fireEvent.keyDown(done, { key: "Tab", shiftKey: true });
+  await waitFor(() => expect(document.activeElement).toBe(iframe));
+});
