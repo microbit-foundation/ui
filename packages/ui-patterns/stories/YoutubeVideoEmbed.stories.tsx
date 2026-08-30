@@ -70,6 +70,9 @@ const DialogHarness = (props: YoutubeVideoEmbedProps) => {
  * tab order working — an always-present iframe cannot be reached by Tab at
  * all in Firefox (react-aria's focus containment re-implements Tab with a
  * programmatic focus that Firefox drops for cross-origin iframes).
+ *
+ * On iOS/iPadOS there is no facade: the player renders upfront, since WebKit
+ * won't autoplay the swapped-in iframe and would demand a second tap.
  */
 export const InAWelcomeDialog: Story = {
   args,

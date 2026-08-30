@@ -8,10 +8,23 @@ import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { ReactNode } from "react";
 import { IntlProvider } from "react-intl";
-import { afterEach, expect, it } from "vitest";
+import { afterEach, expect, it, vi } from "vitest";
 import { YoutubeVideoEmbed } from "../src";
 
 afterEach(cleanup);
+afterEach(() => {
+  vi.restoreAllMocks();
+  // jsdom has no maxTouchPoints of its own, so mockIOS defines one.
+  Reflect.deleteProperty(window.navigator, "maxTouchPoints");
+});
+
+const mockIOS = () => {
+  vi.spyOn(window.navigator, "platform", "get").mockReturnValue("iPhone");
+  Object.defineProperty(window.navigator, "maxTouchPoints", {
+    value: 5,
+    configurable: true,
+  });
+};
 
 const Providers = ({ children }: { children: ReactNode }) => (
   <IntlProvider locale="en">
@@ -59,6 +72,19 @@ it("swaps in an autoplaying nocookie player on activation", async () => {
   const iframe = screen.getByTitle<HTMLIFrameElement>("welcome video");
   expect(iframe.src).toBe(
     "https://www.youtube-nocookie.com/embed/QD8kpuSC0Vc?rel=0&cc_load_policy=1&autoplay=1",
+  );
+  expect(screen.queryByRole("button")).toBeNull();
+});
+
+// On iOS the facade would cost a second tap — WebKit won't autoplay a
+// cross-origin iframe created after the tap — so the player renders
+// upfront, without autoplay, and the tap lands on YouTube's play button.
+it("renders the player upfront on iOS, without autoplay", () => {
+  mockIOS();
+  renderEmbed();
+  const iframe = screen.getByTitle<HTMLIFrameElement>("welcome video");
+  expect(iframe.src).toBe(
+    "https://www.youtube-nocookie.com/embed/QD8kpuSC0Vc?rel=0&cc_load_policy=1",
   );
   expect(screen.queryByRole("button")).toBeNull();
 });

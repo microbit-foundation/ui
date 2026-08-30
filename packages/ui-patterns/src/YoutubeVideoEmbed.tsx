@@ -26,16 +26,28 @@ export interface YoutubeVideoEmbedProps {
 }
 
 /**
+ * WebKit doesn't carry a tap's user activation into a cross-origin iframe
+ * created afterwards, and ignores autoplay=1 without one — so on iOS the
+ * facade would cost a second tap, on the loaded player's own play button.
+ * iPadOS reports the platform as macOS, hence the touch-points check.
+ */
+const isIOS = () =>
+  typeof navigator !== "undefined" &&
+  /iP(hone|ad|od)|Mac/.test(navigator.platform) &&
+  navigator.maxTouchPoints > 1;
+
+/**
  * A YouTube video as a click-to-play facade: the video's own preview image
  * (from YouTube's cookieless image CDN) behind a play button, swapped for the
  * privacy-enhanced youtube-nocookie player on activation.
  *
  * The player only exists after a deliberate click, so no YouTube script runs
  * on page load — and, inside a modal, keyboard users aren't tabbed into an
- * embedded document just to get past the video (which react-aria's focus
- * containment cannot do at all in Firefox: it re-implements Tab as a
- * programmatic focus of the next tabbable element, and Firefox drops a
- * synchronous cross-origin iframe focus made during key event dispatch).
+ * embedded document just to get past the video.
+ *
+ * On iOS the player renders upfront instead — WebKit won't autoplay the
+ * swapped-in iframe (see isIOS), so the facade would demand two taps there.
+ * If we revisit this we should change the facade UX to a consent interaction.
  */
 export const YoutubeVideoEmbed = ({
   youtubeId,
@@ -44,7 +56,8 @@ export const YoutubeVideoEmbed = ({
 }: YoutubeVideoEmbedProps) => {
   const intl = useIntl();
   const id = encodeURIComponent(youtubeId.trim());
-  const [playing, setPlaying] = useState(false);
+  const [activated, setActivated] = useState(false);
+  const showPlayer = activated || isIOS();
   // maxresdefault only exists for videos uploaded in ≥720p; fall back to
   // hqdefault, which YouTube generates for everything.
   const [thumbnail, setThumbnail] = useState<"maxresdefault" | "hqdefault">(
@@ -52,25 +65,28 @@ export const YoutubeVideoEmbed = ({
   );
   const iframeRef = useRef<HTMLIFrameElement>(null);
   useEffect(() => {
-    if (playing) {
+    if (activated) {
       // rAF, not a direct call: Firefox drops a synchronous focus() of a
       // cross-origin iframe made while a UI event is being dispatched.
       const raf = requestAnimationFrame(() => iframeRef.current?.focus());
       return () => cancelAnimationFrame(raf);
     }
-  }, [playing]);
+  }, [activated]);
   return (
     <AspectRatio ratio={16 / 9}>
-      {playing ? (
+      {showPlayer ? (
         <iframe
           ref={iframeRef}
           title={title}
           // youtube-nocookie avoids the YouTube cookie. rel=0 should limit
           // related videos to our channel. Once we have translated videos
           // we can try e.g. cc_lang_pref=fr but we'll need to check our
-          // codes match theirs. autoplay: the user just pressed play on
-          // the facade, so the real player shouldn't ask again.
-          src={`https://www.youtube-nocookie.com/embed/${id}?rel=0&cc_load_policy=1&autoplay=1`}
+          // codes match theirs. autoplay only after a facade activation:
+          // the user just pressed play, so the real player shouldn't ask
+          // again. The eager iOS player waits for its own play button.
+          src={`https://www.youtube-nocookie.com/embed/${id}?rel=0&cc_load_policy=1${
+            activated ? "&autoplay=1" : ""
+          }`}
           allow="autoplay; encrypted-media"
           frameBorder="0"
           allowFullScreen
@@ -82,7 +98,7 @@ export const YoutubeVideoEmbed = ({
             uiPatternsMessage("ui-patterns.play-video"),
             { title },
           )}
-          onClick={() => setPlaying(true)}
+          onClick={() => setActivated(true)}
           className={css({
             position: "relative",
             display: "block",
