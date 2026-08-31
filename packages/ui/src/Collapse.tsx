@@ -73,6 +73,8 @@ export const Collapse = ({
     if (isOpen) {
       // Opening: mount (collapsed) first, then flip on the next frame so
       // the browser has a computed collapsed state to transition from.
+      // The mount-then-flip sequencing above depends on the effect timing.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setPresent(true);
       const raf = requestAnimationFrame(() => {
         setAnimating(true);

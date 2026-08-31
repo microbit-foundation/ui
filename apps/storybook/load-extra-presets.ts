@@ -82,7 +82,7 @@ if (
       pathToFileURL(path.resolve(process.cwd(), spec)).href
     );
     while (mod && typeof mod === "object" && "default" in mod) {
-      mod = (mod as { default: unknown }).default;
+      mod = mod.default;
     }
     if (!mod || typeof mod !== "object" || !("theme" in mod)) {
       throw new Error(`${spec} did not resolve to a Panda preset`);

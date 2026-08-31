@@ -97,7 +97,7 @@ const imageLoader = () => {
     srcset?: string;
     #src?: string;
     constructor() {
-      instances.push(this as never);
+      instances.push(this);
     }
     set src(value: string) {
       this.#src = value;
@@ -116,7 +116,7 @@ const imageLoader = () => {
   };
 };
 
-it("shows the initials until the photo loads, then the photo", async () => {
+it("shows the initials until the photo loads, then the photo", () => {
   const loader = imageLoader();
   try {
     render(<Avatar name="Ada Lovelace" src="ada.png" />);
@@ -125,7 +125,9 @@ it("shows the initials until the photo loads, then the photo", async () => {
     );
     expect(document.querySelector("img")).toBeNull();
 
-    await act(async () => loader.instances[0].onload!());
+    act(() => {
+      loader.instances[0].onload!();
+    });
     const img = document.querySelector("img")!;
     expect(img.getAttribute("src")).toBe("ada.png");
     expect(img.getAttribute("alt")).toBe("Ada Lovelace");
@@ -134,11 +136,13 @@ it("shows the initials until the photo loads, then the photo", async () => {
   }
 });
 
-it("keeps the fallback when the photo fails, rather than a broken image", async () => {
+it("keeps the fallback when the photo fails, rather than a broken image", () => {
   const loader = imageLoader();
   try {
     render(<Avatar name="Ada Lovelace" src="gone.png" />);
-    await act(async () => loader.instances[0].onerror!());
+    act(() => {
+      loader.instances[0].onerror!();
+    });
     expect(document.querySelector("img")).toBeNull();
     expect(screen.getByRole("img", { name: "Ada Lovelace" }).textContent).toBe(
       "AL",
@@ -148,11 +152,13 @@ it("keeps the fallback when the photo fails, rather than a broken image", async 
   }
 });
 
-it("starts again when the src changes", async () => {
+it("starts again when the src changes", () => {
   const loader = imageLoader();
   try {
     const { rerender } = render(<Avatar name="Ada Lovelace" src="ada.png" />);
-    await act(async () => loader.instances[0].onload!());
+    act(() => {
+      loader.instances[0].onload!();
+    });
     expect(document.querySelector("img")!.getAttribute("src")).toBe("ada.png");
 
     // The next person's photo: the old one must not linger while it loads.
@@ -162,7 +168,9 @@ it("starts again when the src changes", async () => {
       "GH",
     );
 
-    await act(async () => loader.instances[1].onload!());
+    act(() => {
+      loader.instances[1].onload!();
+    });
     expect(document.querySelector("img")!.getAttribute("src")).toBe(
       "grace.png",
     );
@@ -171,14 +179,16 @@ it("starts again when the src changes", async () => {
   }
 });
 
-it("derives no background colour once the photo is showing", async () => {
+it("derives no background colour once the photo is showing", () => {
   const loader = imageLoader();
   try {
     const { container } = render(<Avatar name="Ada Lovelace" src="ada.png" />);
     const root = container.firstElementChild as HTMLElement;
     expect(root.style.getPropertyValue("--avatar-bg")).toBe("#8b409d");
 
-    await act(async () => loader.instances[0].onload!());
+    act(() => {
+      loader.instances[0].onload!();
+    });
     expect(root.style.getPropertyValue("--avatar-bg")).toBe("");
     expect(root.hasAttribute("data-loaded")).toBe(true);
   } finally {

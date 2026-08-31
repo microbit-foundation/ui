@@ -166,7 +166,7 @@ const ComboBoxInner = <T extends object>(
     <SelectSlotProvider value={slots}>
       <RACComboBox
         allowsEmptyCollection={emptyState != null}
-        {...(rest as RACComboBoxProps<T>)}
+        {...rest}
         className={cx(fieldSlots.root, slots.root, className)}
       >
         {label != null && (

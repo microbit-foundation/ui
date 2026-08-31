@@ -83,8 +83,9 @@ it("splits into sections when a language is partially supported", () => {
 
 it("selects on press: onSelectLanguage completes, then the dialog closes", async () => {
   const events: string[] = [];
-  const onSelectLanguage = vi.fn(async (id: string) => {
+  const onSelectLanguage = vi.fn((id: string) => {
     events.push(`select:${id}`);
+    return Promise.resolve();
   });
   const onClose = vi.fn(() => events.push("close"));
   renderDialog({ onSelectLanguage, onClose });

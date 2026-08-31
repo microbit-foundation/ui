@@ -12,6 +12,9 @@ import { useEffect, useRef } from "react";
  */
 export const UnmountCallback = ({ callback }: { callback?: () => void }) => {
   const ref = useRef(callback);
+  // Latest-ref pattern: the unmount effect calls the current callback
+  // without re-subscribing.
+  // eslint-disable-next-line react-hooks/refs
   ref.current = callback;
   useEffect(() => () => ref.current?.(), []);
   return null;

@@ -13,6 +13,7 @@ import { ToastFn, ToastProvider, useToast } from "../src";
 // component so tests drive toasts the way apps do.
 let toast: ToastFn;
 const Capture = () => {
+  // eslint-disable-next-line react-hooks/globals -- see comment above.
   toast = useToast();
   return null;
 };
@@ -39,9 +40,13 @@ it("auto-dismisses after 5s by default", () => {
   renderProvider();
   act(() => toast({ title: "Saved", status: "success" }));
   expect(screen.getByText("Saved")).toBeDefined();
-  act(() => vi.advanceTimersByTime(4900));
+  act(() => {
+    vi.advanceTimersByTime(4900);
+  });
   expect(screen.getByText("Saved")).toBeDefined();
-  act(() => vi.advanceTimersByTime(200));
+  act(() => {
+    vi.advanceTimersByTime(200);
+  });
   expect(screen.queryByText("Saved")).toBeNull();
 });
 
@@ -75,7 +80,9 @@ it("honours an explicit duration", () => {
   vi.useFakeTimers();
   renderProvider();
   act(() => toast({ title: "Quick", duration: 2000 }));
-  act(() => vi.advanceTimersByTime(2100));
+  act(() => {
+    vi.advanceTimersByTime(2100);
+  });
   expect(screen.queryByText("Quick")).toBeNull();
 });
 
@@ -85,7 +92,9 @@ it("persistent toasts never time out and force the close button on", () => {
   act(() =>
     toast({ title: "Storage full", status: "error", persistent: true }),
   );
-  act(() => vi.advanceTimersByTime(60_000));
+  act(() => {
+    vi.advanceTimersByTime(60_000);
+  });
   expect(screen.getByText("Storage full")).toBeDefined();
   expect(screen.getByRole("button", { name: "Close" })).toBeDefined();
 });
@@ -132,7 +141,10 @@ const pushOutOfSight = () => {
     act(() => toast({ title: `Filler ${i}` }));
   }
 };
-const expireFillers = () => act(() => vi.advanceTimersByTime(5100));
+const expireFillers = () =>
+  act(() => {
+    vi.advanceTimersByTime(5100);
+  });
 
 it("re-adding an id that's queued out of sight is a no-op", () => {
   vi.useFakeTimers();
@@ -178,7 +190,9 @@ it("an id is free again after it times out", () => {
   vi.useFakeTimers();
   renderProvider();
   act(() => toast({ id: "r", title: "First" }));
-  act(() => vi.advanceTimersByTime(5100));
+  act(() => {
+    vi.advanceTimersByTime(5100);
+  });
   act(() => toast({ id: "r", title: "Second" }));
   expect(screen.getByText("Second")).toBeDefined();
 });

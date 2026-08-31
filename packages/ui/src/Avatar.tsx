@@ -103,6 +103,9 @@ const useImageStatus = (src?: string, srcSet?: string): ImageStatus => {
   );
   useEffect(() => {
     if (!src) {
+      // Resets for a removed src; a render-time reset is a behaviour change
+      // to review.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setStatus("pending");
       return;
     }
