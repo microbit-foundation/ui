@@ -48,7 +48,7 @@ it("reports every option chosen in multiple-selection mode", () => {
 
   fireEvent.click(screen.getByRole("option", { name: "Ada" }));
   fireEvent.click(screen.getByRole("option", { name: "Alan" }));
-  expect([...onSelectionChange.mock.calls.at(-1)![0]]).toEqual(["Ada", "Alan"]);
+  expect([...(onSelectionChange.mock.calls.at(-1)![0] as Set<string>)]).toEqual(["Ada", "Alan"]);
 });
 
 it("marks the selected option so the recipe can style it", () => {

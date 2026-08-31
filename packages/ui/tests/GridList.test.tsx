@@ -30,7 +30,7 @@ it("renders a row per item and reports the one selected", () => {
   fireEvent.click(screen.getByRole("row", { name: "Grace" }));
   // react-aria's Selection is a Set subclass carrying anchor/current keys, so
   // compare the contents rather than the object.
-  expect([...onSelectionChange.mock.calls[0][0]]).toEqual(["Grace"]);
+  expect([...(onSelectionChange.mock.calls[0][0] as Set<string>)]).toEqual(["Grace"]);
 });
 
 it("marks the selected row so the recipe can style it", () => {

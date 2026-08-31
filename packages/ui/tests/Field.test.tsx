@@ -128,8 +128,11 @@ it("CheckboxGroup shares one value array and renders the chrome", () => {
   );
   const group = screen.getByRole("group", { name: /Age groups/ });
   expect(group).not.toBeNull();
-  const boxes = screen.getAllByRole("checkbox") as HTMLInputElement[];
-  expect(boxes.map((b) => b.checked)).toEqual([false, true]);
+  const boxes = screen.getAllByRole("checkbox");
+  expect(boxes.map((b) => b instanceof HTMLInputElement && b.checked)).toEqual([
+    false,
+    true,
+  ]);
   expect(screen.getByText("All that apply")).not.toBeNull();
 });
 

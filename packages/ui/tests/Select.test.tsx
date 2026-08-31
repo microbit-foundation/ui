@@ -73,7 +73,7 @@ it("ComboBox filters as you type and reports the selection", () => {
       ))}
     </ComboBox>,
   );
-  const input = screen.getByRole("combobox") as HTMLInputElement;
+  const input = screen.getByRole("combobox");
   act(() => input.focus());
   fireEvent.change(input, { target: { value: "an" } });
   const names = screen.getAllByRole("option").map((o) => o.textContent);
@@ -103,7 +103,7 @@ it("ComboBox can withhold the popover entirely", () => {
     );
   };
   render(<Probe />);
-  const input = screen.getByRole("combobox") as HTMLInputElement;
+  const input = screen.getByRole("combobox");
   act(() => input.focus());
   fireEvent.change(input, { target: { value: "a" } });
   expect(screen.queryAllByRole("option")).toHaveLength(0);
@@ -125,7 +125,7 @@ it("ComboBox shows an empty state and can drop the indicator", () => {
   );
   // indicator={null} means no toggle button beside the input.
   expect(screen.queryAllByRole("button")).toHaveLength(0);
-  const input = screen.getByRole("combobox") as HTMLInputElement;
+  const input = screen.getByRole("combobox");
   act(() => input.focus());
   fireEvent.change(input, { target: { value: "zzz" } });
   expect(screen.getByText("Nothing found")).toBeDefined();
@@ -192,7 +192,7 @@ it("ComboBox keeps its focus styling while an option is active", () => {
       ))}
     </ComboBox>,
   );
-  const input = screen.getByRole("combobox") as HTMLInputElement;
+  const input = screen.getByRole("combobox");
   act(() => input.focus());
   expect(input.getAttribute("aria-expanded")).toBe("true");
   expect(input.getAttribute("aria-activedescendant")).toBeTruthy();
@@ -211,7 +211,7 @@ it("ComboBox keeps its focus styling across opening, choosing and reopening", ()
       ))}
     </ComboBox>,
   );
-  const input = screen.getByRole("combobox") as HTMLInputElement;
+  const input = screen.getByRole("combobox");
   const trigger = input.parentElement!;
   const toggle = screen.getByRole("button");
   act(() => input.focus());

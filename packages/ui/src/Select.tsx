@@ -110,7 +110,7 @@ export const Select = <T extends object>({
   return (
     <SelectSlotProvider value={slots}>
       <RACSelect
-        {...(rest as RACSelectProps<T>)}
+        {...rest}
         className={cx(fieldSlots.root, slots.root, className)}
       >
         {label != null && (
