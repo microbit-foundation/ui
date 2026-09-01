@@ -236,6 +236,7 @@ export const Avatar = ({
       // directly in the flex container it is a flex item and centres
       // exactly.
       isValidElement(icon) ? (
+        // eslint-disable-next-line @eslint-react/no-clone-element -- labelling in place is the point, as above.
         cloneElement(icon as ReactElement<Record<string, unknown>>, {
           role: "img",
           "aria-label": iconLabel,

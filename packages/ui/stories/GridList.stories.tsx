@@ -65,7 +65,7 @@ export const Playground: Story = {
 export const RowsWithControls: Story = {
   render: function RowsWithControls() {
     const [selected, setSelected] = useState<Selection>(
-      new Set<Key>(["Ada Lovelace"]),
+      () => new Set<Key>(["Ada Lovelace"]),
     );
     return (
       <GridList

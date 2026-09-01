@@ -11,7 +11,7 @@ export default [
     // warning is not what the tests exercise.
     files: ["**/tests/**"],
     rules: {
-      "react/jsx-key": "off",
+      "@eslint-react/no-missing-key": "off",
     },
   },
 ];
