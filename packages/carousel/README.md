@@ -7,7 +7,15 @@ previously duplicated across micro:bit apps (CreateAI, Python Editor).
 
 ## What's here
 
-Nothing yet — components land as the extraction progresses.
+- **`SwiperCarousel`** — thin wrapper over Swiper shared by everything else
+  here: list semantics, translated ARIA annotations, focus-follows-slide,
+  and edge-pinned prev/next overlay buttons (enable with `navigation`;
+  hidden below `md`, decorative for keyboard users — tab moves through the
+  cards instead). Takes a pre-translated `containerLabel` as the carousel's
+  accessible name, and any Swiper prop passes through. Layout — breakpoints,
+  slide sizing, padding — stays with the caller.
+
+More lands as the extraction progresses (`Carousel`, `CarouselRow`).
 
 ## Consumption
 
