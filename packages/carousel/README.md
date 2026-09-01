@@ -7,6 +7,11 @@ previously duplicated across micro:bit apps (CreateAI, Python Editor).
 
 ## What's here
 
+- **`CarouselRow`** — page furniture around a `Carousel`: a full-width row
+  with an `<h2>` heading (`title`, or `titleElement` verbatim for titles
+  with adornments) and optional trailing `actions`. `className` hooks
+  app-specific styling (e.g. tighter padding on short screens); `Carousel`
+  props pass through.
 - **`Carousel`** — the standard micro:bit carousel: a paged row of 260px
   cards whose slides-per-page follow the window width, or — with `hero` — a
   full-width looping banner that autoplays (paused on hover, stopped on
@@ -20,8 +25,6 @@ previously duplicated across micro:bit apps (CreateAI, Python Editor).
   cards instead). Takes a pre-translated `containerLabel` as the carousel's
   accessible name, and any Swiper prop passes through. Layout — breakpoints,
   slide sizing, padding — stays with the caller.
-
-More lands as the extraction progresses (`CarouselRow`).
 
 ## Consumption
 
