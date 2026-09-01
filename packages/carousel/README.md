@@ -43,3 +43,8 @@ and style-extracted by the consuming app's build. Set up `@microbit/ui` first
 3. Swiper's stylesheets are imported by this package into the `vendor`
    cascade layer, so your app's `@layer` declaration must include `vendor`
    (it does if it follows the `@microbit/ui` README).
+
+4. **Strings**: compile `lang/ui.<locale>.json` into your per-locale catalogs
+   exactly as you do `@microbit/ui`'s (message ids are namespaced
+   `ui-carousel.`). English needs no catalog — components carry inline
+   `defaultMessage`s.

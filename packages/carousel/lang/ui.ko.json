@@ -1,0 +1,14 @@
+{
+  "ui-carousel.role": {
+    "defaultMessage": "무한 재생",
+    "description": "aria-roledescription for carousel"
+  },
+  "ui-carousel.slide-label": {
+    "defaultMessage": "{slideNum}/{totalSlides}",
+    "description": "Label for carousel slide / item"
+  },
+  "ui-carousel.slide-role": {
+    "defaultMessage": "slide",
+    "description": "aria-roledescription for carousel slide / item"
+  }
+}

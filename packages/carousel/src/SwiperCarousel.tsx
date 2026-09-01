@@ -11,6 +11,7 @@ import { Swiper as SwiperClass } from "swiper";
 import "./swiper.css";
 import { A11y, Autoplay, Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperProps, SwiperSlide } from "swiper/react";
+import { carouselMessage } from "./messages";
 import SwiperCarouselButtons from "./SwiperCarouselButtons";
 
 export interface SwiperCarouselProps extends SwiperProps {
@@ -99,20 +100,15 @@ const SwiperCarousel = ({
         a11y={{
           enabled: true,
           slideRole: "presentation",
-          containerRoleDescriptionMessage: intl.formatMessage({
-            id: "carousel-role",
-            defaultMessage: "carousel",
-          }),
-          itemRoleDescriptionMessage: intl.formatMessage({
-            id: "carousel-slide-role",
-            defaultMessage: "slide",
-          }),
+          containerRoleDescriptionMessage: intl.formatMessage(
+            carouselMessage("ui-carousel.role"),
+          ),
+          itemRoleDescriptionMessage: intl.formatMessage(
+            carouselMessage("ui-carousel.slide-role"),
+          ),
           containerMessage: containerLabel,
           slideLabelMessage: intl.formatMessage(
-            {
-              id: "carousel-slide-label",
-              defaultMessage: "{slideNum} of {totalSlides}",
-            },
+            carouselMessage("ui-carousel.slide-label"),
             {
               slideNum: "{{index}}",
               totalSlides: "{{slidesLength}}",

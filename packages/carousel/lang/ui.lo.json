@@ -1,0 +1,14 @@
+{
+  "ui-carousel.role": {
+    "defaultMessage": "ຮູບແບບເລື່ອນຮູບ",
+    "description": "aria-roledescription for carousel"
+  },
+  "ui-carousel.slide-label": {
+    "defaultMessage": "{slideNum} ຂອງ {totalSlides}",
+    "description": "Label for carousel slide / item"
+  },
+  "ui-carousel.slide-role": {
+    "defaultMessage": "ສະໄລ້",
+    "description": "aria-roledescription for carousel slide / item"
+  }
+}

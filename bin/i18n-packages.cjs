@@ -37,9 +37,14 @@ const languages = [
 module.exports = [
   {
     // Package directory, relative to the repo root.
-    dir: "packages/ui-patterns",
+    dir: "packages/carousel",
     // Where this package's strings sit within each language's Crowdin export
     // dir.
+    crowdinDir: "new/packages/carousel",
+    languages,
+  },
+  {
+    dir: "packages/ui-patterns",
     crowdinDir: "new/packages/ui-patterns",
     languages,
   },

@@ -1,0 +1,14 @@
+{
+  "ui-carousel.role": {
+    "defaultMessage": "carrossel",
+    "description": "aria-roledescription for carousel"
+  },
+  "ui-carousel.slide-label": {
+    "defaultMessage": "{slideNum} de {totalSlides}",
+    "description": "Label for carousel slide / item"
+  },
+  "ui-carousel.slide-role": {
+    "defaultMessage": "deslizar",
+    "description": "aria-roledescription for carousel slide / item"
+  }
+}
