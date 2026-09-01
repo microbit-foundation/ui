@@ -149,14 +149,14 @@ export const ToastProvider = () => {
                 )}
               />
               <div className={slots.body}>
-                {toast.content.title && (
+                {toast.content.title ? (
                   <p className={slots.title}>{toast.content.title}</p>
-                )}
-                {toast.content.description && (
+                ) : null}
+                {toast.content.description ? (
                   <div className={slots.description}>
                     {toast.content.description}
                   </div>
-                )}
+                ) : null}
               </div>
             </RACToastContent>
             {toast.content.isClosable && (

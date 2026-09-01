@@ -100,7 +100,7 @@ export const Slider = ({
       formatOptions={formatOptions}
       className={cx(slots.root, cssProp ? css(cssProp) : undefined)}
     >
-      {mark && (
+      {mark ? (
         <div
           data-part="mark"
           className={cx(slots.mark, markCss ? css(markCss) : undefined)}
@@ -108,7 +108,7 @@ export const Slider = ({
         >
           {mark}
         </div>
-      )}
+      ) : null}
       <SliderTrack
         className={cx(slots.track, trackCss ? css(trackCss) : undefined)}
       >
@@ -120,7 +120,7 @@ export const Slider = ({
           style={{ width: `${percent}%` }}
         />
       </SliderTrack>
-      {thumbTooltip && isThumbTooltipOpen && (
+      {thumbTooltip && isThumbTooltipOpen ? (
         // Matches the shared Tooltip's look (tooltipBase) with a bottom
         // arrow, anchored above the thumb.
         <div
@@ -160,7 +160,7 @@ export const Slider = ({
         >
           {thumbTooltip}
         </div>
-      )}
+      ) : null}
       <SliderThumb
         onFocusChange={onThumbFocusChange}
         className={cx(slots.thumb, thumbCss ? css(thumbCss) : undefined)}
