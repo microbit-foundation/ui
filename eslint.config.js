@@ -1,4 +1,5 @@
 import microbit from "@microbit/eslint-config/react";
+import storybook from "eslint-plugin-storybook";
 
 export default [
   {
@@ -6,6 +7,7 @@ export default [
     ignores: ["bin"],
   },
   ...microbit,
+  ...storybook.configs["flat/recommended"],
   {
     // Test fixtures assemble static children arrays where the runtime key
     // warning is not what the tests exercise.
