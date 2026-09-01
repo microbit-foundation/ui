@@ -7,6 +7,7 @@
  * ui-carousel — Swiper-based carousel components in the micro:bit design
  * language, shared across the micro:bit app family.
  */
+export { default as Carousel, type CarouselProps } from "./Carousel";
 export {
   default as SwiperCarousel,
   type SwiperCarouselProps,

@@ -7,6 +7,12 @@ previously duplicated across micro:bit apps (CreateAI, Python Editor).
 
 ## What's here
 
+- **`Carousel`** — the standard micro:bit carousel: a paged row of 260px
+  cards whose slides-per-page follow the window width, or — with `hero` — a
+  full-width looping banner that autoplays (paused on hover, stopped on
+  interaction). `centerItems` centres a row too short to fill the width;
+  `navigation={false}` drops the prev/next buttons (e.g. on touch-only
+  native apps).
 - **`SwiperCarousel`** — thin wrapper over Swiper shared by everything else
   here: list semantics, translated ARIA annotations, focus-follows-slide,
   and edge-pinned prev/next overlay buttons (enable with `navigation`;
@@ -15,7 +21,7 @@ previously duplicated across micro:bit apps (CreateAI, Python Editor).
   accessible name, and any Swiper prop passes through. Layout — breakpoints,
   slide sizing, padding — stays with the caller.
 
-More lands as the extraction progresses (`Carousel`, `CarouselRow`).
+More lands as the extraction progresses (`CarouselRow`).
 
 ## Consumption
 
