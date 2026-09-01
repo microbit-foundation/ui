@@ -20,6 +20,7 @@
   "devDependencies": {
     "@microbit/eslint-config": "^0.1.2",
     "eslint": "^9.39.5",
+    "eslint-plugin-storybook": "^10.5.10",
     "prettier": "3.3.2"
   },
   "overrides": {
