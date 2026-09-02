@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 import { forwardRef, SelectHTMLAttributes } from "react";
+import { mergeProps, useFocusRing } from "react-aria";
 import { css, cx } from "styled-system/css";
 import { input, InputVariantProps } from "styled-system/recipes";
 import { SystemStyleObject } from "styled-system/types";
@@ -40,9 +41,14 @@ export const NativeSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(
     { hideChevron = false, size, css: cssProp, wrapperCss, className, ...rest },
     ref,
   ) {
+    // Modality tracked here rather than via the recipe's native
+    // :focus-visible fallback: Chrome matches that on a clicked select (as it
+    // does on text inputs), and this ring is keyboard-only.
+    const { isFocusVisible, focusProps } = useFocusRing();
     const select = (
       <select
         ref={ref}
+        data-focus-visible={isFocusVisible || undefined}
         className={cx(
           input({ size }),
           css(
@@ -59,7 +65,7 @@ export const NativeSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(
           ),
           className,
         )}
-        {...rest}
+        {...mergeProps(rest, focusProps)}
       />
     );
     if (hideChevron) {
