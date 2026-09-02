@@ -149,20 +149,22 @@ export const dialog = defineSlotRecipe({
           my: "0",
           mx: "0",
           borderRadius: "0",
-          paddingTop: "env(safe-area-inset-top)",
-          paddingBottom: "env(safe-area-inset-bottom)",
-          paddingLeft: "env(safe-area-inset-left)",
-          paddingRight: "env(safe-area-inset-right)",
+          paddingTop: "safeAreaTop",
+          paddingBottom: "safeAreaBottom",
+          // The nav-side tokens (README: CSS-variable contract), so content
+          // can flow under a camera cutout.
+          paddingLeft: "safeAreaNavLeft",
+          paddingRight: "safeAreaNavRight",
           // brand colour in the status-bar area, white below (matches ActionBar)
           background:
-            "linear-gradient(to bottom, token(colors.statusBarBg) env(safe-area-inset-top), white env(safe-area-inset-top))",
+            "linear-gradient(to bottom, token(colors.statusBarBg) token(spacing.safeAreaTop), white token(spacing.safeAreaTop))",
         },
         header: {
           pl: "calc(var(--window-controls-left, 0px) + token(spacing.6))",
         },
         body: { flex: "1", overflowY: "auto" },
         closeTrigger: {
-          top: "calc(env(safe-area-inset-top) + token(spacing.2))",
+          top: "calc(token(spacing.safeAreaTop) + token(spacing.2))",
         },
       },
     },
