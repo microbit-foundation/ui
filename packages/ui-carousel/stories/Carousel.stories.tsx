@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { css, cx, LinkBox, LinkOverlayButton } from "@microbit/ui";
+import { css, cx, LinkBox, LinkOverlay, LinkOverlayButton } from "@microbit/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Carousel } from "../src";
 
@@ -66,6 +66,54 @@ export const exampleCards = (count: number): JSX.Element[] =>
     </LinkBox>
   ));
 
+const tintFills = ["#bee3f8", "#b2f5ea", "#e9d8fd", "#feebcb"];
+
+const tintImageSrc = (i: number): string =>
+  "data:image/svg+xml;utf8," +
+  encodeURIComponent(
+    `<svg xmlns='http://www.w3.org/2000/svg' width='4' height='3'><rect width='4' height='3' fill='${
+      tintFills[i % tintFills.length]
+    }'/></svg>`,
+  );
+
+/**
+ * Cards whose overlay is a link over an image, like the apps' resource
+ * cards. Links and images are natively draggable, so these exercise the
+ * carousel's drag suppression.
+ */
+const linkCards = (count: number): JSX.Element[] =>
+  Array.from({ length: count }, (_, i) => (
+    <LinkBox key={i} className={cardStyle}>
+      <img
+        alt=""
+        src={tintImageSrc(i)}
+        className={css({ height: "120px", width: "100%", objectFit: "cover" })}
+      />
+      <div
+        className={css({
+          display: "flex",
+          flexDirection: "column",
+          gap: 2,
+          p: 4,
+        })}
+      >
+        <p className={css({ fontWeight: "semibold" })}>
+          <LinkOverlay
+            href="https://microbit.org/"
+            target="_blank"
+            rel="noreferrer"
+            className={css({ _focusVisible: { focusRing: "outline" } })}
+          >
+            Link card {i + 1}
+          </LinkOverlay>
+        </p>
+        <p className={css({ color: "gray.600", fontSize: "sm" })}>
+          {descriptions[i % descriptions.length]}
+        </p>
+      </div>
+    </LinkBox>
+  ));
+
 const meta = {
   title: "Carousel/Carousel",
   component: Carousel,
@@ -90,6 +138,14 @@ export const CenterItems: Story = {
     carouselItems: exampleCards(3),
     containerLabel: "Example cards",
     centerItems: true,
+  },
+};
+
+/** Anchor-overlay cards with images — natively draggable content. */
+export const LinkCards: Story = {
+  args: {
+    carouselItems: linkCards(12),
+    containerLabel: "Example link cards",
   },
 };
 
