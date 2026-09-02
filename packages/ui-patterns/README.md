@@ -39,11 +39,10 @@ and style-extracted by the consuming app's build. Set up `@microbit/ui` first
 [README](../ui/README.md)), then:
 
 1. Install the package. `@microbit/ui` is a peer dependency, so both must be
-   installed; keep them upgraded together. The peer range is deliberately
-   `*`: it is the one range npm accepts both for the published prerelease
-   versions (a normal semver range refuses to match another package's
-   prereleases) and for the in-repo workspace copy, which sits at `0.0.0`.
-   Apps pin exact versions anyway. `react-icons` and `react-intl` are peers
+   installed; keep them upgraded together. The peer range tracks the
+   `@microbit/ui` minor this release was built against — a caret on a `0.x`
+   version pins the minor, so each new `@microbit/ui` minor needs a matching
+   `@microbit/ui-patterns` release. `react-icons` and `react-intl` are peers
    too, matching `@microbit/ui`'s expectations.
 2. Add this package's sources to your Panda `include`, alongside the
    `@microbit/ui` glob:
