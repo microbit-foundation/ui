@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 import { css, cx } from "@microbit/ui";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useLocale } from "react-aria";
 import { useIntl } from "react-intl";
 import { Swiper as SwiperClass } from "swiper";
@@ -49,9 +49,12 @@ const SwiperCarousel = ({
   const intl = useIntl();
   const { direction } = useLocale();
   const [swiper, setSwiper] = useState<SwiperClass>();
+  // Mouse-down on a focusable card fires focus mid-gesture; sliding in
+  // response corrupts the drag. Keyboard focus arrives with no pointer down.
+  const pointerDownRef = useRef(false);
   const handleSlideFocus = useCallback(
     (e: React.FocusEvent<HTMLElement, Element>) => {
-      if (swiper) {
+      if (swiper && !pointerDownRef.current) {
         swiper.slides.forEach((slide, i) => {
           if (slide.contains(e.target)) {
             swiper.activeIndex = i;
@@ -96,6 +99,12 @@ const SwiperCarousel = ({
         }),
         className,
       )}
+      onPointerDownCapture={() => {
+        pointerDownRef.current = true;
+        requestAnimationFrame(() => {
+          pointerDownRef.current = false;
+        });
+      }}
     >
       <Swiper
         onSwiper={handleSwiper}
@@ -103,6 +112,10 @@ const SwiperCarousel = ({
         // compatibility mousedown/mouseup events that overlays (e.g. menus)
         // rely on to detect an outside click and dismiss.
         touchStartPreventDefault={false}
+        // Swiper refuses to drag from its default focusableElements list,
+        // and our cards are covered by overlay buttons — a drag from a card
+        // face poisons the gesture and snaps to slide 0 (swiper#5524).
+        focusableElements="input, select, option, textarea, video"
         style={{
           ...(padding !== undefined && { padding }),
           alignItems: "stretch",
