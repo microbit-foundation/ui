@@ -52,6 +52,7 @@ const config: StorybookConfig = {
   // and are globbed in here; panda.config.ts includes the same files so
   // their styles are extracted into this build's CSS.
   stories: [
+    "../../../packages/carousel/stories/**/*.stories.@(ts|tsx)",
     "../../../packages/ui/stories/**/*.stories.@(ts|tsx)",
     "../../../packages/ui-patterns/stories/**/*.stories.@(ts|tsx)",
   ],
