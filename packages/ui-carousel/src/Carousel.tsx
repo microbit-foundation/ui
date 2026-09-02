@@ -8,7 +8,6 @@ import { useCallback, useMemo } from "react";
 import { SwiperClass } from "swiper/react";
 import SwiperCarousel from "./SwiperCarousel";
 
-const speed = 1000;
 const cardWidth = 260;
 const mobileSpaceBetween = 15;
 
@@ -121,12 +120,12 @@ const Carousel = ({
       navigation={navigation}
       onResize={recalculateBreakpoints}
       onInit={recalculateBreakpoints}
-      speed={speed}
+      speed={1000}
       className={css({
         "--carousel-px": { base: "12px", md: "20px" },
         "--carousel-pt": "1rem",
         "--carousel-pb": "12px",
-        "& li > div": { height: "100%", width: "260px" },
+        "& li > div": { height: "100%", width: `${cardWidth}px` },
         "& .swiper": {
           padding: "var(--carousel-pt) var(--carousel-px) var(--carousel-pb)",
         },
