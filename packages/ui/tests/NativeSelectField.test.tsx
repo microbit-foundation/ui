@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { cleanup, render, screen } from "@testing-library/react";
+import { act, cleanup, render, screen } from "@testing-library/react";
 import { field } from "styled-system/recipes";
 import { afterEach, expect, it } from "vitest";
 import { NativeSelectField } from "../src";
@@ -92,4 +92,16 @@ it("adds the asterisk when required", () => {
     </NativeSelectField>,
   );
   expect(screen.getByText("*")).not.toBeNull();
+});
+
+it("stamps data-focus-visible from react-aria's modality tracking", () => {
+  render(<NativeSelectField label="Fruit">{options}</NativeSelectField>);
+  const select = screen.getByLabelText("Fruit");
+  // The recipe's ring keys off this attribute rather than native
+  // :focus-visible, which Chrome matches on a clicked select. jsdom has no
+  // pointer, so the keyboard path is what can be asserted here.
+  act(() => select.focus());
+  expect(select.getAttribute("data-focus-visible")).toBe("true");
+  act(() => select.blur());
+  expect(select.getAttribute("data-focus-visible")).toBeNull();
 });

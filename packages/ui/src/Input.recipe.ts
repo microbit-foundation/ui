@@ -49,11 +49,11 @@ export const input = defineRecipe({
     "&&&:is([data-invalid], :user-invalid)": {
       borderColor: "danger.500",
     },
-    // Modality-tracked: RAC's attribute, or Input.tsx's. Native
+    // Modality-tracked: RAC's attribute, or Input/NativeSelect's. Native
     // :focus-visible is the fallback for a bare element wearing the recipe,
-    // but not text-entry ones — browsers match it there on a pointer click,
-    // which is what the tracking exists to exclude.
-    "&&&:is([data-focus-visible], :focus-visible:not([data-rac], input, textarea))":
+    // but not form controls — browsers match it there on a pointer click
+    // (Chrome includes select), which is what the tracking exists to exclude.
+    "&&&:is([data-focus-visible], :focus-visible:not([data-rac], input, textarea, select))":
       {
         focusRing: "outline",
       },
