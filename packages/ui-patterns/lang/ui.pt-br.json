@@ -8,7 +8,7 @@
     "description": "Language dialog title"
   },
   "ui-patterns.language-fully-supported-heading": {
-    "defaultMessage": "Suporte completo",
+    "defaultMessage": "Totalmente suportado",
     "description": "Fully supported languages heading text"
   },
   "ui-patterns.language-partially-supported-heading": {

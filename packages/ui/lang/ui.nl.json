@@ -1,6 +1,6 @@
 {
   "ui.breadcrumb": {
-    "defaultMessage": "Kruimelpad",
+    "defaultMessage": "Kruimelspoor",
     "description": "Accessible label for the breadcrumb navigation trail (the WAI-ARIA APG's conventional name)"
   },
   "ui.close-action": {
@@ -52,7 +52,7 @@
     "description": "Announced by screen readers before an informational notification"
   },
   "ui.toast-status-success": {
-    "defaultMessage": "Succes",
+    "defaultMessage": "Succesvol",
     "description": "Announced by screen readers before a success notification"
   },
   "ui.toast-status-warning": {

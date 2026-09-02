@@ -40,7 +40,7 @@
     "description": "Accessible label for a row-selection checkbox in a list or table; screen readers read it together with the row's content"
   },
   "ui.toast-region": {
-    "defaultMessage": "{count, plural, one {# fógra} two {# fhógra} few {# fógraí} many {# notifications} other {# fógraí}}.",
+    "defaultMessage": "{count, plural, one {# fógra} two {# fhógra} few {# fógraí} many {# fógraí} other {# fógraí}}",
     "description": "Accessible label for the notifications area; count is the number of notifications showing"
   },
   "ui.toast-status-error": {
