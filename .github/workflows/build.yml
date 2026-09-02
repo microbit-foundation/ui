@@ -24,10 +24,11 @@ jobs:
       - run: npm install -g npm@${{ env.NPM_VERSION }}
       - run: npm ci
       - run: npm run format:check
-      # Route a release to a package by its tag prefix: ui-vX.Y.Z or
-      # ui-patterns-vX.Y.Z (bare vX.Y.Z is the pre-monorepo @microbit/ui
-      # convention). The versioner derives the version from the tag's
-      # numeric part. Branch builds default to ui; nothing is published.
+      # Route a release to a package by its tag prefix: ui-vX.Y.Z,
+      # ui-carousel-vX.Y.Z or ui-patterns-vX.Y.Z (bare vX.Y.Z is the
+      # pre-monorepo @microbit/ui convention). The versioner derives the
+      # version from the tag's numeric part. Branch builds default to ui;
+      # nothing is published.
       - name: Route release tag to a package
         id: route
         env:
@@ -35,10 +36,11 @@ jobs:
         run: |
           case "$TAG" in
             "") PACKAGE="ui" ;;
+            ui-carousel-v[0-9]*) PACKAGE="ui-carousel" ;;
             ui-patterns-v[0-9]*) PACKAGE="ui-patterns" ;;
             ui-v[0-9]* | v[0-9]*) PACKAGE="ui" ;;
             *)
-              echo "Unrecognised release tag '$TAG' (expected ui-vX.Y.Z, ui-patterns-vX.Y.Z or legacy vX.Y.Z)" >&2
+              echo "Unrecognised release tag '$TAG' (expected ui-vX.Y.Z, ui-carousel-vX.Y.Z, ui-patterns-vX.Y.Z or legacy vX.Y.Z)" >&2
               exit 1
               ;;
           esac

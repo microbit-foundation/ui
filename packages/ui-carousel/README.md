@@ -61,3 +61,27 @@ and style-extracted by the consuming app's build. Set up `@microbit/ui` first
    exactly as you do `@microbit/ui`'s (message ids are namespaced
    `ui-carousel.`). English needs no catalog — components carry inline
    `defaultMessage`s.
+
+## Development
+
+Stories live in `stories/` here but are rendered by the repo's Storybook
+harness, [`apps/storybook`](../../apps/storybook), whose config globs this
+package — one harness for the whole family. Run it from the repo root:
+
+```bash
+npm run storybook
+```
+
+`npm run typecheck -w @microbit/ui-carousel` generates this package's own
+`styled-system/` output (from the same base preset) and runs `tsc`.
+
+## Releases
+
+Create a GitHub release with a tag of the form `ui-carousel-vX.Y.Z`
+(e.g. `ui-carousel-v0.1.0-alpha.1`). The build workflow routes the release
+to this package by the tag prefix and publishes it. This package is
+versioned independently of `@microbit/ui`.
+
+## License
+
+[MIT](LICENSE.md) © Micro:bit Educational Foundation and contributors.

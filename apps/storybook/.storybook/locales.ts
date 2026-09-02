@@ -17,7 +17,7 @@ import { languages } from "@microbit/ui-patterns";
  */
 const catalogs = import.meta.glob<
   Record<string, { defaultMessage: string; description: string }>
->("../../../packages/{carousel,ui,ui-patterns}/lang/*.json", {
+>("../../../packages/{ui,ui-carousel,ui-patterns}/lang/*.json", {
   eager: true,
   import: "default",
 });
