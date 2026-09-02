@@ -13,11 +13,9 @@ previously duplicated across micro:bit apps (CreateAI, Python Editor).
   app-specific styling (e.g. tighter padding on short screens); `Carousel`
   props pass through.
 - **`Carousel`** — the standard micro:bit carousel: a paged row of 260px
-  cards whose slides-per-page follow the window width, or — with `hero` — a
-  full-width looping banner that autoplays (paused on hover, stopped on
-  interaction). `centerItems` centres a row too short to fill the width;
-  `navigation={false}` drops the prev/next buttons (e.g. on touch-only
-  native apps).
+  cards whose slides-per-page follow the window width. `centerItems` centres
+  a row too short to fill the width; `navigation={false}` drops the
+  prev/next buttons (e.g. on touch-only native apps).
 - **`SwiperCarousel`** — thin wrapper over Swiper shared by everything else
   here: list semantics, translated ARIA annotations, focus-follows-slide,
   and edge-pinned prev/next overlay buttons (enable with `navigation`;
@@ -25,6 +23,12 @@ previously duplicated across micro:bit apps (CreateAI, Python Editor).
   cards instead). Takes a pre-translated `containerLabel` as the carousel's
   accessible name, and any Swiper prop passes through. Layout — breakpoints,
   slide sizing, padding — stays with the caller.
+
+There is deliberately no "hero" banner mode: the hero carousel on
+microbit.org (looping, autoplaying, pagination bullets, always-visible
+prev/next buttons in the page grid) is its own design, and the vestige of it
+the apps carried was never shipped. When one is wanted, build it on
+`SwiperCarousel` — `loop`, `autoplay` and `pagination` all pass through.
 
 ## Consumption
 

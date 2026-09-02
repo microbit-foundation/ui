@@ -8,8 +8,7 @@ import { useCallback, useMemo } from "react";
 import { SwiperClass } from "swiper/react";
 import SwiperCarousel from "./SwiperCarousel";
 
-const slow = 3000;
-const fast = 1000;
+const speed = 1000;
 const cardWidth = 260;
 const mobileSpaceBetween = 15;
 
@@ -20,27 +19,20 @@ export interface CarouselProps {
    * carousel's on-screen title.
    */
   containerLabel: string;
-  /**
-   * Full-width hero mode: one slide per view, looping, autoplaying (paused
-   * on hover, stopped on interaction), no nav buttons.
-   */
-  hero?: boolean;
   /** Center the slides when there are too few to fill the row. */
   centerItems?: boolean;
-  /** Show the prev/next overlay buttons (md+ only). Not shown in hero mode. */
+  /** Show the prev/next overlay buttons (md+ only). */
   navigation?: boolean;
 }
 
 /**
- * The standard micro:bit carousel: a paged row of 260px cards, or a
- * full-width autoplaying banner in hero mode. Slides per page follow the
- * window width. For a differently-shaped carousel, use SwiperCarousel
- * directly.
+ * The standard micro:bit carousel: a paged row of 260px cards, slides per
+ * page following the window width. For a differently-shaped carousel, use
+ * SwiperCarousel directly.
  */
 const Carousel = ({
   carouselItems,
   containerLabel,
-  hero = false,
   centerItems = false,
   navigation = true,
 }: CarouselProps) => {
@@ -104,7 +96,7 @@ const Carousel = ({
 
   const recalculateBreakpoints = useCallback(
     (swiper: SwiperClass) => {
-      if (hero || typeof window === "undefined") {
+      if (typeof window === "undefined") {
         return;
       }
       const breakpoint = getBreakpoint();
@@ -116,41 +108,20 @@ const Carousel = ({
         swiper.params.slidesPerGroup = slidesPerGroup;
       }
     },
-    [getBreakpoint, getSlidesPerGroup, hero],
+    [getBreakpoint, getSlidesPerGroup],
   );
 
   return (
     <SwiperCarousel
-      autoHeight={hero}
-      autoplay={
-        hero
-          ? {
-              disableOnInteraction: true,
-              delay: 10_000,
-              pauseOnMouseEnter: true,
-            }
-          : false
-      }
-      breakpoints={
-        hero
-          ? {
-              0: {
-                slidesPerView: 1,
-                spaceBetween: 0,
-              },
-            }
-          : breakpoints
-      }
+      breakpoints={breakpoints}
       slidesPerView="auto"
       carouselItems={carouselItems}
       centerInsufficientSlides={centerItems}
       containerLabel={containerLabel}
-      loop={hero}
-      navigation={!hero && navigation}
+      navigation={navigation}
       onResize={recalculateBreakpoints}
       onInit={recalculateBreakpoints}
-      padding={hero ? 0 : undefined}
-      speed={hero ? slow : fast}
+      speed={speed}
       className={css({
         "--carousel-px": { base: "12px", md: "20px" },
         "--carousel-pt": "1rem",
