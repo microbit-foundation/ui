@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { css, cx } from "@microbit/ui";
+import { css, cx, LinkBox, LinkOverlayButton } from "@microbit/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Carousel } from "../src";
 
@@ -30,20 +30,30 @@ const descriptions = [
   "Something in between the two, about a line and a half long.",
 ];
 
+/**
+ * Cards in the apps' shape: a LinkBox with a LinkOverlayButton as the one
+ * tab stop, so the stories exercise keyboard navigation — tabbing to an
+ * off-screen card slides the carousel to it (SwiperCarousel's slide-focus
+ * handling).
+ */
 export const exampleCards = (count: number): JSX.Element[] =>
   Array.from({ length: count }, (_, i) => (
-    <div key={i} className={cardStyle}>
+    <LinkBox key={i} className={cardStyle}>
       <div
         className={cx(
           css({ height: "120px", borderRadius: "md" }),
           cardImageTints[i % cardImageTints.length],
         )}
       />
-      <p className={css({ fontWeight: "semibold" })}>Card {i + 1}</p>
+      <p className={css({ fontWeight: "semibold" })}>
+        <LinkOverlayButton css={{ _focusVisible: { focusRing: "outline" } }}>
+          Card {i + 1}
+        </LinkOverlayButton>
+      </p>
       <p className={css({ color: "gray.600", fontSize: "sm" })}>
         {descriptions[i % descriptions.length]}
       </p>
-    </div>
+    </LinkBox>
   ));
 
 const meta = {
