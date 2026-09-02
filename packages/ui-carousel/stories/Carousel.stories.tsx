@@ -10,11 +10,11 @@ import { Carousel } from "../src";
 const cardStyle = css({
   display: "flex",
   flexDirection: "column",
-  gap: 2,
-  p: 4,
   bg: "white",
   borderRadius: "lg",
   boxShadow: "md",
+  // Clips the edge-to-edge image block to the rounded top corners.
+  overflow: "hidden",
 });
 
 const cardImageTints = [
@@ -39,20 +39,30 @@ const descriptions = [
 export const exampleCards = (count: number): JSX.Element[] =>
   Array.from({ length: count }, (_, i) => (
     <LinkBox key={i} className={cardStyle}>
+      {/* Stands in for the apps' edge-to-edge card image. */}
       <div
         className={cx(
-          css({ height: "120px", borderRadius: "md" }),
+          css({ height: "120px" }),
           cardImageTints[i % cardImageTints.length],
         )}
       />
-      <p className={css({ fontWeight: "semibold" })}>
-        <LinkOverlayButton css={{ _focusVisible: { focusRing: "outline" } }}>
-          Card {i + 1}
-        </LinkOverlayButton>
-      </p>
-      <p className={css({ color: "gray.600", fontSize: "sm" })}>
-        {descriptions[i % descriptions.length]}
-      </p>
+      <div
+        className={css({
+          display: "flex",
+          flexDirection: "column",
+          gap: 2,
+          p: 4,
+        })}
+      >
+        <p className={css({ fontWeight: "semibold" })}>
+          <LinkOverlayButton css={{ _focusVisible: { focusRing: "outline" } }}>
+            Card {i + 1}
+          </LinkOverlayButton>
+        </p>
+        <p className={css({ color: "gray.600", fontSize: "sm" })}>
+          {descriptions[i % descriptions.length]}
+        </p>
+      </div>
     </LinkBox>
   ));
 
