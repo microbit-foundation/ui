@@ -24,12 +24,6 @@ previously duplicated across micro:bit apps (CreateAI, Python Editor).
   accessible name, and any Swiper prop passes through. Layout — breakpoints,
   slide sizing, padding — stays with the caller.
 
-There is deliberately no "hero" banner mode: the hero carousel on
-microbit.org (looping, autoplaying, pagination bullets, always-visible
-prev/next buttons in the page grid) is its own design, and the vestige of it
-the apps carried was never shipped. When one is wanted, build it on
-`SwiperCarousel` — `loop`, `autoplay` and `pagination` all pass through.
-
 ## Consumption
 
 Like `@microbit/ui`, this package **ships as source** — TypeScript compiled
