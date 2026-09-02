@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 import { css, cx } from "@microbit/ui";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useLocale } from "react-aria";
 import { useIntl } from "react-intl";
 import { Swiper as SwiperClass } from "swiper";
@@ -68,6 +68,17 @@ const SwiperCarousel = ({
     setSwiper(swiper);
     swiper.update();
   }, []);
+
+  // Swiper reads the direction from the DOM only at init, so on a live
+  // locale switch its translate maths run backwards against the flipped
+  // layout (drag clamps early, buttons move the wrong way). The `dir` prop
+  // below only covers first render; this is the official API for changes
+  // after it, and a no-op when the direction already matches.
+  useEffect(() => {
+    if (swiper && !swiper.destroyed) {
+      swiper.changeLanguageDirection(direction);
+    }
+  }, [swiper, direction]);
 
   return (
     <div
