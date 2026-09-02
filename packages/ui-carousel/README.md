@@ -17,7 +17,7 @@ previously duplicated across micro:bit apps (CreateAI, Python Editor).
   a row too short to fill the width; `navigation={false}` drops the
   prev/next buttons (e.g. on touch-only native apps).
 - **`SwiperCarousel`** — thin wrapper over Swiper shared by everything else
-  here: list semantics, translated ARIA annotations, focus-follows-slide,
+  here: APG carousel semantics, translated ARIA annotations, focus-follows-slide,
   and edge-pinned prev/next overlay buttons (enable with `navigation`;
   hidden below `md`, decorative for keyboard users — tab moves through the
   cards instead). Takes a pre-translated `containerLabel` as the carousel's

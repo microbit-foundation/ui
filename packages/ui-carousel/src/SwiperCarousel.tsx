@@ -31,7 +31,7 @@ export interface SwiperCarouselProps extends SwiperProps {
 const swiperModules = [A11y, Autoplay, Navigation, Pagination];
 
 /**
- * Thin shared wrapper over Swiper: list semantics, translated ARIA
+ * Thin shared wrapper over Swiper: APG carousel semantics, translated ARIA
  * annotations, focus-follows-slide, and our edge-pinned prev/next buttons
  * (enable with `navigation`). Layout decisions — breakpoints, slide sizing,
  * padding — stay with the caller; see `Carousel` for the standard card row.
@@ -92,7 +92,6 @@ const SwiperCarousel = ({
           overflow: "hidden",
           "--swiper-theme-color": "black",
           "--swiper-navigation-size": "50",
-          "& ul": { margin: 0 },
           "& .swiper-slide": {
             transform: "translate3d(0, 0, 0) translateZ(0) !important",
             width: "unset",
@@ -114,7 +113,11 @@ const SwiperCarousel = ({
         dir={direction}
         a11y={{
           enabled: true,
-          slideRole: "presentation",
+          // The APG grouped-carousel pattern: a labelled region of
+          // role="group" slides (Swiper's default), each labelled "8 of 12"
+          // — announced when Tab moves focus into a slide's card, which is
+          // the only way focus arrives (the slides themselves never focus).
+          containerRole: "region",
           containerRoleDescriptionMessage: intl.formatMessage(
             carouselMessage("ui-carousel.role"),
           ),
@@ -122,6 +125,7 @@ const SwiperCarousel = ({
             carouselMessage("ui-carousel.slide-role"),
           ),
           containerMessage: containerLabel,
+          // Swiper's own default label reads as "one slash twelve".
           slideLabelMessage: intl.formatMessage(
             carouselMessage("ui-carousel.slide-label"),
             {
@@ -131,7 +135,6 @@ const SwiperCarousel = ({
           ),
         }}
         modules={swiperModules}
-        tag="ul"
         watchSlidesProgress
         wrapperClass={swiperWrapperClassName}
         {...props}
@@ -142,7 +145,6 @@ const SwiperCarousel = ({
             key={item.key}
             className={slideClassName}
             onFocus={handleSlideFocus}
-            tag="li"
           >
             {item}
           </SwiperSlide>
