@@ -31,6 +31,9 @@ It will be a while before this settles down as a component API, but in the short
   builds. Ships as source; see the package README for the consumption setup
   (preset stack, `styled-system` alias, cascade layers, react-intl
   messages).
+- [`@microbit/ui-carousel`](./packages/ui-carousel) — Swiper-based carousel
+  components in the micro:bit design language. Also ships as source,
+  consumed the same way; `@microbit/ui` and `swiper` are peer dependencies.
 - [`@microbit/ui-patterns`](./packages/ui-patterns) — higher-level patterns
   composed from `@microbit/ui` primitives. Also ships as source, consumed
   the same way; `@microbit/ui` is a peer dependency.
@@ -38,9 +41,9 @@ It will be a while before this settles down as a component API, but in the short
 ## Releases
 
 Packages are versioned independently. To release one, create a GitHub
-release whose tag carries the package's prefix — `ui-vX.Y.Z` or
-`ui-patterns-vX.Y.Z` (bare `vX.Y.Z` still means `@microbit/ui`, the
-pre-monorepo convention). The build workflow routes the release to the
+release whose tag carries the package's prefix — `ui-vX.Y.Z`,
+`ui-carousel-vX.Y.Z` or `ui-patterns-vX.Y.Z` (bare `vX.Y.Z` still means
+`@microbit/ui`, the pre-monorepo convention). The build workflow routes the release to the
 package by prefix, derives the npm version from the tag's numeric part, and
 publishes that package alone; an unrecognised prefix fails the build.
 
