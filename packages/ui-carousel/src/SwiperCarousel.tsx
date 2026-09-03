@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { css, cx } from "@microbit/ui";
+import { css, cx, useMediaQuery } from "@microbit/ui";
 import React, { useCallback, useEffect, useState } from "react";
 import { useLocale } from "react-aria";
 import { useIntl } from "react-intl";
@@ -44,10 +44,12 @@ const SwiperCarousel = ({
   slideClassName,
   swiperWrapperClassName,
   className,
+  speed,
   ...props
 }: SwiperCarouselProps) => {
   const intl = useIntl();
   const { direction } = useLocale();
+  const reducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
   const [swiper, setSwiper] = useState<SwiperClass>();
   const handleSlideFocus = useCallback(
     (e: React.FocusEvent<HTMLElement, Element>) => {
@@ -115,6 +117,7 @@ const SwiperCarousel = ({
           alignItems: "stretch",
         }}
         dir={direction}
+        speed={reducedMotion ? 0 : speed}
         a11y={{
           enabled: true,
           // The APG grouped-carousel pattern: a labelled region of
