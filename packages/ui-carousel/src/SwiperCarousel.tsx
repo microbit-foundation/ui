@@ -4,31 +4,30 @@
  * SPDX-License-Identifier: MIT
  */
 import { css, cx, useMediaQuery } from "@microbit/ui";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { ReactElement, useCallback, useEffect, useState } from "react";
 import { useLocale } from "react-aria";
 import { useIntl } from "react-intl";
 import { Swiper as SwiperClass } from "swiper";
 import "./swiper.css";
-import { A11y, Pagination } from "swiper/modules";
+import { A11y } from "swiper/modules";
 import { Swiper, SwiperProps, SwiperSlide } from "swiper/react";
 import { carouselMessage } from "./messages";
 import SwiperCarouselButtons from "./SwiperCarouselButtons";
 
 export interface SwiperCarouselProps extends SwiperProps {
-  carouselItems: JSX.Element[];
+  carouselItems: ReactElement[];
   /**
    * Accessible name for the carousel, already translated — typically the
    * carousel's on-screen title.
    */
   containerLabel: string;
-  padding?: string | number;
+  /** Extra classes for each slide (e.g. sizing — see Carousel). */
   slideClassName?: string;
-  swiperWrapperClassName?: string;
   /** Extra classes for the root (e.g. a `css(...)` result from the caller). */
   className?: string;
 }
 
-const swiperModules = [A11y, Pagination];
+const swiperModules = [A11y];
 
 /**
  * Thin shared wrapper over Swiper: APG carousel semantics, translated ARIA
@@ -39,10 +38,8 @@ const swiperModules = [A11y, Pagination];
 const SwiperCarousel = ({
   carouselItems,
   containerLabel,
-  padding,
   navigation,
   slideClassName,
-  swiperWrapperClassName,
   className,
   speed,
   ...props
@@ -92,8 +89,6 @@ const SwiperCarousel = ({
         css({
           display: "grid",
           overflow: "hidden",
-          "--swiper-theme-color": "black",
-          "--swiper-navigation-size": "50",
           // Swiper's own margin-inline auto would disable the grid item's
           // stretch, sizing .swiper to its slides — it then measures itself
           // as fitting and locks (no drag, no buttons).
@@ -111,10 +106,6 @@ const SwiperCarousel = ({
         // and our cards are covered by overlay buttons — a drag from a card
         // face poisons the gesture and snaps to slide 0 (swiper#5524).
         focusableElements="input, select, option, textarea, video"
-        style={{
-          ...(padding !== undefined && { padding }),
-          alignItems: "stretch",
-        }}
         dir={direction}
         speed={reducedMotion ? 0 : speed}
         a11y={{
@@ -145,7 +136,6 @@ const SwiperCarousel = ({
         }}
         modules={swiperModules}
         watchSlidesProgress
-        wrapperClass={swiperWrapperClassName}
         {...props}
       >
         {navigation && <SwiperCarouselButtons />}

@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 import { css, cx, LinkBox, LinkOverlay, LinkOverlayButton } from "@microbit/ui";
+import { ReactElement } from "react";
 
 /**
  * Card factories for the carousel stories. Not a stories file: Storybook
@@ -39,7 +40,7 @@ const descriptions = [
  * off-screen card slides the carousel to it (SwiperCarousel's slide-focus
  * handling).
  */
-export const exampleCards = (count: number): JSX.Element[] =>
+export const exampleCards = (count: number): ReactElement[] =>
   Array.from({ length: count }, (_, i) => (
     <LinkBox key={i} className={cardStyle}>
       {/* Stands in for the apps' edge-to-edge card image. */}
@@ -84,7 +85,7 @@ const tintImageSrc = (i: number): string =>
  * cards. Links and images are natively draggable, so these exercise the
  * carousel's drag suppression.
  */
-export const linkCards = (count: number): JSX.Element[] =>
+export const linkCards = (count: number): ReactElement[] =>
   Array.from({ length: count }, (_, i) => (
     <LinkBox key={i} className={cardStyle}>
       <img

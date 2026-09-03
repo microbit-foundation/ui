@@ -8,6 +8,7 @@
  * language, shared across the micro:bit app family.
  */
 export { default as Carousel, type CarouselProps } from "./Carousel";
+export { carouselMessage } from "./messages";
 export { default as CarouselRow, type CarouselRowProps } from "./CarouselRow";
 export {
   default as SwiperCarousel,

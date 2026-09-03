@@ -7,10 +7,8 @@
  * the layer declaration every consuming app carries — see the @microbit/ui
  * README). Left unlayered they would beat every layered Panda rule on shared
  * properties regardless of specificity — e.g. Swiper's
- * `.swiper-slide { width: 100% }` overriding the carousel's `width: unset`,
+ * `.swiper-slide { width: 100% }` overriding the slide width Carousel sets,
  * collapsing the layout.
  */
 @import "swiper/css" layer(vendor);
 @import "swiper/css/a11y" layer(vendor);
-@import "swiper/css/navigation" layer(vendor);
-@import "swiper/css/pagination" layer(vendor);

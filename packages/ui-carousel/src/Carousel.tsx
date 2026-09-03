@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 import { css } from "@microbit/ui";
-import { useCallback, useMemo } from "react";
+import { ReactElement, useCallback, useMemo } from "react";
 import { SwiperClass } from "swiper/react";
 import SwiperCarousel from "./SwiperCarousel";
 
@@ -12,7 +12,7 @@ const cardWidth = 260;
 const mobileSpaceBetween = 15;
 
 export interface CarouselProps {
-  carouselItems: JSX.Element[];
+  carouselItems: ReactElement[];
   /**
    * Accessible name for the carousel, already translated — typically the
    * carousel's on-screen title.
