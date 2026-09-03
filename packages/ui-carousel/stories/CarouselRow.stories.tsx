@@ -6,7 +6,7 @@
 import { Button, Heading, HStack, Text } from "@microbit/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { CarouselRow } from "../src";
-import { exampleCards } from "./Carousel.stories";
+import { exampleCards } from "./cards";
 
 const meta = {
   title: "Carousel/CarouselRow",
