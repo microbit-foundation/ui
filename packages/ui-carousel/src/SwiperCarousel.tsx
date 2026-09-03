@@ -92,6 +92,10 @@ const SwiperCarousel = ({
           overflow: "hidden",
           "--swiper-theme-color": "black",
           "--swiper-navigation-size": "50",
+          // Swiper's own margin-inline auto would disable the grid item's
+          // stretch, sizing .swiper to its slides — it then measures itself
+          // as fitting and locks (no drag, no buttons).
+          "& .swiper": { margin: 0 },
           "& .swiper-slide": {
             transform: "translate3d(0, 0, 0) translateZ(0) !important",
             width: "unset",
