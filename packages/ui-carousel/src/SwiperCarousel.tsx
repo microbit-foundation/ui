@@ -119,6 +119,9 @@ const SwiperCarousel = ({
         speed={reducedMotion ? 0 : speed}
         a11y={{
           enabled: true,
+          // handleSlideFocus is the one owner of focus-follows-slide: unlike
+          // scrollOnFocus it also slides partially visible cards into view.
+          scrollOnFocus: false,
           // The APG grouped-carousel pattern: a labelled region of
           // role="group" slides (Swiper's default), each labelled "8 of 12"
           // — announced when Tab moves focus into a slide's card, which is
