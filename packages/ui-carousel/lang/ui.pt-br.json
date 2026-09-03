@@ -1,4 +1,12 @@
 {
+  "ui-carousel.next": {
+    "defaultMessage": "Next",
+    "description": "Label for the carousel button that shows the next set of slides"
+  },
+  "ui-carousel.previous": {
+    "defaultMessage": "Previous",
+    "description": "Label for the carousel button that shows the previous set of slides"
+  },
   "ui-carousel.role": {
     "defaultMessage": "carrossel",
     "description": "aria-roledescription for carousel"

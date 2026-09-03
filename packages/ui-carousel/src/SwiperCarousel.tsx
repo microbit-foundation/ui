@@ -9,7 +9,7 @@ import { useLocale } from "react-aria";
 import { useIntl } from "react-intl";
 import { Swiper as SwiperClass } from "swiper";
 import "./swiper.css";
-import { A11y, Autoplay, Navigation, Pagination } from "swiper/modules";
+import { A11y, Autoplay, Pagination } from "swiper/modules";
 import { Swiper, SwiperProps, SwiperSlide } from "swiper/react";
 import { carouselMessage } from "./messages";
 import SwiperCarouselButtons from "./SwiperCarouselButtons";
@@ -28,7 +28,7 @@ export interface SwiperCarouselProps extends SwiperProps {
   className?: string;
 }
 
-const swiperModules = [A11y, Autoplay, Navigation, Pagination];
+const swiperModules = [A11y, Autoplay, Pagination];
 
 /**
  * Thin shared wrapper over Swiper: APG carousel semantics, translated ARIA

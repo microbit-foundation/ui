@@ -4,68 +4,68 @@
  * SPDX-License-Identifier: MIT
  */
 import { css } from "@microbit/ui";
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useLocale } from "react-aria";
+import { useIntl } from "react-intl";
 import { useSwiper } from "swiper/react";
 import CarouselButton from "./CarouselButton";
+import { carouselMessage } from "./messages";
+
+const edgeEvents = ["toEdge", "fromEdge", "lock", "unlock", "update"] as const;
 
 /**
- * The prev/next buttons, wired to the surrounding Swiper. Hidden below md,
- * where swiping is the interaction.
+ * The prev/next buttons, hidden below md where swiping is the interaction.
+ * Not tab stops — the cards are the keyboard path (each contains a tab
+ * stop, and focusing one slides it into view) — but named and exposed to
+ * assistive tech so voice-control users can activate them.
+ *
+ * Deliberately not wired to Swiper's navigation module: its a11y handling
+ * re-adds tabindex="0" on edge changes, fighting the tab-order choice.
  */
 const SwiperCarouselButtons = () => {
+  const intl = useIntl();
   const isRtl = useLocale().direction === "rtl";
   const swiper = useSwiper();
-  const nextButtonRef = useRef<HTMLButtonElement>(null);
-  const prevButtonRef = useRef<HTMLButtonElement>(null);
+  const [{ atStart, atEnd }, setEdges] = useState({
+    atStart: true,
+    atEnd: true,
+  });
   useEffect(() => {
-    if (!swiper.destroyed && prevButtonRef.current && nextButtonRef.current) {
-      swiper.navigation.prevEl = prevButtonRef.current;
-      swiper.navigation.nextEl = nextButtonRef.current;
-      swiper.navigation.update();
-      swiper.navigation.nextEl.tabIndex = -1;
-      swiper.navigation.prevEl.tabIndex = -1;
-    }
-  }, [swiper.destroyed, swiper.navigation]);
-
-  // Override tab index on buttons. These are useless for keyboard users.
-  // Just tab through the slide items/cards instead.
-  useEffect(() => {
-    const listener = () => {
-      swiper.navigation.nextEl.tabIndex = -1;
-      swiper.navigation.prevEl.tabIndex = -1;
+    const update = () => {
+      setEdges({
+        atStart: swiper.isBeginning || swiper.isLocked,
+        atEnd: swiper.isEnd || swiper.isLocked,
+      });
     };
-    if (!swiper.destroyed) {
-      swiper.on("activeIndexChange", listener);
-    }
+    update();
+    edgeEvents.forEach((event) => swiper.on(event, update));
     return () => {
       if (!swiper.destroyed) {
-        swiper.off("activeIndexChange", listener);
+        edgeEvents.forEach((event) => swiper.off(event, update));
       }
     };
   }, [swiper]);
 
   return (
-    <div
-      className={css({
-        display: { base: "none", md: "contents" },
-        "& .swiper-button-disabled": { display: "none" },
-      })}
-    >
-      <CarouselButton
-        ref={prevButtonRef}
-        aria-hidden
-        side={isRtl ? "right" : "left"}
-        direction={isRtl ? "right" : "left"}
-        onClick={() => swiper.slidePrev()}
-      />
-      <CarouselButton
-        ref={nextButtonRef}
-        aria-hidden
-        side={isRtl ? "left" : "right"}
-        direction={isRtl ? "left" : "right"}
-        onClick={() => swiper.slideNext()}
-      />
+    <div className={css({ display: { base: "none", md: "contents" } })}>
+      {!atStart && (
+        <CarouselButton
+          aria-label={intl.formatMessage(
+            carouselMessage("ui-carousel.previous"),
+          )}
+          side={isRtl ? "right" : "left"}
+          direction={isRtl ? "right" : "left"}
+          onClick={() => swiper.slidePrev()}
+        />
+      )}
+      {!atEnd && (
+        <CarouselButton
+          aria-label={intl.formatMessage(carouselMessage("ui-carousel.next"))}
+          side={isRtl ? "left" : "right"}
+          direction={isRtl ? "left" : "right"}
+          onClick={() => swiper.slideNext()}
+        />
+      )}
     </div>
   );
 };
