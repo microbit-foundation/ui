@@ -121,11 +121,14 @@ const Carousel = ({
       onResize={recalculateBreakpoints}
       onInit={recalculateBreakpoints}
       speed={1000}
+      slideClassName={css({
+        width: `${cardWidth}px`,
+        "& > div": { height: "100%" },
+      })}
       className={css({
         "--carousel-px": { base: "12px", md: "20px" },
         "--carousel-pt": "1rem",
         "--carousel-pb": "12px",
-        "& .swiper-slide > div": { height: "100%", width: `${cardWidth}px` },
         "& .swiper": {
           padding: "var(--carousel-pt) var(--carousel-px) var(--carousel-pb)",
         },

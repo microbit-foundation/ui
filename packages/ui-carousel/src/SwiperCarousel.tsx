@@ -100,7 +100,6 @@ const SwiperCarousel = ({
           "& .swiper": { margin: 0 },
           "& .swiper-slide": {
             transform: "translate3d(0, 0, 0) translateZ(0) !important",
-            width: "unset",
           },
         }),
         className,
