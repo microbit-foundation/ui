@@ -17,10 +17,10 @@ import SwiperCarouselButtons from "./SwiperCarouselButtons";
 export interface SwiperCarouselProps extends SwiperProps {
   carouselItems: ReactElement[];
   /**
-   * Accessible name for the carousel, already translated — typically the
-   * carousel's on-screen title.
+   * Accessible name for the carousel, already translated. Supply this or an
+   * `aria-labelledby` (forwarded to the root element by Swiper).
    */
-  containerLabel: string;
+  containerLabel?: string;
   /** Extra classes for each slide (e.g. sizing — see Carousel). */
   slideClassName?: string;
   /** Extra classes for the root (e.g. a `css(...)` result from the caller). */

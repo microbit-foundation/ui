@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { Button, Heading, HStack, Text } from "@microbit/ui";
+import { Button, Text } from "@microbit/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { CarouselRow } from "../src";
 import { exampleCards } from "./cards";
@@ -20,7 +20,6 @@ export const Standard: Story = {
   args: {
     title: "Project ideas",
     carouselItems: exampleCards(12),
-    containerLabel: "Project ideas",
   },
 };
 
@@ -28,7 +27,6 @@ export const WithActions: Story = {
   args: {
     title: "My projects",
     carouselItems: exampleCards(8),
-    containerLabel: "My projects",
     actions: (
       <>
         <Button variant="secondary">Import</Button>
@@ -39,18 +37,13 @@ export const WithActions: Story = {
 };
 
 /**
- * `titleElement` replaces the standard heading for titles with adornments —
- * bring your own Heading.
+ * `titleSuffix` renders beside the heading but stays out of the carousel's
+ * accessible name.
  */
-export const WithTitleElement: Story = {
+export const WithTitleSuffix: Story = {
   args: {
-    titleElement: (
-      <HStack gap={3}>
-        <Heading size="lg">My projects</Heading>
-        <Text color="gray.600">(stored in this browser)</Text>
-      </HStack>
-    ),
+    title: "My projects",
+    titleSuffix: <Text color="gray.600">(stored in this browser)</Text>,
     carouselItems: exampleCards(8),
-    containerLabel: "My projects",
   },
 };

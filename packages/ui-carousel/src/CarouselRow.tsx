@@ -4,22 +4,40 @@
  * SPDX-License-Identifier: MIT
  */
 import { Box, Heading, HStack } from "@microbit/ui";
-import { ReactNode } from "react";
-import Carousel, { CarouselProps } from "./Carousel";
+import { ReactNode, useId } from "react";
+import Carousel, { CarouselName, CarouselProps } from "./Carousel";
 
-export interface CarouselRowProps extends CarouselProps {
-  /** Row heading content, already translated; rendered as an <h2>. */
-  title?: ReactNode;
-  /**
-   * Replaces the standard heading, rendered verbatim, for rows whose title
-   * carries adornments (bring your own Heading). Wins over `title`.
-   */
-  titleElement?: ReactNode;
-  /** Trailing controls beside the heading (e.g. import/view-all buttons). */
-  actions?: ReactNode;
-  /** Extra classes for the row (e.g. a `css(...)` result from the caller). */
-  className?: string;
-}
+/**
+ * The row's accessible name for its carousel: a heading (which also names
+ * the carousel), or one of the headless Carousel namings.
+ */
+export type CarouselRowName =
+  | {
+      /**
+       * Row heading content, already translated; rendered as an <h2> that
+       * also names the carousel.
+       */
+      title: ReactNode;
+      /**
+       * Rendered beside the heading but outside the carousel's accessible
+       * name (e.g. an info tooltip).
+       */
+      titleSuffix?: ReactNode;
+      containerLabel?: undefined;
+      ariaLabelledBy?: undefined;
+    }
+  | ({ title?: undefined; titleSuffix?: undefined } & CarouselName);
+
+export type CarouselRowProps = Omit<
+  CarouselProps,
+  "containerLabel" | "ariaLabelledBy"
+> &
+  CarouselRowName & {
+    /** Trailing controls beside the heading (e.g. import/view-all buttons). */
+    actions?: ReactNode;
+    /** Extra classes for the row (e.g. a `css(...)` result from the caller). */
+    className?: string;
+  };
 
 /**
  * Page furniture around a Carousel: a full-width row with a heading and
@@ -27,11 +45,12 @@ export interface CarouselRowProps extends CarouselProps {
  */
 const CarouselRow = ({
   title,
-  titleElement,
+  titleSuffix,
   actions,
   className,
   ...carouselProps
 }: CarouselRowProps) => {
+  const headingId = useId();
   return (
     <Box w="100%" py={8} className={className}>
       <HStack
@@ -41,11 +60,25 @@ const CarouselRow = ({
         gap={{ base: 3, sm: 12 }}
         justifyContent={{ base: "space-between", sm: "flex-start" }}
       >
-        {titleElement ??
-          (title !== undefined && <Heading size="lg">{title}</Heading>)}
+        {title !== undefined && (
+          <HStack gap={3}>
+            <Heading id={headingId} size="lg">
+              {title}
+            </Heading>
+            {titleSuffix}
+          </HStack>
+        )}
         <HStack gap={3}>{actions}</HStack>
       </HStack>
-      <Carousel {...carouselProps} />
+      <Carousel
+        // The union can't be proven through the conditional: a heading means
+        // ariaLabelledBy, otherwise the row's own union guarantees a naming
+        // in the rest props.
+        {...({
+          ariaLabelledBy: title !== undefined ? headingId : undefined,
+          ...carouselProps,
+        } as CarouselProps)}
+      />
     </Box>
   );
 };

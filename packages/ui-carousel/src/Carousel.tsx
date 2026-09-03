@@ -11,18 +11,21 @@ import SwiperCarousel from "./SwiperCarousel";
 const cardWidth = 260;
 const mobileSpaceBetween = 15;
 
-export interface CarouselProps {
+/**
+ * The carousel's accessible name: a pre-translated label, or the id of the
+ * element naming it (CarouselRow's heading).
+ */
+export type CarouselName =
+  | { containerLabel: string; ariaLabelledBy?: undefined }
+  | { containerLabel?: undefined; ariaLabelledBy: string };
+
+export type CarouselProps = {
   carouselItems: ReactElement[];
-  /**
-   * Accessible name for the carousel, already translated — typically the
-   * carousel's on-screen title.
-   */
-  containerLabel: string;
   /** Center the slides when there are too few to fill the row. */
   centerItems?: boolean;
   /** Show the prev/next overlay buttons (md+ only). */
   navigation?: boolean;
-}
+} & CarouselName;
 
 /**
  * The standard micro:bit carousel: a paged row of 260px cards, slides per
@@ -32,6 +35,7 @@ export interface CarouselProps {
 const Carousel = ({
   carouselItems,
   containerLabel,
+  ariaLabelledBy,
   centerItems = false,
   navigation = true,
 }: CarouselProps) => {
@@ -123,6 +127,7 @@ const Carousel = ({
       carouselItems={carouselItems}
       centerInsufficientSlides={centerItems}
       containerLabel={containerLabel}
+      aria-labelledby={ariaLabelledBy}
       navigation={navigation}
       onResize={recalculateBreakpoints}
       onInit={recalculateBreakpoints}

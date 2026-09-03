@@ -8,10 +8,11 @@ previously duplicated across micro:bit apps (CreateAI, Python Editor).
 ## What's here
 
 - **`CarouselRow`** — page furniture around a `Carousel`: a full-width row
-  with an `<h2>` heading (`title`, or `titleElement` verbatim for titles
-  with adornments) and optional trailing `actions`. `className` hooks
-  app-specific styling (e.g. tighter padding on short screens); `Carousel`
-  props pass through.
+  with an `<h2>` heading that also names the carousel for assistive tech
+  (`title`, with `titleSuffix` for adornments kept out of the accessible
+  name) and optional trailing `actions`. `className` hooks app-specific
+  styling (e.g. tighter padding on short screens); `Carousel` props pass
+  through.
 - **`Carousel`** — the standard micro:bit carousel: a paged row of 260px
   cards whose slides-per-page follow the window width. `centerItems` centres
   a row too short to fill the width; `navigation={false}` drops the
