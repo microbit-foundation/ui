@@ -5,7 +5,7 @@
  */
 
 const ChevronLeftIcon = () => (
-  <svg viewBox="0 0 12.5 25">
+  <svg viewBox="0 0 12.5 25" aria-hidden="true">
     <path
       fill="none"
       stroke="currentColor"
