@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 import { css, cx, useMediaQuery } from "@microbit/ui";
-import React, { ReactElement, useCallback, useEffect, useState } from "react";
+import React, { ReactElement, useCallback, useEffect, useRef } from "react";
 import { useLocale } from "react-aria";
 import { useIntl } from "react-intl";
 import { Swiper as SwiperClass } from "swiper";
@@ -47,10 +47,11 @@ const SwiperCarousel = ({
   const intl = useIntl();
   const { direction } = useLocale();
   const reducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
-  const [swiper, setSwiper] = useState<SwiperClass>();
+  const swiperRef = useRef<SwiperClass>();
   const handleSlideFocus = useCallback(
     (e: React.FocusEvent<HTMLElement, Element>) => {
-      if (swiper) {
+      const swiper = swiperRef.current;
+      if (swiper && !swiper.destroyed) {
         // Undo the browser's native scroll-focused-element-into-view:
         // Swiper positions by transform, so a real scrollLeft on the
         // overflow-hidden container desyncs the view.
@@ -64,11 +65,11 @@ const SwiperCarousel = ({
         });
       }
     },
-    [swiper],
+    [],
   );
 
   const handleSwiper = useCallback((swiper: SwiperClass) => {
-    setSwiper(swiper);
+    swiperRef.current = swiper;
     swiper.update();
   }, []);
 
@@ -78,10 +79,11 @@ const SwiperCarousel = ({
   // below only covers first render; this is the official API for changes
   // after it, and a no-op when the direction already matches.
   useEffect(() => {
+    const swiper = swiperRef.current;
     if (swiper && !swiper.destroyed) {
       swiper.changeLanguageDirection(direction);
     }
-  }, [swiper, direction]);
+  }, [direction]);
 
   return (
     <div
