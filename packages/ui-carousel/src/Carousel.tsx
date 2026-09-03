@@ -104,7 +104,13 @@ const Carousel = ({
         if (breakpoint.spaceBetween !== mobileSpaceBetween) {
           slidesPerGroup = getSlidesPerGroup(breakpoint.spaceBetween);
         }
-        swiper.params.slidesPerGroup = slidesPerGroup;
+        if (slidesPerGroup !== swiper.params.slidesPerGroup) {
+          swiper.params.slidesPerGroup = slidesPerGroup;
+          // Swiper's own resize handler runs first (registered with
+          // priority), so the snap grid was already built with the previous
+          // value.
+          swiper.updateSlides();
+        }
       }
     },
     [getBreakpoint, getSlidesPerGroup],
