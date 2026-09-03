@@ -41,7 +41,7 @@ const CarouselButton = ({
           borderRadius: 0,
           bg: "rgba(245, 245, 245, 0.5)",
           // The icons follow currentColor.
-          color: "gray.500",
+          color: "gray.800",
           cursor: "pointer",
           transition: "background-color 0.2s ease",
           w: "60px",
