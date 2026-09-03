@@ -39,6 +39,8 @@ export default defineConfig({
   eject: true,
   presets: ["@pandacss/preset-base", basePreset, ...extraPresets],
   include: [
+    "../../packages/ui-carousel/src/**/*.{ts,tsx}",
+    "../../packages/ui-carousel/stories/**/*.{ts,tsx}",
     "../../packages/ui/src/**/*.{ts,tsx}",
     "../../packages/ui/stories/**/*.{ts,tsx}",
     "../../packages/ui-patterns/src/**/*.{ts,tsx}",

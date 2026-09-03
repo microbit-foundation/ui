@@ -19,6 +19,7 @@
   },
   "devDependencies": {
     "@microbit/ui": "*",
+    "@microbit/ui-carousel": "*",
     "@microbit/ui-patterns": "*",
     "@pandacss/dev": "^1.11.4",
     "@storybook/react-vite": "^10.5.2",
@@ -33,6 +34,7 @@
     "react-icons": "^4.12.0",
     "react-intl": "^6.6.8",
     "storybook": "^10.5.2",
+    "swiper": "^14.0.1",
     "typescript": "^5.4.2",
     "vite": "^7.3.6"
   }

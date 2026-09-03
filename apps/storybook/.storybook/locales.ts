@@ -11,12 +11,13 @@ import { languages } from "@microbit/ui-patterns";
  * app would build, so this harness reads the files in the repo and no build
  * step sits between editing a translation and seeing it.
  *
- * Both packages are globbed into one catalog per locale: the ids are
- * namespaced (`ui.` / `ui-patterns.`) so they cannot collide.
+ * The packages are globbed into one catalog per locale: the ids are
+ * namespaced (`ui.` / `ui-patterns.` / `ui-carousel.`) so they cannot
+ * collide.
  */
 const catalogs = import.meta.glob<
   Record<string, { defaultMessage: string; description: string }>
->("../../../packages/{ui,ui-patterns}/lang/*.json", {
+>("../../../packages/{ui,ui-carousel,ui-patterns}/lang/*.json", {
   eager: true,
   import: "default",
 });

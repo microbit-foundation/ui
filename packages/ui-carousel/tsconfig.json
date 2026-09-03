@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    /* Panda CSS generated output (run `npm run panda`), imported as styled-system/* */
+    "paths": {
+      "styled-system/*": ["./styled-system/*"]
+    }
+  },
+  "include": ["src", "stories", "panda.config.ts"]
+}
