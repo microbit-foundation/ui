@@ -26,7 +26,7 @@
     "typecheck": "npm run panda && tsc --noEmit"
   },
   "peerDependencies": {
-    "@microbit/ui": "^0.2.0",
+    "@microbit/ui": "^0.3.0",
     "@pandacss/dev": "^1.11.4",
     "react": "^18.3.1",
     "react-aria": "^3.50.0",
