@@ -5,7 +5,7 @@
  */
 import fs from "node:fs";
 import path from "node:path";
-import type { ResolvedConfig } from "../config.ts";
+import { inCrowdin, type ResolvedConfig } from "../config.ts";
 import { CrowdinProject, requireToken } from "../crowdin.ts";
 import { parseCatalog } from "../messages.ts";
 import type { Catalog } from "../index.ts";
@@ -25,7 +25,7 @@ interface Target {
 }
 
 export const uploadTargets = (config: ResolvedConfig): Target[] => [
-  ...config.catalogs.map((c) => ({
+  ...config.catalogs.filter(inCrowdin).map((c) => ({
     source: c.source,
     crowdinFile: c.crowdinFile,
   })),

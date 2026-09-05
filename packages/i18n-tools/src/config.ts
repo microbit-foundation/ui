@@ -20,6 +20,7 @@ export interface ResolvedCatalog {
   out?: string;
   packages: string[];
   local: string[];
+  languages?: string[];
   afterDownload?: CatalogConfig["afterDownload"];
 }
 
@@ -99,6 +100,7 @@ export const resolveCatalog = (catalog: CatalogConfig): ResolvedCatalog => {
     out: catalog.out,
     packages: catalog.packages ?? [],
     local,
+    languages: catalog.languages,
     afterDownload: catalog.afterDownload,
   };
 };
@@ -174,6 +176,16 @@ export const translationPath = (
   language: string,
 ): string => expandTemplate(catalog.translations, language);
 
+/** The Crowdin languages downloaded for a catalog. */
+export const catalogLanguages = (
+  config: ResolvedConfig,
+  catalog: ResolvedCatalog,
+): string[] => catalog.languages ?? config.languages;
+
+/** Whether the catalog has a file in Crowdin at all. */
+export const inCrowdin = (catalog: ResolvedCatalog): boolean =>
+  catalog.languages === undefined || catalog.languages.length > 0;
+
 /**
  * Every locale a catalog is compiled for: English, the hand-maintained
  * locales, then the Crowdin languages.
@@ -181,7 +193,7 @@ export const translationPath = (
 export const catalogLocales = (
   config: ResolvedConfig,
   catalog: ResolvedCatalog,
-): string[] => ["en", ...catalog.local, ...config.languages];
+): string[] => ["en", ...catalog.local, ...catalogLanguages(config, catalog)];
 
 /**
  * Languages found on disk for a catalog that the config doesn't know about:

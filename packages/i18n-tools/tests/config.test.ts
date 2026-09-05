@@ -9,7 +9,9 @@ import path from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import {
   ConfigError,
+  catalogLanguages,
   catalogLocales,
+  inCrowdin,
   expandTemplate,
   resolveConfig,
   strayTranslationFiles,
@@ -38,6 +40,23 @@ describe("resolveConfig", () => {
       "fr",
       "pt-BR",
     ]);
+  });
+
+  it("lets a catalog override the languages or opt out of Crowdin", () => {
+    const config = resolveConfig(
+      {
+        ...base,
+        catalogs: [
+          { source: "lang/a.en.json", languages: ["fr"] },
+          { source: "lang/b.en.json", languages: [], local: ["cy"] },
+        ],
+      },
+      "/repo",
+    );
+    expect(catalogLanguages(config, config.catalogs[0])).toEqual(["fr"]);
+    expect(inCrowdin(config.catalogs[0])).toBe(true);
+    expect(catalogLocales(config, config.catalogs[1])).toEqual(["en", "cy"]);
+    expect(inCrowdin(config.catalogs[1])).toBe(false);
   });
 
   it("rejects en as a language and unusable sources", () => {

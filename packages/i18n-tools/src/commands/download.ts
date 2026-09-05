@@ -6,8 +6,10 @@
 import fs from "node:fs";
 import path from "node:path";
 import {
+  catalogLanguages,
   expandTemplate,
   inContextLanguage,
+  inCrowdin,
   translationPath,
   type ResolvedConfig,
 } from "../config.ts";
@@ -71,11 +73,12 @@ export const runDownload = async (
     return crowdinPath.endsWith(".json") ? (JSON.parse(text) as unknown) : text;
   };
 
-  for (const catalog of config.catalogs) {
+  for (const catalog of config.catalogs.filter(inCrowdin)) {
     const crowdinPath = `${directory}/${catalog.crowdinFile}`;
     const file = await project.requireFile(crowdinPath);
     const english = readCatalog(path.resolve(config.root, catalog.source));
-    for (const language of languages) {
+    const wanted = new Set(catalogLanguages(config, catalog));
+    for (const language of languages.filter((l) => wanted.has(l))) {
       const relative = translationPath(catalog, language);
       try {
         const text = await project.downloadTranslation(file, language, {

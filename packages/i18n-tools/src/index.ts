@@ -72,6 +72,11 @@ export interface CatalogConfig {
    * files hold only the messages that differ from English.
    */
   local?: string[];
+  /**
+   * Crowdin languages for this catalog when they differ from the config's
+   * `languages`. An empty list means the file is not in Crowdin at all.
+   */
+  languages?: string[];
   /** Adjust a language's translations after download, before tidying. */
   afterDownload?: (context: AfterDownloadContext) => Catalog | Promise<Catalog>;
 }
