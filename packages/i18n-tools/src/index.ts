@@ -74,7 +74,8 @@ export interface CatalogConfig {
   local?: string[];
   /**
    * Crowdin languages for this catalog when they differ from the config's
-   * `languages`. An empty list means the file is not in Crowdin at all.
+   * `languages`. An empty list means the catalog is never synced: it is not
+   * in Crowdin, or translation of it is disabled there.
    */
   languages?: string[];
   /** Adjust a language's translations after download, before tidying. */

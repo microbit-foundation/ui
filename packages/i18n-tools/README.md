@@ -72,7 +72,8 @@ export default defineConfig({
   with the app's, which the `ui.` prefix guarantees for ours.
 - `local` are locales kept by hand rather than in Crowdin.
 - `languages` overrides the config's list for one catalog; an empty list is a
-  catalog that is not in Crowdin, compiled but never synced.
+  catalog that is never synced (not in Crowdin, or translation disabled
+  there), only compiled.
 - `afterDownload` adjusts a language's messages before they are tidied and
   written. It can fetch other Crowdin files for that language, which is how
   CreateAI keeps a block label in step with the MakeCode extension.
