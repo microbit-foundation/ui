@@ -3,10 +3,12 @@
  *
  * SPDX-License-Identifier: MIT
  */
+import type { SourceFilesModel } from "@crowdin/crowdin-api-client";
 import fs from "node:fs";
 import path from "node:path";
 import {
   catalogLanguages,
+  configuredLanguages,
   expandTemplate,
   inContextLanguage,
   inCrowdin,
@@ -30,23 +32,31 @@ export interface DownloadOptions {
   approvedOnly?: boolean;
 }
 
-const selectLanguages = (
+/**
+ * Narrows a catalog's or the config's languages to those asked for on the
+ * command line, or returns them all when none were.
+ */
+const languageFilter = (
   config: ResolvedConfig,
   requested?: string[],
-): string[] => {
+): ((languages: string[]) => string[]) => {
   if (!requested?.length) {
-    return config.languages;
+    return (languages) => languages;
   }
-  const known = new Map(config.languages.map((l) => [l.toLowerCase(), l]));
-  return requested.map((r) => {
-    const language = known.get(r.toLowerCase());
-    if (!language) {
-      throw new Error(
-        `${r} is not a configured language (${config.languages.join(", ")})`,
-      );
-    }
-    return language;
-  });
+  const all = configuredLanguages(config);
+  const known = new Map(all.map((l) => [l.toLowerCase(), l]));
+  const selected = new Set(
+    requested.map((r) => {
+      const language = known.get(r.toLowerCase());
+      if (!language) {
+        throw new Error(
+          `${r} is not a configured language (${all.join(", ")})`,
+        );
+      }
+      return language;
+    }),
+  );
+  return (languages) => languages.filter((l) => selected.has(l));
 };
 
 const writeBytes = (file: string, data: Uint8Array): void => {
@@ -58,7 +68,7 @@ export const runDownload = async (
   config: ResolvedConfig,
   options: DownloadOptions,
 ): Promise<number> => {
-  const languages = selectLanguages(config, options.languages);
+  const select = languageFilter(config, options.languages);
   const project = await CrowdinProject.connect(config.crowdin, requireToken());
   const { directory } = config.crowdin;
   const dropped: Issue[] = [];
@@ -75,10 +85,17 @@ export const runDownload = async (
 
   for (const catalog of config.catalogs.filter(inCrowdin)) {
     const crowdinPath = `${directory}/${catalog.crowdinFile}`;
-    const file = await project.requireFile(crowdinPath);
+    let file: SourceFilesModel.File;
+    try {
+      file = await project.requireFile(crowdinPath);
+    } catch (e) {
+      // A catalog not yet uploaded should not stop the others downloading.
+      failures++;
+      console.error(`${crowdinPath}: ${describeError(e)}`);
+      continue;
+    }
     const english = readCatalog(path.resolve(config.root, catalog.source));
-    const wanted = new Set(catalogLanguages(config, catalog));
-    for (const language of languages.filter((l) => wanted.has(l))) {
+    for (const language of select(catalogLanguages(config, catalog))) {
       const relative = translationPath(catalog, language);
       try {
         const text = await project.downloadTranslation(file, language, {
@@ -110,7 +127,7 @@ export const runDownload = async (
 
   for (const entry of config.files) {
     const crowdinPath = `${directory}/${entry.crowdinFile}`;
-    for (const language of languages) {
+    for (const language of select(config.languages)) {
       const local = path.resolve(
         config.root,
         expandTemplate(entry.local, language),

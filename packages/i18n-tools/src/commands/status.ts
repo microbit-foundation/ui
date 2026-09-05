@@ -3,8 +3,9 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import type { ResolvedConfig } from "../config.ts";
-import { CrowdinProject, requireToken } from "../crowdin.ts";
+import { configuredLanguages, type ResolvedConfig } from "../config.ts";
+import type { TranslationStatusModel } from "@crowdin/crowdin-api-client";
+import { CrowdinProject, describeError, requireToken } from "../crowdin.ts";
 import { uploadTargets } from "./upload.ts";
 
 const pad = (value: string | number, width: number): string =>
@@ -17,11 +18,21 @@ const pad = (value: string | number, width: number): string =>
  */
 export const runStatus = async (config: ResolvedConfig): Promise<number> => {
   const project = await CrowdinProject.connect(config.crowdin, requireToken());
-  const configured = new Set(config.languages.map((l) => l.toLowerCase()));
+  const configured = new Set(
+    configuredLanguages(config).map((l) => l.toLowerCase()),
+  );
+  let failures = 0;
   for (const target of uploadTargets(config)) {
     const crowdinPath = `${config.crowdin.directory}/${target.crowdinFile}`;
-    const file = await project.requireFile(crowdinPath);
-    const progress = await project.fileProgress(file);
+    let progress: TranslationStatusModel.LanguageProgress[];
+    try {
+      const file = await project.requireFile(crowdinPath);
+      progress = await project.fileProgress(file);
+    } catch (e) {
+      failures++;
+      console.error(`\n${crowdinPath}: ${describeError(e)}`);
+      continue;
+    }
     progress.sort(
       (a, b) =>
         b.translationProgress - a.translationProgress ||
@@ -39,5 +50,5 @@ export const runStatus = async (config: ResolvedConfig): Promise<number> => {
     }
   }
   console.log("\n* configured in i18n.config");
-  return 0;
+  return failures ? 1 : 0;
 };

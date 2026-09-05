@@ -18,7 +18,9 @@ export interface NewStringsOptions {
 const catalogAt = (root: string, ref: string, file: string): Catalog => {
   let text: string;
   try {
-    text = execFileSync("git", ["show", `${ref}:${file}`], {
+    // `./` makes the path relative to the working directory (the config's
+    // directory) rather than the repository root.
+    text = execFileSync("git", ["show", `${ref}:./${file}`], {
       cwd: root,
       encoding: "utf-8",
       stdio: ["ignore", "pipe", "ignore"],

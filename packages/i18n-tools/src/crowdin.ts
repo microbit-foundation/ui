@@ -289,7 +289,7 @@ export class CrowdinProject {
       // about five minutes.
       let delay = 1000;
       const deadline = Date.now() + 5 * 60 * 1000;
-      while (Date.now() < deadline) {
+      for (;;) {
         const status = await this.api.translationsApi.checkBuildStatus(
           this.projectId,
           buildId,
@@ -302,6 +302,11 @@ export class CrowdinProject {
           status.data.status === "canceled"
         ) {
           throw new Error(`Crowdin build ${buildId} ${status.data.status}`);
+        }
+        if (Date.now() >= deadline) {
+          throw new Error(
+            `Crowdin build ${buildId} for ${directory.path} did not finish within five minutes`,
+          );
         }
         await sleep(delay);
         delay = Math.min(delay * 2, 10000);
@@ -332,17 +337,50 @@ export class CrowdinProject {
   }
 
   /**
-   * Replaces a file's English source (or adds the file to a directory).
+   * The directory at a path, created along with any missing parents. A
+   * `crowdinPath` of the branch root resolves to undefined.
+   */
+  async ensureDirectory(
+    crowdinPath: string,
+  ): Promise<SourceFilesModel.Directory | undefined> {
+    const relative = this.relative(crowdinPath);
+    if (relative === "") {
+      return undefined;
+    }
+    const existing = await this.findDirectory(relative);
+    if (existing) {
+      return existing;
+    }
+    const segments = relative.split("/");
+    const name = segments.pop() as string;
+    const parent = await this.ensureDirectory(segments.join("/"));
+    const created = await this.api.sourceFilesApi.createDirectory(
+      this.projectId,
+      {
+        name,
+        ...(parent
+          ? { directoryId: parent.id }
+          : { branchId: this.branch?.id }),
+      },
+    );
+    this.directoryCache.set(relative, Promise.resolve(created.data));
+    return created.data;
+  }
+
+  /**
+   * Replaces a file's English source, or adds the file (and any missing
+   * directories on its path) when it is not yet in Crowdin.
    * `keepTranslations` keeps existing translations for strings whose text
    * changed, for corrections translators need not see.
    */
   async uploadSource(
-    directoryPath: string,
-    name: string,
+    crowdinPath: string,
     content: string,
     { keepTranslations = false }: { keepTranslations?: boolean } = {},
   ): Promise<SourceFilesModel.File> {
-    const existing = await this.findFile(`${directoryPath}/${name}`);
+    const segments = this.relative(crowdinPath).split("/");
+    const name = segments.pop() as string;
+    const existing = await this.findFile(crowdinPath);
     const storage = await this.api.uploadStorageApi.addStorage(
       name,
       content,
@@ -361,11 +399,13 @@ export class CrowdinProject {
       );
       return updated.data;
     }
-    const directory = await this.requireDirectory(directoryPath);
+    const directory = await this.ensureDirectory(segments.join("/"));
     const created = await this.api.sourceFilesApi.createFile(this.projectId, {
       storageId: storage.data.id,
       name,
-      directoryId: directory.id,
+      ...(directory
+        ? { directoryId: directory.id }
+        : { branchId: this.branch?.id }),
     });
     return created.data;
   }

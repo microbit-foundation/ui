@@ -10,10 +10,12 @@ interface Listing {
   branchId?: number;
   directoryId?: number;
   filter?: string;
+  name?: string;
+  storageId?: number;
 }
 
 /**
- * A fake of the two listing calls, over a small tree:
+ * A fake of the listing and creation calls, over a small tree:
  *   /apps (id 1) /apps/x (id 2) /packages (id 3), file ui.en.json (id 10) in /apps/x.
  * Records every listing so a test can see how much was asked for.
  */
@@ -30,13 +32,56 @@ const fakeClient = () => {
       path: "/packages",
     },
   ];
-  const files = [
+  const files: {
+    id: number;
+    directoryId?: number;
+    name: string;
+    path: string;
+  }[] = [
     { id: 10, directoryId: 2, name: "ui.en.json", path: "/apps/x/ui.en.json" },
   ];
+  let nextId = 100;
   const api = {
+    uploadStorageApi: {
+      addStorage(fileName: string) {
+        calls.push({ kind: "storage", options: { filter: fileName } });
+        return Promise.resolve({ data: { id: 50, fileName } });
+      },
+    },
     sourceFilesApi: {
       withFetchAll() {
         return this;
+      },
+      createDirectory(
+        _projectId: number,
+        request: { name: string; directoryId?: number; branchId?: number },
+      ) {
+        calls.push({ kind: "createDirectory", options: request });
+        const parent = directories.find((d) => d.id === request.directoryId);
+        const data = {
+          id: nextId++,
+          directoryId: request.directoryId,
+          branchId: 7,
+          name: request.name,
+          path: `${parent?.path ?? ""}/${request.name}`,
+        };
+        directories.push(data);
+        return Promise.resolve({ data });
+      },
+      createFile(
+        _projectId: number,
+        request: { name: string; directoryId?: number; storageId: number },
+      ) {
+        calls.push({ kind: "createFile", options: request });
+        const parent = directories.find((d) => d.id === request.directoryId);
+        const data = {
+          id: nextId++,
+          directoryId: request.directoryId,
+          name: request.name,
+          path: `${parent?.path ?? ""}/${request.name}`,
+        };
+        files.push(data);
+        return Promise.resolve({ data });
       },
       listProjectDirectories(_projectId: number, options: Listing) {
         calls.push({ kind: "directories", options });
@@ -98,6 +143,33 @@ describe("CrowdinProject lookups", () => {
     expect(await project.findFile("apps/x/missing.json")).toBeUndefined();
     await expect(project.requireDirectory("nowhere")).rejects.toThrow(
       /nowhere/,
+    );
+  });
+});
+
+describe("CrowdinProject.uploadSource", () => {
+  it("creates the missing directories and the file for a new path", async () => {
+    const { api, calls } = fakeClient();
+    const project = CrowdinProject.withClient(api, 1, branch);
+    const file = await project.uploadSource(
+      "packages/ui-carousel/ui.en.json",
+      "{}",
+    );
+    expect(file.path).toBe("/packages/ui-carousel/ui.en.json");
+    // No file listing: the lookup stops at the missing directory.
+    expect(calls.filter((c) => c.kind !== "directories")).toEqual([
+      { kind: "storage", options: { filter: "ui.en.json" } },
+      {
+        kind: "createDirectory",
+        options: { name: "ui-carousel", directoryId: 3 },
+      },
+      {
+        kind: "createFile",
+        options: { storageId: 50, name: "ui.en.json", directoryId: 100 },
+      },
+    ]);
+    expect(await project.findFile("packages/ui-carousel/ui.en.json")).toBe(
+      file,
     );
   });
 });

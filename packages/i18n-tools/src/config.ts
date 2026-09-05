@@ -182,6 +182,17 @@ export const catalogLanguages = (
   catalog: ResolvedCatalog,
 ): string[] => catalog.languages ?? config.languages;
 
+/**
+ * Every Crowdin language any catalog downloads: the config's list plus any
+ * a catalog adds in its own.
+ */
+export const configuredLanguages = (config: ResolvedConfig): string[] => [
+  ...new Set([
+    ...config.languages,
+    ...config.catalogs.flatMap((c) => c.languages ?? []),
+  ]),
+];
+
 /** Whether the catalog has a file in Crowdin at all. */
 export const inCrowdin = (catalog: ResolvedCatalog): boolean =>
   catalog.languages === undefined || catalog.languages.length > 0;

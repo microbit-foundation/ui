@@ -102,9 +102,16 @@ export const runUpload = async (
       "utf-8",
     );
     const existing = await project.findFile(crowdinPath);
-    console.log(
-      `${target.source} -> ${crowdinPath}${existing ? "" : " (new file)"}`,
-    );
+    let note = "";
+    if (!existing) {
+      const parent = path.posix.dirname(crowdinPath);
+      const hasDirectory =
+        parent === "." || (await project.findDirectory(parent)) !== undefined;
+      note = hasDirectory
+        ? " (new file)"
+        : ` (new file; creates directory ${parent})`;
+    }
+    console.log(`${target.source} -> ${crowdinPath}${note}`);
     if (existing) {
       const current = await project.downloadSource(existing);
       if (target.crowdinFile.endsWith(".json")) {
@@ -136,7 +143,7 @@ export const runUpload = async (
       console.log("  dry run; not uploaded");
       continue;
     }
-    await project.uploadSource(directory, target.crowdinFile, content, {
+    await project.uploadSource(crowdinPath, content, {
       keepTranslations: options.keepTranslations,
     });
     console.log("  uploaded");

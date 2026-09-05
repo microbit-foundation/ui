@@ -36,6 +36,16 @@ Options:
 Crowdin commands read a personal access token from ${tokenEnvVar}.
 `;
 
+// The flags each command accepts; parseArgs itself takes any flag anywhere.
+const commandOptions: Record<string, string[]> = {
+  tidy: ["check"],
+  compile: [],
+  download: ["language", "approved-only"],
+  upload: ["keep-translations", "dry-run", "only"],
+  status: [],
+  "new-strings": ["base"],
+};
+
 export const main = async (argv: string[]): Promise<number> => {
   let parsed: ReturnType<typeof parseArgs>;
   try {
@@ -65,6 +75,20 @@ export const main = async (argv: string[]): Promise<number> => {
     console.log(usage);
     return command ? 0 : 1;
   }
+  const allowed = commandOptions[command];
+  if (!allowed) {
+    console.error(`Unknown command: ${command}\n`);
+    console.error(usage);
+    return 1;
+  }
+  const stray = Object.keys(values).filter(
+    (name) => name !== "config" && !allowed.includes(name),
+  );
+  if (stray.length) {
+    console.error(`--${stray[0]} is not an option of ${command}\n`);
+    console.error(usage);
+    return 1;
+  }
   try {
     const config = await loadConfig(
       process.cwd(),
@@ -93,9 +117,7 @@ export const main = async (argv: string[]): Promise<number> => {
           base: values.base as string | undefined,
         });
       default:
-        console.error(`Unknown command: ${command}\n`);
-        console.error(usage);
-        return 1;
+        throw new Error(`Unhandled command ${command}`);
     }
   } catch (e) {
     if (e instanceof ConfigError) {
