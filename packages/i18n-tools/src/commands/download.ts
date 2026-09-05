@@ -13,11 +13,11 @@ import {
 } from "../config.ts";
 import { CrowdinProject, describeError, requireToken } from "../crowdin.ts";
 import {
+  dropInvalidTranslations,
   formatIssues,
   parseCatalog,
   readCatalog,
   tidyTranslation,
-  validateTranslation,
   writeCatalog,
   type Issue,
 } from "../messages.ts";
@@ -59,7 +59,7 @@ export const runDownload = async (
   const languages = selectLanguages(config, options.languages);
   const project = await CrowdinProject.connect(config.crowdin, requireToken());
   const { directory } = config.crowdin;
-  const issues: Issue[] = [];
+  const dropped: Issue[] = [];
   let failures = 0;
 
   const downloadOther = async (language: string, crowdinPath: string) => {
@@ -92,7 +92,7 @@ export const runDownload = async (
         }
         const tidied = tidyTranslation(english, messages);
         if (language !== inContextLanguage) {
-          issues.push(...validateTranslation(relative, english, tidied));
+          dropped.push(...dropInvalidTranslations(relative, english, tidied));
         }
         writeCatalog(path.resolve(config.root, relative), tidied);
         console.log(
@@ -147,12 +147,15 @@ export const runDownload = async (
     }
   }
 
-  if (issues.length) {
-    console.error(formatIssues(issues));
+  if (dropped.length) {
+    console.warn(
+      `\nDropped ${dropped.length} translation(s) whose placeholders do not match English; fix them in Crowdin:`,
+    );
+    console.warn(formatIssues(dropped));
   }
   if (failures) {
     console.error(`${failures} download(s) failed`);
     return 1;
   }
-  return issues.length ? 2 : 0;
+  return 0;
 };

@@ -160,5 +160,22 @@ export const validateTranslation = (
   return issues;
 };
 
+/**
+ * Removes translations that fail validation so English renders instead: a
+ * literal `{name}` or `<link>` shown to users is worse than English. Returns
+ * what was dropped, for someone to fix in Crowdin.
+ */
+export const dropInvalidTranslations = (
+  file: string,
+  source: Catalog,
+  translated: Catalog,
+): Issue[] => {
+  const issues = validateTranslation(file, source, translated);
+  for (const issue of issues) {
+    delete translated[issue.id];
+  }
+  return issues;
+};
+
 export const formatIssues = (issues: Issue[]): string =>
   issues.map((i) => `${i.file}: ${i.id}: ${i.message}`).join("\n");

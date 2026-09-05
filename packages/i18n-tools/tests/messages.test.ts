@@ -5,6 +5,7 @@
  */
 import { describe, expect, it } from "vitest";
 import {
+  dropInvalidTranslations,
   parseCatalog,
   tidySource,
   tidyTranslation,
@@ -75,6 +76,22 @@ describe("validation", () => {
         b: { defaultMessage: "{name" },
       }),
     ).toHaveLength(1);
+  });
+});
+
+describe("dropInvalidTranslations", () => {
+  it("removes translations with placeholder problems and reports them", () => {
+    const translated = {
+      a: { defaultMessage: "Ouvrir" },
+      b: { defaultMessage: "Enregistrer {nom}" },
+    };
+    const issues = dropInvalidTranslations(
+      "lang/ui.fr.json",
+      english,
+      translated,
+    );
+    expect(issues.map((i) => i.id)).toEqual(["b"]);
+    expect(translated).toEqual({ a: { defaultMessage: "Ouvrir" } });
   });
 });
 

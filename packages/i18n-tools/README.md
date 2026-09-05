@@ -22,9 +22,14 @@ CLI.
 `download`, `upload` and `status` need a Crowdin personal access token in
 `CROWDIN_PERSONAL_TOKEN`.
 
+A translation that has lost or gained a placeholder (`{name}`, `<link>`)
+would show users literal markup, so `download` leaves it out, English shows
+instead, and the log names it for fixing in Crowdin. `tidy` reports the same
+problems in hand-edited files.
+
 Exit codes: 0 on success, 1 for usage errors, failed downloads or a failing
-`--check`, 2 when a translation has placeholder problems (files are still
-written so you can fix them in place).
+`--check`, 2 when `tidy` finds placeholder problems (files are still written
+so you can fix them in place).
 
 ## Configuration
 
