@@ -8,11 +8,14 @@
     "microbit-i18n": "./bin/microbit-i18n.mjs"
   },
   "exports": {
-    ".": "./src/index.ts"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
   },
   "files": [
     "bin",
-    "src",
+    "dist",
     "README.md",
     "LICENSE.md"
   ],
@@ -23,6 +26,8 @@
     "access": "public"
   },
   "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "prepare": "npm run build",
     "typecheck": "tsc --noEmit",
     "test": "vitest run"
   },

@@ -1,13 +1,14 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    /* A Node CLI, run from TypeScript source by Node's type stripping: only
-       erasable syntax, explicit .ts import specifiers, type-only imports. */
+    /* A Node CLI. The sources import with .ts specifiers so vitest and Node
+       can run them directly; the build rewrites them to .js for dist/. */
     "lib": ["ES2023"],
     "types": ["node"],
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "allowImportingTsExtensions": true,
+    "rewriteRelativeImportExtensions": true,
     "erasableSyntaxOnly": true,
     "verbatimModuleSyntax": true
   },
