@@ -340,8 +340,8 @@ Translations come and go through Crowdin with
 `i18n.config.mjs`, which lists every locale a consuming app ships so a string
 translated for one app is in place for the next. `npm run i18n:tidy` sorts
 and prunes the files (CI checks this); `npm run i18n:download` and
-`npm run i18n:upload` need a Crowdin token, and CI runs them: the English
-sources are uploaded when a change to them lands on `main`, and a weekly
+`npm run i18n:upload` need a Crowdin token. The translations-upload workflow
+runs the upload from the Actions tab (with a dry-run option), and a weekly
 workflow opens a pull request with new translations.
 
 Until this package's Crowdin project is wired up, the non-English catalogs are

@@ -1,16 +1,18 @@
 name: translations-upload
 
-# Sends the English catalogs to Crowdin whenever a change to them lands on
-# main, so translators see new strings without anyone uploading by hand.
+# Sends the English catalogs to Crowdin. Run by hand from the Actions tab for
+# now; once a dry run has shown it does the right thing, the intention is to
+# also run it on every change to the catalogs landing on main, so translators
+# see new strings without anyone uploading by hand:
+#
+#   push:
+#     branches: [main]
+#     paths: ["packages/*/lang/ui.en.json"]
+#
 # Translations of strings whose English changed are cleared, as with a manual
-# upload; for a correction translators need not revisit, run this by hand with
-# "keep translations" ticked.
+# upload; for a correction translators need not revisit, tick "keep
+# translations".
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - "packages/*/lang/ui.en.json"
   workflow_dispatch:
     inputs:
       keep_translations:
