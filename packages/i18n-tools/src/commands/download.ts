@@ -7,6 +7,7 @@ import fs from "node:fs";
 import path from "node:path";
 import {
   expandTemplate,
+  inContextLanguage,
   translationPath,
   type ResolvedConfig,
 } from "../config.ts";
@@ -26,11 +27,6 @@ export interface DownloadOptions {
   languages?: string[];
   approvedOnly?: boolean;
 }
-
-// Crowdin's in-context pseudo-language: every string has a placeholder
-// "translation" the in-context editor keys on, so nothing is untranslated
-// and nothing may be skipped.
-const inContextLanguage = "lol";
 
 const selectLanguages = (
   config: ResolvedConfig,
@@ -95,7 +91,9 @@ export const runDownload = async (
           });
         }
         const tidied = tidyTranslation(english, messages);
-        issues.push(...validateTranslation(relative, english, tidied));
+        if (language !== inContextLanguage) {
+          issues.push(...validateTranslation(relative, english, tidied));
+        }
         writeCatalog(path.resolve(config.root, relative), tidied);
         console.log(
           `${relative}: ${Object.keys(tidied).length}/${Object.keys(english).length} messages`,

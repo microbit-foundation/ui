@@ -34,6 +34,13 @@ export interface ResolvedConfig {
 
 export const configFileNames = ["i18n.config.mjs", "i18n.config.js"];
 
+/**
+ * Crowdin's in-context pseudo-language. Every string is "translated" to a
+ * placeholder the in-context editor keys on, so nothing may be skipped on
+ * download and the placeholders cannot be checked against English.
+ */
+export const inContextLanguage = "lol";
+
 export class ConfigError extends Error {}
 
 const findConfigFile = (root: string, explicit?: string): string => {

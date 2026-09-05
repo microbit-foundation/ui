@@ -141,6 +141,21 @@ describe("tidy", () => {
     });
   });
 
+  it("does not check placeholders in the in-context pseudo-language", () => {
+    write("lang/ui.lol.json", {
+      greeting: { defaultMessage: "crwdns1:0crwdne1:0" },
+    });
+    const config = resolveConfig(
+      {
+        crowdin: { project: 1, directory: "apps/x" },
+        languages: ["fr", "lol"],
+        catalogs: [{ source: "lang/ui.en.json" }],
+      },
+      root,
+    );
+    expect(tidy(config).issues).toEqual([]);
+  });
+
   it("with --check reports without writing", () => {
     write("lang/ui.en.json", {
       greeting: { defaultMessage: "Hello {name}", description: "Greeting" },

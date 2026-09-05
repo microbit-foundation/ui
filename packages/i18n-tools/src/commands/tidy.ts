@@ -7,6 +7,7 @@ import fs from "node:fs";
 import path from "node:path";
 import {
   catalogLocales,
+  inContextLanguage,
   strayTranslationFiles,
   translationPath,
   type ResolvedConfig,
@@ -84,7 +85,9 @@ export const tidy = (
       const tidied = tidyTranslation(english, readCatalog(file), {
         overrides: catalog.local.includes(locale),
       });
-      issues.push(...validateTranslation(relative, english, tidied));
+      if (locale !== inContextLanguage) {
+        issues.push(...validateTranslation(relative, english, tidied));
+      }
       tidyFile(config.root, relative, tidied, check, changed);
     }
     for (const stray of strayTranslationFiles(config, catalog)) {
