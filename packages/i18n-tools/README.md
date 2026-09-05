@@ -6,7 +6,9 @@ catalogs, and moves them to and from [Crowdin](https://crowdin.com/) one file
 at a time, without a project build or a zip.
 
 Configured per repo in an `i18n.config.mjs` and driven by the `microbit-i18n`
-CLI.
+CLI. Paths in the config are relative to the config file, which sits at the
+repo root; `--config <file>` points the CLI at it from elsewhere (a `simx/`
+subproject, say).
 
 ## Commands
 

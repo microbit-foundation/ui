@@ -25,7 +25,7 @@ export interface ResolvedCatalog {
 }
 
 export interface ResolvedConfig {
-  /** The repo root (the working directory); all paths are relative to it. */
+  /** The directory holding the config file; all paths are relative to it. */
   root: string;
   crowdin: CrowdinConfig;
   languages: string[];
@@ -158,7 +158,7 @@ export const loadConfig = async (
   const module = (await import(pathToFileURL(file).href)) as {
     default?: Config;
   };
-  return resolveConfig(module.default, root);
+  return resolveConfig(module.default, path.dirname(file));
 };
 
 /**
