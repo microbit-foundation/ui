@@ -1,42 +1,32 @@
 {
   "ui-patterns.help-translate": {
-    "defaultMessage": "Trợ giúp dịch thuật",
-    "description": "Language dialog link to the translation project"
+    "defaultMessage": "Trợ giúp dịch thuật"
   },
   "ui-patterns.language": {
-    "defaultMessage": "Ngôn ngữ",
-    "description": "Language dialog title"
+    "defaultMessage": "Ngôn ngữ"
   },
   "ui-patterns.language-fully-supported-heading": {
-    "defaultMessage": "Được hỗ trợ đầy đủ",
-    "description": "Fully supported languages heading text"
+    "defaultMessage": "Được hỗ trợ đầy đủ"
   },
   "ui-patterns.language-partially-supported-heading": {
-    "defaultMessage": "Được hỗ trợ một phần",
-    "description": "Partially supported languages heading text"
+    "defaultMessage": "Được hỗ trợ một phần"
   },
   "ui-patterns.language-preview-notice": {
-    "defaultMessage": "* These languages are an early preview of in-progress translations.",
-    "description": "Language dialog footnote shown when preview languages are listed"
+    "defaultMessage": "* These languages are an early preview of in-progress translations."
   },
   "ui-patterns.language-support-checked": {
-    "defaultMessage": "Được hỗ trợ",
-    "description": "Aria label for ticked checkbox for language support"
+    "defaultMessage": "Được hỗ trợ"
   },
   "ui-patterns.language-support-unchecked": {
-    "defaultMessage": "Không được hỗ trợ",
-    "description": "Aria label for unticked checkbox for language support"
+    "defaultMessage": "Không được hỗ trợ"
   },
   "ui-patterns.language-supported-for": {
-    "defaultMessage": "Hỗ trợ dịch cho:",
-    "description": "Text introducing the list of translated products for a given language"
+    "defaultMessage": "Hỗ trợ dịch cho:"
   },
   "ui-patterns.language-toast-title": {
-    "defaultMessage": "Ngôn ngữ không được hỗ trợ đầy đủ",
-    "description": "Language support toast notification title"
+    "defaultMessage": "Ngôn ngữ không được hỗ trợ đầy đủ"
   },
   "ui-patterns.play-video": {
-    "defaultMessage": "Play video: {title}",
-    "description": "Accessible label for the play button shown over a video preview image; title is the video's title"
+    "defaultMessage": "Play video: {title}"
   }
 }

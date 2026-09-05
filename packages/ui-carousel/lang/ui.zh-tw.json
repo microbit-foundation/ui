@@ -1,22 +1,17 @@
 {
   "ui-carousel.next": {
-    "defaultMessage": "Next",
-    "description": "Label for the carousel button that shows the next set of slides"
+    "defaultMessage": "Next"
   },
   "ui-carousel.previous": {
-    "defaultMessage": "Previous",
-    "description": "Label for the carousel button that shows the previous set of slides"
+    "defaultMessage": "Previous"
   },
   "ui-carousel.role": {
-    "defaultMessage": "順序播放",
-    "description": "aria-roledescription for carousel"
+    "defaultMessage": "順序播放"
   },
   "ui-carousel.slide-label": {
-    "defaultMessage": "第 {slideNum} 張，共 {totalSlides} 張",
-    "description": "Label for carousel slide / item"
+    "defaultMessage": "第 {slideNum} 張，共 {totalSlides} 張"
   },
   "ui-carousel.slide-role": {
-    "defaultMessage": "slide",
-    "description": "aria-roledescription for carousel slide / item"
+    "defaultMessage": "slide"
   }
 }

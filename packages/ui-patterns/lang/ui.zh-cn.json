@@ -1,42 +1,32 @@
 {
   "ui-patterns.help-translate": {
-    "defaultMessage": "帮助翻译",
-    "description": "Language dialog link to the translation project"
+    "defaultMessage": "帮助翻译"
   },
   "ui-patterns.language": {
-    "defaultMessage": "语言",
-    "description": "Language dialog title"
+    "defaultMessage": "语言"
   },
   "ui-patterns.language-fully-supported-heading": {
-    "defaultMessage": "完全支持",
-    "description": "Fully supported languages heading text"
+    "defaultMessage": "完全支持"
   },
   "ui-patterns.language-partially-supported-heading": {
-    "defaultMessage": "部分支持",
-    "description": "Partially supported languages heading text"
+    "defaultMessage": "部分支持"
   },
   "ui-patterns.language-preview-notice": {
-    "defaultMessage": "* These languages are an early preview of in-progress translations.",
-    "description": "Language dialog footnote shown when preview languages are listed"
+    "defaultMessage": "* These languages are an early preview of in-progress translations."
   },
   "ui-patterns.language-support-checked": {
-    "defaultMessage": "支持",
-    "description": "Aria label for ticked checkbox for language support"
+    "defaultMessage": "支持"
   },
   "ui-patterns.language-support-unchecked": {
-    "defaultMessage": "不支持",
-    "description": "Aria label for unticked checkbox for language support"
+    "defaultMessage": "不支持"
   },
   "ui-patterns.language-supported-for": {
-    "defaultMessage": "翻译支持:",
-    "description": "Text introducing the list of translated products for a given language"
+    "defaultMessage": "翻译支持:"
   },
   "ui-patterns.language-toast-title": {
-    "defaultMessage": "该语言没有完全支持",
-    "description": "Language support toast notification title"
+    "defaultMessage": "该语言没有完全支持"
   },
   "ui-patterns.play-video": {
-    "defaultMessage": "Play video: {title}",
-    "description": "Accessible label for the play button shown over a video preview image; title is the video's title"
+    "defaultMessage": "Play video: {title}"
   }
 }

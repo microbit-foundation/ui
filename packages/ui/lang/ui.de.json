@@ -1,62 +1,47 @@
 {
   "ui.breadcrumb": {
-    "defaultMessage": "Navigationspfad",
-    "description": "Accessible label for the breadcrumb navigation trail (the WAI-ARIA APG's conventional name)"
+    "defaultMessage": "Navigationspfad"
   },
   "ui.close-action": {
-    "defaultMessage": "Schließen",
-    "description": "Close button text or label"
+    "defaultMessage": "Schließen"
   },
   "ui.combobox-listbox": {
-    "defaultMessage": "Empfehlungen",
-    "description": "Accessible label for a ComboBox's dropdown list of suggestions"
+    "defaultMessage": "Empfehlungen"
   },
   "ui.combobox-trigger": {
-    "defaultMessage": "Empfehlungen anzeigen",
-    "description": "Accessible label for the button that opens a ComboBox's suggestions dropdown"
+    "defaultMessage": "Empfehlungen anzeigen"
   },
   "ui.loading": {
-    "defaultMessage": "Laden",
-    "description": "Announced by screen readers for a button showing a loading spinner"
+    "defaultMessage": "Laden"
   },
   "ui.new-tab-notice": {
-    "defaultMessage": "opens in a new tab",
-    "description": "Visually hidden suffix on links that open a new tab, announced by screen readers"
+    "defaultMessage": "opens in a new tab"
   },
   "ui.numberfield-decrease": {
-    "defaultMessage": "{fieldLabel} verringern",
-    "description": "Accessible label for a number field's decrement stepper; fieldLabel is the field's label and may be empty"
+    "defaultMessage": "{fieldLabel} verringern"
   },
   "ui.numberfield-increase": {
-    "defaultMessage": "{fieldLabel} erhöhen",
-    "description": "Accessible label for a number field's increment stepper; fieldLabel is the field's label and may be empty"
+    "defaultMessage": "{fieldLabel} erhöhen"
   },
   "ui.select-placeholder": {
-    "defaultMessage": "Element wählen",
-    "description": "Shown in a Select's trigger while nothing is chosen and the app supplies no placeholder"
+    "defaultMessage": "Element wählen"
   },
   "ui.select-row-action": {
-    "defaultMessage": "Auswählen",
-    "description": "Accessible label for a row-selection checkbox in a list or table; screen readers read it together with the row's content"
+    "defaultMessage": "Auswählen"
   },
   "ui.toast-region": {
-    "defaultMessage": "{count, plural, one {# Benachrichtigung} other {# Benachrichtigungen}}.",
-    "description": "Accessible label for the notifications area; count is the number of notifications showing"
+    "defaultMessage": "{count, plural, one {# Benachrichtigung} other {# Benachrichtigungen}}."
   },
   "ui.toast-status-error": {
-    "defaultMessage": "Fehler",
-    "description": "Announced by screen readers before an error notification"
+    "defaultMessage": "Fehler"
   },
   "ui.toast-status-info": {
-    "defaultMessage": "Informationen",
-    "description": "Announced by screen readers before an informational notification"
+    "defaultMessage": "Informationen"
   },
   "ui.toast-status-success": {
-    "defaultMessage": "Erfolg",
-    "description": "Announced by screen readers before a success notification"
+    "defaultMessage": "Erfolg"
   },
   "ui.toast-status-warning": {
-    "defaultMessage": "Warnung",
-    "description": "Announced by screen readers before a warning notification"
+    "defaultMessage": "Warnung"
   }
 }

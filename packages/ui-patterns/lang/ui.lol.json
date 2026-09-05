@@ -1,42 +1,32 @@
 {
   "ui-patterns.help-translate": {
-    "defaultMessage": "crwdns370126:0crwdne370126:0",
-    "description": "Language dialog link to the translation project"
+    "defaultMessage": "crwdns370126:0crwdne370126:0"
   },
   "ui-patterns.language": {
-    "defaultMessage": "crwdns370128:0crwdne370128:0",
-    "description": "Language dialog title"
+    "defaultMessage": "crwdns370128:0crwdne370128:0"
   },
   "ui-patterns.language-fully-supported-heading": {
-    "defaultMessage": "crwdns370130:0crwdne370130:0",
-    "description": "Fully supported languages heading text"
+    "defaultMessage": "crwdns370130:0crwdne370130:0"
   },
   "ui-patterns.language-partially-supported-heading": {
-    "defaultMessage": "crwdns370132:0crwdne370132:0",
-    "description": "Partially supported languages heading text"
+    "defaultMessage": "crwdns370132:0crwdne370132:0"
   },
   "ui-patterns.language-preview-notice": {
-    "defaultMessage": "crwdns370134:0crwdne370134:0",
-    "description": "Language dialog footnote shown when preview languages are listed"
+    "defaultMessage": "crwdns370134:0crwdne370134:0"
   },
   "ui-patterns.language-support-checked": {
-    "defaultMessage": "crwdns370136:0crwdne370136:0",
-    "description": "Aria label for ticked checkbox for language support"
+    "defaultMessage": "crwdns370136:0crwdne370136:0"
   },
   "ui-patterns.language-support-unchecked": {
-    "defaultMessage": "crwdns370138:0crwdne370138:0",
-    "description": "Aria label for unticked checkbox for language support"
+    "defaultMessage": "crwdns370138:0crwdne370138:0"
   },
   "ui-patterns.language-supported-for": {
-    "defaultMessage": "crwdns370140:0crwdne370140:0",
-    "description": "Text introducing the list of translated products for a given language"
+    "defaultMessage": "crwdns370140:0crwdne370140:0"
   },
   "ui-patterns.language-toast-title": {
-    "defaultMessage": "crwdns370142:0crwdne370142:0",
-    "description": "Language support toast notification title"
+    "defaultMessage": "crwdns370142:0crwdne370142:0"
   },
   "ui-patterns.play-video": {
-    "defaultMessage": "Play video: {title}",
-    "description": "Accessible label for the play button shown over a video preview image; title is the video's title"
+    "defaultMessage": "Play video: {title}"
   }
 }

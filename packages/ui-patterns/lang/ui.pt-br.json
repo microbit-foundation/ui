@@ -1,42 +1,32 @@
 {
   "ui-patterns.help-translate": {
-    "defaultMessage": "Ajude a traduzir",
-    "description": "Language dialog link to the translation project"
+    "defaultMessage": "Ajude a traduzir"
   },
   "ui-patterns.language": {
-    "defaultMessage": "Idioma",
-    "description": "Language dialog title"
+    "defaultMessage": "Idioma"
   },
   "ui-patterns.language-fully-supported-heading": {
-    "defaultMessage": "Totalmente suportado",
-    "description": "Fully supported languages heading text"
+    "defaultMessage": "Totalmente suportado"
   },
   "ui-patterns.language-partially-supported-heading": {
-    "defaultMessage": "Suporte parcial",
-    "description": "Partially supported languages heading text"
+    "defaultMessage": "Suporte parcial"
   },
   "ui-patterns.language-preview-notice": {
-    "defaultMessage": "* Estes idiomas estão numa fase inicial de traduções que ainda estão em progresso.",
-    "description": "Language dialog footnote shown when preview languages are listed"
+    "defaultMessage": "* Estes idiomas estão numa fase inicial de traduções que ainda estão em progresso."
   },
   "ui-patterns.language-support-checked": {
-    "defaultMessage": "Suportado",
-    "description": "Aria label for ticked checkbox for language support"
+    "defaultMessage": "Suportado"
   },
   "ui-patterns.language-support-unchecked": {
-    "defaultMessage": "Não suportado",
-    "description": "Aria label for unticked checkbox for language support"
+    "defaultMessage": "Não suportado"
   },
   "ui-patterns.language-supported-for": {
-    "defaultMessage": "Traduções suportadas para:",
-    "description": "Text introducing the list of translated products for a given language"
+    "defaultMessage": "Traduções suportadas para:"
   },
   "ui-patterns.language-toast-title": {
-    "defaultMessage": "O idioma possui suporte parcial",
-    "description": "Language support toast notification title"
+    "defaultMessage": "O idioma possui suporte parcial"
   },
   "ui-patterns.play-video": {
-    "defaultMessage": "Play video: {title}",
-    "description": "Accessible label for the play button shown over a video preview image; title is the video's title"
+    "defaultMessage": "Play video: {title}"
   }
 }
