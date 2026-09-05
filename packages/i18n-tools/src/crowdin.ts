@@ -26,8 +26,26 @@ export const requireToken = (): string => {
   return token;
 };
 
-// Generous: listing the whole microbit.org project is a few thousand files.
-const fetchAllLimit = 10000;
+// Only project listings are paged through in full; everything else is looked
+// up by name.
+const fetchAllLimit = 1000;
+
+// Retry transient failures and rate limiting; a 4xx other than 429 is our
+// mistake and retrying will not help.
+const retryConfig = {
+  retries: 3,
+  waitInterval: 2000,
+  conditions: [
+    {
+      test: (error: unknown) => {
+        const code = (error as { code?: unknown }).code;
+        return (
+          typeof code === "number" && code >= 400 && code < 500 && code !== 429
+        );
+      },
+    },
+  ],
+};
 
 export interface DownloadOptions {
   approvedOnly?: boolean;
@@ -51,8 +69,10 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
  * to Crowdin's numeric ids and wraps the handful of API calls we make.
  */
 export class CrowdinProject {
-  private files?: SourceFilesModel.File[];
-  private directories?: SourceFilesModel.Directory[];
+  private readonly directoryCache = new Map<
+    string,
+    Promise<SourceFilesModel.Directory | undefined>
+  >();
   private readonly api: Client;
   readonly projectId: number;
   private readonly branch: SourceFilesModel.Branch | undefined;
@@ -71,7 +91,7 @@ export class CrowdinProject {
     config: CrowdinConfig,
     token: string,
   ): Promise<CrowdinProject> {
-    const api = new Crowdin({ token });
+    const api = new Crowdin({ token }, { retryConfig });
     let projectId: number;
     if (typeof config.project === "number") {
       projectId = config.project;
@@ -106,6 +126,15 @@ export class CrowdinProject {
     return new CrowdinProject(api, projectId, branch);
   }
 
+  /** For tests: a project over a fake client, with no API calls to connect. */
+  static withClient(
+    api: Client,
+    projectId: number,
+    branch?: SourceFilesModel.Branch,
+  ): CrowdinProject {
+    return new CrowdinProject(api, projectId, branch);
+  }
+
   /** A Crowdin path made relative to the branch, without a leading slash. */
   private relative(crowdinPath: string): string {
     let p = crowdinPath.replace(/^\/+/, "");
@@ -115,40 +144,68 @@ export class CrowdinProject {
     return p.replace(/\/+$/, "");
   }
 
-  private async listFiles(): Promise<SourceFilesModel.File[]> {
-    if (!this.files) {
-      const response = await this.api.sourceFilesApi
-        .withFetchAll(fetchAllLimit)
-        .listProjectFiles(this.projectId, {
-          branchId: this.branch?.id,
-          recursion: "true",
-        });
-      this.files = response.data.map((f) => f.data);
+  /**
+   * Resolves a directory by walking its path segment by segment, each step a
+   * name-filtered listing of one directory's children. The branch holds
+   * thousands of files (the whole website's content), so listing it
+   * recursively to find one file is the heaviest request we could make.
+   */
+  async findDirectory(
+    crowdinPath: string,
+  ): Promise<SourceFilesModel.Directory | undefined> {
+    const relative = this.relative(crowdinPath);
+    if (relative === "") {
+      return undefined;
     }
-    return this.files;
-  }
-
-  private async listDirectories(): Promise<SourceFilesModel.Directory[]> {
-    if (!this.directories) {
-      const response = await this.api.sourceFilesApi
-        .withFetchAll(fetchAllLimit)
-        .listProjectDirectories(this.projectId, {
-          branchId: this.branch?.id,
-          recursion: "true",
-        });
-      this.directories = response.data.map((d) => d.data);
+    let cached = this.directoryCache.get(relative);
+    if (!cached) {
+      cached = (async () => {
+        const segments = relative.split("/");
+        const name = segments.pop() as string;
+        const parent =
+          segments.length > 0
+            ? await this.findDirectory(segments.join("/"))
+            : undefined;
+        if (segments.length > 0 && !parent) {
+          return undefined;
+        }
+        const children = await this.api.sourceFilesApi
+          .withFetchAll(fetchAllLimit)
+          .listProjectDirectories(this.projectId, {
+            ...(parent
+              ? { directoryId: parent.id }
+              : { branchId: this.branch?.id }),
+            filter: name,
+          });
+        return children.data.map((d) => d.data).find((d) => d.name === name);
+      })();
+      this.directoryCache.set(relative, cached);
     }
-    return this.directories;
+    return cached;
   }
 
   /** @param crowdinPath relative to the branch root, e.g. `apps/x/ui.en.json`. */
   async findFile(
     crowdinPath: string,
   ): Promise<SourceFilesModel.File | undefined> {
-    const wanted = this.relative(crowdinPath);
-    return (await this.listFiles()).find(
-      (f) => this.relative(f.path) === wanted,
-    );
+    const segments = this.relative(crowdinPath).split("/");
+    const name = segments.pop() as string;
+    const directory =
+      segments.length > 0
+        ? await this.findDirectory(segments.join("/"))
+        : undefined;
+    if (segments.length > 0 && !directory) {
+      return undefined;
+    }
+    const files = await this.api.sourceFilesApi
+      .withFetchAll(fetchAllLimit)
+      .listProjectFiles(this.projectId, {
+        ...(directory
+          ? { directoryId: directory.id }
+          : { branchId: this.branch?.id }),
+        filter: name,
+      });
+    return files.data.map((f) => f.data).find((f) => f.name === name);
   }
 
   async requireFile(crowdinPath: string): Promise<SourceFilesModel.File> {
@@ -159,15 +216,6 @@ export class CrowdinProject {
       );
     }
     return file;
-  }
-
-  async findDirectory(
-    crowdinPath: string,
-  ): Promise<SourceFilesModel.Directory | undefined> {
-    const wanted = this.relative(crowdinPath);
-    return (await this.listDirectories()).find(
-      (d) => this.relative(d.path) === wanted,
-    );
   }
 
   async requireDirectory(
@@ -237,7 +285,11 @@ export class CrowdinProject {
     let url: string | undefined = (started.data as { url?: string }).url;
     if (!url) {
       const buildId = started.data.id;
-      for (let attempt = 0; attempt < 120; attempt++) {
+      // Poll with backoff: a second at first, doubling to ten, for up to
+      // about five minutes.
+      let delay = 1000;
+      const deadline = Date.now() + 5 * 60 * 1000;
+      while (Date.now() < deadline) {
         const status = await this.api.translationsApi.checkBuildStatus(
           this.projectId,
           buildId,
@@ -251,7 +303,8 @@ export class CrowdinProject {
         ) {
           throw new Error(`Crowdin build ${buildId} ${status.data.status}`);
         }
-        await sleep(1000);
+        await sleep(delay);
+        delay = Math.min(delay * 2, 10000);
       }
       url = (
         await this.api.translationsApi.downloadTranslations(
@@ -314,7 +367,6 @@ export class CrowdinProject {
       name,
       directoryId: directory.id,
     });
-    this.files = undefined;
     return created.data;
   }
 
