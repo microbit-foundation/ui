@@ -82,9 +82,9 @@ export const resolveCatalog = (catalog: CatalogConfig): ResolvedCatalog => {
     }
     translations = catalog.source.replace(/\.en\.json$/, ".{lang}.json");
   }
-  if (!translations.includes("{lang}") && !translations.includes("{Lang}")) {
+  if (!translations.includes("{lang")) {
     throw new ConfigError(
-      `Catalog ${catalog.source}: \`translations\` must contain {lang} or {Lang}`,
+      `Catalog ${catalog.source}: \`translations\` must contain {lang} or {lang:lower}`,
     );
   }
   const local = catalog.local ?? [];
@@ -162,14 +162,14 @@ export const loadConfig = async (
 };
 
 /**
- * Expands `{lang}` (lowercase) and `{Lang}` (Crowdin's casing) in a path
- * template. Catalog files are lowercase by convention; MakeCode's `_locales`
- * directories keep Crowdin's casing.
+ * Expands `{lang}` (the language id in Crowdin's canonical BCP 47 casing, e.g.
+ * `pt-BR`) and `{lang:lower}` (lowercased, for the few places that keep the
+ * old convention) in a path template.
  */
 export const expandTemplate = (template: string, language: string): string =>
   template
-    .replaceAll("{lang}", language.toLowerCase())
-    .replaceAll("{Lang}", language);
+    .replaceAll("{lang:lower}", language.toLowerCase())
+    .replaceAll("{lang}", language);
 
 export const translationPath = (
   catalog: ResolvedCatalog,
@@ -215,7 +215,7 @@ export const strayTranslationFiles = (
         .replace(/[.*+?^${}()|[\]\\]/g, (c) =>
           c === "{" || c === "}" ? c : `\\${c}`,
         )
-        .replace(/\{lang\}|\{Lang\}/g, "([A-Za-z0-9-]+)") +
+        .replace(/\{lang(:lower)?\}/g, "([A-Za-z0-9-]+)") +
       "$",
   );
   const known = new Set(

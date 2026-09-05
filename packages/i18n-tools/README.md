@@ -64,8 +64,9 @@ export default defineConfig({
 - `source` is the English file. `crowdinFile` (default: the source's file
   name) is its name within `crowdin.directory`.
 - `translations` is a template for the translated files (default: the source
-  path with `.en.json` as `.{lang}.json`). `{lang}` is the lowercased language
-  id and `{Lang}` Crowdin's casing.
+  path with `.en.json` as `.{lang}.json`). `{lang}` is the language id in
+  Crowdin's canonical casing (`pt-BR`); `{lang:lower}` is its lowercase form,
+  for the few places that keep the old lowercase file names.
 - `out` is a template for the compiled catalogs. Leave it out for a package
   that ships its `lang/` files for apps to compile.
 - `packages` are merged into the compiled output. Their ids must not collide
@@ -105,8 +106,8 @@ for Panda's `styled-system`.
 
 One project, one branch, one directory per repo. Files are react-intl JSON,
 which Crowdin recognises and shows `description` as context. Language ids are
-Crowdin's, canonical BCP 47 casing (`pt-BR`); catalog file names are
-lowercase.
+Crowdin's, canonical BCP 47 casing (`pt-BR`), and catalog file names use the
+same casing (`ui.pt-BR.json`).
 
 ## Running
 

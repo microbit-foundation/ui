@@ -28,7 +28,7 @@ beforeEach(() => {
     greeting: { defaultMessage: "Hello {name}", description: "Greeting" },
   });
   write("lang/ui.fr.json", { greeting: { defaultMessage: "Bonjour {name}" } });
-  write("lang/ui.en-us.json", { colour: { defaultMessage: "Color" } });
+  write("lang/ui.en-US.json", { colour: { defaultMessage: "Color" } });
   // A linked package shipping sparse catalogs.
   write("node_modules/@fake/pkg/package.json", {
     name: "@fake/pkg",
@@ -81,8 +81,21 @@ describe("mergeMessages", () => {
     );
     expect(messages["ui.close"]).toBe("Close");
     expect(warnings).toEqual([
-      "@fake/pkg has no ui.pt-br.json; its English text will be used",
+      "@fake/pkg has no ui.pt-BR.json; its English text will be used",
     ]);
+  });
+
+  it("reads lowercase catalog names from packages published before the rename", () => {
+    write("node_modules/@fake/pkg/lang/ui.pt-br.json", {
+      "ui.close": { defaultMessage: "Fechar" },
+    });
+    const { messages, warnings } = mergeMessages(
+      config(),
+      config().catalogs[0],
+      "pt-BR",
+    );
+    expect(messages["ui.close"]).toBe("Fechar");
+    expect(warnings).toEqual([]);
   });
 
   it("applies hand-maintained overrides without warning", () => {
@@ -108,9 +121,9 @@ describe("compileCatalog", () => {
     const result = compileCatalog(config(), config().catalogs[0]);
     expect(result.written).toEqual([
       "src/messages/ui.en.json",
-      "src/messages/ui.en-us.json",
+      "src/messages/ui.en-US.json",
       "src/messages/ui.fr.json",
-      "src/messages/ui.pt-br.json",
+      "src/messages/ui.pt-BR.json",
     ]);
     const fr = JSON.parse(
       fs.readFileSync(path.join(root, "src/messages/ui.fr.json"), "utf-8"),

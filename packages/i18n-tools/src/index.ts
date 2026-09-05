@@ -50,9 +50,10 @@ export interface CatalogConfig {
    */
   crowdinFile?: string;
   /**
-   * Template for the translated files, `{lang}` being the lowercased
-   * language id and `{Lang}` Crowdin's casing. Defaults to the source path
-   * with `.en.json` replaced by `.{lang}.json`.
+   * Template for the translated files, `{lang}` being the language id in
+   * Crowdin's canonical casing (`pt-BR`) and `{lang:lower}` its lowercase
+   * form. Defaults to the source path with `.en.json` replaced by
+   * `.{lang}.json`.
    */
   translations?: string;
   /**

@@ -74,12 +74,12 @@ describe("resolveConfig", () => {
 });
 
 describe("expandTemplate", () => {
-  it("lowercases {lang} and keeps Crowdin casing for {Lang}", () => {
+  it("keeps Crowdin casing for {lang} and lowercases {lang:lower}", () => {
     expect(expandTemplate("lang/ui.{lang}.json", "pt-BR")).toBe(
-      "lang/ui.pt-br.json",
+      "lang/ui.pt-BR.json",
     );
-    expect(expandTemplate("_locales/{Lang}/strings.json", "pt-BR")).toBe(
-      "_locales/pt-BR/strings.json",
+    expect(expandTemplate("api.{lang:lower}.json", "pt-BR")).toBe(
+      "api.pt-br.json",
     );
   });
 });
@@ -97,7 +97,7 @@ describe("strayTranslationFiles", () => {
       "ui.en.json",
       "ui.fr.json",
       "ui.de.json",
-      "ui.en-us.json",
+      "ui.en-US.json",
       "other.de.json",
     ]) {
       fs.writeFileSync(path.join(dir, "lang", name), "{}");

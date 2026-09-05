@@ -8,7 +8,7 @@ import { createRequire } from "node:module";
 import path from "node:path";
 import type { MessageFormatElement } from "@formatjs/icu-messageformat-parser";
 import type { ResolvedCatalog, ResolvedConfig } from "./config.ts";
-import { catalogLocales, translationPath } from "./config.ts";
+import { catalogLocales, expandTemplate, translationPath } from "./config.ts";
 import { parseMessage } from "./icu.ts";
 import { readCatalog } from "./messages.ts";
 import type { Catalog } from "./index.ts";
@@ -70,13 +70,15 @@ export const mergeMessages = (
   for (const name of catalog.packages) {
     const dir = packageLangDir(name, root);
     const packageEnglish = readCatalog(path.join(dir, "ui.en.json"));
-    const packageFile = path.join(dir, `ui.${locale.toLowerCase()}.json`);
+    // Packages published before the catalogs took canonical casing ship
+    // lowercase names.
     const packageTranslation = isEnglish
       ? undefined
-      : readOptional(packageFile);
+      : readOptional(path.join(dir, `ui.${locale}.json`)) ??
+        readOptional(path.join(dir, `ui.${locale.toLowerCase()}.json`));
     if (!isEnglish && !packageTranslation && !catalog.local.includes(locale)) {
       warnings.push(
-        `${name} has no ui.${locale.toLowerCase()}.json; its English text will be used`,
+        `${name} has no ui.${locale}.json; its English text will be used`,
       );
     }
     for (const [id, message] of Object.entries(
@@ -126,12 +128,7 @@ export const compileCatalog = (
   for (const locale of catalogLocales(config, catalog)) {
     const merged = mergeMessages(config, catalog, locale);
     warnings.push(...merged.warnings);
-    const out = path.resolve(
-      config.root,
-      catalog.out
-        .replaceAll("{lang}", locale.toLowerCase())
-        .replaceAll("{Lang}", locale),
-    );
+    const out = path.resolve(config.root, expandTemplate(catalog.out, locale));
     fs.mkdirSync(path.dirname(out), { recursive: true });
     fs.writeFileSync(
       out,
