@@ -1,0 +1,32 @@
+{
+  "ui-patterns.help-translate": {
+    "defaultMessage": "Ayudar a traducir"
+  },
+  "ui-patterns.language": {
+    "defaultMessage": "Idioma"
+  },
+  "ui-patterns.language-fully-supported-heading": {
+    "defaultMessage": "Totalmente compatible"
+  },
+  "ui-patterns.language-partially-supported-heading": {
+    "defaultMessage": "Parcialmente compatible"
+  },
+  "ui-patterns.language-preview-notice": {
+    "defaultMessage": "Estos idiomas son una vista previa temprana de traducciones en curso."
+  },
+  "ui-patterns.language-support-checked": {
+    "defaultMessage": "Compatible"
+  },
+  "ui-patterns.language-support-unchecked": {
+    "defaultMessage": "No compatible"
+  },
+  "ui-patterns.language-supported-for": {
+    "defaultMessage": "Traducciones compatibles con:"
+  },
+  "ui-patterns.language-toast-title": {
+    "defaultMessage": "Idioma no es totalmente compatible"
+  },
+  "ui-patterns.play-video": {
+    "defaultMessage": "Play video: {title}"
+  }
+}

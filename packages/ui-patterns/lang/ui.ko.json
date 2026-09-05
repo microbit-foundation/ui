@@ -1,42 +1,32 @@
 {
   "ui-patterns.help-translate": {
-    "defaultMessage": "번역 지원",
-    "description": "Language dialog link to the translation project"
+    "defaultMessage": "번역 지원"
   },
   "ui-patterns.language": {
-    "defaultMessage": "언어 선택",
-    "description": "Language dialog title"
+    "defaultMessage": "언어 선택"
   },
   "ui-patterns.language-fully-supported-heading": {
-    "defaultMessage": "완벽 지원",
-    "description": "Fully supported languages heading text"
+    "defaultMessage": "완벽 지원"
   },
   "ui-patterns.language-partially-supported-heading": {
-    "defaultMessage": "일부 지원",
-    "description": "Partially supported languages heading text"
+    "defaultMessage": "일부 지원"
   },
   "ui-patterns.language-preview-notice": {
-    "defaultMessage": "* These languages are an early preview of in-progress translations.",
-    "description": "Language dialog footnote shown when preview languages are listed"
+    "defaultMessage": "* These languages are an early preview of in-progress translations."
   },
   "ui-patterns.language-support-checked": {
-    "defaultMessage": "지원됨",
-    "description": "Aria label for ticked checkbox for language support"
+    "defaultMessage": "지원됨"
   },
   "ui-patterns.language-support-unchecked": {
-    "defaultMessage": "지원되지 않음",
-    "description": "Aria label for unticked checkbox for language support"
+    "defaultMessage": "지원되지 않음"
   },
   "ui-patterns.language-supported-for": {
-    "defaultMessage": "번역 지원 언어:",
-    "description": "Text introducing the list of translated products for a given language"
+    "defaultMessage": "번역 지원 언어:"
   },
   "ui-patterns.language-toast-title": {
-    "defaultMessage": "완전히 지원되지 않는 언어",
-    "description": "Language support toast notification title"
+    "defaultMessage": "완전히 지원되지 않는 언어"
   },
   "ui-patterns.play-video": {
-    "defaultMessage": "Play video: {title}",
-    "description": "Accessible label for the play button shown over a video preview image; title is the video's title"
+    "defaultMessage": "Play video: {title}"
   }
 }

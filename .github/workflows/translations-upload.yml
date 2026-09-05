@@ -1,0 +1,50 @@
+name: translations-upload
+
+# Sends the English catalogs to Crowdin. Run by hand from the Actions tab for
+# now; once a dry run has shown it does the right thing, the intention is to
+# also run it on every change to the catalogs landing on main, so translators
+# see new strings without anyone uploading by hand:
+#
+#   push:
+#     branches: [main]
+#     paths: ["packages/*/lang/ui.en.json"]
+#
+# Translations of strings whose English changed are cleared, as with a manual
+# upload; for a correction translators need not revisit, tick "keep
+# translations".
+on:
+  workflow_dispatch:
+    inputs:
+      keep_translations:
+        description: Keep translations of strings whose English text changed
+        type: boolean
+        default: false
+      dry_run:
+        description: Show what would change without uploading
+        type: boolean
+        default: false
+
+concurrency:
+  group: translations-upload
+  cancel-in-progress: false
+
+env:
+  # renovate: datasource=npm depName=npm
+  NPM_VERSION: "11"
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "24.x"
+          cache: npm
+      - run: npm install -g npm@${{ env.NPM_VERSION }}
+      - run: npm ci
+      - run: npm run i18n:upload -- ${{ inputs.keep_translations && '--keep-translations' || '' }} ${{ inputs.dry_run && '--dry-run' || '' }}
+        env:
+          CROWDIN_PERSONAL_TOKEN: ${{ secrets.MICROBIT_ORG_CROWDIN_PERSONAL_ACCESS_TOKEN }}

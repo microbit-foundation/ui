@@ -1,42 +1,32 @@
 {
   "ui-patterns.help-translate": {
-    "defaultMessage": "Contribuer à la traduction",
-    "description": "Language dialog link to the translation project"
+    "defaultMessage": "Contribuer à la traduction"
   },
   "ui-patterns.language": {
-    "defaultMessage": "Langue",
-    "description": "Language dialog title"
+    "defaultMessage": "Langue"
   },
   "ui-patterns.language-fully-supported-heading": {
-    "defaultMessage": "Entièrement pris en charge",
-    "description": "Fully supported languages heading text"
+    "defaultMessage": "Entièrement pris en charge"
   },
   "ui-patterns.language-partially-supported-heading": {
-    "defaultMessage": "Partiellement pris en charge",
-    "description": "Partially supported languages heading text"
+    "defaultMessage": "Partiellement pris en charge"
   },
   "ui-patterns.language-preview-notice": {
-    "defaultMessage": "* These languages are an early preview of in-progress translations.",
-    "description": "Language dialog footnote shown when preview languages are listed"
+    "defaultMessage": "* These languages are an early preview of in-progress translations."
   },
   "ui-patterns.language-support-checked": {
-    "defaultMessage": "Pris en charge",
-    "description": "Aria label for ticked checkbox for language support"
+    "defaultMessage": "Pris en charge"
   },
   "ui-patterns.language-support-unchecked": {
-    "defaultMessage": "Non pris en charge",
-    "description": "Aria label for unticked checkbox for language support"
+    "defaultMessage": "Non pris en charge"
   },
   "ui-patterns.language-supported-for": {
-    "defaultMessage": "Traductions prises en charge pour :",
-    "description": "Text introducing the list of translated products for a given language"
+    "defaultMessage": "Traductions prises en charge pour :"
   },
   "ui-patterns.language-toast-title": {
-    "defaultMessage": "La langue n'est pas entièrement prise en charge",
-    "description": "Language support toast notification title"
+    "defaultMessage": "La langue n'est pas entièrement prise en charge"
   },
   "ui-patterns.play-video": {
-    "defaultMessage": "Play video: {title}",
-    "description": "Accessible label for the play button shown over a video preview image; title is the video's title"
+    "defaultMessage": "Play video: {title}"
   }
 }

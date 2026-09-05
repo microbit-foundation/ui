@@ -1,0 +1,47 @@
+{
+  "ui.breadcrumb": {
+    "defaultMessage": "巡覽路徑"
+  },
+  "ui.close-action": {
+    "defaultMessage": "關閉"
+  },
+  "ui.combobox-listbox": {
+    "defaultMessage": "建議"
+  },
+  "ui.combobox-trigger": {
+    "defaultMessage": "顯示建議"
+  },
+  "ui.loading": {
+    "defaultMessage": "正在載入"
+  },
+  "ui.new-tab-notice": {
+    "defaultMessage": "opens in a new tab"
+  },
+  "ui.numberfield-decrease": {
+    "defaultMessage": "縮小 {fieldLabel}"
+  },
+  "ui.numberfield-increase": {
+    "defaultMessage": "放大 {fieldLabel}"
+  },
+  "ui.select-placeholder": {
+    "defaultMessage": "選取項目"
+  },
+  "ui.select-row-action": {
+    "defaultMessage": "選擇"
+  },
+  "ui.toast-region": {
+    "defaultMessage": "{count, plural, one {# 個通知} other {# 個通知}}。"
+  },
+  "ui.toast-status-error": {
+    "defaultMessage": "錯誤"
+  },
+  "ui.toast-status-info": {
+    "defaultMessage": "資訊"
+  },
+  "ui.toast-status-success": {
+    "defaultMessage": "成功"
+  },
+  "ui.toast-status-warning": {
+    "defaultMessage": "警告"
+  }
+}

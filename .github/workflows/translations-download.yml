@@ -1,0 +1,75 @@
+name: translations-download
+
+# Pulls the configured languages from Crowdin and opens (or refreshes) a
+# pull request with whatever changed. New languages are added to
+# i18n.config.mjs first; this only updates the ones listed there.
+on:
+  schedule:
+    # Monday mornings UTC, after crowdin-reports has run at 5am. The repos
+    # share one Crowdin token, so each starts at a different minute.
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+concurrency:
+  group: translations-download
+  cancel-in-progress: false
+
+env:
+  # renovate: datasource=npm depName=npm
+  NPM_VERSION: "11"
+  BRANCH: translations/sync
+
+jobs:
+  download:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      # The branch is pushed and the pull request opened with a token from the
+      # microbit-i18n GitHub App rather than GITHUB_TOKEN: events raised by
+      # GITHUB_TOKEN never start workflows, so the pull request would get no
+      # CI. The App's setup is in the @microbit/i18n-tools README.
+      - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        id: app-token
+        with:
+          app-id: ${{ secrets.I18N_APP_ID }}
+          private-key: ${{ secrets.I18N_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "24.x"
+          cache: npm
+      - run: npm install -g npm@${{ env.NPM_VERSION }}
+      - run: npm ci
+      - run: npm run i18n:download
+        env:
+          CROWDIN_PERSONAL_TOKEN: ${{ secrets.MICROBIT_ORG_CROWDIN_PERSONAL_ACCESS_TOKEN }}
+      - run: npm run format
+      - name: Open or update the pull request
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          APP_SLUG: ${{ steps.app-token.outputs.app-slug }}
+        run: |
+          # Staged first so a new language's file counts as a change.
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No translation changes."
+            exit 0
+          fi
+          BOT="$APP_SLUG[bot]"
+          BOT_ID=$(gh api "/users/$BOT" --jq .id)
+          git config user.name "$BOT"
+          git config user.email "$BOT_ID+$BOT@users.noreply.github.com"
+          git checkout -B "$BRANCH"
+          git commit -m "Translation sync"
+          git push --force origin "$BRANCH"
+          if gh pr view "$BRANCH" --json state --jq .state 2>/dev/null | grep -q OPEN; then
+            echo "Updated the open pull request."
+          else
+            gh pr create --base main --head "$BRANCH" --title "Translation sync" \
+              --body "Translations downloaded from Crowdin by the translations-download workflow. Review, then merge; the branch is force-pushed on each run."
+          fi

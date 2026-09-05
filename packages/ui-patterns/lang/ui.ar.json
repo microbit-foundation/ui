@@ -1,42 +1,32 @@
 {
   "ui-patterns.help-translate": {
-    "defaultMessage": "ساعدنا في الترجمة",
-    "description": "Language dialog link to the translation project"
+    "defaultMessage": "ساعدنا في الترجمة"
   },
   "ui-patterns.language": {
-    "defaultMessage": "اللغة",
-    "description": "Language dialog title"
+    "defaultMessage": "اللغة"
   },
   "ui-patterns.language-fully-supported-heading": {
-    "defaultMessage": "مدعومة بالكامل",
-    "description": "Fully supported languages heading text"
+    "defaultMessage": "مدعومة بالكامل"
   },
   "ui-patterns.language-partially-supported-heading": {
-    "defaultMessage": "مدعومة جزئيًا",
-    "description": "Partially supported languages heading text"
+    "defaultMessage": "مدعومة جزئيًا"
   },
   "ui-patterns.language-preview-notice": {
-    "defaultMessage": "* هذه اللغات معاينة مبكرة لترجمات قيد الإنجاز.",
-    "description": "Language dialog footnote shown when preview languages are listed"
+    "defaultMessage": "* هذه اللغات معاينة مبكرة لترجمات قيد الإنجاز."
   },
   "ui-patterns.language-support-checked": {
-    "defaultMessage": "مدعوم",
-    "description": "Aria label for ticked checkbox for language support"
+    "defaultMessage": "مدعوم"
   },
   "ui-patterns.language-support-unchecked": {
-    "defaultMessage": "غير مدعوم",
-    "description": "Aria label for unticked checkbox for language support"
+    "defaultMessage": "غير مدعوم"
   },
   "ui-patterns.language-supported-for": {
-    "defaultMessage": "الترجمات مدعومة في:",
-    "description": "Text introducing the list of translated products for a given language"
+    "defaultMessage": "الترجمات مدعومة في:"
   },
   "ui-patterns.language-toast-title": {
-    "defaultMessage": "اللغة غير مدعومة بشكل كامل",
-    "description": "Language support toast notification title"
+    "defaultMessage": "اللغة غير مدعومة بشكل كامل"
   },
   "ui-patterns.play-video": {
-    "defaultMessage": "Play video: {title}",
-    "description": "Accessible label for the play button shown over a video preview image; title is the video's title"
+    "defaultMessage": "Play video: {title}"
   }
 }

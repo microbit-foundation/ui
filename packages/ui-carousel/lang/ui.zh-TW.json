@@ -1,0 +1,17 @@
+{
+  "ui-carousel.next": {
+    "defaultMessage": "Next"
+  },
+  "ui-carousel.previous": {
+    "defaultMessage": "Previous"
+  },
+  "ui-carousel.role": {
+    "defaultMessage": "順序播放"
+  },
+  "ui-carousel.slide-label": {
+    "defaultMessage": "第 {slideNum} 張，共 {totalSlides} 張"
+  },
+  "ui-carousel.slide-role": {
+    "defaultMessage": "slide"
+  }
+}
