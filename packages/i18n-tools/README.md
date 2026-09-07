@@ -125,12 +125,16 @@ the Actions tab, and `translations-download`, which runs weekly and opens or
 refreshes a `translations/sync` pull request. Both need the shared Crowdin
 token in `MICROBIT_ORG_CROWDIN_PERSONAL_ACCESS_TOKEN`.
 
-The download workflow pushes and opens its pull request with a token from
-the `microbit-i18n` GitHub App rather than `GITHUB_TOKEN`, because events
-raised by `GITHUB_TOKEN` never start workflows and the pull request would
-get no CI. It is a separate App from Renovate's so that its private key,
-which every translated repo holds, can do no more than push a branch and
-open a pull request.
+The download workflow installs the repo's dependencies and then hands over
+to
+[`translations-sync-action`](https://github.com/microbit-foundation/translations-sync-action),
+which runs `npm run i18n:download`, publishes the `--summary` output to the
+step summary and the pull request body, and pushes with a token from the
+`microbit-i18n` GitHub App rather than `GITHUB_TOKEN`, because events raised
+by `GITHUB_TOKEN` never start workflows and the pull request would get no
+CI. It is a separate App from Renovate's so that its private key, which
+every translated repo holds, can do no more than push a branch and open a
+pull request.
 
 One-time setup, and for each new repo:
 
