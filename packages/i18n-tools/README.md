@@ -32,9 +32,12 @@ problems in hand-edited files.
 A catalog that is not in Crowdin yet, or that fails to download, is reported
 and the rest still download.
 
-Exit codes: 0 on success, 1 for usage errors, failed downloads or a failing
-`--check`, 2 when `tidy` finds placeholder problems (files are still written
-so you can fix them in place).
+Exit codes: 0 on success; 1 for usage and configuration errors, a failing
+`--check`, or a download that produced nothing; 2 when the command did its
+work but found problems, namely `tidy` finding placeholder issues (the files
+are still written so you can fix them in place) and `download` failing for
+some files while writing the rest. The download workflows open their pull
+request on 0 or 2 and stop on anything else.
 
 ## Configuration
 

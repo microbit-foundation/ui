@@ -72,6 +72,7 @@ export const runDownload = async (
   const project = await CrowdinProject.connect(config.crowdin, requireToken());
   const { directory } = config.crowdin;
   const dropped: Issue[] = [];
+  let written = 0;
   let failures = 0;
 
   const downloadOther = async (language: string, crowdinPath: string) => {
@@ -115,6 +116,7 @@ export const runDownload = async (
           dropped.push(...dropInvalidTranslations(relative, english, tidied));
         }
         writeCatalog(path.resolve(config.root, relative), tidied);
+        written++;
         console.log(
           `${relative}: ${Object.keys(tidied).length}/${Object.keys(english).length} messages`,
         );
@@ -146,6 +148,7 @@ export const runDownload = async (
           for (const [name, data] of contents) {
             writeBytes(path.join(local, name), data);
           }
+          written++;
           console.log(
             `${path.relative(config.root, local)}/: ${contents.size} files`,
           );
@@ -156,6 +159,7 @@ export const runDownload = async (
             skipUntranslated: language !== inContextLanguage,
           });
           writeBytes(local, new TextEncoder().encode(text));
+          written++;
           console.log(path.relative(config.root, local));
         }
       } catch (e) {
@@ -175,7 +179,9 @@ export const runDownload = async (
   }
   if (failures) {
     console.error(`${failures} download(s) failed`);
-    return 1;
+    // Exit 2 tells a caller the files that were written are worth keeping;
+    // 1 that nothing usable came back.
+    return written ? 2 : 1;
   }
   return 0;
 };
