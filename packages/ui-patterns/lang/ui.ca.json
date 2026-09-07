@@ -12,7 +12,7 @@
     "defaultMessage": "Parcialment compatible"
   },
   "ui-patterns.language-preview-notice": {
-    "defaultMessage": "* These languages are an early preview of in-progress translations."
+    "defaultMessage": "* Aquests idiomes són una vista prèvia de les traduccions en curs."
   },
   "ui-patterns.language-support-checked": {
     "defaultMessage": "Compatible"
@@ -27,6 +27,6 @@
     "defaultMessage": "L'idioma no està disponible totalment"
   },
   "ui-patterns.play-video": {
-    "defaultMessage": "Play video: {title}"
+    "defaultMessage": "Reprodueix el vídeo: {title}"
   }
 }

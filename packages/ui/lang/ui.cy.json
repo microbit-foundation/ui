@@ -5,38 +5,14 @@
   "ui.close-action": {
     "defaultMessage": "Cau"
   },
-  "ui.combobox-listbox": {
-    "defaultMessage": "Suggestions"
-  },
-  "ui.combobox-trigger": {
-    "defaultMessage": "Show suggestions"
-  },
   "ui.loading": {
     "defaultMessage": "Wrthi'n Llwytho"
-  },
-  "ui.new-tab-notice": {
-    "defaultMessage": "opens in a new tab"
-  },
-  "ui.numberfield-decrease": {
-    "defaultMessage": "Decrease {fieldLabel}"
-  },
-  "ui.numberfield-increase": {
-    "defaultMessage": "Increase {fieldLabel}"
-  },
-  "ui.select-placeholder": {
-    "defaultMessage": "Select an item"
   },
   "ui.select-row-action": {
     "defaultMessage": "Dewis"
   },
-  "ui.toast-region": {
-    "defaultMessage": "{count, plural, one {# notification} other {# notifications}}."
-  },
   "ui.toast-status-error": {
     "defaultMessage": "Gwall"
-  },
-  "ui.toast-status-info": {
-    "defaultMessage": "Information"
   },
   "ui.toast-status-success": {
     "defaultMessage": "Llwyddiant"

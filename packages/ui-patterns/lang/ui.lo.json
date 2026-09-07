@@ -11,9 +11,6 @@
   "ui-patterns.language-partially-supported-heading": {
     "defaultMessage": "ຮອງຮັບບາງສ່ວນ"
   },
-  "ui-patterns.language-preview-notice": {
-    "defaultMessage": "* These languages are an early preview of in-progress translations."
-  },
   "ui-patterns.language-support-checked": {
     "defaultMessage": "ຮອງຮັບ"
   },
@@ -25,8 +22,5 @@
   },
   "ui-patterns.language-toast-title": {
     "defaultMessage": "ພາສາບໍ່ຮອງຮັບຢ່າງເຕັມທີ່"
-  },
-  "ui-patterns.play-video": {
-    "defaultMessage": "Play video: {title}"
   }
 }

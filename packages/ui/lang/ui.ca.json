@@ -15,7 +15,7 @@
     "defaultMessage": "S'està carregant"
   },
   "ui.new-tab-notice": {
-    "defaultMessage": "opens in a new tab"
+    "defaultMessage": "s'obre en una pestanya nova"
   },
   "ui.numberfield-decrease": {
     "defaultMessage": "Decrementa {fieldLabel}"

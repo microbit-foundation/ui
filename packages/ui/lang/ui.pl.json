@@ -15,7 +15,7 @@
     "defaultMessage": "Ładowanie"
   },
   "ui.new-tab-notice": {
-    "defaultMessage": "opens in a new tab"
+    "defaultMessage": "otwiera się w nowej karcie"
   },
   "ui.numberfield-decrease": {
     "defaultMessage": "Zmniejsz {fieldLabel}"
@@ -30,7 +30,7 @@
     "defaultMessage": "Wybierz"
   },
   "ui.toast-region": {
-    "defaultMessage": "{count, plural, one {# powiadomienie} few {# powiadomienia} many {# powiadomień} other {# powiadomienia}}."
+    "defaultMessage": "{count, plural, one {# powiadomienie} few {# powiadomienia} many {# powiadomienia} other {#  powiadomienia}}."
   },
   "ui.toast-status-error": {
     "defaultMessage": "Błąd"

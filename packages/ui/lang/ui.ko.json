@@ -14,9 +14,6 @@
   "ui.loading": {
     "defaultMessage": "불러오는 중..."
   },
-  "ui.new-tab-notice": {
-    "defaultMessage": "opens in a new tab"
-  },
   "ui.numberfield-decrease": {
     "defaultMessage": "{fieldLabel} 감소"
   },

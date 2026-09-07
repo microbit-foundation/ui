@@ -15,7 +15,7 @@
     "defaultMessage": "Laden"
   },
   "ui.new-tab-notice": {
-    "defaultMessage": "opens in a new tab"
+    "defaultMessage": "opent in een nieuw tabblad"
   },
   "ui.numberfield-decrease": {
     "defaultMessage": "Verlaag {fieldLabel}"

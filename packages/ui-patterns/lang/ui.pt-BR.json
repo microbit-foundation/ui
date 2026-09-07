@@ -27,6 +27,6 @@
     "defaultMessage": "O idioma possui suporte parcial"
   },
   "ui-patterns.play-video": {
-    "defaultMessage": "Play video: {title}"
+    "defaultMessage": "Reproduzir vídeo: {title}"
   }
 }

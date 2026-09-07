@@ -27,6 +27,6 @@
     "defaultMessage": "Język nie w pełni obsługiwany"
   },
   "ui-patterns.play-video": {
-    "defaultMessage": "Play video: {title}"
+    "defaultMessage": "Odtwarzaj wideo: {title}"
   }
 }

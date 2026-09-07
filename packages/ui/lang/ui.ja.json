@@ -14,9 +14,6 @@
   "ui.loading": {
     "defaultMessage": "ロード中"
   },
-  "ui.new-tab-notice": {
-    "defaultMessage": "opens in a new tab"
-  },
   "ui.numberfield-decrease": {
     "defaultMessage": "{fieldLabel}を縮小"
   },

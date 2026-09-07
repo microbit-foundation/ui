@@ -1,9 +1,6 @@
 {
   "ui-carousel.next": {
-    "defaultMessage": "Next"
-  },
-  "ui-carousel.previous": {
-    "defaultMessage": "Previous"
+    "defaultMessage": "ຕໍ່ໄປ\n"
   },
   "ui-carousel.role": {
     "defaultMessage": "ຮູບແບບເລື່ອນຮູບ"

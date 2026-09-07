@@ -11,9 +11,6 @@
   "ui-patterns.language-partially-supported-heading": {
     "defaultMessage": "일부 지원"
   },
-  "ui-patterns.language-preview-notice": {
-    "defaultMessage": "* These languages are an early preview of in-progress translations."
-  },
   "ui-patterns.language-support-checked": {
     "defaultMessage": "지원됨"
   },
@@ -25,8 +22,5 @@
   },
   "ui-patterns.language-toast-title": {
     "defaultMessage": "완전히 지원되지 않는 언어"
-  },
-  "ui-patterns.play-video": {
-    "defaultMessage": "Play video: {title}"
   }
 }

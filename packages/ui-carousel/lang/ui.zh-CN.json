@@ -1,17 +1,11 @@
 {
   "ui-carousel.next": {
-    "defaultMessage": "Next"
+    "defaultMessage": "下一个"
   },
   "ui-carousel.previous": {
-    "defaultMessage": "Previous"
-  },
-  "ui-carousel.role": {
-    "defaultMessage": "carousel"
-  },
-  "ui-carousel.slide-label": {
-    "defaultMessage": "{slideNum} of {totalSlides}"
+    "defaultMessage": "上一个"
   },
   "ui-carousel.slide-role": {
-    "defaultMessage": "slide"
+    "defaultMessage": "滑动"
   }
 }

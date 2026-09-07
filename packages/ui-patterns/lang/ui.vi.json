@@ -11,9 +11,6 @@
   "ui-patterns.language-partially-supported-heading": {
     "defaultMessage": "Được hỗ trợ một phần"
   },
-  "ui-patterns.language-preview-notice": {
-    "defaultMessage": "* These languages are an early preview of in-progress translations."
-  },
   "ui-patterns.language-support-checked": {
     "defaultMessage": "Được hỗ trợ"
   },
@@ -25,8 +22,5 @@
   },
   "ui-patterns.language-toast-title": {
     "defaultMessage": "Ngôn ngữ không được hỗ trợ đầy đủ"
-  },
-  "ui-patterns.play-video": {
-    "defaultMessage": "Play video: {title}"
   }
 }

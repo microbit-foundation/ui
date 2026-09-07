@@ -1,15 +1,12 @@
 {
   "ui-carousel.next": {
-    "defaultMessage": "Next"
-  },
-  "ui-carousel.previous": {
-    "defaultMessage": "Previous"
+    "defaultMessage": "Avanti"
   },
   "ui-carousel.role": {
-    "defaultMessage": "carousel"
+    "defaultMessage": "sequenza"
   },
   "ui-carousel.slide-label": {
-    "defaultMessage": "{slideNum} of {totalSlides}"
+    "defaultMessage": "{slideNum} di {totalSlides}"
   },
   "ui-carousel.slide-role": {
     "defaultMessage": "slide"
