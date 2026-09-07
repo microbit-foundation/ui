@@ -69,6 +69,24 @@ const isRecord = (value: unknown): value is Record<string, unknown> =>
 const isStringArray = (value: unknown): value is string[] =>
   Array.isArray(value) && value.every((v) => typeof v === "string");
 
+/**
+ * A path template must use a placeholder this tool expands, and only those:
+ * a `{Lang}` or `{locale}` would otherwise become a literal directory name.
+ */
+const checkTemplate = (template: string, what: string): void => {
+  const placeholders = template.match(/\{[^}]*\}/g) ?? [];
+  const known = ["{lang}", "{lang:lower}"];
+  const unknown = placeholders.find((p) => !known.includes(p));
+  if (unknown) {
+    throw new ConfigError(
+      `${what} contains ${unknown}; the placeholders are {lang} and {lang:lower}`,
+    );
+  }
+  if (!placeholders.some((p) => known.includes(p))) {
+    throw new ConfigError(`${what} must contain {lang} or {lang:lower}`);
+  }
+};
+
 export const resolveCatalog = (catalog: CatalogConfig): ResolvedCatalog => {
   if (typeof catalog.source !== "string") {
     throw new ConfigError("Each catalog needs a `source` path");
@@ -82,11 +100,7 @@ export const resolveCatalog = (catalog: CatalogConfig): ResolvedCatalog => {
     }
     translations = catalog.source.replace(/\.en\.json$/, ".{lang}.json");
   }
-  if (!translations.includes("{lang")) {
-    throw new ConfigError(
-      `Catalog ${catalog.source}: \`translations\` must contain {lang} or {lang:lower}`,
-    );
-  }
+  checkTemplate(translations, `Catalog ${catalog.source}: \`translations\``);
   const local = catalog.local ?? [];
   if (local.some((l) => l.toLowerCase() === "en")) {
     throw new ConfigError(
@@ -140,6 +154,7 @@ export const resolveConfig = (
     ) {
       throw new ConfigError("Each file needs `crowdinFile` and `local` paths");
     }
+    checkTemplate(file.local, `File ${file.crowdinFile}: \`local\``);
   }
   return {
     root,

@@ -71,6 +71,41 @@ describe("resolveConfig", () => {
     ).toThrow(/translations/);
     expect(() => resolveConfig({ languages: [] }, "/")).toThrow(/crowdin/);
   });
+
+  it("rejects templates with unknown placeholders", () => {
+    expect(() =>
+      resolveConfig(
+        {
+          ...base,
+          files: [{ crowdinFile: "x.json", local: "_locales/{Lang}/x.json" }],
+        },
+        "/",
+      ),
+    ).toThrow(/\{Lang\}/);
+    expect(() =>
+      resolveConfig(
+        {
+          ...base,
+          catalogs: [
+            {
+              source: "lang/ui.en.json",
+              translations: "lang/ui.{locale}.json",
+            },
+          ],
+        },
+        "/",
+      ),
+    ).toThrow(/\{locale\}/);
+    expect(() =>
+      resolveConfig(
+        {
+          ...base,
+          files: [{ crowdinFile: "docs/", local: "docs/_locales/{lang}/" }],
+        },
+        "/",
+      ),
+    ).not.toThrow();
+  });
 });
 
 describe("expandTemplate", () => {
