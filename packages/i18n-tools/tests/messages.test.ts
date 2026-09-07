@@ -79,6 +79,21 @@ describe("validation", () => {
   });
 });
 
+describe("quoting", () => {
+  it("is reported as the cause rather than as missing placeholders", () => {
+    const issues = validateTranslation("lang/ui.ko.json", english, {
+      b: { defaultMessage: "'{name}' 저장" },
+    });
+    expect(issues).toHaveLength(1);
+    expect(issues[0].message).toMatch(/starts an ICU quote/);
+    expect(
+      validateSource("lang/ui.en.json", {
+        x: { defaultMessage: "Save '{name}'" },
+      }),
+    ).toHaveLength(1);
+  });
+});
+
 describe("dropInvalidTranslations", () => {
   it("removes translations with placeholder problems and reports them", () => {
     const translated = {

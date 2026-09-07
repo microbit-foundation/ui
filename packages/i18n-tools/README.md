@@ -26,7 +26,10 @@ subproject, say).
 
 A translation that has lost or gained a placeholder (`{name}`, `<link>`)
 would show users literal markup, so `download` leaves it out, English shows
-instead, and the log names it for fixing in Crowdin. `tidy` reports the same
+instead, and the log names it for fixing in Crowdin. The same goes for a
+straight apostrophe directly before `{`, `}`, `<` or `>` (or `#` in a
+plural), which ICU reads as the start of a quote so the syntax after it
+renders literally; `''` is the escape for a literal apostrophe there. `tidy` reports the same
 problems in hand-edited files. The `--summary` file lists them too, with
 the failed downloads, and the download workflows put it in the pull request
 body and the run's step summary so the deletions in the diff are explained
