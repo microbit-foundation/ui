@@ -22,6 +22,7 @@ Commands:
   download      Fetch translations from Crowdin into the repo
                   --language <id>   only this language (repeatable)
                   --approved-only   only approved translations
+                  --summary <file>  write a Markdown summary of the download
   upload        Replace the English sources in Crowdin
                   --keep-translations   keep translations of changed strings
                   --dry-run             show the changes without uploading
@@ -40,7 +41,7 @@ Crowdin commands read a personal access token from ${tokenEnvVar}.
 const commandOptions: Record<string, string[]> = {
   tidy: ["check"],
   compile: [],
-  download: ["language", "approved-only"],
+  download: ["language", "approved-only", "summary"],
   upload: ["keep-translations", "dry-run", "only"],
   status: [],
   "new-strings": ["base"],
@@ -57,6 +58,7 @@ export const main = async (argv: string[]): Promise<number> => {
         check: { type: "boolean" },
         language: { type: "string", multiple: true },
         "approved-only": { type: "boolean" },
+        summary: { type: "string" },
         "keep-translations": { type: "boolean" },
         "dry-run": { type: "boolean" },
         only: { type: "string", multiple: true },
@@ -103,6 +105,7 @@ export const main = async (argv: string[]): Promise<number> => {
         return await runDownload(config, {
           languages: values.language as string[] | undefined,
           approvedOnly: values["approved-only"] as boolean | undefined,
+          summary: values.summary as string | undefined,
         });
       case "upload":
         return await runUpload(config, {
