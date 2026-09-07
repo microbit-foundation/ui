@@ -1,17 +1,5 @@
 {
   "ui-carousel.next": {
-    "defaultMessage": "Next"
-  },
-  "ui-carousel.previous": {
-    "defaultMessage": "Previous"
-  },
-  "ui-carousel.role": {
-    "defaultMessage": "carousel"
-  },
-  "ui-carousel.slide-label": {
-    "defaultMessage": "{slideNum} of {totalSlides}"
-  },
-  "ui-carousel.slide-role": {
-    "defaultMessage": "slide"
+    "defaultMessage": "Nesaf"
   }
 }

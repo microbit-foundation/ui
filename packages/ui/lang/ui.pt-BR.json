@@ -15,7 +15,7 @@
     "defaultMessage": "Carregando"
   },
   "ui.new-tab-notice": {
-    "defaultMessage": "opens in a new tab"
+    "defaultMessage": "abre em uma nova aba"
   },
   "ui.numberfield-decrease": {
     "defaultMessage": "Diminuir {fieldLabel}"

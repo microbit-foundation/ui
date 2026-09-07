@@ -11,9 +11,6 @@
   "ui-patterns.language-partially-supported-heading": {
     "defaultMessage": "部分支持"
   },
-  "ui-patterns.language-preview-notice": {
-    "defaultMessage": "* These languages are an early preview of in-progress translations."
-  },
   "ui-patterns.language-support-checked": {
     "defaultMessage": "支持"
   },
@@ -27,6 +24,6 @@
     "defaultMessage": "该语言没有完全支持"
   },
   "ui-patterns.play-video": {
-    "defaultMessage": "Play video: {title}"
+    "defaultMessage": "播放视频：{title}"
   }
 }

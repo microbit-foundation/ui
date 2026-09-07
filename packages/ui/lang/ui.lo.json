@@ -5,41 +5,11 @@
   "ui.close-action": {
     "defaultMessage": "ປິດໜ້າ"
   },
-  "ui.combobox-listbox": {
-    "defaultMessage": "Suggestions"
-  },
-  "ui.combobox-trigger": {
-    "defaultMessage": "Show suggestions"
-  },
   "ui.loading": {
     "defaultMessage": "ກຳລັງໂຫຼດ"
   },
-  "ui.new-tab-notice": {
-    "defaultMessage": "opens in a new tab"
-  },
-  "ui.numberfield-decrease": {
-    "defaultMessage": "Decrease {fieldLabel}"
-  },
-  "ui.numberfield-increase": {
-    "defaultMessage": "Increase {fieldLabel}"
-  },
-  "ui.select-placeholder": {
-    "defaultMessage": "Select an item"
-  },
-  "ui.select-row-action": {
-    "defaultMessage": "Select"
-  },
-  "ui.toast-region": {
-    "defaultMessage": "{count, plural, one {# notification} other {# notifications}}."
-  },
   "ui.toast-status-error": {
     "defaultMessage": "ຂໍ້ຜິດພາດ"
-  },
-  "ui.toast-status-info": {
-    "defaultMessage": "Information"
-  },
-  "ui.toast-status-success": {
-    "defaultMessage": "Success"
   },
   "ui.toast-status-warning": {
     "defaultMessage": "ຄຳເຕືອນ"

@@ -11,9 +11,6 @@
   "ui-patterns.language-partially-supported-heading": {
     "defaultMessage": "Teilweise unterstützt"
   },
-  "ui-patterns.language-preview-notice": {
-    "defaultMessage": "* These languages are an early preview of in-progress translations."
-  },
   "ui-patterns.language-support-checked": {
     "defaultMessage": "Unterstützt"
   },
@@ -25,8 +22,5 @@
   },
   "ui-patterns.language-toast-title": {
     "defaultMessage": "Sprache nicht vollständig unterstützt"
-  },
-  "ui-patterns.play-video": {
-    "defaultMessage": "Play video: {title}"
   }
 }

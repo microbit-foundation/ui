@@ -27,6 +27,6 @@
     "defaultMessage": "Taal niet volledig ondersteund"
   },
   "ui-patterns.play-video": {
-    "defaultMessage": "Play video: {title}"
+    "defaultMessage": "Speel video: {title}"
   }
 }

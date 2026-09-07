@@ -1,9 +1,6 @@
 {
   "ui-carousel.next": {
-    "defaultMessage": "Next"
-  },
-  "ui-carousel.previous": {
-    "defaultMessage": "Previous"
+    "defaultMessage": "다음"
   },
   "ui-carousel.role": {
     "defaultMessage": "무한 재생"

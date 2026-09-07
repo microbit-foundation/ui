@@ -1,9 +1,9 @@
 {
   "ui-carousel.next": {
-    "defaultMessage": "Next"
+    "defaultMessage": "Volgende"
   },
   "ui-carousel.previous": {
-    "defaultMessage": "Previous"
+    "defaultMessage": "Vorige"
   },
   "ui-carousel.role": {
     "defaultMessage": "carrousel"
@@ -12,6 +12,6 @@
     "defaultMessage": "{slideNum} van {totalSlides}"
   },
   "ui-carousel.slide-role": {
-    "defaultMessage": "Veeg"
+    "defaultMessage": "glijbaan"
   }
 }

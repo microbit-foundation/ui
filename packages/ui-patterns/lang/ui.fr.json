@@ -12,7 +12,7 @@
     "defaultMessage": "Partiellement pris en charge"
   },
   "ui-patterns.language-preview-notice": {
-    "defaultMessage": "* These languages are an early preview of in-progress translations."
+    "defaultMessage": "* Ces langues sont un aperçu anticipé des traductions en cours."
   },
   "ui-patterns.language-support-checked": {
     "defaultMessage": "Pris en charge"
@@ -27,6 +27,6 @@
     "defaultMessage": "La langue n'est pas entièrement prise en charge"
   },
   "ui-patterns.play-video": {
-    "defaultMessage": "Play video: {title}"
+    "defaultMessage": "Lire la vidéo : {title}"
   }
 }

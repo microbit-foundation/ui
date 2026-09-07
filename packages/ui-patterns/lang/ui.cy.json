@@ -1,7 +1,4 @@
 {
-  "ui-patterns.help-translate": {
-    "defaultMessage": "Help translate"
-  },
   "ui-patterns.language": {
     "defaultMessage": "Iaith"
   },
@@ -10,9 +7,6 @@
   },
   "ui-patterns.language-partially-supported-heading": {
     "defaultMessage": "Wedi'u cefnogi'n rhannol"
-  },
-  "ui-patterns.language-preview-notice": {
-    "defaultMessage": "* These languages are an early preview of in-progress translations."
   },
   "ui-patterns.language-support-checked": {
     "defaultMessage": "cefnogi"
@@ -25,8 +19,5 @@
   },
   "ui-patterns.language-toast-title": {
     "defaultMessage": "Iaith heb ei chefnogi'n llawn"
-  },
-  "ui-patterns.play-video": {
-    "defaultMessage": "Play video: {title}"
   }
 }

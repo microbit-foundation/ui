@@ -1,17 +1,14 @@
 {
   "ui-carousel.next": {
-    "defaultMessage": "Next"
+    "defaultMessage": "التالي"
   },
   "ui-carousel.previous": {
-    "defaultMessage": "Previous"
-  },
-  "ui-carousel.role": {
-    "defaultMessage": "carousel"
+    "defaultMessage": "السابق"
   },
   "ui-carousel.slide-label": {
-    "defaultMessage": "{slideNum} of {totalSlides}"
+    "defaultMessage": "{slideNum} من {totalSlides}"
   },
   "ui-carousel.slide-role": {
-    "defaultMessage": "slide"
+    "defaultMessage": "شريحة"
   }
 }

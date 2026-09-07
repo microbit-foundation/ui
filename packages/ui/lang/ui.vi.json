@@ -14,9 +14,6 @@
   "ui.loading": {
     "defaultMessage": "Đang tải"
   },
-  "ui.new-tab-notice": {
-    "defaultMessage": "opens in a new tab"
-  },
   "ui.numberfield-decrease": {
     "defaultMessage": "Giảm {fieldLabel}"
   },

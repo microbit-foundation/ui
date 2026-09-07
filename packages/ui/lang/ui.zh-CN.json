@@ -15,7 +15,7 @@
     "defaultMessage": "正在加载"
   },
   "ui.new-tab-notice": {
-    "defaultMessage": "opens in a new tab"
+    "defaultMessage": "在新tab打开"
   },
   "ui.numberfield-decrease": {
     "defaultMessage": "降低 {fieldLabel}"

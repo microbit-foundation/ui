@@ -27,6 +27,6 @@
     "defaultMessage": "crwdns370142:0crwdne370142:0"
   },
   "ui-patterns.play-video": {
-    "defaultMessage": "Play video: {title}"
+    "defaultMessage": "crwdns370180:0{title}crwdne370180:0"
   }
 }

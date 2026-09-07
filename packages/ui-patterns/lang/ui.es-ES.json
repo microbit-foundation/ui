@@ -25,8 +25,5 @@
   },
   "ui-patterns.language-toast-title": {
     "defaultMessage": "Idioma no es totalmente compatible"
-  },
-  "ui-patterns.play-video": {
-    "defaultMessage": "Play video: {title}"
   }
 }

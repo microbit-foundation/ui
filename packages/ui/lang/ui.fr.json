@@ -15,7 +15,7 @@
     "defaultMessage": "Chargement"
   },
   "ui.new-tab-notice": {
-    "defaultMessage": "opens in a new tab"
+    "defaultMessage": "s'ouvre dans un nouvel onglet"
   },
   "ui.numberfield-decrease": {
     "defaultMessage": "Diminuer {fieldLabel}"

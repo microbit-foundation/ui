@@ -27,6 +27,6 @@
     "defaultMessage": "Teanga nach dtacaítear go hiomlán léi"
   },
   "ui-patterns.play-video": {
-    "defaultMessage": "Play video: {title}"
+    "defaultMessage": "Seinn físeán: {title}"
   }
 }

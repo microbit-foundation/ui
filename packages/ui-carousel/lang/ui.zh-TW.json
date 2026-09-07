@@ -1,9 +1,6 @@
 {
   "ui-carousel.next": {
-    "defaultMessage": "Next"
-  },
-  "ui-carousel.previous": {
-    "defaultMessage": "Previous"
+    "defaultMessage": "下一個"
   },
   "ui-carousel.role": {
     "defaultMessage": "順序播放"

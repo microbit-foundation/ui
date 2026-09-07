@@ -1,17 +1,17 @@
 {
   "ui-carousel.next": {
-    "defaultMessage": "Next"
+    "defaultMessage": "crwdns370188:0crwdne370188:0"
   },
   "ui-carousel.previous": {
-    "defaultMessage": "Previous"
+    "defaultMessage": "crwdns370190:0crwdne370190:0"
   },
   "ui-carousel.role": {
-    "defaultMessage": "crwdns369299:0crwdne369299:0"
+    "defaultMessage": "crwdns370192:0crwdne370192:0"
   },
   "ui-carousel.slide-label": {
-    "defaultMessage": "crwdns369301:0{slideNum}crwdnd369301:0{totalSlides}crwdne369301:0"
+    "defaultMessage": "crwdns370194:0{slideNum}crwdnd370194:0{totalSlides}crwdne370194:0"
   },
   "ui-carousel.slide-role": {
-    "defaultMessage": "crwdns369303:0crwdne369303:0"
+    "defaultMessage": "crwdns370196:0crwdne370196:0"
   }
 }
