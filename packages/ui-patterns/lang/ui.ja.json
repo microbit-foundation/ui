@@ -1,42 +1,32 @@
 {
   "ui-patterns.help-translate": {
-    "defaultMessage": "翻訳を手伝う",
-    "description": "Language dialog link to the translation project"
+    "defaultMessage": "翻訳を手伝う"
   },
   "ui-patterns.language": {
-    "defaultMessage": "言語",
-    "description": "Language dialog title"
+    "defaultMessage": "言語"
   },
   "ui-patterns.language-fully-supported-heading": {
-    "defaultMessage": "完全に対応",
-    "description": "Fully supported languages heading text"
+    "defaultMessage": "完全に対応"
   },
   "ui-patterns.language-partially-supported-heading": {
-    "defaultMessage": "部分的に対応",
-    "description": "Partially supported languages heading text"
+    "defaultMessage": "部分的に対応"
   },
   "ui-patterns.language-preview-notice": {
-    "defaultMessage": "*これらの言語は、翻訳の早期プレビューを実施中です。",
-    "description": "Language dialog footnote shown when preview languages are listed"
+    "defaultMessage": "*これらの言語は、翻訳の早期プレビューを実施中です。"
   },
   "ui-patterns.language-support-checked": {
-    "defaultMessage": "対応",
-    "description": "Aria label for ticked checkbox for language support"
+    "defaultMessage": "対応"
   },
   "ui-patterns.language-support-unchecked": {
-    "defaultMessage": "非対応",
-    "description": "Aria label for unticked checkbox for language support"
+    "defaultMessage": "非対応"
   },
   "ui-patterns.language-supported-for": {
-    "defaultMessage": "サポートされている翻訳:",
-    "description": "Text introducing the list of translated products for a given language"
+    "defaultMessage": "サポートされている翻訳:"
   },
   "ui-patterns.language-toast-title": {
-    "defaultMessage": "言語が完全にサポートされていません",
-    "description": "Language support toast notification title"
+    "defaultMessage": "言語が完全にサポートされていません"
   },
   "ui-patterns.play-video": {
-    "defaultMessage": "Play video: {title}",
-    "description": "Accessible label for the play button shown over a video preview image; title is the video's title"
+    "defaultMessage": "Play video: {title}"
   }
 }

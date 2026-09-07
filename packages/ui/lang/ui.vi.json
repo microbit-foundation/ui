@@ -1,62 +1,47 @@
 {
   "ui.breadcrumb": {
-    "defaultMessage": "Đường dẫn",
-    "description": "Accessible label for the breadcrumb navigation trail (the WAI-ARIA APG's conventional name)"
+    "defaultMessage": "Đường dẫn"
   },
   "ui.close-action": {
-    "defaultMessage": "Đóng",
-    "description": "Close button text or label"
+    "defaultMessage": "Đóng"
   },
   "ui.combobox-listbox": {
-    "defaultMessage": "Gợi ý",
-    "description": "Accessible label for a ComboBox's dropdown list of suggestions"
+    "defaultMessage": "Gợi ý"
   },
   "ui.combobox-trigger": {
-    "defaultMessage": "Hiển thị gợi ý",
-    "description": "Accessible label for the button that opens a ComboBox's suggestions dropdown"
+    "defaultMessage": "Hiển thị gợi ý"
   },
   "ui.loading": {
-    "defaultMessage": "Đang tải",
-    "description": "Announced by screen readers for a button showing a loading spinner"
+    "defaultMessage": "Đang tải"
   },
   "ui.new-tab-notice": {
-    "defaultMessage": "opens in a new tab",
-    "description": "Visually hidden suffix on links that open a new tab, announced by screen readers"
+    "defaultMessage": "opens in a new tab"
   },
   "ui.numberfield-decrease": {
-    "defaultMessage": "Giảm {fieldLabel}",
-    "description": "Accessible label for a number field's decrement stepper; fieldLabel is the field's label and may be empty"
+    "defaultMessage": "Giảm {fieldLabel}"
   },
   "ui.numberfield-increase": {
-    "defaultMessage": "Tăng {fieldLabel}",
-    "description": "Accessible label for a number field's increment stepper; fieldLabel is the field's label and may be empty"
+    "defaultMessage": "Tăng {fieldLabel}"
   },
   "ui.select-placeholder": {
-    "defaultMessage": "Chọn một mục",
-    "description": "Shown in a Select's trigger while nothing is chosen and the app supplies no placeholder"
+    "defaultMessage": "Chọn một mục"
   },
   "ui.select-row-action": {
-    "defaultMessage": "Lựa chọn",
-    "description": "Accessible label for a row-selection checkbox in a list or table; screen readers read it together with the row's content"
+    "defaultMessage": "Lựa chọn"
   },
   "ui.toast-region": {
-    "defaultMessage": "{count, plural, other {# thông báo}}.",
-    "description": "Accessible label for the notifications area; count is the number of notifications showing"
+    "defaultMessage": "{count, plural, other {# thông báo}}."
   },
   "ui.toast-status-error": {
-    "defaultMessage": "Lỗi",
-    "description": "Announced by screen readers before an error notification"
+    "defaultMessage": "Lỗi"
   },
   "ui.toast-status-info": {
-    "defaultMessage": "Thông tin",
-    "description": "Announced by screen readers before an informational notification"
+    "defaultMessage": "Thông tin"
   },
   "ui.toast-status-success": {
-    "defaultMessage": "Thành công",
-    "description": "Announced by screen readers before a success notification"
+    "defaultMessage": "Thành công"
   },
   "ui.toast-status-warning": {
-    "defaultMessage": "Cảnh báo",
-    "description": "Announced by screen readers before a warning notification"
+    "defaultMessage": "Cảnh báo"
   }
 }

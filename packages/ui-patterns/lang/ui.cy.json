@@ -1,42 +1,32 @@
 {
   "ui-patterns.help-translate": {
-    "defaultMessage": "Help translate",
-    "description": "Language dialog link to the translation project"
+    "defaultMessage": "Help translate"
   },
   "ui-patterns.language": {
-    "defaultMessage": "Iaith",
-    "description": "Language dialog title"
+    "defaultMessage": "Iaith"
   },
   "ui-patterns.language-fully-supported-heading": {
-    "defaultMessage": "Wedi'u cefnogi'n llawn",
-    "description": "Fully supported languages heading text"
+    "defaultMessage": "Wedi'u cefnogi'n llawn"
   },
   "ui-patterns.language-partially-supported-heading": {
-    "defaultMessage": "Wedi'u cefnogi'n rhannol",
-    "description": "Partially supported languages heading text"
+    "defaultMessage": "Wedi'u cefnogi'n rhannol"
   },
   "ui-patterns.language-preview-notice": {
-    "defaultMessage": "* These languages are an early preview of in-progress translations.",
-    "description": "Language dialog footnote shown when preview languages are listed"
+    "defaultMessage": "* These languages are an early preview of in-progress translations."
   },
   "ui-patterns.language-support-checked": {
-    "defaultMessage": "cefnogi",
-    "description": "Aria label for ticked checkbox for language support"
+    "defaultMessage": "cefnogi"
   },
   "ui-patterns.language-support-unchecked": {
-    "defaultMessage": "heb gefnogaeth",
-    "description": "Aria label for unticked checkbox for language support"
+    "defaultMessage": "heb gefnogaeth"
   },
   "ui-patterns.language-supported-for": {
-    "defaultMessage": "Cyfieithiadau a gefnogir ar gyfer:",
-    "description": "Text introducing the list of translated products for a given language"
+    "defaultMessage": "Cyfieithiadau a gefnogir ar gyfer:"
   },
   "ui-patterns.language-toast-title": {
-    "defaultMessage": "Iaith heb ei chefnogi'n llawn",
-    "description": "Language support toast notification title"
+    "defaultMessage": "Iaith heb ei chefnogi'n llawn"
   },
   "ui-patterns.play-video": {
-    "defaultMessage": "Play video: {title}",
-    "description": "Accessible label for the play button shown over a video preview image; title is the video's title"
+    "defaultMessage": "Play video: {title}"
   }
 }

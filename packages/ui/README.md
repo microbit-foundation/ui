@@ -328,16 +328,21 @@ compile them into their own per-locale catalogs (see the consumption setup
 above). Components also carry the English text inline as `defaultMessage`,
 so an app that compiles no catalogs still renders English.
 
-`en` is hand-edited; `en-US` is maintained manually. Other locales come from
-Crowdin via the repo-root `npm run update-translations -- <path to extracted
-Crowdin ZIP>` (config-driven over packages in
-`bin/update-translations.cjs`), after which you run `npm run i18n:tidy`
-from the root.
+`en` is hand-edited. Every other file holds only what that locale actually
+has: `en-US` the handful of spellings that differ from `en`, and each
+Crowdin locale the strings translated so far, without descriptions. Apps
+backfill from English when they compile, so an untranslated string renders
+English rather than blank, and a diff of a translated file shows translation
+changes and nothing else.
 
-`bin/i18n-packages.cjs` lists every locale a consuming app ships, so a string
-translated for one app is in place for the next. `i18n:tidy` backfills anything
-missing from English, so an untranslated string renders English rather than
-blank.
+Translations come and go through Crowdin with
+[`@microbit/i18n-tools`](../i18n-tools), configured in the repo-root
+`i18n.config.mjs`, which lists every locale a consuming app ships so a string
+translated for one app is in place for the next. `npm run i18n:tidy` sorts
+and prunes the files (CI checks this); `npm run i18n:download` and
+`npm run i18n:upload` need a Crowdin token. The translations-upload workflow
+runs the upload from the Actions tab (with a dry-run option), and a weekly
+workflow opens a pull request with new translations.
 
 Until this package's Crowdin project is wired up, the non-English catalogs are
 pre-Crowdin seeds — some strings AI-drafted, all of them for Crowdin to review

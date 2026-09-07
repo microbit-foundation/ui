@@ -1,62 +1,47 @@
 {
   "ui.breadcrumb": {
-    "defaultMessage": "crwdns370036:0crwdne370036:0",
-    "description": "Accessible label for the breadcrumb navigation trail (the WAI-ARIA APG's conventional name)"
+    "defaultMessage": "crwdns370036:0crwdne370036:0"
   },
   "ui.close-action": {
-    "defaultMessage": "crwdns370038:0crwdne370038:0",
-    "description": "Close button text or label"
+    "defaultMessage": "crwdns370038:0crwdne370038:0"
   },
   "ui.combobox-listbox": {
-    "defaultMessage": "crwdns370040:0crwdne370040:0",
-    "description": "Accessible label for a ComboBox's dropdown list of suggestions"
+    "defaultMessage": "crwdns370040:0crwdne370040:0"
   },
   "ui.combobox-trigger": {
-    "defaultMessage": "crwdns370042:0crwdne370042:0",
-    "description": "Accessible label for the button that opens a ComboBox's suggestions dropdown"
+    "defaultMessage": "crwdns370042:0crwdne370042:0"
   },
   "ui.loading": {
-    "defaultMessage": "crwdns370044:0crwdne370044:0",
-    "description": "Announced by screen readers for a button showing a loading spinner"
+    "defaultMessage": "crwdns370044:0crwdne370044:0"
   },
   "ui.new-tab-notice": {
-    "defaultMessage": "opens in a new tab",
-    "description": "Visually hidden suffix on links that open a new tab, announced by screen readers"
+    "defaultMessage": "opens in a new tab"
   },
   "ui.numberfield-decrease": {
-    "defaultMessage": "crwdns370046:0{fieldLabel}crwdne370046:0",
-    "description": "Accessible label for a number field's decrement stepper; fieldLabel is the field's label and may be empty"
+    "defaultMessage": "crwdns370046:0{fieldLabel}crwdne370046:0"
   },
   "ui.numberfield-increase": {
-    "defaultMessage": "crwdns370048:0{fieldLabel}crwdne370048:0",
-    "description": "Accessible label for a number field's increment stepper; fieldLabel is the field's label and may be empty"
+    "defaultMessage": "crwdns370048:0{fieldLabel}crwdne370048:0"
   },
   "ui.select-placeholder": {
-    "defaultMessage": "crwdns370050:0crwdne370050:0",
-    "description": "Shown in a Select's trigger while nothing is chosen and the app supplies no placeholder"
+    "defaultMessage": "crwdns370050:0crwdne370050:0"
   },
   "ui.select-row-action": {
-    "defaultMessage": "crwdns370052:0crwdne370052:0",
-    "description": "Accessible label for a row-selection checkbox in a list or table; screen readers read it together with the row's content"
+    "defaultMessage": "crwdns370052:0crwdne370052:0"
   },
   "ui.toast-region": {
-    "defaultMessage": "crwdns370054:0count={count}crwdne370054:0",
-    "description": "Accessible label for the notifications area; count is the number of notifications showing"
+    "defaultMessage": "crwdns370054:0count={count}crwdne370054:0"
   },
   "ui.toast-status-error": {
-    "defaultMessage": "crwdns370056:0crwdne370056:0",
-    "description": "Announced by screen readers before an error notification"
+    "defaultMessage": "crwdns370056:0crwdne370056:0"
   },
   "ui.toast-status-info": {
-    "defaultMessage": "crwdns370058:0crwdne370058:0",
-    "description": "Announced by screen readers before an informational notification"
+    "defaultMessage": "crwdns370058:0crwdne370058:0"
   },
   "ui.toast-status-success": {
-    "defaultMessage": "crwdns370060:0crwdne370060:0",
-    "description": "Announced by screen readers before a success notification"
+    "defaultMessage": "crwdns370060:0crwdne370060:0"
   },
   "ui.toast-status-warning": {
-    "defaultMessage": "crwdns370062:0crwdne370062:0",
-    "description": "Announced by screen readers before a warning notification"
+    "defaultMessage": "crwdns370062:0crwdne370062:0"
   }
 }

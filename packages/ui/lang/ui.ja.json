@@ -1,62 +1,47 @@
 {
   "ui.breadcrumb": {
-    "defaultMessage": "パンくずリスト",
-    "description": "Accessible label for the breadcrumb navigation trail (the WAI-ARIA APG's conventional name)"
+    "defaultMessage": "パンくずリスト"
   },
   "ui.close-action": {
-    "defaultMessage": "閉じる",
-    "description": "Close button text or label"
+    "defaultMessage": "閉じる"
   },
   "ui.combobox-listbox": {
-    "defaultMessage": "候補",
-    "description": "Accessible label for a ComboBox's dropdown list of suggestions"
+    "defaultMessage": "候補"
   },
   "ui.combobox-trigger": {
-    "defaultMessage": "候補を表示",
-    "description": "Accessible label for the button that opens a ComboBox's suggestions dropdown"
+    "defaultMessage": "候補を表示"
   },
   "ui.loading": {
-    "defaultMessage": "ロード中",
-    "description": "Announced by screen readers for a button showing a loading spinner"
+    "defaultMessage": "ロード中"
   },
   "ui.new-tab-notice": {
-    "defaultMessage": "opens in a new tab",
-    "description": "Visually hidden suffix on links that open a new tab, announced by screen readers"
+    "defaultMessage": "opens in a new tab"
   },
   "ui.numberfield-decrease": {
-    "defaultMessage": "{fieldLabel}を縮小",
-    "description": "Accessible label for a number field's decrement stepper; fieldLabel is the field's label and may be empty"
+    "defaultMessage": "{fieldLabel}を縮小"
   },
   "ui.numberfield-increase": {
-    "defaultMessage": "{fieldLabel}を拡大",
-    "description": "Accessible label for a number field's increment stepper; fieldLabel is the field's label and may be empty"
+    "defaultMessage": "{fieldLabel}を拡大"
   },
   "ui.select-placeholder": {
-    "defaultMessage": "項目を選択",
-    "description": "Shown in a Select's trigger while nothing is chosen and the app supplies no placeholder"
+    "defaultMessage": "項目を選択"
   },
   "ui.select-row-action": {
-    "defaultMessage": "選択する",
-    "description": "Accessible label for a row-selection checkbox in a list or table; screen readers read it together with the row's content"
+    "defaultMessage": "選択する"
   },
   "ui.toast-region": {
-    "defaultMessage": "{count, plural, one {# 個の通知} other {# 個の通知}}。",
-    "description": "Accessible label for the notifications area; count is the number of notifications showing"
+    "defaultMessage": "{count, plural, one {# 個の通知} other {# 個の通知}}。"
   },
   "ui.toast-status-error": {
-    "defaultMessage": "エラー",
-    "description": "Announced by screen readers before an error notification"
+    "defaultMessage": "エラー"
   },
   "ui.toast-status-info": {
-    "defaultMessage": "情報",
-    "description": "Announced by screen readers before an informational notification"
+    "defaultMessage": "情報"
   },
   "ui.toast-status-success": {
-    "defaultMessage": "成功",
-    "description": "Announced by screen readers before a success notification"
+    "defaultMessage": "成功"
   },
   "ui.toast-status-warning": {
-    "defaultMessage": "警告",
-    "description": "Announced by screen readers before a warning notification"
+    "defaultMessage": "警告"
   }
 }

@@ -1,0 +1,47 @@
+{
+  "ui.breadcrumb": {
+    "defaultMessage": "痕迹导航"
+  },
+  "ui.close-action": {
+    "defaultMessage": "关闭"
+  },
+  "ui.combobox-listbox": {
+    "defaultMessage": "建议"
+  },
+  "ui.combobox-trigger": {
+    "defaultMessage": "显示建议"
+  },
+  "ui.loading": {
+    "defaultMessage": "正在加载"
+  },
+  "ui.new-tab-notice": {
+    "defaultMessage": "opens in a new tab"
+  },
+  "ui.numberfield-decrease": {
+    "defaultMessage": "降低 {fieldLabel}"
+  },
+  "ui.numberfield-increase": {
+    "defaultMessage": "提高 {fieldLabel}"
+  },
+  "ui.select-placeholder": {
+    "defaultMessage": "选择一个项目"
+  },
+  "ui.select-row-action": {
+    "defaultMessage": "选择"
+  },
+  "ui.toast-region": {
+    "defaultMessage": "{count, plural, one {# 个通知} other {# 个通知}}。"
+  },
+  "ui.toast-status-error": {
+    "defaultMessage": "错误"
+  },
+  "ui.toast-status-info": {
+    "defaultMessage": "信息"
+  },
+  "ui.toast-status-success": {
+    "defaultMessage": "成功"
+  },
+  "ui.toast-status-warning": {
+    "defaultMessage": "警告"
+  }
+}

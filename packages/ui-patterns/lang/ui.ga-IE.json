@@ -1,0 +1,32 @@
+{
+  "ui-patterns.help-translate": {
+    "defaultMessage": "Cabhair a aistriú"
+  },
+  "ui-patterns.language": {
+    "defaultMessage": "Teanga"
+  },
+  "ui-patterns.language-fully-supported-heading": {
+    "defaultMessage": "Tacaíocht iomlán"
+  },
+  "ui-patterns.language-partially-supported-heading": {
+    "defaultMessage": "Tacaithe go páirteach"
+  },
+  "ui-patterns.language-preview-notice": {
+    "defaultMessage": "* Is réamhamharc luath ar aistriúcháin atá ar siúl iad na teangacha seo."
+  },
+  "ui-patterns.language-support-checked": {
+    "defaultMessage": "Tacaithe"
+  },
+  "ui-patterns.language-support-unchecked": {
+    "defaultMessage": "Gan tacaíocht"
+  },
+  "ui-patterns.language-supported-for": {
+    "defaultMessage": "Aistriúcháin a dtacaítear leo le haghaidh:"
+  },
+  "ui-patterns.language-toast-title": {
+    "defaultMessage": "Teanga nach dtacaítear go hiomlán léi"
+  },
+  "ui-patterns.play-video": {
+    "defaultMessage": "Play video: {title}"
+  }
+}

@@ -1,42 +1,32 @@
 {
   "ui-patterns.help-translate": {
-    "defaultMessage": "Beim Übersetzen helfen",
-    "description": "Language dialog link to the translation project"
+    "defaultMessage": "Beim Übersetzen helfen"
   },
   "ui-patterns.language": {
-    "defaultMessage": "Sprache",
-    "description": "Language dialog title"
+    "defaultMessage": "Sprache"
   },
   "ui-patterns.language-fully-supported-heading": {
-    "defaultMessage": "Vollständig unterstützt",
-    "description": "Fully supported languages heading text"
+    "defaultMessage": "Vollständig unterstützt"
   },
   "ui-patterns.language-partially-supported-heading": {
-    "defaultMessage": "Teilweise unterstützt",
-    "description": "Partially supported languages heading text"
+    "defaultMessage": "Teilweise unterstützt"
   },
   "ui-patterns.language-preview-notice": {
-    "defaultMessage": "* These languages are an early preview of in-progress translations.",
-    "description": "Language dialog footnote shown when preview languages are listed"
+    "defaultMessage": "* These languages are an early preview of in-progress translations."
   },
   "ui-patterns.language-support-checked": {
-    "defaultMessage": "Unterstützt",
-    "description": "Aria label for ticked checkbox for language support"
+    "defaultMessage": "Unterstützt"
   },
   "ui-patterns.language-support-unchecked": {
-    "defaultMessage": "Nicht unterstützt",
-    "description": "Aria label for unticked checkbox for language support"
+    "defaultMessage": "Nicht unterstützt"
   },
   "ui-patterns.language-supported-for": {
-    "defaultMessage": "Übersetzungen unterstützt für:",
-    "description": "Text introducing the list of translated products for a given language"
+    "defaultMessage": "Übersetzungen unterstützt für:"
   },
   "ui-patterns.language-toast-title": {
-    "defaultMessage": "Sprache nicht vollständig unterstützt",
-    "description": "Language support toast notification title"
+    "defaultMessage": "Sprache nicht vollständig unterstützt"
   },
   "ui-patterns.play-video": {
-    "defaultMessage": "Play video: {title}",
-    "description": "Accessible label for the play button shown over a video preview image; title is the video's title"
+    "defaultMessage": "Play video: {title}"
   }
 }

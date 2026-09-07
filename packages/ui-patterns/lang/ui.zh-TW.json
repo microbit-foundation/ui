@@ -1,0 +1,32 @@
+{
+  "ui-patterns.help-translate": {
+    "defaultMessage": "說明翻譯"
+  },
+  "ui-patterns.language": {
+    "defaultMessage": "語言"
+  },
+  "ui-patterns.language-fully-supported-heading": {
+    "defaultMessage": "完全支援"
+  },
+  "ui-patterns.language-partially-supported-heading": {
+    "defaultMessage": "部分支持"
+  },
+  "ui-patterns.language-preview-notice": {
+    "defaultMessage": "* These languages are an early preview of in-progress translations."
+  },
+  "ui-patterns.language-support-checked": {
+    "defaultMessage": "支援"
+  },
+  "ui-patterns.language-support-unchecked": {
+    "defaultMessage": "不支援"
+  },
+  "ui-patterns.language-supported-for": {
+    "defaultMessage": "支援的翻譯："
+  },
+  "ui-patterns.language-toast-title": {
+    "defaultMessage": "語言未完全支持"
+  },
+  "ui-patterns.play-video": {
+    "defaultMessage": "Play video: {title}"
+  }
+}

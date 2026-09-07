@@ -1,62 +1,47 @@
 {
   "ui.breadcrumb": {
-    "defaultMessage": "Rastres de navegació",
-    "description": "Accessible label for the breadcrumb navigation trail (the WAI-ARIA APG's conventional name)"
+    "defaultMessage": "Rastres de navegació"
   },
   "ui.close-action": {
-    "defaultMessage": "Tanca ",
-    "description": "Close button text or label"
+    "defaultMessage": "Tanca "
   },
   "ui.combobox-listbox": {
-    "defaultMessage": "Suggeriments",
-    "description": "Accessible label for a ComboBox's dropdown list of suggestions"
+    "defaultMessage": "Suggeriments"
   },
   "ui.combobox-trigger": {
-    "defaultMessage": "Mostra els suggeriments",
-    "description": "Accessible label for the button that opens a ComboBox's suggestions dropdown"
+    "defaultMessage": "Mostra els suggeriments"
   },
   "ui.loading": {
-    "defaultMessage": "S'està carregant",
-    "description": "Announced by screen readers for a button showing a loading spinner"
+    "defaultMessage": "S'està carregant"
   },
   "ui.new-tab-notice": {
-    "defaultMessage": "opens in a new tab",
-    "description": "Visually hidden suffix on links that open a new tab, announced by screen readers"
+    "defaultMessage": "opens in a new tab"
   },
   "ui.numberfield-decrease": {
-    "defaultMessage": "Decrementa {fieldLabel}",
-    "description": "Accessible label for a number field's decrement stepper; fieldLabel is the field's label and may be empty"
+    "defaultMessage": "Decrementa {fieldLabel}"
   },
   "ui.numberfield-increase": {
-    "defaultMessage": "Incrementa {fieldLabel}",
-    "description": "Accessible label for a number field's increment stepper; fieldLabel is the field's label and may be empty"
+    "defaultMessage": "Incrementa {fieldLabel}"
   },
   "ui.select-placeholder": {
-    "defaultMessage": "Selecciona un element",
-    "description": "Shown in a Select's trigger while nothing is chosen and the app supplies no placeholder"
+    "defaultMessage": "Selecciona un element"
   },
   "ui.select-row-action": {
-    "defaultMessage": "Selecciona",
-    "description": "Accessible label for a row-selection checkbox in a list or table; screen readers read it together with the row's content"
+    "defaultMessage": "Selecciona"
   },
   "ui.toast-region": {
-    "defaultMessage": "{count, plural, one {# notificació} other {# notificacions}}.",
-    "description": "Accessible label for the notifications area; count is the number of notifications showing"
+    "defaultMessage": "{count, plural, one {# notificació} other {# notificacions}}."
   },
   "ui.toast-status-error": {
-    "defaultMessage": "Error",
-    "description": "Announced by screen readers before an error notification"
+    "defaultMessage": "Error"
   },
   "ui.toast-status-info": {
-    "defaultMessage": "Informació",
-    "description": "Announced by screen readers before an informational notification"
+    "defaultMessage": "Informació"
   },
   "ui.toast-status-success": {
-    "defaultMessage": "Completat amb èxit",
-    "description": "Announced by screen readers before a success notification"
+    "defaultMessage": "Completat amb èxit"
   },
   "ui.toast-status-warning": {
-    "defaultMessage": "Advertència",
-    "description": "Announced by screen readers before a warning notification"
+    "defaultMessage": "Advertència"
   }
 }

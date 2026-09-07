@@ -1,0 +1,17 @@
+{
+  "ui-carousel.next": {
+    "defaultMessage": "Next"
+  },
+  "ui-carousel.previous": {
+    "defaultMessage": "Previous"
+  },
+  "ui-carousel.role": {
+    "defaultMessage": "carrossel"
+  },
+  "ui-carousel.slide-label": {
+    "defaultMessage": "{slideNum} de {totalSlides}"
+  },
+  "ui-carousel.slide-role": {
+    "defaultMessage": "deslizar"
+  }
+}

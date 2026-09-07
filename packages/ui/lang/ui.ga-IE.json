@@ -1,0 +1,47 @@
+{
+  "ui.breadcrumb": {
+    "defaultMessage": "Grabhróg aráin"
+  },
+  "ui.close-action": {
+    "defaultMessage": "Dún"
+  },
+  "ui.combobox-listbox": {
+    "defaultMessage": "Moltaí"
+  },
+  "ui.combobox-trigger": {
+    "defaultMessage": "Taispeáin moltaí"
+  },
+  "ui.loading": {
+    "defaultMessage": "Ag lódáil"
+  },
+  "ui.new-tab-notice": {
+    "defaultMessage": "opens in a new tab"
+  },
+  "ui.numberfield-decrease": {
+    "defaultMessage": "Laghdaigh {fieldLabel}"
+  },
+  "ui.numberfield-increase": {
+    "defaultMessage": "Méadaigh {fieldLabel}"
+  },
+  "ui.select-placeholder": {
+    "defaultMessage": "Roghnaigh mír"
+  },
+  "ui.select-row-action": {
+    "defaultMessage": "Roghnaigh"
+  },
+  "ui.toast-region": {
+    "defaultMessage": "{count, plural, one {# fógra} two {# fhógra} few {# fógraí} many {# fógraí} other {# fógraí}}"
+  },
+  "ui.toast-status-error": {
+    "defaultMessage": "Earráid"
+  },
+  "ui.toast-status-info": {
+    "defaultMessage": "Eolas"
+  },
+  "ui.toast-status-success": {
+    "defaultMessage": "Rath"
+  },
+  "ui.toast-status-warning": {
+    "defaultMessage": "Rabhadh"
+  }
+}

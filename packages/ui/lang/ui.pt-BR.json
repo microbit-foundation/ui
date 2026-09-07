@@ -1,0 +1,47 @@
+{
+  "ui.breadcrumb": {
+    "defaultMessage": "Trilha de navegação"
+  },
+  "ui.close-action": {
+    "defaultMessage": "Fechar"
+  },
+  "ui.combobox-listbox": {
+    "defaultMessage": "Sugestões"
+  },
+  "ui.combobox-trigger": {
+    "defaultMessage": "Mostrar sugestões"
+  },
+  "ui.loading": {
+    "defaultMessage": "Carregando"
+  },
+  "ui.new-tab-notice": {
+    "defaultMessage": "opens in a new tab"
+  },
+  "ui.numberfield-decrease": {
+    "defaultMessage": "Diminuir {fieldLabel}"
+  },
+  "ui.numberfield-increase": {
+    "defaultMessage": "Aumentar {fieldLabel}"
+  },
+  "ui.select-placeholder": {
+    "defaultMessage": "Selecione um item"
+  },
+  "ui.select-row-action": {
+    "defaultMessage": "Seleciona"
+  },
+  "ui.toast-region": {
+    "defaultMessage": "{count, plural, one {# notificação} other {# notificações}}."
+  },
+  "ui.toast-status-error": {
+    "defaultMessage": "Erro"
+  },
+  "ui.toast-status-info": {
+    "defaultMessage": "Informações"
+  },
+  "ui.toast-status-success": {
+    "defaultMessage": "Sucesso"
+  },
+  "ui.toast-status-warning": {
+    "defaultMessage": "Atenção"
+  }
+}

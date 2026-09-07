@@ -10,12 +10,14 @@
     "build-storybook": "npm run build-storybook -w @microbit/ui-storybook",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
-    "ci": "npm run typecheck && npm run lint && npm run test && npm run build-storybook",
-    "update-translations": "node bin/update-translations.cjs",
-    "i18n:tidy": "node bin/tidy-lang.cjs",
+    "ci": "npm run typecheck && npm run lint && npm run test && npm run i18n:tidy -- --check && npm run build-storybook",
+    "i18n:tidy": "microbit-i18n tidy",
     "format": "prettier --write --list-different .",
     "format:check": "prettier --check .",
-    "lint": "eslint . --max-warnings 0"
+    "lint": "eslint . --max-warnings 0",
+    "i18n:download": "microbit-i18n download",
+    "i18n:upload": "microbit-i18n upload",
+    "i18n:status": "microbit-i18n status"
   },
   "devDependencies": {
     "@microbit/eslint-config": "^0.2.0",

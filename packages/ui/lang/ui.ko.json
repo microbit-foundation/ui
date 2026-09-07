@@ -1,62 +1,47 @@
 {
   "ui.breadcrumb": {
-    "defaultMessage": "이동경로",
-    "description": "Accessible label for the breadcrumb navigation trail (the WAI-ARIA APG's conventional name)"
+    "defaultMessage": "이동경로"
   },
   "ui.close-action": {
-    "defaultMessage": "닫기",
-    "description": "Close button text or label"
+    "defaultMessage": "닫기"
   },
   "ui.combobox-listbox": {
-    "defaultMessage": "제안",
-    "description": "Accessible label for a ComboBox's dropdown list of suggestions"
+    "defaultMessage": "제안"
   },
   "ui.combobox-trigger": {
-    "defaultMessage": "제안 사항 표시",
-    "description": "Accessible label for the button that opens a ComboBox's suggestions dropdown"
+    "defaultMessage": "제안 사항 표시"
   },
   "ui.loading": {
-    "defaultMessage": "불러오는 중...",
-    "description": "Announced by screen readers for a button showing a loading spinner"
+    "defaultMessage": "불러오는 중..."
   },
   "ui.new-tab-notice": {
-    "defaultMessage": "opens in a new tab",
-    "description": "Visually hidden suffix on links that open a new tab, announced by screen readers"
+    "defaultMessage": "opens in a new tab"
   },
   "ui.numberfield-decrease": {
-    "defaultMessage": "{fieldLabel} 감소",
-    "description": "Accessible label for a number field's decrement stepper; fieldLabel is the field's label and may be empty"
+    "defaultMessage": "{fieldLabel} 감소"
   },
   "ui.numberfield-increase": {
-    "defaultMessage": "{fieldLabel} 증가",
-    "description": "Accessible label for a number field's increment stepper; fieldLabel is the field's label and may be empty"
+    "defaultMessage": "{fieldLabel} 증가"
   },
   "ui.select-placeholder": {
-    "defaultMessage": "항목 선택",
-    "description": "Shown in a Select's trigger while nothing is chosen and the app supplies no placeholder"
+    "defaultMessage": "항목 선택"
   },
   "ui.select-row-action": {
-    "defaultMessage": "선택",
-    "description": "Accessible label for a row-selection checkbox in a list or table; screen readers read it together with the row's content"
+    "defaultMessage": "선택"
   },
   "ui.toast-region": {
-    "defaultMessage": "{count, plural, one {#개 알림} other {#개 알림}}.",
-    "description": "Accessible label for the notifications area; count is the number of notifications showing"
+    "defaultMessage": "{count, plural, one {#개 알림} other {#개 알림}}."
   },
   "ui.toast-status-error": {
-    "defaultMessage": "오류",
-    "description": "Announced by screen readers before an error notification"
+    "defaultMessage": "오류"
   },
   "ui.toast-status-info": {
-    "defaultMessage": "정보",
-    "description": "Announced by screen readers before an informational notification"
+    "defaultMessage": "정보"
   },
   "ui.toast-status-success": {
-    "defaultMessage": "성공",
-    "description": "Announced by screen readers before a success notification"
+    "defaultMessage": "성공"
   },
   "ui.toast-status-warning": {
-    "defaultMessage": "경고",
-    "description": "Announced by screen readers before a warning notification"
+    "defaultMessage": "경고"
   }
 }
