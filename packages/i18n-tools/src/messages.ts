@@ -12,6 +12,9 @@ export interface Issue {
   file: string;
   id: string;
   message: string;
+  /** The English and translated texts, for placeholder mismatches. */
+  english?: string;
+  translation?: string;
 }
 
 const isDescriptor = (value: unknown): value is MessageDescriptor =>
@@ -153,7 +156,9 @@ export const validateTranslation = (
       issues.push({
         file,
         id,
-        message: `${difference}\n    en: ${english.defaultMessage}\n    tr: ${defaultMessage}`,
+        message: difference,
+        english: english.defaultMessage,
+        translation: defaultMessage,
       });
     }
   }
@@ -178,4 +183,10 @@ export const dropInvalidTranslations = (
 };
 
 export const formatIssues = (issues: Issue[]): string =>
-  issues.map((i) => `${i.file}: ${i.id}: ${i.message}`).join("\n");
+  issues
+    .map((i) =>
+      i.english === undefined
+        ? `${i.file}: ${i.id}: ${i.message}`
+        : `${i.file}: ${i.id}: ${i.message}\n    en: ${i.english}\n    tr: ${i.translation}`,
+    )
+    .join("\n");

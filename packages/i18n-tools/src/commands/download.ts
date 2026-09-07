@@ -16,6 +16,7 @@ import {
   type ResolvedConfig,
 } from "../config.ts";
 import { CrowdinProject, describeError, requireToken } from "../crowdin.ts";
+import { formatSummary, type DownloadSummary } from "../summary.ts";
 import {
   dropInvalidTranslations,
   formatIssues,
@@ -30,6 +31,8 @@ export interface DownloadOptions {
   /** Crowdin language ids; defaults to every configured language. */
   languages?: string[];
   approvedOnly?: boolean;
+  /** Write a Markdown summary of the download to this file. */
+  summary?: string;
 }
 
 /**
@@ -72,8 +75,12 @@ export const runDownload = async (
   const project = await CrowdinProject.connect(config.crowdin, requireToken());
   const { directory } = config.crowdin;
   const dropped: Issue[] = [];
-  let written = 0;
-  let failures = 0;
+  const written: string[] = [];
+  const failed: DownloadSummary["failed"] = [];
+  const fail = (file: string, e: unknown) => {
+    failed.push({ file, error: describeError(e) });
+    console.error(`${file}: ${describeError(e)}`);
+  };
 
   const downloadOther = async (language: string, crowdinPath: string) => {
     const file = await project.requireFile(crowdinPath);
@@ -91,8 +98,7 @@ export const runDownload = async (
       file = await project.requireFile(crowdinPath);
     } catch (e) {
       // A catalog not yet uploaded should not stop the others downloading.
-      failures++;
-      console.error(`${crowdinPath}: ${describeError(e)}`);
+      fail(crowdinPath, e);
       continue;
     }
     const english = readCatalog(path.resolve(config.root, catalog.source));
@@ -116,13 +122,12 @@ export const runDownload = async (
           dropped.push(...dropInvalidTranslations(relative, english, tidied));
         }
         writeCatalog(path.resolve(config.root, relative), tidied);
-        written++;
+        written.push(relative);
         console.log(
           `${relative}: ${Object.keys(tidied).length}/${Object.keys(english).length} messages`,
         );
       } catch (e) {
-        failures++;
-        console.error(`${relative}: ${describeError(e)}`);
+        fail(relative, e);
       }
     }
   }
@@ -148,7 +153,7 @@ export const runDownload = async (
           for (const [name, data] of contents) {
             writeBytes(path.join(local, name), data);
           }
-          written++;
+          written.push(path.relative(config.root, local) + "/");
           console.log(
             `${path.relative(config.root, local)}/: ${contents.size} files`,
           );
@@ -159,14 +164,11 @@ export const runDownload = async (
             skipUntranslated: language !== inContextLanguage,
           });
           writeBytes(local, new TextEncoder().encode(text));
-          written++;
+          written.push(path.relative(config.root, local));
           console.log(path.relative(config.root, local));
         }
       } catch (e) {
-        failures++;
-        console.error(
-          `${path.relative(config.root, local)}: ${describeError(e)}`,
-        );
+        fail(path.relative(config.root, local), e);
       }
     }
   }
@@ -177,11 +179,16 @@ export const runDownload = async (
     );
     console.warn(formatIssues(dropped));
   }
-  if (failures) {
-    console.error(`${failures} download(s) failed`);
+  if (options.summary) {
+    const file = path.resolve(options.summary);
+    fs.mkdirSync(path.dirname(file), { recursive: true });
+    fs.writeFileSync(file, formatSummary({ written, failed, dropped }));
+  }
+  if (failed.length) {
+    console.error(`${failed.length} download(s) failed`);
     // Exit 2 tells a caller the files that were written are worth keeping;
     // 1 that nothing usable came back.
-    return written ? 2 : 1;
+    return written.length ? 2 : 1;
   }
   return 0;
 };
