@@ -23,6 +23,7 @@ Commands:
                   --language <id>   only this language (repeatable)
                   --approved-only   only approved translations
                   --summary <file>  write a Markdown summary of the download
+                                    (or set I18N_SUMMARY)
   upload        Replace the English sources in Crowdin
                   --keep-translations   keep translations of changed strings
                   --dry-run             show the changes without uploading
@@ -105,7 +106,12 @@ export const main = async (argv: string[]): Promise<number> => {
         return await runDownload(config, {
           languages: values.language as string[] | undefined,
           approvedOnly: values["approved-only"] as boolean | undefined,
-          summary: values.summary as string | undefined,
+          // The env var lets a workflow ask for the summary without knowing
+          // how the repo invokes the download.
+          summary:
+            (values.summary as string | undefined) ??
+            process.env.I18N_SUMMARY ??
+            undefined,
         });
       case "upload":
         return await runUpload(config, {
