@@ -22,16 +22,23 @@ export interface UploadOptions {
 interface Target {
   source: string;
   crowdinFile: string;
+  /** A react-intl catalog, whose changes can be described id by id. */
+  catalog: boolean;
 }
 
 export const uploadTargets = (config: ResolvedConfig): Target[] => [
   ...config.catalogs.filter(inCrowdin).map((c) => ({
     source: c.source,
     crowdinFile: c.crowdinFile,
+    catalog: true,
   })),
   ...config.files
     .filter((f) => f.source && !f.crowdinFile.endsWith("/"))
-    .map((f) => ({ source: f.source as string, crowdinFile: f.crowdinFile })),
+    .map((f) => ({
+      source: f.source as string,
+      crowdinFile: f.crowdinFile,
+      catalog: false,
+    })),
 ];
 
 export interface CatalogDiff {
@@ -114,7 +121,7 @@ export const runUpload = async (
     console.log(`${target.source} -> ${crowdinPath}${note}`);
     if (existing) {
       const current = await project.downloadSource(existing);
-      if (target.crowdinFile.endsWith(".json")) {
+      if (target.catalog) {
         const diff = diffCatalogs(
           parseCatalog(current, crowdinPath),
           parseCatalog(content, target.source),

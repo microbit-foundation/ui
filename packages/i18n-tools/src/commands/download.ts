@@ -134,6 +134,11 @@ export const runDownload = async (
 
   for (const entry of config.files) {
     const crowdinPath = `${directory}/${entry.crowdinFile}`;
+    const fileOptions = (language: string) => ({
+      approvedOnly: options.approvedOnly,
+      skipUntranslated:
+        language !== inContextLanguage && (entry.skipUntranslated ?? false),
+    });
     for (const language of select(config.languages)) {
       const local = path.resolve(
         config.root,
@@ -145,10 +150,7 @@ export const runDownload = async (
           const contents = await project.downloadDirectoryTranslation(
             dir,
             language,
-            {
-              approvedOnly: options.approvedOnly,
-              skipUntranslated: language !== inContextLanguage,
-            },
+            fileOptions(language),
           );
           for (const [name, data] of contents) {
             writeBytes(path.join(local, name), data);
@@ -159,10 +161,11 @@ export const runDownload = async (
           );
         } else {
           const file = await project.requireFile(crowdinPath);
-          const text = await project.downloadTranslation(file, language, {
-            approvedOnly: options.approvedOnly,
-            skipUntranslated: language !== inContextLanguage,
-          });
+          const text = await project.downloadTranslation(
+            file,
+            language,
+            fileOptions(language),
+          );
           writeBytes(local, new TextEncoder().encode(text));
           written.push(path.relative(config.root, local));
           console.log(path.relative(config.root, local));

@@ -89,7 +89,11 @@ export default defineConfig({
   CreateAI keeps a block label in step with the MakeCode extension.
 
 `files` are anything else, copied as-is: `{ crowdinFile, local, source? }`. A
-`crowdinFile` with a trailing slash is a whole directory.
+`crowdinFile` with a trailing slash is a whole directory. They are downloaded
+in full, untranslated strings included as English, since whatever consumes
+them does its own fallback or none; `skipUntranslated: true` asks Crowdin to
+leave untranslated strings out instead. Uploading one compares the whole
+text, since only the catalogs have ids to diff.
 
 ## What the catalogs hold
 
