@@ -6,7 +6,11 @@
 import fs from "node:fs";
 import path from "node:path";
 import type { Catalog, MessageDescriptor } from "./index.ts";
-import { describeSignatureDifference, parseMessage } from "./icu.ts";
+import {
+  describeQuotingProblems,
+  describeSignatureDifference,
+  parseMessage,
+} from "./icu.ts";
 
 export interface Issue {
   file: string;
@@ -117,6 +121,10 @@ export const validateSource = (file: string, source: Catalog): Issue[] => {
         id,
         message: `does not parse: ${(e as Error).message}`,
       });
+      continue;
+    }
+    for (const problem of describeQuotingProblems(defaultMessage)) {
+      issues.push({ file, id, message: problem });
     }
   }
   return issues;
@@ -140,10 +148,11 @@ export const validateTranslation = (
     }
     let difference: string | undefined;
     try {
-      difference = describeSignatureDifference(
-        english.defaultMessage,
-        defaultMessage,
-      );
+      // A quoting problem is the cause of any placeholder difference it
+      // produces, so it is reported instead.
+      difference =
+        describeQuotingProblems(defaultMessage)[0] ??
+        describeSignatureDifference(english.defaultMessage, defaultMessage);
     } catch (e) {
       issues.push({
         file,

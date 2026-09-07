@@ -90,6 +90,52 @@ export const describeSignatureDifference = (
   return problems.length ? problems.join("; ") : undefined;
 };
 
+/**
+ * Places where a straight apostrophe starts an ICU quote, so the syntax
+ * after it renders as literal text: `d'<link>` shows the tag, `'{name}'`
+ * shows the braces, and `'#'` in a plural shows a hash instead of the
+ * number. Returns a description per problem, or an empty list.
+ *
+ * The parser quotes on an odd run of apostrophes before `{`, `}`, `<` or
+ * `>`, or before `#` inside a plural; `''` is a literal apostrophe.
+ */
+export const describeQuotingProblems = (message: string): string[] => {
+  const problems: string[] = [];
+  for (const match of message.matchAll(/(^|[^'])('+)(?=[{}<>])/g)) {
+    if (match[2].length % 2 === 1) {
+      const next = message[match.index + match[0].length];
+      problems.push(
+        `apostrophe before ${next} starts an ICU quote; the text after it renders literally (write '' for an apostrophe)`,
+      );
+    }
+  }
+  const inPlural = (elements: MessageFormatElement[], plural: boolean) => {
+    for (const element of elements) {
+      if (
+        plural &&
+        element.type === TYPE.literal &&
+        element.value.includes("#")
+      ) {
+        problems.push(
+          "quoted # in a plural renders a hash instead of the number",
+        );
+      } else if (element.type === TYPE.plural) {
+        for (const option of Object.values(element.options)) {
+          inPlural(option.value, true);
+        }
+      } else if (element.type === TYPE.select) {
+        for (const option of Object.values(element.options)) {
+          inPlural(option.value, plural);
+        }
+      } else if (element.type === TYPE.tag) {
+        inPlural(element.children, plural);
+      }
+    }
+  };
+  inPlural(parseMessage(message), false);
+  return problems;
+};
+
 const textOf = (elements: MessageFormatElement[]): string => {
   const parts: string[] = [];
   for (const element of elements) {

@@ -6,6 +6,7 @@
 import { describe, expect, it } from "vitest";
 import {
   countWords,
+  describeQuotingProblems,
   describeSignatureDifference,
   signature,
 } from "../src/icu.ts";
@@ -56,5 +57,22 @@ describe("countWords", () => {
     expect(
       countWords("{count, plural, one {# sample} other {# samples}}"),
     ).toBe(2);
+  });
+});
+
+describe("describeQuotingProblems", () => {
+  it("flags a lone apostrophe before syntax", () => {
+    expect(describeQuotingProblems("Has d'<link>x</link>")).toHaveLength(1);
+    expect(describeQuotingProblems("'{project}' delete?")).toHaveLength(1);
+    expect(
+      describeQuotingProblems("{n, plural, one {'#' file} other {# files}}"),
+    ).toEqual(["quoted # in a plural renders a hash instead of the number"]);
+  });
+
+  it("accepts doubled apostrophes and apostrophes before letters", () => {
+    expect(describeQuotingProblems("Has d''<link>x</link>")).toEqual([]);
+    expect(describeQuotingProblems("''{project}'' delete?")).toEqual([]);
+    expect(describeQuotingProblems("l'eix de {name}, a '#' tag")).toEqual([]);
+    expect(describeQuotingProblems("We'd like {count}")).toEqual([]);
   });
 });
