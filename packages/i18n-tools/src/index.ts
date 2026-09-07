@@ -97,6 +97,13 @@ export interface FileConfig {
   local: string;
   /** The local English source to upload, if this tool uploads it. */
   source?: string;
+  /**
+   * Leave untranslated strings out of the download rather than exporting
+   * the English. Off by default: unlike the catalogs, whose compile
+   * backfills English, these files are consumed as they are, and a Markdown
+   * page with paragraphs missing is worse than one with English paragraphs.
+   */
+  skipUntranslated?: boolean;
 }
 
 export interface Config {
