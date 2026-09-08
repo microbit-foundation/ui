@@ -75,6 +75,10 @@ export default defineConfig({
 
 - `source` is the English file. `crowdinFile` (default: the source's file
   name) is its name within `crowdin.directory`.
+- `crowdinFormat` is the file's format in Crowdin: `react-intl` (the
+  default) or `chrome`, Chrome's `{ message, description }` JSON. The local
+  files are react-intl either way; only what is sent to and read from
+  Crowdin is converted.
 - `translations` is a template for the translated files (default: the source
   path with `.en.json` as `.{lang}.json`). `{lang}` is the language id in
   Crowdin's canonical casing (`pt-BR`); `{lang:lower}` is its lowercase form,
@@ -121,9 +125,13 @@ for Panda's `styled-system`.
 ## Conventions in Crowdin
 
 One project, one branch, one directory per repo. Files are react-intl JSON,
-which Crowdin recognises and shows `description` as context. Language ids are
-Crowdin's, canonical BCP 47 casing (`pt-BR`), and catalog file names use the
-same casing (`ui.pt-BR.json`).
+which Crowdin recognises and shows `description` as context. The Python
+Editor's `ui.en.json` is the exception: it predates that support and is Chrome
+JSON (`crowdinFormat: "chrome"`), kept because its strings carry screenshots
+and other hand-added context that a change of format would lose. Crowdin
+reads ICU from the message text, so plurals get the same editor in both.
+Language ids are Crowdin's, canonical BCP 47 casing (`pt-BR`), and catalog
+file names use the same casing (`ui.pt-BR.json`).
 
 ## Workflows
 

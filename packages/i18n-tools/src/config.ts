@@ -10,12 +10,15 @@ import type {
   CatalogConfig,
   Config,
   CrowdinConfig,
+  CrowdinFormat,
   FileConfig,
 } from "./index.ts";
+import { crowdinFormats } from "./formats.ts";
 
 export interface ResolvedCatalog {
   source: string;
   crowdinFile: string;
+  crowdinFormat: CrowdinFormat;
   translations: string;
   out?: string;
   packages: string[];
@@ -107,9 +110,16 @@ export const resolveCatalog = (catalog: CatalogConfig): ResolvedCatalog => {
       `Catalog ${catalog.source}: \`en\` is the source and cannot be a local locale`,
     );
   }
+  const crowdinFormat = catalog.crowdinFormat ?? "react-intl";
+  if (!crowdinFormats.includes(crowdinFormat)) {
+    throw new ConfigError(
+      `Catalog ${catalog.source}: \`crowdinFormat\` must be one of ${crowdinFormats.join(", ")}`,
+    );
+  }
   return {
     source: catalog.source,
     crowdinFile: catalog.crowdinFile ?? path.basename(catalog.source),
+    crowdinFormat,
     translations,
     out: catalog.out,
     packages: catalog.packages ?? [],

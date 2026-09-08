@@ -7,8 +7,9 @@ import fs from "node:fs";
 import path from "node:path";
 import { inCrowdin, type ResolvedConfig } from "../config.ts";
 import { CrowdinProject, requireToken } from "../crowdin.ts";
+import { parseCrowdinCatalog, toCrowdinFormat } from "../formats.ts";
 import { parseCatalog } from "../messages.ts";
-import type { Catalog } from "../index.ts";
+import type { Catalog, CrowdinFormat } from "../index.ts";
 
 export interface UploadOptions {
   /** Keep translations for strings whose English changed (typo fixes). */
@@ -22,22 +23,24 @@ export interface UploadOptions {
 interface Target {
   source: string;
   crowdinFile: string;
-  /** A react-intl catalog, whose changes can be described id by id. */
-  catalog: boolean;
+  /**
+   * A catalog, whose changes can be described id by id, and the format it
+   * takes in Crowdin. Absent for an opaque file.
+   */
+  catalog?: CrowdinFormat;
 }
 
 export const uploadTargets = (config: ResolvedConfig): Target[] => [
   ...config.catalogs.filter(inCrowdin).map((c) => ({
     source: c.source,
     crowdinFile: c.crowdinFile,
-    catalog: true,
+    catalog: c.crowdinFormat,
   })),
   ...config.files
     .filter((f) => f.source && !f.crowdinFile.endsWith("/"))
     .map((f) => ({
       source: f.source as string,
       crowdinFile: f.crowdinFile,
-      catalog: false,
     })),
 ];
 
@@ -104,27 +107,34 @@ export const runUpload = async (
   const { directory } = config.crowdin;
   for (const target of targets) {
     const crowdinPath = `${directory}/${target.crowdinFile}`;
-    const content = fs.readFileSync(
+    const local = fs.readFileSync(
       path.resolve(config.root, target.source),
       "utf-8",
     );
+    const content = target.catalog
+      ? toCrowdinFormat(local, target.catalog, target.source)
+      : local;
     const existing = await project.findFile(crowdinPath);
-    let note = "";
+    const notes: string[] = [];
+    if (target.catalog === "chrome") {
+      notes.push("as Chrome JSON");
+    }
     if (!existing) {
       const parent = path.posix.dirname(crowdinPath);
       const hasDirectory =
         parent === "." || (await project.findDirectory(parent)) !== undefined;
-      note = hasDirectory
-        ? " (new file)"
-        : ` (new file; creates directory ${parent})`;
+      notes.push(
+        hasDirectory ? "new file" : `new file; creates directory ${parent}`,
+      );
     }
+    const note = notes.length ? ` (${notes.join("; ")})` : "";
     console.log(`${target.source} -> ${crowdinPath}${note}`);
     if (existing) {
       const current = await project.downloadSource(existing);
       if (target.catalog) {
         const diff = diffCatalogs(
-          parseCatalog(current, crowdinPath),
-          parseCatalog(content, target.source),
+          parseCrowdinCatalog(current, target.catalog, crowdinPath),
+          parseCatalog(local, target.source),
         );
         if (isEmpty(diff)) {
           console.log("  unchanged; skipping");

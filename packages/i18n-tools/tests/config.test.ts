@@ -30,6 +30,7 @@ describe("resolveConfig", () => {
     );
     expect(config.catalogs[0]).toMatchObject({
       crowdinFile: "ui.en.json",
+      crowdinFormat: "react-intl",
       translations: "lang/ui.{lang}.json",
       packages: [],
       local: ["en-US"],
@@ -40,6 +41,18 @@ describe("resolveConfig", () => {
       "fr",
       "pt-BR",
     ]);
+  });
+
+  it("rejects an unknown Crowdin format", () => {
+    expect(() =>
+      resolveConfig(
+        {
+          ...base,
+          catalogs: [{ source: "lang/ui.en.json", crowdinFormat: "i18next" }],
+        },
+        "/repo",
+      ),
+    ).toThrow(/crowdinFormat/);
   });
 
   it("lets a catalog override the languages or opt out of Crowdin", () => {
