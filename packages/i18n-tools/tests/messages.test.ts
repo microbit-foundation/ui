@@ -85,7 +85,7 @@ describe("quoting", () => {
       b: { defaultMessage: "'{name}' 저장" },
     });
     expect(issues).toHaveLength(1);
-    expect(issues[0].message).toMatch(/starts an ICU quote/);
+    expect(issues[0].message).toMatch(/apostrophe before \{ escapes it/);
     expect(
       validateSource("lang/ui.en.json", {
         x: { defaultMessage: "Save '{name}'" },

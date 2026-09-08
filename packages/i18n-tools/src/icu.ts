@@ -91,12 +91,14 @@ export const describeSignatureDifference = (
 };
 
 /**
- * Places where a straight apostrophe starts an ICU quote, so the syntax
- * after it renders as literal text: `d'<link>` shows the tag, `'{name}'`
- * shows the braces, and `'#'` in a plural shows a hash instead of the
- * number. Returns a description per problem, or an empty list.
+ * Places where a straight apostrophe is ICU's escape (which ICU calls
+ * quoting), so the syntax after it renders as literal text: `d'<link>` shows
+ * the tag, `'{name}'` shows the braces, and `'#'` in a plural shows a hash
+ * instead of the number. Returns a description per problem, or an empty
+ * list. The descriptions say "escape", the formatjs term, since "quote"
+ * reads as quotation marks to anyone fixing a translation.
  *
- * The parser quotes on an odd run of apostrophes before `{`, `}`, `<` or
+ * The parser escapes on an odd run of apostrophes before `{`, `}`, `<` or
  * `>`, or before `#` inside a plural; `''` is a literal apostrophe.
  */
 export const describeQuotingProblems = (message: string): string[] => {
@@ -105,7 +107,7 @@ export const describeQuotingProblems = (message: string): string[] => {
     if (match[2].length % 2 === 1) {
       const next = message[match.index + match[0].length];
       problems.push(
-        `apostrophe before ${next} starts an ICU quote; the text after it renders literally (write '' for an apostrophe)`,
+        `apostrophe before ${next} escapes it, so the placeholder or tag after it is shown as text; write '' for an apostrophe`,
       );
     }
   }
@@ -117,7 +119,7 @@ export const describeQuotingProblems = (message: string): string[] => {
         element.value.includes("#")
       ) {
         problems.push(
-          "quoted # in a plural renders a hash instead of the number",
+          "apostrophe before # in a plural escapes it, so a hash is shown instead of the number; write '' for an apostrophe",
         );
       } else if (element.type === TYPE.plural) {
         for (const option of Object.values(element.options)) {
