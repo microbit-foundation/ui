@@ -62,6 +62,15 @@ const listSourceFiles = (dir: string): string[] => {
   return result.sort();
 };
 
+/**
+ * The fixed leading part of each file entry's `local` template: where this
+ * tool writes translations. MakeCode keeps an extension's translations under
+ * its docs (`docs/_locales/<lang>/`), so a directory source can contain them,
+ * and they must not be uploaded as English.
+ */
+const translationDirs = (config: ResolvedConfig): string[] =>
+  config.files.map((f) => f.local.replace(/\{.*$/, ""));
+
 const fileTargets = (config: ResolvedConfig, entry: FileConfig): Target[] => {
   if (!entry.source) {
     return [];
@@ -84,12 +93,15 @@ const fileTargets = (config: ResolvedConfig, entry: FileConfig): Target[] => {
     );
   }
   const prefix = entry.source.replace(/\/+$/, "");
-  return listSourceFiles(dir).map((name) => ({
-    source: `${prefix}/${name}`,
-    crowdinFile: `${entry.crowdinFile}${name}`,
-    name,
-    beforeUpload,
-  }));
+  const excluded = translationDirs(config);
+  return listSourceFiles(dir)
+    .map((name) => ({
+      source: `${prefix}/${name}`,
+      crowdinFile: `${entry.crowdinFile}${name}`,
+      name,
+      beforeUpload,
+    }))
+    .filter((t) => !excluded.some((d) => t.source.startsWith(d)));
 };
 
 export const uploadTargets = (config: ResolvedConfig): Target[] => [
