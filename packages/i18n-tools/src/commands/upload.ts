@@ -9,6 +9,7 @@ import { inCrowdin, type ResolvedConfig } from "../config.ts";
 import { CrowdinProject, requireToken } from "../crowdin.ts";
 import { parseCrowdinCatalog, toCrowdinFormat } from "../formats.ts";
 import { parseCatalog } from "../messages.ts";
+import { unifiedDiff } from "../diff.ts";
 import type { Catalog, CrowdinFormat, FileConfig } from "../index.ts";
 
 export interface UploadOptions {
@@ -241,6 +242,14 @@ export const runUpload = async (
         continue;
       } else {
         console.log("  content differs");
+        console.log(
+          unifiedDiff(current, content, {
+            beforeName: crowdinPath,
+            afterName: target.source,
+          })
+            .replace(/\n$/, "")
+            .replace(/^/gm, "    "),
+        );
       }
     }
     if (options.dryRun) {

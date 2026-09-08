@@ -12,14 +12,14 @@ subproject, say).
 
 ## Commands
 
-| Command                     | What it does                                                                                                                                                                                                         |
-| --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `microbit-i18n tidy`        | Sorts and prunes every catalog, drops what a translation shouldn't hold (see below) and checks each translation keeps its placeholders. `--check` for CI.                                                            |
-| `microbit-i18n compile`     | Writes the compiled per-locale catalogs the app loads: formatjs AST, English backfilled, package catalogs merged in.                                                                                                 |
-| `microbit-i18n download`    | Fetches translations for the configured languages. `--language <id>` for a subset; `--approved-only` to leave out unapproved translations; `--summary <file>` (or `I18N_SUMMARY`) for a Markdown account of the run. |
-| `microbit-i18n upload`      | Replaces the English sources in Crowdin after showing what changes, adding new files and directories. `--keep-translations` for corrections translators need not revisit; `--dry-run`.                               |
-| `microbit-i18n status`      | Per-language translation and approval progress for this repo's files, configured languages marked.                                                                                                                   |
-| `microbit-i18n new-strings` | English copy added since a git ref (`--base`, default `main`) with a Crowdin-style word count, for translation cost estimates.                                                                                       |
+| Command                     | What it does                                                                                                                                                                                                                           |
+| --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `microbit-i18n tidy`        | Sorts and prunes every catalog, drops what a translation shouldn't hold (see below) and checks each translation keeps its placeholders. `--check` for CI.                                                                              |
+| `microbit-i18n compile`     | Writes the compiled per-locale catalogs the app loads: formatjs AST, English backfilled, package catalogs merged in.                                                                                                                   |
+| `microbit-i18n download`    | Fetches translations for the configured languages. `--language <id>` for a subset; `--approved-only` to leave out unapproved translations; `--summary <file>` (or `I18N_SUMMARY`) for a Markdown account of the run.                   |
+| `microbit-i18n upload`      | Replaces the English sources in Crowdin after showing what changes (the ids for a catalog, a diff for other files), adding new files and directories. `--keep-translations` for corrections translators need not revisit; `--dry-run`. |
+| `microbit-i18n status`      | Per-language translation and approval progress for this repo's files, configured languages marked.                                                                                                                                     |
+| `microbit-i18n new-strings` | English copy added since a git ref (`--base`, default `main`) with a Crowdin-style word count, for translation cost estimates.                                                                                                         |
 
 `download`, `upload` and `status` need a Crowdin personal access token in
 `CROWDIN_PERSONAL_TOKEN`.
