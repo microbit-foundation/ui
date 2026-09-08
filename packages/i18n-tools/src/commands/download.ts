@@ -157,7 +157,17 @@ export const runDownload = async (
             fileOptions(language),
           );
           for (const [name, data] of contents) {
-            writeBytes(path.join(local, name), data);
+            writeBytes(
+              path.join(local, name),
+              entry.afterDownload
+                ? new TextEncoder().encode(
+                    entry.afterDownload(new TextDecoder().decode(data), {
+                      name,
+                      language,
+                    }),
+                  )
+                : data,
+            );
           }
           written.push(path.relative(config.root, local) + "/");
           console.log(
@@ -165,11 +175,17 @@ export const runDownload = async (
           );
         } else {
           const file = await project.requireFile(crowdinPath);
-          const text = await project.downloadTranslation(
+          let text = await project.downloadTranslation(
             file,
             language,
             fileOptions(language),
           );
+          if (entry.afterDownload) {
+            text = entry.afterDownload(text, {
+              name: path.posix.basename(entry.crowdinFile),
+              language,
+            });
+          }
           writeBytes(local, new TextEncoder().encode(text));
           written.push(path.relative(config.root, local));
           console.log(path.relative(config.root, local));

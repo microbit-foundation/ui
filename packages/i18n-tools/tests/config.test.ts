@@ -85,6 +85,25 @@ describe("resolveConfig", () => {
     expect(() => resolveConfig({ languages: [] }, "/")).toThrow(/crowdin/);
   });
 
+  it("rejects file hooks that are not functions", () => {
+    expect(() =>
+      resolveConfig(
+        {
+          crowdin: { project: 1, directory: "x" },
+          languages: ["fr"],
+          files: [
+            {
+              crowdinFile: "docs/",
+              local: "docs/{lang}/",
+              afterDownload: "no",
+            },
+          ],
+        },
+        "/repo",
+      ),
+    ).toThrow(/afterDownload.*must be a function/);
+  });
+
   it("rejects templates with unknown placeholders", () => {
     expect(() =>
       resolveConfig(

@@ -165,6 +165,18 @@ export const resolveConfig = (
       throw new ConfigError("Each file needs `crowdinFile` and `local` paths");
     }
     checkTemplate(file.local, `File ${file.crowdinFile}: \`local\``);
+    if (file.source !== undefined && typeof file.source !== "string") {
+      throw new ConfigError(
+        `File ${file.crowdinFile}: \`source\` must be a path`,
+      );
+    }
+    for (const hook of ["beforeUpload", "afterDownload"] as const) {
+      if (file[hook] !== undefined && typeof file[hook] !== "function") {
+        throw new ConfigError(
+          `File ${file.crowdinFile}: \`${hook}\` must be a function`,
+        );
+      }
+    }
   }
   return {
     root,
