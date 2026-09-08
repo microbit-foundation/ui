@@ -36,4 +36,24 @@ describe("formatSummary", () => {
       "- `lang/ui.fr.json` `greeting`: missing {name}\n  - en: `Hello {name}`\n  - translated: `Bonjour {nom}`",
     );
   });
+
+  it("escapes tags in the reasons so Markdown shows them rather than rendering them", () => {
+    const summary = formatSummary({
+      written: [],
+      failed: [{ file: "x.json", error: "Expected <ul> in `x`" }],
+      dropped: [
+        {
+          file: "lang/ui.ko.json",
+          id: "steps",
+          message: "missing <li>, <p>, <ul>",
+          english: "<p>Steps</p>",
+          translation: "Other `text`",
+        },
+      ],
+    });
+    expect(summary).toContain("- `x.json`: Expected \\<ul\\> in \\`x\\`");
+    expect(summary).toContain(
+      "- `lang/ui.ko.json` `steps`: missing \\<li\\>, \\<p\\>, \\<ul\\>\n  - en: `<p>Steps</p>`\n  - translated: `` Other `text` ``",
+    );
+  });
 });
