@@ -86,6 +86,9 @@ describe("uploadTargets", () => {
     fs.writeFileSync(path.join(root, "docs/a.md"), "a");
     fs.writeFileSync(path.join(root, "docs/sub/c.md"), "c");
     fs.writeFileSync(path.join(root, "docs/.hidden"), "");
+    // MakeCode keeps the translations under the docs; they are not source.
+    fs.mkdirSync(path.join(root, "docs/_locales/fr"), { recursive: true });
+    fs.writeFileSync(path.join(root, "docs/_locales/fr/a.md"), "a (fr)");
     const beforeUpload = (text: string) => text;
     const config = resolveConfig(
       {

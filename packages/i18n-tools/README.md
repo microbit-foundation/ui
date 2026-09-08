@@ -102,7 +102,9 @@ them does its own fallback or none; `skipUntranslated: true` asks Crowdin to
 leave untranslated strings out instead. Uploading one compares the whole
 text, since only the catalogs have ids to diff. A directory entry whose
 `source` is a directory uploads every file in it, creating in Crowdin any it
-lacks; nothing is deleted there.
+lacks; nothing is deleted there. Files under a `local` translation directory
+are left out, since MakeCode keeps an extension's translated docs under
+`docs/_locales/`, inside the English they translate.
 
 `beforeUpload(text, { name })` rewrites the English before it is compared and
 sent, and `afterDownload(text, { name, language })` rewrites each downloaded
