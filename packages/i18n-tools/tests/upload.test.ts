@@ -33,12 +33,15 @@ describe("diffCatalogs", () => {
 });
 
 describe("uploadTargets", () => {
-  it("marks only react-intl catalogs for an id-by-id diff", () => {
+  it("marks catalogs, with their Crowdin format, for an id-by-id diff", () => {
     const config = resolveConfig(
       {
         crowdin: { project: 1, directory: "apps/x" },
         languages: ["fr"],
-        catalogs: [{ source: "lang/ui.en.json" }],
+        catalogs: [
+          { source: "lang/ui.en.json" },
+          { source: "lang/old.en.json", crowdinFormat: "chrome" },
+        ],
         files: [
           {
             crowdinFile: "api.en.json",
@@ -51,12 +54,17 @@ describe("uploadTargets", () => {
       "/repo",
     );
     expect(uploadTargets(config)).toEqual([
-      { source: "lang/ui.en.json", crowdinFile: "ui.en.json", catalog: true },
       {
-        source: "crowdin/api.en.json",
-        crowdinFile: "api.en.json",
-        catalog: false,
+        source: "lang/ui.en.json",
+        crowdinFile: "ui.en.json",
+        catalog: "react-intl",
       },
+      {
+        source: "lang/old.en.json",
+        crowdinFile: "old.en.json",
+        catalog: "chrome",
+      },
+      { source: "crowdin/api.en.json", crowdinFile: "api.en.json" },
     ]);
   });
 });

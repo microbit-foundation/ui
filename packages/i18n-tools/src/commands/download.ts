@@ -17,10 +17,10 @@ import {
 } from "../config.ts";
 import { CrowdinProject, describeError, requireToken } from "../crowdin.ts";
 import { formatSummary, type DownloadSummary } from "../summary.ts";
+import { parseCrowdinCatalog } from "../formats.ts";
 import {
   dropInvalidTranslations,
   formatIssues,
-  parseCatalog,
   readCatalog,
   tidyTranslation,
   writeCatalog,
@@ -109,7 +109,11 @@ export const runDownload = async (
           approvedOnly: options.approvedOnly,
           skipUntranslated: language !== inContextLanguage,
         });
-        let messages = parseCatalog(text, `${crowdinPath} (${language})`);
+        let messages = parseCrowdinCatalog(
+          text,
+          catalog.crowdinFormat,
+          `${crowdinPath} (${language})`,
+        );
         if (catalog.afterDownload) {
           messages = await catalog.afterDownload({
             language,

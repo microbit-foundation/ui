@@ -15,6 +15,14 @@ export interface MessageDescriptor {
 
 export type Catalog = Record<string, MessageDescriptor>;
 
+/**
+ * How a catalog is stored in Crowdin. Local files are always react-intl;
+ * `chrome` is Chrome's `{ message, description }` JSON, for a file created
+ * before Crowdin recognised react-intl whose strings carry hand-added
+ * context that a change of format would lose.
+ */
+export type CrowdinFormat = "react-intl" | "chrome";
+
 export interface CrowdinConfig {
   /** Project identifier (the slug in Crowdin URLs) or numeric id. */
   project: string | number;
@@ -49,6 +57,8 @@ export interface CatalogConfig {
    * source file's name.
    */
   crowdinFile?: string;
+  /** The file's format in Crowdin. Defaults to `react-intl`. */
+  crowdinFormat?: CrowdinFormat;
   /**
    * Template for the translated files, `{lang}` being the language id in
    * Crowdin's canonical casing (`pt-BR`) and `{lang:lower}` its lowercase
