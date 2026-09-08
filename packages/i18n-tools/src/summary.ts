@@ -14,7 +14,26 @@ export interface DownloadSummary {
   dropped: Issue[];
 }
 
-const code = (text: string): string => `\`${text.replaceAll("`", "\\`")}\``;
+/**
+ * A code span, fenced with more backticks than any run inside it: a
+ * backslash does not escape inside a span.
+ */
+const code = (text: string): string => {
+  const longest = Math.max(
+    0,
+    ...[...text.matchAll(/`+/g)].map((m) => m[0].length),
+  );
+  const fence = "`".repeat(longest + 1);
+  const pad = longest ? " " : "";
+  return `${fence}${pad}${text}${pad}${fence}`;
+};
+
+/**
+ * Prose that names placeholders and tags, which would otherwise be read as
+ * HTML (`<li>`) or emphasis.
+ */
+const escape = (text: string): string =>
+  text.replace(/[\\`*_<>[\]]/g, (c) => `\\${c}`);
 
 /**
  * A Markdown account of a download for a pull request body or a GitHub step
@@ -38,7 +57,7 @@ export const formatSummary = ({
   if (failed.length) {
     lines.push("", `### Failed downloads (${failed.length})`, "");
     for (const f of failed) {
-      lines.push(`- ${code(f.file)}: ${f.error}`);
+      lines.push(`- ${code(f.file)}: ${escape(f.error)}`);
     }
   }
   if (dropped.length) {
@@ -50,7 +69,7 @@ export const formatSummary = ({
       "",
     );
     for (const d of dropped) {
-      lines.push(`- ${code(d.file)} ${code(d.id)}: ${d.message}`);
+      lines.push(`- ${code(d.file)} ${code(d.id)}: ${escape(d.message)}`);
       if (d.english !== undefined) {
         lines.push(`  - en: ${code(d.english)}`);
         lines.push(`  - translated: ${code(d.translation ?? "")}`);
