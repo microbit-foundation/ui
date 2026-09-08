@@ -100,7 +100,18 @@ export default defineConfig({
 in full, untranslated strings included as English, since whatever consumes
 them does its own fallback or none; `skipUntranslated: true` asks Crowdin to
 leave untranslated strings out instead. Uploading one compares the whole
-text, since only the catalogs have ids to diff.
+text, since only the catalogs have ids to diff. A directory entry whose
+`source` is a directory uploads every file in it, creating in Crowdin any it
+lacks; nothing is deleted there.
+
+`beforeUpload(text, { name })` rewrites the English before it is compared and
+sent, and `afterDownload(text, { name, language })` rewrites each downloaded
+file before it is written; `name` is the path within a directory entry, or
+the file's name. Together they keep a value that changes with every release
+out of Crowdin. pxt-microbit-ml's help pages pin the extension's version in a
+code block that Crowdin treats as a string, so its upload puts a placeholder
+there and its download restores the version from the English page, and
+translators see a line that never changes.
 
 ## What the catalogs hold
 

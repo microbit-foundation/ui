@@ -27,7 +27,7 @@ Commands:
   upload        Replace the English sources in Crowdin
                   --keep-translations   keep translations of changed strings
                   --dry-run             show the changes without uploading
-                  --only <source>       only this source file (repeatable)
+                  --only <source>       only this source file or directory (repeatable)
   status        Show per-language progress for this repo's files in Crowdin
   new-strings   List English copy added since a git ref, with a word count
                   --base <ref>      compare against this ref (default: main)

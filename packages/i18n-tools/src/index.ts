@@ -93,6 +93,16 @@ export interface CatalogConfig {
   afterDownload?: (context: AfterDownloadContext) => Catalog | Promise<Catalog>;
 }
 
+export interface FileContext {
+  /** The file's path within a directory entry, or its name otherwise. */
+  name: string;
+}
+
+export interface FileDownloadContext extends FileContext {
+  /** Crowdin language id, in Crowdin's casing (e.g. `pt-BR`). */
+  language: string;
+}
+
 /**
  * Any other translated file, copied as-is: MakeCode `_locales` strings,
  * pyright's message JSON, a directory of Markdown docs.
@@ -105,8 +115,20 @@ export interface FileConfig {
   crowdinFile: string;
   /** Template for the local copy, expanded as for `translations`. */
   local: string;
-  /** The local English source to upload, if this tool uploads it. */
+  /**
+   * The local English to upload, if this tool uploads it: a file, or for a
+   * directory entry the directory whose files are all uploaded.
+   */
   source?: string;
+  /**
+   * Rewrites the English before it is compared with and sent to Crowdin.
+   * With `afterDownload`, this keeps a value that changes with every release
+   * out of Crowdin: send a placeholder and put the current value back on
+   * download, so the string translators see never changes.
+   */
+  beforeUpload?: (text: string, context: FileContext) => string;
+  /** Rewrites a downloaded translation before it is written. */
+  afterDownload?: (text: string, context: FileDownloadContext) => string;
   /**
    * Leave untranslated strings out of the download rather than exporting
    * the English. Off by default: unlike the catalogs, whose compile
