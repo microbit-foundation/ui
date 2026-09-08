@@ -66,7 +66,9 @@ describe("describeQuotingProblems", () => {
     expect(describeQuotingProblems("'{project}' delete?")).toHaveLength(1);
     expect(
       describeQuotingProblems("{n, plural, one {'#' file} other {# files}}"),
-    ).toEqual(["quoted # in a plural renders a hash instead of the number"]);
+    ).toEqual([
+      "apostrophe before # in a plural escapes it, so a hash is shown instead of the number; write '' for an apostrophe",
+    ]);
   });
 
   it("accepts doubled apostrophes and apostrophes before letters", () => {
