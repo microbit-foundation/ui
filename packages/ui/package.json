@@ -3,6 +3,11 @@
   "version": "0.0.0",
   "description": "micro:bit design-system primitives: react-aria-components + Panda CSS with a design language ported from Chakra UI v2. Ships as source; see README for the consumption setup.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/microbit-foundation/ui.git",
+    "directory": "packages/ui"
+  },
   "type": "module",
   "exports": {
     ".": "./src/index.ts",

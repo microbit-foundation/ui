@@ -4,6 +4,11 @@
   "description": "Higher-level UI patterns composed from @microbit/ui primitives. Ships as source; see README for the consumption setup.",
   "license": "MIT",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/microbit-foundation/ui.git",
+    "directory": "packages/ui-patterns"
+  },
   "exports": {
     ".": "./src/index.ts",
     "./messages": "./src/messages.ts",

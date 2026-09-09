@@ -3,6 +3,11 @@
   "version": "0.0.0",
   "description": "Crowdin and react-intl catalog tooling shared by the micro:bit web apps: tidy and compile message catalogs, and upload, download and report on their translations.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/microbit-foundation/ui.git",
+    "directory": "packages/i18n-tools"
+  },
   "type": "module",
   "bin": {
     "microbit-i18n": "./bin/microbit-i18n.mjs"

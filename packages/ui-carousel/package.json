@@ -4,6 +4,11 @@
   "description": "Swiper-based carousel components in the micro:bit design language, composed from @microbit/ui primitives. Ships as source; see README for the consumption setup.",
   "license": "MIT",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/microbit-foundation/ui.git",
+    "directory": "packages/ui-carousel"
+  },
   "exports": {
     ".": "./src/index.ts",
     "./messages": "./src/messages.ts",
