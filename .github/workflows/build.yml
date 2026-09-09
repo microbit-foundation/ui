@@ -54,7 +54,7 @@ jobs:
         if: github.event_name == 'release'
         with:
           name: npm-tarball
-          path: '*.tgz'
+          path: "*.tgz"
           if-no-files-found: error
           retention-days: 1
       # On main, hand the Storybook this run just built and checked to the
@@ -80,8 +80,8 @@ jobs:
           name: npm-tarball
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
-          node-version: '24.x'
-          registry-url: 'https://registry.npmjs.org'
+          node-version: "24.x"
+          registry-url: "https://registry.npmjs.org"
       - run: npm install -g npm@${{ env.NPM_VERSION }}
       - run: npm stage publish --allow-file=all ./*.tgz
 
