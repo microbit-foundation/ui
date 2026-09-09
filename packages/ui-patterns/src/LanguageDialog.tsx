@@ -183,6 +183,7 @@ export const LanguageDialog = ({
             <ExternalLink
               href={translationLinkHref}
               css={{ fontSize: "md", color: "brand.500" }}
+              variant="standalone"
             >
               <FormattedMessage
                 {...uiPatternsMessage("ui-patterns.help-translate")}
