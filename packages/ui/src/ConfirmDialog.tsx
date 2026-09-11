@@ -3,16 +3,11 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import {
-  Button,
-  Modal,
-  ModalBody,
-  ModalFooter,
-  ModalHeader,
-} from "@microbit/ui";
 import { ReactNode, RefObject } from "react";
 import { FormattedMessage } from "react-intl";
-import { uiPatternsMessage } from "../messages";
+import { Button } from "./Button";
+import { uiMessage } from "./messages";
+import { Modal, ModalBody, ModalFooter, ModalHeader } from "./Modal";
 
 export interface ConfirmDialogProps {
   isOpen: boolean;
@@ -61,11 +56,7 @@ export const ConfirmDialog = ({
     <ModalBody>{body}</ModalBody>
     <ModalFooter css={{ gap: 3 }}>
       <Button autoFocus onPress={onCancel}>
-        {cancelText ?? (
-          <FormattedMessage
-            {...uiPatternsMessage("ui-patterns.cancel-action")}
-          />
-        )}
+        {cancelText ?? <FormattedMessage {...uiMessage("ui.cancel-action")} />}
       </Button>
       <Button variant="solid" tone="danger" onPress={onConfirm}>
         {confirmText}

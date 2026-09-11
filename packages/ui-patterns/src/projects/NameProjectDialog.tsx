@@ -21,6 +21,7 @@ import {
   useState,
 } from "react";
 import { FormattedMessage } from "react-intl";
+import { uiMessage } from "@microbit/ui/messages";
 import { uiPatternsMessage } from "../messages";
 
 export interface NameProjectDialogProps {
@@ -133,9 +134,7 @@ export const NameProjectDialog = ({
       </ModalBody>
       <ModalFooter css={{ gap: 3 }}>
         <Button onPress={onClose}>
-          <FormattedMessage
-            {...uiPatternsMessage("ui-patterns.cancel-action")}
-          />
+          <FormattedMessage {...uiMessage("ui.cancel-action")} />
         </Button>
         <Button variant="primary" onPress={handleSave} isDisabled={!isValid}>
           {confirmText}

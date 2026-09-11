@@ -3,7 +3,6 @@
  *
  * SPDX-License-Identifier: MIT
  */
-export * from "./ConfirmDialog";
 export * from "./NameProjectDialog";
 export * from "./ProjectCard";
 export * from "./ProjectsToolbar";

@@ -3,11 +3,10 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { Text } from "@microbit/ui";
+import { ConfirmDialog, Text } from "@microbit/ui";
 import { ReactNode, RefObject, useCallback, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { uiPatternsMessage } from "../messages";
-import { ConfirmDialog } from "./ConfirmDialog";
 import { NameProjectDialog } from "./NameProjectDialog";
 import { ProjectNameDialogReason, ProjectSummary } from "./types";
 

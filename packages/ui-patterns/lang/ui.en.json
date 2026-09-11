@@ -1,8 +1,4 @@
 {
-  "ui-patterns.cancel-action": {
-    "defaultMessage": "Cancel",
-    "description": "Cancel button in dialogs"
-  },
   "ui-patterns.clear-action": {
     "defaultMessage": "Clear",
     "description": "Clears a search box or a selection"

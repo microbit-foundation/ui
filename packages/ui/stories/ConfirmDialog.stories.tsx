@@ -3,12 +3,11 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { Box, Button, Text, useDisclosure } from "@microbit/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { ConfirmDialog } from "../src";
+import { Box, Button, ConfirmDialog, Text, useDisclosure } from "../src";
 
 const meta = {
-  title: "Projects/ConfirmDialog",
+  title: "Overlays/ConfirmDialog",
   component: ConfirmDialog,
 } satisfies Meta<typeof ConfirmDialog>;
 export default meta;
