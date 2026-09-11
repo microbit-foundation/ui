@@ -1,4 +1,16 @@
 {
+  "ui-patterns.copied-feedback": {
+    "defaultMessage": "Copied",
+    "description": "Accessible name of the copy button briefly after copying the error reference"
+  },
+  "ui-patterns.copy-error-reference-action": {
+    "defaultMessage": "Copy error reference",
+    "description": "Accessible name of the button that copies the error reference"
+  },
+  "ui-patterns.error-reference": {
+    "defaultMessage": "Error reference: {id}",
+    "description": "Shown on the unexpected error page. The id identifies the error report and can be quoted in support requests."
+  },
   "ui-patterns.help-translate": {
     "defaultMessage": "Help translate",
     "description": "Language dialog link to the translation project"
@@ -35,8 +47,28 @@
     "defaultMessage": "Language not fully supported",
     "description": "Language support toast notification title"
   },
+  "ui-patterns.not-found-home-link": {
+    "defaultMessage": "Go to home page",
+    "description": "Link text on the page not found page"
+  },
+  "ui-patterns.not-found-title": {
+    "defaultMessage": "Page not found",
+    "description": "Title of the page shown for an unknown URL"
+  },
   "ui-patterns.play-video": {
     "defaultMessage": "Play video: {title}",
     "description": "Accessible label for the play button shown over a video preview image; title is the video's title"
+  },
+  "ui-patterns.reload-action": {
+    "defaultMessage": "Click to reload the page",
+    "description": "Button on the unexpected error page"
+  },
+  "ui-patterns.support-request": {
+    "defaultMessage": "Please consider <link>raising a support request</link>.",
+    "description": "Text on the unexpected error page. The link opens the support site."
+  },
+  "ui-patterns.unexpected-error-title": {
+    "defaultMessage": "An unexpected error occurred",
+    "description": "Title of the full-page view shown for an unrecoverable error"
   }
 }
