@@ -7,7 +7,11 @@
  * ui-patterns — higher-level patterns composed from @microbit/ui primitives,
  * shared across the micro:bit app family.
  */
+export * from "./ErrorBoundary";
+export * from "./ErrorPage";
 export * from "./LanguageDialog";
+export * from "./NotFoundPage";
+export * from "./UnexpectedErrorPage";
 export * from "./YoutubeVideoEmbed";
 export * from "./get-default-language";
 export * from "./languages";

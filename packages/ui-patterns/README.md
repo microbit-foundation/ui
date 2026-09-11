@@ -28,6 +28,18 @@ blocks.
   pass a narrowed set where landing a user in a language silently would be
   wrong (e.g. incomplete native-app translations).
 
+- **Error views** — the full-page fallbacks every app carries.
+  `UnexpectedErrorPage` says an unexpected error occurred, links to the
+  app's support site, offers a reload, and shows an optional error
+  reference (the Sentry event id) so a support request can be matched to
+  the report. `NotFoundPage` is the unknown-URL page with a link home.
+  Both sit on `ErrorPage`, the shared layout, which apps can use for their
+  own cases. `ErrorBoundary` catches render errors below it and renders a
+  fallback you supply; its `onError` callback is where the app reports the
+  error and can return the reference for the fallback to show. Route-level
+  `errorElement`s stay app-side (they need react-router's `useRouteError`)
+  and render the same views.
+
 (`<html lang>` needs nothing from this package: `@microbit/ui`'s
 `SharedUIProvider` keeps it in step with the locale automatically.)
 
