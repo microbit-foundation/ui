@@ -49,6 +49,13 @@ describe("UnexpectedErrorPage", () => {
     expect(onReload).toHaveBeenCalledOnce();
   });
 
+  it("omits the support text when there is no support site", () => {
+    render(<UnexpectedErrorPage reference="abc123" />, { wrapper: Providers });
+    expect(screen.queryByRole("link")).toBeNull();
+    expect(screen.queryByText(/support request/)).toBeNull();
+    expect(screen.getByText(/Error reference/)).toBeDefined();
+  });
+
   it("focuses the heading on mount", () => {
     render(<UnexpectedErrorPage supportUrl={supportUrl} />, {
       wrapper: Providers,
