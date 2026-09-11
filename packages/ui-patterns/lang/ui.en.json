@@ -1,4 +1,12 @@
 {
+  "ui-patterns.cancel-action": {
+    "defaultMessage": "Cancel",
+    "description": "Cancel button in dialogs"
+  },
+  "ui-patterns.clear-action": {
+    "defaultMessage": "Clear",
+    "description": "Clears a search box or a selection"
+  },
   "ui-patterns.copied-feedback": {
     "defaultMessage": "Copied",
     "description": "Accessible name of the copy button briefly after copying the error reference"
@@ -6,6 +14,34 @@
   "ui-patterns.copy-error-reference-action": {
     "defaultMessage": "Copy error reference",
     "description": "Accessible name of the button that copies the error reference"
+  },
+  "ui-patterns.delete-project-action": {
+    "defaultMessage": "{count, plural, one {Delete} other {Delete {count} projects}}",
+    "description": "Delete action for one project or a selection of projects"
+  },
+  "ui-patterns.delete-project-confirm-heading": {
+    "defaultMessage": "Confirm delete project",
+    "description": "Heading of the dialog confirming deletion of one project"
+  },
+  "ui-patterns.delete-project-confirm-text": {
+    "defaultMessage": "Are you sure you want to delete the project \"{project}\"?",
+    "description": "Body of the dialog confirming deletion of one project"
+  },
+  "ui-patterns.delete-projects-confirm-heading": {
+    "defaultMessage": "Confirm delete projects",
+    "description": "Heading of the dialog confirming deletion of several projects"
+  },
+  "ui-patterns.delete-projects-confirm-text": {
+    "defaultMessage": "Are you sure you want to delete {numProjects} projects?",
+    "description": "Body of the dialog confirming deletion of several projects"
+  },
+  "ui-patterns.duplicate-project-action": {
+    "defaultMessage": "Duplicate",
+    "description": "Duplicate project action"
+  },
+  "ui-patterns.duplicate-project-heading": {
+    "defaultMessage": "Duplicate project",
+    "description": "Heading of the dialog naming a duplicated project"
   },
   "ui-patterns.error-reference": {
     "defaultMessage": "Error reference: {id}",
@@ -47,6 +83,14 @@
     "defaultMessage": "Language not fully supported",
     "description": "Language support toast notification title"
   },
+  "ui-patterns.name-label": {
+    "defaultMessage": "Name",
+    "description": "Label of the project name field"
+  },
+  "ui-patterns.name-project-heading": {
+    "defaultMessage": "Name your project",
+    "description": "Default heading of the project name dialog"
+  },
   "ui-patterns.not-found-home-link": {
     "defaultMessage": "Go to home page",
     "description": "Link text on the page not found page"
@@ -55,17 +99,85 @@
     "defaultMessage": "Page not found",
     "description": "Title of the page shown for an unknown URL"
   },
+  "ui-patterns.open-project-action": {
+    "defaultMessage": "Open",
+    "description": "Open project action"
+  },
   "ui-patterns.play-video": {
     "defaultMessage": "Play video: {title}",
     "description": "Accessible label for the play button shown over a video preview image; title is the video's title"
+  },
+  "ui-patterns.project-menu-label": {
+    "defaultMessage": "{name} actions menu",
+    "description": "Accessible name of a project card's actions menu button"
+  },
+  "ui-patterns.project-name-not-empty": {
+    "defaultMessage": "The project name cannot be empty",
+    "description": "Validation message for the project name field"
   },
   "ui-patterns.reload-action": {
     "defaultMessage": "Click to reload the page",
     "description": "Button on the unexpected error page"
   },
+  "ui-patterns.rename-project-action": {
+    "defaultMessage": "Rename",
+    "description": "Rename project action"
+  },
+  "ui-patterns.rename-project-heading": {
+    "defaultMessage": "Rename project",
+    "description": "Heading of the dialog renaming a project"
+  },
+  "ui-patterns.search": {
+    "defaultMessage": "Search",
+    "description": "Label and placeholder of the projects search box"
+  },
+  "ui-patterns.select-project-action": {
+    "defaultMessage": "Select {name}",
+    "description": "Accessible label of a project card's selection checkbox"
+  },
+  "ui-patterns.selection-actions-group": {
+    "defaultMessage": "Selection actions",
+    "description": "Accessible name of the toolbar acting on selected projects"
+  },
+  "ui-patterns.skip-to-toolbar-action": {
+    "defaultMessage": "Skip to toolbar",
+    "description": "Hidden button on a selected project card that moves focus to the selection toolbar"
+  },
+  "ui-patterns.sort-option-last-modified": {
+    "defaultMessage": "Last modified",
+    "description": "Sort projects by last modified"
+  },
+  "ui-patterns.sort-option-name": {
+    "defaultMessage": "Name",
+    "description": "Sort projects by name"
+  },
+  "ui-patterns.sort-option-relevance": {
+    "defaultMessage": "Relevance",
+    "description": "Shown in the sort control while searching; results are ranked by relevance"
+  },
+  "ui-patterns.sort-order-ascending-label": {
+    "defaultMessage": "Ascending order",
+    "description": "Accessible name of the sort direction button when ascending"
+  },
+  "ui-patterns.sort-order-descending-label": {
+    "defaultMessage": "Descending order",
+    "description": "Accessible name of the sort direction button when descending"
+  },
+  "ui-patterns.sort-projects-label": {
+    "defaultMessage": "Sort projects",
+    "description": "Accessible name of the sort field select"
+  },
   "ui-patterns.support-request": {
     "defaultMessage": "Please consider <link>raising a support request</link>.",
     "description": "Text on the unexpected error page. The link opens the support site."
+  },
+  "ui-patterns.timestamp-now": {
+    "defaultMessage": "now",
+    "description": "Relative time shown for a project modified this second"
+  },
+  "ui-patterns.timestamp-seconds": {
+    "defaultMessage": "a few seconds ago",
+    "description": "Relative time shown for a project modified under a minute ago"
   },
   "ui-patterns.unexpected-error-title": {
     "defaultMessage": "An unexpected error occurred",
