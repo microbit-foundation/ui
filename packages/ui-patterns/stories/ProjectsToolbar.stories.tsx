@@ -12,7 +12,8 @@ const meta = {
   component: ProjectsToolbar,
   args: {
     selectedCount: 1,
-    onRenameDuplicate: (reason) => alert(reason),
+    onRename: () => alert("rename"),
+    onDuplicate: () => alert("duplicate"),
     onDelete: () => alert("delete"),
     onClearSelection: () => alert("clear"),
   },

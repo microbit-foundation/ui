@@ -147,7 +147,8 @@ const ProjectsPageExample = () => {
               >
                 <ProjectsToolbar
                   selectedCount={selection.selectedIds.length}
-                  onRenameDuplicate={actions.renameOrDuplicate}
+                  onRename={actions.rename}
+                  onDuplicate={actions.duplicate}
                   onDelete={actions.requestDelete}
                   onClearSelection={selection.clear}
                 />
@@ -192,8 +193,8 @@ const ProjectsPageExample = () => {
                     onSelected={selection.toggle}
                     onOpen={(id) => alert(`open ${id}`)}
                     onDelete={actions.requestDelete}
-                    onRenameDuplicate={actions.renameOrDuplicate}
-                    setFinalFocusRef={actions.setFinalFocusRef}
+                    onRename={actions.rename}
+                    onDuplicate={actions.duplicate}
                   >
                     <Glyph />
                   </ProjectCard>
@@ -220,7 +221,8 @@ const ProjectsPageExample = () => {
         >
           <ProjectsToolbar
             selectedCount={selection.lastSelectedIds.length}
-            onRenameDuplicate={actions.renameOrDuplicate}
+            onRename={actions.rename}
+            onDuplicate={actions.duplicate}
             onDelete={actions.requestDelete}
             onClearSelection={selection.clear}
             isAttached={false}

@@ -21,7 +21,7 @@ import {
   Text,
   VisuallyHidden,
 } from "@microbit/ui";
-import { ReactNode, RefObject, useCallback, useRef } from "react";
+import { ReactNode, useCallback, useRef } from "react";
 import { MdMoreVert } from "react-icons/md";
 import {
   RiDeleteBin2Line,
@@ -32,7 +32,7 @@ import {
 import { FormattedMessage, useIntl } from "react-intl";
 import { uiPatternsMessage } from "../messages";
 import { formatTimeAgo } from "./time-ago";
-import { ProjectNameDialogReason, ProjectSummary } from "./types";
+import { ProjectSummary } from "./types";
 
 export interface ProjectCardProps {
   project: ProjectSummary;
@@ -53,13 +53,14 @@ export interface ProjectCardProps {
    */
   onSkipToToolbar?: () => void;
   onOpen: (id: string) => void;
-  onDelete: (id: string) => void;
-  onRenameDuplicate: (reason: ProjectNameDialogReason, id: string) => void;
   /**
-   * Called with the menu button before a menu action opens a dialog, so the
-   * dialog can return focus to it. See useProjectActions.
+   * Rename, duplicate and delete come with the menu button that started
+   * them, so a dialog can return focus there once it closes (the menu has
+   * gone by then). useProjectActions handles this.
    */
-  setFinalFocusRef?: (ref: RefObject<HTMLElement>) => void;
+  onRename: (id: string, trigger?: HTMLElement) => void;
+  onDuplicate: (id: string, trigger?: HTMLElement) => void;
+  onDelete: (id: string, trigger?: HTMLElement) => void;
   /** Per-instance overrides for the card body, e.g. tighter padding. */
   bodyCss?: SystemStyleObject;
   className?: string;
@@ -78,15 +79,16 @@ export const ProjectCard = ({
   onSelected,
   onSkipToToolbar,
   onOpen,
+  onRename,
+  onDuplicate,
   onDelete,
-  onRenameDuplicate,
-  setFinalFocusRef,
   bodyCss,
   className,
 }: ProjectCardProps) => {
   const intl = useIntl();
   const { id, name, timestamp } = project;
   const handleOpen = useCallback(() => onOpen(id), [id, onOpen]);
+  const date = new Date(timestamp);
   return (
     <LinkBox h="100%" w="100%" className={className}>
       <Card css={{ h: "100%", w: "100%" }}>
@@ -99,9 +101,9 @@ export const ProjectCard = ({
               onSelected={onSelected}
               onSkipToToolbar={onSkipToToolbar}
               onOpen={onOpen}
+              onRename={onRename}
+              onDuplicate={onDuplicate}
               onDelete={onDelete}
-              onRenameDuplicate={onRenameDuplicate}
-              setFinalFocusRef={setFinalFocusRef}
             />
             {children}
             <LinkOverlayButton
@@ -122,7 +124,15 @@ export const ProjectCard = ({
               </Text>
             )}
             <Text fontSize="sm" pt={2} color="blackAlpha.700">
-              {formatTimeAgo(intl, timestamp)}
+              <time
+                dateTime={date.toISOString()}
+                title={intl.formatDate(date, {
+                  dateStyle: "medium",
+                  timeStyle: "short",
+                })}
+              >
+                {formatTimeAgo(intl, timestamp)}
+              </time>
             </Text>
           </Stack>
         </CardBody>
@@ -138,9 +148,9 @@ interface ProjectCardActionsProps {
   onSelected?: (id: string) => void;
   onSkipToToolbar?: () => void;
   onOpen: (id: string) => void;
-  onDelete: (id: string) => void;
-  onRenameDuplicate: (reason: ProjectNameDialogReason, id: string) => void;
-  setFinalFocusRef?: (ref: RefObject<HTMLElement>) => void;
+  onRename: (id: string, trigger?: HTMLElement) => void;
+  onDuplicate: (id: string, trigger?: HTMLElement) => void;
+  onDelete: (id: string, trigger?: HTMLElement) => void;
 }
 
 const ProjectCardActions = ({
@@ -150,19 +160,13 @@ const ProjectCardActions = ({
   onSelected,
   onSkipToToolbar,
   onOpen,
+  onRename,
+  onDuplicate,
   onDelete,
-  onRenameDuplicate,
-  setFinalFocusRef,
 }: ProjectCardActionsProps) => {
   const intl = useIntl();
   const menuButtonRef = useRef<HTMLButtonElement>(null);
-  const withFocusReturn = useCallback(
-    (action: () => void) => () => {
-      setFinalFocusRef?.(menuButtonRef);
-      action();
-    },
-    [setFinalFocusRef],
-  );
+  const trigger = () => menuButtonRef.current ?? undefined;
   return (
     <HStack
       justifyContent="space-between"
@@ -251,7 +255,7 @@ const ProjectCardActions = ({
           </MenuItem>
           <MenuItem
             icon={<Icon as={RiEdit2Line} />}
-            onAction={withFocusReturn(() => onRenameDuplicate("rename", id))}
+            onAction={() => onRename(id, trigger())}
             textValue={intl.formatMessage(
               uiPatternsMessage("ui-patterns.rename-project-action"),
             )}
@@ -262,7 +266,7 @@ const ProjectCardActions = ({
           </MenuItem>
           <MenuItem
             icon={<Icon as={RiFileCopyLine} />}
-            onAction={withFocusReturn(() => onRenameDuplicate("duplicate", id))}
+            onAction={() => onDuplicate(id, trigger())}
             textValue={intl.formatMessage(
               uiPatternsMessage("ui-patterns.duplicate-project-action"),
             )}
@@ -273,7 +277,7 @@ const ProjectCardActions = ({
           </MenuItem>
           <MenuItem
             icon={<Icon as={RiDeleteBin2Line} />}
-            onAction={withFocusReturn(() => onDelete(id))}
+            onAction={() => onDelete(id, trigger())}
             textValue={intl.formatMessage(
               uiPatternsMessage("ui-patterns.delete-project-action"),
               { count: 1 },

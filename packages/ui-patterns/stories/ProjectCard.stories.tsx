@@ -18,7 +18,8 @@ const meta = {
     },
     onOpen: (id) => alert(`open ${id}`),
     onDelete: (id) => alert(`delete ${id}`),
-    onRenameDuplicate: (reason, id) => alert(`${reason} ${id}`),
+    onRename: (id) => alert(`rename ${id}`),
+    onDuplicate: (id) => alert(`duplicate ${id}`),
   },
   decorators: [
     (Story) => (

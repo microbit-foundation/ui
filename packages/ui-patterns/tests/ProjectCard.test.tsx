@@ -36,7 +36,8 @@ describe("ProjectCard", () => {
         description="main.py, helper.py"
         onOpen={onOpen}
         onDelete={() => {}}
-        onRenameDuplicate={() => {}}
+        onRename={() => {}}
+        onDuplicate={() => {}}
       >
         <span data-testid="glyph" />
       </ProjectCard>,
@@ -44,24 +45,29 @@ describe("ProjectCard", () => {
     );
     expect(screen.getByTestId("glyph")).toBeDefined();
     expect(screen.getByText("main.py, helper.py")).toBeDefined();
-    expect(screen.getByText("2 minutes ago")).toBeDefined();
+    const time = screen.getByText("2 minutes ago");
+    expect(time.tagName).toBe("TIME");
+    expect(time.getAttribute("dateTime")).toBe(
+      new Date(project.timestamp).toISOString(),
+    );
+    expect(time.getAttribute("title")).toMatch(/\d/);
     await user.click(screen.getByRole("button", { name: "Heart" }));
     expect(onOpen).toHaveBeenCalledWith("p1");
   });
 
-  it("offers open, rename, duplicate and delete from its menu", async () => {
+  it("offers open, rename, duplicate and delete from its menu, passing the menu button", async () => {
     const user = userEvent.setup();
     const onOpen = vi.fn();
+    const onRename = vi.fn();
+    const onDuplicate = vi.fn();
     const onDelete = vi.fn();
-    const onRenameDuplicate = vi.fn();
-    const setFinalFocusRef = vi.fn();
     render(
       <ProjectCard
         project={project}
         onOpen={onOpen}
+        onRename={onRename}
+        onDuplicate={onDuplicate}
         onDelete={onDelete}
-        onRenameDuplicate={onRenameDuplicate}
-        setFinalFocusRef={setFinalFocusRef}
       />,
       { wrapper: Providers },
     );
@@ -70,14 +76,15 @@ describe("ProjectCard", () => {
     });
     await user.click(menuButton);
     await user.click(screen.getByRole("menuitem", { name: "Duplicate" }));
-    expect(onRenameDuplicate).toHaveBeenCalledWith("duplicate", "p1");
-    expect(setFinalFocusRef).toHaveBeenCalledWith(
-      expect.objectContaining({ current: menuButton }),
-    );
+    expect(onDuplicate).toHaveBeenCalledWith("p1", menuButton);
+
+    await user.click(menuButton);
+    await user.click(screen.getByRole("menuitem", { name: "Rename" }));
+    expect(onRename).toHaveBeenCalledWith("p1", menuButton);
 
     await user.click(menuButton);
     await user.click(screen.getByRole("menuitem", { name: "Delete" }));
-    expect(onDelete).toHaveBeenCalledWith("p1");
+    expect(onDelete).toHaveBeenCalledWith("p1", menuButton);
 
     await user.click(menuButton);
     await user.click(screen.getByRole("menuitem", { name: "Open" }));
@@ -93,7 +100,8 @@ describe("ProjectCard", () => {
         project={project}
         onOpen={() => {}}
         onDelete={() => {}}
-        onRenameDuplicate={() => {}}
+        onRename={() => {}}
+        onDuplicate={() => {}}
       />,
       { wrapper: Providers },
     );
@@ -110,7 +118,8 @@ describe("ProjectCard", () => {
         onSkipToToolbar={onSkipToToolbar}
         onOpen={() => {}}
         onDelete={() => {}}
-        onRenameDuplicate={() => {}}
+        onRename={() => {}}
+        onDuplicate={() => {}}
       />,
     );
     await user.click(screen.getByRole("checkbox", { name: "Select Heart" }));
@@ -148,7 +157,8 @@ const Harness = ({
       {selection.hasSelection && (
         <ProjectsToolbar
           selectedCount={selection.selectedIds.length}
-          onRenameDuplicate={actions.renameOrDuplicate}
+          onRename={actions.rename}
+          onDuplicate={actions.duplicate}
           onDelete={actions.requestDelete}
           onClearSelection={selection.clear}
         />
@@ -161,8 +171,8 @@ const Harness = ({
           onSelected={selection.toggle}
           onOpen={() => {}}
           onDelete={actions.requestDelete}
-          onRenameDuplicate={actions.renameOrDuplicate}
-          setFinalFocusRef={actions.setFinalFocusRef}
+          onRename={actions.rename}
+          onDuplicate={actions.duplicate}
         />
       ))}
     </>

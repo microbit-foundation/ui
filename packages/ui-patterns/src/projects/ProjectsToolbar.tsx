@@ -12,12 +12,12 @@ import {
 } from "react-icons/ri";
 import { FormattedMessage, useIntl } from "react-intl";
 import { uiPatternsMessage } from "../messages";
-import { ProjectNameDialogReason } from "./types";
 
 export interface ProjectsToolbarProps {
   /** How many projects are selected. Rename and duplicate need exactly one. */
   selectedCount: number;
-  onRenameDuplicate: (reason: ProjectNameDialogReason) => void;
+  onRename: () => void;
+  onDuplicate: () => void;
   onDelete: () => void;
   onClearSelection: () => void;
   /** Icons without labels, for narrow layouts. */
@@ -38,7 +38,8 @@ export interface ProjectsToolbarProps {
  */
 export const ProjectsToolbar = ({
   selectedCount,
-  onRenameDuplicate,
+  onRename,
+  onDuplicate,
   onDelete,
   onClearSelection,
   iconOnly,
@@ -74,7 +75,7 @@ export const ProjectsToolbar = ({
           <IconButton
             variant="ghost"
             size={size}
-            onPress={() => onRenameDuplicate("rename")}
+            onPress={() => onRename()}
             css={iconCss}
             aria-label={intl.formatMessage(
               uiPatternsMessage("ui-patterns.rename-project-action"),
@@ -86,7 +87,7 @@ export const ProjectsToolbar = ({
           <Button
             variant="ghost"
             size={size}
-            onPress={() => onRenameDuplicate("rename")}
+            onPress={() => onRename()}
             startIcon={<Icon as={RiEdit2Line} />}
           >
             <FormattedMessage
@@ -99,7 +100,7 @@ export const ProjectsToolbar = ({
           <IconButton
             variant="ghost"
             size={size}
-            onPress={() => onRenameDuplicate("duplicate")}
+            onPress={() => onDuplicate()}
             css={iconCss}
             aria-label={intl.formatMessage(
               uiPatternsMessage("ui-patterns.duplicate-project-action"),
@@ -111,7 +112,7 @@ export const ProjectsToolbar = ({
           <Button
             variant="ghost"
             size={size}
-            onPress={() => onRenameDuplicate("duplicate")}
+            onPress={() => onDuplicate()}
             startIcon={<Icon as={RiFileCopyLine} />}
           >
             <FormattedMessage
@@ -123,7 +124,7 @@ export const ProjectsToolbar = ({
         <IconButton
           variant="ghost"
           size={size}
-          onPress={onDelete}
+          onPress={() => onDelete()}
           css={iconCss}
           aria-label={intl.formatMessage(
             uiPatternsMessage("ui-patterns.delete-project-action"),
@@ -136,7 +137,7 @@ export const ProjectsToolbar = ({
         <Button
           variant="ghost"
           size={size}
-          onPress={onDelete}
+          onPress={() => onDelete()}
           startIcon={<Icon as={RiDeleteBin2Line} />}
         >
           <FormattedMessage
@@ -149,7 +150,7 @@ export const ProjectsToolbar = ({
         <IconButton
           variant="ghost"
           size={size}
-          onPress={onClearSelection}
+          onPress={() => onClearSelection()}
           css={iconCss}
           aria-label={intl.formatMessage(
             uiPatternsMessage("ui-patterns.clear-action"),
@@ -161,7 +162,7 @@ export const ProjectsToolbar = ({
         <Button
           variant="ghost"
           size={size}
-          onPress={onClearSelection}
+          onPress={() => onClearSelection()}
           startIcon={<Icon as={RiCloseLine} />}
         >
           <FormattedMessage

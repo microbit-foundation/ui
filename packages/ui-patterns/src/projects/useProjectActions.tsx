@@ -4,11 +4,13 @@
  * SPDX-License-Identifier: MIT
  */
 import { ConfirmDialog, Text } from "@microbit/ui";
-import { ReactNode, RefObject, useCallback, useState } from "react";
+import { ReactNode, useCallback, useMemo, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { uiPatternsMessage } from "../messages";
 import { NameProjectDialog } from "./NameProjectDialog";
-import { ProjectNameDialogReason, ProjectSummary } from "./types";
+import { ProjectSummary } from "./types";
+
+type NameDialogReason = "rename" | "duplicate";
 
 export interface UseProjectActionsOptions {
   projects: ProjectSummary[];
@@ -23,18 +25,24 @@ export interface UseProjectActionsOptions {
   getSelectedIds?: () => string[];
 }
 
+/**
+ * Each action takes the id of the project, or acts on the selection without
+ * one, and optionally the element that started it, which the dialog returns
+ * focus to on closing. ProjectCard passes its menu button.
+ */
+type ProjectAction = (id?: string, trigger?: HTMLElement) => void;
+
 export interface ProjectActions {
   /**
-   * The name and confirm dialogs, wired up. Render once on the page. They
-   * return focus to the card menu button that opened them.
+   * The name and confirm dialogs, wired up. Render once on the page.
    */
   dialogs: ReactNode;
-  /** For ProjectCard, so a dialog can return focus to the menu button. */
-  setFinalFocusRef: (ref: RefObject<HTMLElement>) => void;
-  /** Opens the name dialog. Without an id, acts on the single selection. */
-  renameOrDuplicate: (reason: ProjectNameDialogReason, id?: string) => void;
-  /** Opens the confirm dialog. Without an id, acts on the selection. */
-  requestDelete: (id?: string) => void;
+  /** Opens the name dialog. Needs exactly one project. */
+  rename: ProjectAction;
+  /** Opens the name dialog for the copy. Needs exactly one project. */
+  duplicate: ProjectAction;
+  /** Opens the confirm dialog for one project or the selection. */
+  requestDelete: ProjectAction;
 }
 
 /**
@@ -50,12 +58,14 @@ export const useProjectActions = ({
   getSelectedIds,
 }: UseProjectActionsOptions): ProjectActions => {
   const [target, setTarget] = useState<ProjectSummary | undefined>();
-  const [nameReason, setNameReason] = useState<ProjectNameDialogReason>();
+  const [nameReason, setNameReason] = useState<NameDialogReason>();
   const [confirming, setConfirming] = useState(false);
-  const [finalFocusRef, setFinalFocusRef] = useState<
-    RefObject<HTMLElement> | undefined
-  >();
-  const clearFinalFocusRef = useCallback(() => setFinalFocusRef(undefined), []);
+  const [trigger, setTrigger] = useState<HTMLElement | undefined>();
+  const finalFocusRef = useMemo(
+    () => ({ current: trigger ?? null }),
+    [trigger],
+  );
+  const clearFinalFocusRef = useCallback(() => setTrigger(undefined), []);
 
   const resolve = useCallback(
     (id?: string): ProjectSummary | undefined => {
@@ -67,15 +77,24 @@ export const useProjectActions = ({
     [getSelectedIds, projects],
   );
 
-  const renameOrDuplicate = useCallback(
-    (reason: ProjectNameDialogReason, id?: string) => {
+  const openNameDialog = useCallback(
+    (reason: NameDialogReason, id?: string, trigger?: HTMLElement) => {
       const project = resolve(id);
       if (project) {
         setTarget(project);
+        setTrigger(trigger);
         setNameReason(reason);
       }
     },
     [resolve],
+  );
+  const rename = useCallback<ProjectAction>(
+    (id, trigger) => openNameDialog("rename", id, trigger),
+    [openNameDialog],
+  );
+  const duplicate = useCallback<ProjectAction>(
+    (id, trigger) => openNameDialog("duplicate", id, trigger),
+    [openNameDialog],
   );
   const closeNameDialog = useCallback(() => setNameReason(undefined), []);
   const saveName = useCallback(
@@ -92,10 +111,11 @@ export const useProjectActions = ({
     [closeNameDialog, nameReason, onDuplicate, onRename, target],
   );
 
-  const requestDelete = useCallback(
-    (id?: string) => {
+  const requestDelete = useCallback<ProjectAction>(
+    (id, trigger) => {
       const project = id ? resolve(id) : undefined;
       setTarget(project);
+      setTrigger(trigger);
       if (project || (getSelectedIds?.().length ?? 0) > 0) {
         setConfirming(true);
       }
@@ -184,5 +204,5 @@ export const useProjectActions = ({
     </>
   );
 
-  return { dialogs, setFinalFocusRef, renameOrDuplicate, requestDelete };
+  return { dialogs, rename, duplicate, requestDelete };
 };

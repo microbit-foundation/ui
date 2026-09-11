@@ -53,8 +53,11 @@ export const SearchInput = ({
         placeholder={text}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        type="text"
+        type="search"
         css={{
+          // We draw our own clear button.
+          appearance: "none",
+          "&::-webkit-search-cancel-button": { display: "none" },
           ps: 10,
           pe: 10,
           fontSize: "lg",

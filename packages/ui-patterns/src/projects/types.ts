@@ -15,8 +15,6 @@ export interface ProjectSummary {
   timestamp: number;
 }
 
-export type ProjectNameDialogReason = "rename" | "duplicate";
-
 export type ProjectSortField = "name" | "timestamp";
 
 export type SortDirection = "asc" | "desc";

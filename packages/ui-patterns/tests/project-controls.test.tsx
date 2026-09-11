@@ -27,14 +27,14 @@ describe("SearchInput", () => {
       wrapper: Providers,
     });
     expect(screen.queryByRole("button", { name: "Clear" })).toBeNull();
-    await user.type(screen.getByRole("textbox", { name: "Search" }), "h");
+    await user.type(screen.getByRole("searchbox", { name: "Search" }), "h");
     expect(onChange).toHaveBeenLastCalledWith("h");
 
     rerender(<SearchInput value="heart" onChange={onChange} />);
     await user.click(screen.getByRole("button", { name: "Clear" }));
     expect(onChange).toHaveBeenLastCalledWith("");
     expect(document.activeElement).toBe(
-      screen.getByRole("textbox", { name: "Search" }),
+      screen.getByRole("searchbox", { name: "Search" }),
     );
   });
 });
@@ -92,7 +92,8 @@ describe("ProjectsToolbar", () => {
     const { rerender } = render(
       <ProjectsToolbar
         selectedCount={1}
-        onRenameDuplicate={() => {}}
+        onRename={() => {}}
+        onDuplicate={() => {}}
         onDelete={() => {}}
         onClearSelection={() => {}}
       />,
@@ -110,7 +111,8 @@ describe("ProjectsToolbar", () => {
     rerender(
       <ProjectsToolbar
         selectedCount={3}
-        onRenameDuplicate={() => {}}
+        onRename={() => {}}
+        onDuplicate={() => {}}
         onDelete={() => {}}
         onClearSelection={() => {}}
       />,
@@ -121,23 +123,29 @@ describe("ProjectsToolbar", () => {
     ]);
   });
 
-  it("calls back with the reason and keeps accessible names when icon-only", async () => {
+  it("calls back and keeps accessible names when icon-only", async () => {
     const user = userEvent.setup();
-    const onRenameDuplicate = vi.fn();
+    const onRename = vi.fn();
+    const onDuplicate = vi.fn();
     const onDelete = vi.fn();
     const onClearSelection = vi.fn();
     render(
       <ProjectsToolbar
         selectedCount={1}
         iconOnly
-        onRenameDuplicate={onRenameDuplicate}
+        onRename={onRename}
+        onDuplicate={onDuplicate}
         onDelete={onDelete}
         onClearSelection={onClearSelection}
       />,
       { wrapper: Providers },
     );
     await user.click(screen.getByRole("button", { name: "Duplicate" }));
-    expect(onRenameDuplicate).toHaveBeenCalledWith("duplicate");
+    expect(onDuplicate).toHaveBeenCalledOnce();
+    // No arguments: the hook treats a first argument as a project id.
+    expect(onDuplicate).toHaveBeenCalledWith();
+    await user.click(screen.getByRole("button", { name: "Rename" }));
+    expect(onRename).toHaveBeenCalledWith();
     await user.click(screen.getByRole("button", { name: "Delete" }));
     expect(onDelete).toHaveBeenCalledOnce();
     await user.click(screen.getByRole("button", { name: "Clear" }));
