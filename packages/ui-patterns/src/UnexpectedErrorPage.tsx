@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 import {
+  Box,
   Button,
   Code,
   ExternalLink,
@@ -70,11 +71,11 @@ export const UnexpectedErrorPage = ({
     </Text>
     {reference && <ErrorReference reference={reference} />}
     {children}
-    <Text>
+    <Box mt={2}>
       <Button variant="primary" onPress={onReload}>
         <FormattedMessage {...uiPatternsMessage("ui-patterns.reload-action")} />
       </Button>
-    </Text>
+    </Box>
   </ErrorPage>
 );
 
