@@ -44,3 +44,11 @@ export const WithRecoveryAction: Story = {
     ),
   },
 };
+
+/** A deployment with no support site of its own. */
+export const WithoutSupportSite: Story = {
+  args: {
+    supportUrl: undefined,
+    reference: "5f1e7a2c9b3d4e6f8a0b1c2d3e4f5a6b",
+  },
+};

@@ -21,8 +21,11 @@ import { ErrorPage } from "./ErrorPage";
 import { uiPatternsMessage } from "./messages";
 
 export interface UnexpectedErrorPageProps {
-  /** Where "raising a support request" links to. */
-  supportUrl: string;
+  /**
+   * Where "raising a support request" links to. Omit it and the page does
+   * not mention support, for deployments without a support site.
+   */
+  supportUrl?: string;
   /**
    * Identifies the error report, typically the Sentry event id, so a support
    * request quoting it can be matched to the report. Omit when the error was
@@ -57,18 +60,20 @@ export const UnexpectedErrorPage = ({
       />
     }
   >
-    <Text>
-      <FormattedMessage
-        {...uiPatternsMessage("ui-patterns.support-request")}
-        values={{
-          link: (chunks: ReactNode) => (
-            <ExternalLink href={supportUrl} color="brand.600">
-              {chunks}
-            </ExternalLink>
-          ),
-        }}
-      />
-    </Text>
+    {supportUrl && (
+      <Text>
+        <FormattedMessage
+          {...uiPatternsMessage("ui-patterns.support-request")}
+          values={{
+            link: (chunks: ReactNode) => (
+              <ExternalLink href={supportUrl} color="brand.600">
+                {chunks}
+              </ExternalLink>
+            ),
+          }}
+        />
+      </Text>
+    )}
     {reference && <ErrorReference reference={reference} />}
     {children}
     <Box mt={2}>
