@@ -57,7 +57,11 @@ const SwiperCarousel = ({
         // overflow-hidden container desyncs the view.
         swiper.el.scrollLeft = 0;
         swiper.slides.forEach((slide, i) => {
-          if (slide.contains(e.target)) {
+          if (
+            slide.contains(e.target) &&
+            // Only scroll the card into view if it is not already fully visible.
+            !slide.classList.contains("swiper-slide-fully-visible")
+          ) {
             swiper.activeIndex = i;
             swiper.updateSlidesClasses();
             swiper.slideTo(i);
