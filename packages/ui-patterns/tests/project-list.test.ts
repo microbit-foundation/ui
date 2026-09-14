@@ -133,4 +133,23 @@ describe("useProjectSelection", () => {
     rerender();
     expect(result.current.selectedIds).toEqual(["b"]);
   });
+
+  it("forgets deleted projects when the next selection is made", () => {
+    let projects = [p("a", "A", 1), p("b", "B", 2), p("c", "C", 3)];
+    const { result, rerender } = renderHook(() =>
+      useProjectSelection(projects),
+    );
+    act(() => result.current.toggle("a"));
+    act(() => result.current.toggle("b"));
+    // Deleting the selection empties it but the sliding-out toolbar still
+    // shows the count it had.
+    projects = [p("c", "C", 3)];
+    rerender();
+    expect(result.current.selectedIds).toEqual([]);
+    expect(result.current.lastSelectedIds).toEqual(["a", "b"]);
+
+    act(() => result.current.toggle("c"));
+    expect(result.current.selectedIds).toEqual(["c"]);
+    expect(result.current.lastSelectedIds).toEqual(["c"]);
+  });
 });

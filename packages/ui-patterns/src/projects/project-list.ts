@@ -105,7 +105,9 @@ interface SelectionState {
   last: string[];
 }
 
-type SelectionAction = { type: "toggle"; id: string } | { type: "clear" };
+type SelectionAction =
+  | { type: "toggle"; id: string; projectIds: Set<string> }
+  | { type: "clear" };
 
 const selectionReducer = (
   state: SelectionState,
@@ -113,9 +115,13 @@ const selectionReducer = (
 ): SelectionState => {
   switch (action.type) {
     case "toggle": {
-      const selected = state.selected.includes(action.id)
-        ? state.selected.filter((v) => v !== action.id)
-        : [...state.selected, action.id];
+      // Ids of projects that have since left the list are dropped here rather
+      // than when the list changes, so `last` keeps its shape while a toolbar
+      // slides out after a delete.
+      const live = state.selected.filter((id) => action.projectIds.has(id));
+      const selected = live.includes(action.id)
+        ? live.filter((v) => v !== action.id)
+        : [...live, action.id];
       return { selected, last: selected.length > 0 ? selected : state.last };
     }
     case "clear":
@@ -133,13 +139,17 @@ export const useProjectSelection = (
   projects: ProjectSummary[],
 ): ProjectSelection => {
   const [state, dispatch] = useReducer(selectionReducer, noSelection);
-  const selectedIds = useMemo(() => {
-    const ids = new Set(projects.map((p) => p.id));
-    return state.selected.filter((id) => ids.has(id));
-  }, [projects, state.selected]);
+  const projectIds = useMemo(
+    () => new Set(projects.map((p) => p.id)),
+    [projects],
+  );
+  const selectedIds = useMemo(
+    () => state.selected.filter((id) => projectIds.has(id)),
+    [projectIds, state.selected],
+  );
   const toggle = useCallback(
-    (id: string) => dispatch({ type: "toggle", id }),
-    [],
+    (id: string) => dispatch({ type: "toggle", id, projectIds }),
+    [projectIds],
   );
   const clear = useCallback(() => dispatch({ type: "clear" }), []);
   const isSelected = useCallback(
