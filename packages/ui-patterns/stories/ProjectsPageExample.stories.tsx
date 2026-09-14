@@ -147,7 +147,9 @@ const ProjectsPageExample = () => {
                 }
                 setQuery(value);
               }}
-              className={css({ maxW: "30ch" })}
+              // Fields inherit their surface colour; the page is grey, so
+              // the wrapper supplies white, shaped to the field's radius.
+              className={css({ maxW: "30ch", bg: "white", borderRadius: "md" })}
             />
             {selection.hasSelection && (
               <Box
@@ -170,7 +172,7 @@ const ProjectsPageExample = () => {
             )}
             <ProjectSortInput
               className={cx(
-                css({ ml: "auto" }),
+                css({ ml: "auto", bg: "white", borderRadius: "md" }),
                 selection.hasSelection
                   ? css({ display: { base: "flex", lg: "none" } })
                   : undefined,

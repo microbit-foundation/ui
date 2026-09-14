@@ -49,7 +49,7 @@ export const ProjectSortInput = ({
         disabled={hasSearchQuery}
         // Lets the select shrink below its longest option when space is
         // tight, clipping the text.
-        css={{ fontSize: "lg", background: "white", flex: 1, minW: 0 }}
+        css={{ flex: 1, minW: 0 }}
       >
         {hasSearchQuery ? (
           <option value="relevance">
@@ -76,15 +76,12 @@ export const ProjectSortInput = ({
         onPress={onToggleDirection}
         isDisabled={hasSearchQuery}
         css={{
-          background: "white",
-          fontSize: "2xl",
           // Poses as the second half of the attached select, so the border
           // tracks the input recipe's resting border; the divider between
           // the two is ButtonGroup's hairline.
           border: "2px solid",
           borderColor: "gray.300",
           _hover: { borderColor: "gray.500" },
-          color: "gray.500",
           borderRadius: "md",
         }}
       >

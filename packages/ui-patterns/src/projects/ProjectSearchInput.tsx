@@ -25,7 +25,7 @@ export interface ProjectSearchInputProps {
 }
 
 /**
- * A rounded search box with a leading icon and a clear button while there
+ * A search box with a leading icon and a clear button while there
  * is text. Clearing returns focus to the box.
  */
 export const ProjectSearchInput = ({
@@ -45,7 +45,7 @@ export const ProjectSearchInput = ({
   return (
     <InputGroup className={className}>
       <InputStartElement pointerEvents="none">
-        <Icon as={RiSearch2Line} css={{ color: "gray.800" }} />
+        <Icon as={RiSearch2Line} />
       </InputStartElement>
       <Input
         ref={ref}
@@ -56,14 +56,9 @@ export const ProjectSearchInput = ({
         type="search"
         css={{
           // We draw our own clear button.
-          appearance: "none",
           "&::-webkit-search-cancel-button": { display: "none" },
           ps: 10,
           pe: 10,
-          fontSize: "lg",
-          _placeholder: { color: "gray.500" },
-          borderRadius: "20px",
-          background: "white",
         }}
       />
       {value && (
@@ -74,7 +69,6 @@ export const ProjectSearchInput = ({
               uiPatternsMessage("ui-patterns.clear-action"),
             )}
             onPress={handleClear}
-            css={{ fontSize: "2xl", color: "gray.500" }}
           >
             <Icon as={RiCloseLine} />
           </IconButton>
