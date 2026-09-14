@@ -2,6 +2,9 @@
   "ui-carousel.next": {
     "defaultMessage": "Ar Aghaidh"
   },
+  "ui-carousel.previous": {
+    "defaultMessage": "Roimhe Seo"
+  },
   "ui-carousel.role": {
     "defaultMessage": "carúsál"
   },

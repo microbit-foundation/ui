@@ -12,6 +12,6 @@
     "defaultMessage": "{slideNum} van {totalSlides}"
   },
   "ui-carousel.slide-role": {
-    "defaultMessage": "glijbaan"
+    "defaultMessage": "dia"
   }
 }
