@@ -2,6 +2,9 @@
   "ui-carousel.next": {
     "defaultMessage": "Dalej"
   },
+  "ui-carousel.previous": {
+    "defaultMessage": "Poprzedni"
+  },
   "ui-carousel.role": {
     "defaultMessage": "karuzela"
   },
