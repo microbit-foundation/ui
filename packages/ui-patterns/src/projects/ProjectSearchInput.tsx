@@ -16,7 +16,7 @@ import { RiCloseLine, RiSearch2Line } from "react-icons/ri";
 import { useIntl } from "react-intl";
 import { uiPatternsMessage } from "../messages";
 
-export interface SearchInputProps {
+export interface ProjectSearchInputProps {
   value: string;
   onChange: (value: string) => void;
   /** Accessible name and placeholder. Defaults to "Search". */
@@ -28,12 +28,12 @@ export interface SearchInputProps {
  * A rounded search box with a leading icon and a clear button while there
  * is text. Clearing returns focus to the box.
  */
-export const SearchInput = ({
+export const ProjectSearchInput = ({
   value,
   onChange,
   label,
   className,
-}: SearchInputProps) => {
+}: ProjectSearchInputProps) => {
   const intl = useIntl();
   const ref = useRef<HTMLInputElement>(null);
   const text =

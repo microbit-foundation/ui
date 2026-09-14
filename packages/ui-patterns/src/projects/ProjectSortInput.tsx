@@ -7,12 +7,12 @@ import { ButtonGroup, Icon, IconButton, NativeSelect } from "@microbit/ui";
 import { RiArrowDownLine, RiArrowUpLine } from "react-icons/ri";
 import { useIntl } from "react-intl";
 import { uiPatternsMessage } from "../messages";
-import { ProjectSortField, SortDirection } from "./types";
+import { ProjectSortField, ProjectSortDirection } from "./types";
 
-export interface SortInputProps {
+export interface ProjectSortInputProps {
   field: ProjectSortField;
   onFieldChange: (field: ProjectSortField) => void;
-  direction: SortDirection;
+  direction: ProjectSortDirection;
   onToggleDirection: () => void;
   /**
    * While searching, results are ranked by relevance and the controls are
@@ -25,14 +25,14 @@ export interface SortInputProps {
 /**
  * Sort field select with an attached direction button.
  */
-export const SortInput = ({
+export const ProjectSortInput = ({
   field,
   onFieldChange,
   direction,
   onToggleDirection,
   hasSearchQuery,
   className,
-}: SortInputProps) => {
+}: ProjectSortInputProps) => {
   const intl = useIntl();
   const message = (id: Parameters<typeof uiPatternsMessage>[0]) =>
     intl.formatMessage(uiPatternsMessage(id));

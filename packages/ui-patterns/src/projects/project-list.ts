@@ -7,7 +7,11 @@
  * SPDX-License-Identifier: MIT
  */
 import { useCallback, useMemo, useReducer } from "react";
-import { ProjectSortField, ProjectSummary, SortDirection } from "./types";
+import {
+  ProjectSortField,
+  ProjectSummary,
+  ProjectSortDirection,
+} from "./types";
 
 /**
  * Ranks projects against a search query. Every term must match the name or
@@ -58,22 +62,30 @@ export const rankProjects = <P extends ProjectSummary>(
   return ranked.sort((a, b) => b.score - a.score).map((r) => r.project);
 };
 
+/**
+ * Sorts by name (case-insensitively, in the given locale) or by timestamp.
+ * Pass the app's locale: the runtime default follows the OS language, which
+ * need not be the language the user chose in the app.
+ */
 export const sortProjects = <P extends ProjectSummary>(
   projects: P[],
   field: ProjectSortField,
-  direction: SortDirection,
+  direction: ProjectSortDirection,
+  locale?: string,
 ): P[] => {
+  const collator = new Intl.Collator(locale, { sensitivity: "base" });
   const sorted = [...projects].sort((a, b) =>
     field === "name"
-      ? a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+      ? collator.compare(a.name, b.name)
       : a.timestamp - b.timestamp,
   );
   return direction === "desc" ? sorted.reverse() : sorted;
 };
 
 /** The default direction when switching to a field: newest first, A to Z. */
-export const defaultSortDirection = (field: ProjectSortField): SortDirection =>
-  field === "name" ? "asc" : "desc";
+export const defaultSortDirection = (
+  field: ProjectSortField,
+): ProjectSortDirection => (field === "name" ? "asc" : "desc");
 
 export interface ProjectSelection {
   selectedIds: string[];

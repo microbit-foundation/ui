@@ -30,9 +30,10 @@ blocks.
 
 - **Project components** — the building blocks of a "your projects" page:
   `ProjectCard`, the selection toolbar, search and sort controls, the
-  name and confirm dialogs, and `useProjectActions` for the rename,
-  duplicate and delete flows behind them. Page layout and the grid stay
-  app-side; see the "Projects/Page example" story for a composition.
+  name dialog, and `useProjectActions` for the rename, duplicate and
+  delete flows behind them (the delete confirmation is `@microbit/ui`'s
+  `ConfirmDialog`). Page layout and the grid stay app-side; see the
+  "Projects/Page example" story for a composition.
 
 - **Error views** — the full-page fallbacks every app carries.
   `UnexpectedErrorPage` says an unexpected error occurred, links to the

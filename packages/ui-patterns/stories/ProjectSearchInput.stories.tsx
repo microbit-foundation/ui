@@ -6,11 +6,11 @@
 import { Box } from "@microbit/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { SearchInput } from "../src";
+import { ProjectSearchInput } from "../src";
 
 const meta = {
-  title: "Projects/SearchInput",
-  component: SearchInput,
+  title: "Projects/ProjectSearchInput",
+  component: ProjectSearchInput,
   decorators: [
     (Story) => (
       <Box w="30ch" p={4}>
@@ -18,14 +18,14 @@ const meta = {
       </Box>
     ),
   ],
-} satisfies Meta<typeof SearchInput>;
+} satisfies Meta<typeof ProjectSearchInput>;
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
 const Controlled = ({ initial }: { initial: string }) => {
   const [value, setValue] = useState(initial);
-  return <SearchInput value={value} onChange={setValue} />;
+  return <ProjectSearchInput value={value} onChange={setValue} />;
 };
 
 export const Empty: Story = {

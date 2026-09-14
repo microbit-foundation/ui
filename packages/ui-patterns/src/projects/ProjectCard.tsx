@@ -43,9 +43,12 @@ export interface ProjectCardProps {
   children?: ReactNode;
   /** One line under the name, e.g. what the project contains. */
   description?: ReactNode;
-  /** When set the card shows a selection checkbox. */
   isSelected?: boolean;
-  onSelected?: (id: string) => void;
+  /**
+   * When set the card shows a selection checkbox, and this is called with the
+   * project's id when it is toggled.
+   */
+  onToggleSelected?: (id: string) => void;
   /**
    * When set, a selected card carries a hidden "skip to toolbar" button for
    * keyboard users, so they need not tab through every card to act on a
@@ -76,7 +79,7 @@ export const ProjectCard = ({
   children,
   description,
   isSelected,
-  onSelected,
+  onToggleSelected,
   onSkipToToolbar,
   onOpen,
   onRename,
@@ -98,7 +101,7 @@ export const ProjectCard = ({
               id={id}
               name={name}
               isSelected={isSelected}
-              onSelected={onSelected}
+              onToggleSelected={onToggleSelected}
               onSkipToToolbar={onSkipToToolbar}
               onOpen={onOpen}
               onRename={onRename}
@@ -111,7 +114,7 @@ export const ProjectCard = ({
               css={{
                 mt: "auto",
                 h: 8,
-                textAlign: "left",
+                textAlign: "start",
                 fontSize: "xl",
                 truncate: true,
               }}
@@ -145,7 +148,7 @@ interface ProjectCardActionsProps {
   id: string;
   name: string;
   isSelected?: boolean;
-  onSelected?: (id: string) => void;
+  onToggleSelected?: (id: string) => void;
   onSkipToToolbar?: () => void;
   onOpen: (id: string) => void;
   onRename: (id: string, trigger?: HTMLElement) => void;
@@ -157,7 +160,7 @@ const ProjectCardActions = ({
   id,
   name,
   isSelected,
-  onSelected,
+  onToggleSelected,
   onSkipToToolbar,
   onOpen,
   onRename,
@@ -175,10 +178,10 @@ const ProjectCardActions = ({
       top={0}
       left={0}
     >
-      {onSelected && (
+      {onToggleSelected && (
         <Checkbox
           isSelected={isSelected ?? false}
-          onChange={() => onSelected(id)}
+          onChange={() => onToggleSelected(id)}
           css={{
             px: 5,
             py: 5,
@@ -186,7 +189,7 @@ const ProjectCardActions = ({
             zIndex: 1,
             borderColor: "gray.500",
             _hover: { backgroundColor: "blackAlpha.50" },
-            borderBottomRightRadius: "md",
+            borderEndEndRadius: "md",
             h: "60px",
           }}
         >
@@ -234,9 +237,9 @@ const ProjectCardActions = ({
             py: 5,
             h: "100%",
             borderRadius: 0,
-            borderBottomLeftRadius: "md",
+            borderEndStartRadius: "md",
             fontSize: "xl",
-            ml: "auto",
+            ms: "auto",
           }}
         >
           <Icon as={MdMoreVert} />

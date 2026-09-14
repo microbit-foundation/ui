@@ -18,6 +18,7 @@ import {
   ReactNode,
   RefObject,
   useCallback,
+  useRef,
   useState,
 } from "react";
 import { FormattedMessage } from "react-intl";
@@ -63,6 +64,13 @@ export const NameProjectDialog = ({
   onCloseComplete,
 }: NameProjectDialogProps) => {
   const [name, setName] = useState(initialName);
+  // The error only shows once the user has edited the name: an empty initial
+  // name should not open the dialog in an error state.
+  const [isEdited, setIsEdited] = useState(false);
+  // Select the whole name on the first focus after opening, so typing
+  // replaces it, but not on later focuses, which would override a click's
+  // caret position.
+  const hasSelectedRef = useRef(false);
   // Start afresh from the initial name each time the dialog opens. Adjusting
   // state during render, as React recommends for state derived from a prop
   // change, rather than an effect that would flash the stale name.
@@ -71,12 +79,21 @@ export const NameProjectDialog = ({
     setWasOpen(isOpen);
     if (isOpen) {
       setName(initialName);
+      setIsEdited(false);
+      hasSelectedRef.current = false;
     }
   }
   const isValid = isValidProjectName(name);
 
+  const handleChange = useCallback((value: string) => {
+    setName(value);
+    setIsEdited(true);
+  }, []);
   const handleFocus = useCallback((event: FocusEvent<HTMLInputElement>) => {
-    event.target.setSelectionRange(0, event.target.value.length);
+    if (!hasSelectedRef.current) {
+      hasSelectedRef.current = true;
+      event.target.setSelectionRange(0, event.target.value.length);
+    }
   }, []);
   const handleSave = useCallback(() => {
     if (isValid) {
@@ -116,12 +133,12 @@ export const NameProjectDialog = ({
               />
             }
             value={name}
-            onChange={setName}
+            onChange={handleChange}
             onFocus={handleFocus}
             autoFocus
             autoComplete="off"
             isRequired
-            isInvalid={!isValid}
+            isInvalid={isEdited && !isValid}
             helperText={helperText}
             helperTextCss={{ color: "gray.700" }}
             errorMessage={

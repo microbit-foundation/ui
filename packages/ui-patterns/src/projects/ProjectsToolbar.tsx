@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 import { Button, ButtonGroup, Icon, IconButton } from "@microbit/ui";
+import { forwardRef, useImperativeHandle, useRef } from "react";
 import {
   RiCloseLine,
   RiDeleteBin2Line,
@@ -20,7 +21,10 @@ export interface ProjectsToolbarProps {
   onDuplicate: () => void;
   onDelete: () => void;
   onClearSelection: () => void;
-  /** Icons without labels, for narrow layouts. */
+  /**
+   * Icons without labels, for narrow layouts. Delete keeps its label when
+   * more than one project is selected so the count is visible.
+   */
   iconOnly?: boolean;
   /**
    * Attached: a squared strip with hairline dividers (the default). The
@@ -32,26 +36,58 @@ export interface ProjectsToolbarProps {
   className?: string;
 }
 
+export interface ProjectsToolbarHandle {
+  /**
+   * Moves focus to the first button, for a card's "skip to toolbar". Returns
+   * false when the toolbar is hidden (a page that renders one toolbar for
+   * wide layouts and another for narrow can try each in turn).
+   */
+  focus: () => boolean;
+}
+
 /**
  * Actions on the selected projects: rename and duplicate when one is
  * selected, delete and clear always.
  */
-export const ProjectsToolbar = ({
-  selectedCount,
-  onRename,
-  onDuplicate,
-  onDelete,
-  onClearSelection,
-  iconOnly,
-  isAttached = true,
-  size,
-  className,
-}: ProjectsToolbarProps) => {
+export const ProjectsToolbar = forwardRef<
+  ProjectsToolbarHandle,
+  ProjectsToolbarProps
+>(function ProjectsToolbar(
+  {
+    selectedCount,
+    onRename,
+    onDuplicate,
+    onDelete,
+    onClearSelection,
+    iconOnly,
+    isAttached = true,
+    size,
+    className,
+  },
+  ref,
+) {
   const intl = useIntl();
+  const groupRef = useRef<HTMLDivElement>(null);
+  useImperativeHandle(
+    ref,
+    () => ({
+      focus: () => {
+        const group = groupRef.current;
+        if (!group || !(group.checkVisibility?.() ?? true)) {
+          return false;
+        }
+        const button = group.querySelector<HTMLElement>("button");
+        button?.focus();
+        return button !== null;
+      },
+    }),
+    [],
+  );
   const isSingle = selectedCount === 1;
   const iconCss = { fontSize: "xl" } as const;
   return (
     <ButtonGroup
+      ref={groupRef}
       isAttached={isAttached}
       role="group"
       aria-label={intl.formatMessage(
@@ -63,7 +99,7 @@ export const ProjectsToolbar = ({
           ? {
               "& > button": { borderRadius: 0 },
               "& > button + button": {
-                borderLeft: "1px solid",
+                borderInlineStart: "1px solid",
                 borderColor: "gray.200",
               },
             }
@@ -172,4 +208,4 @@ export const ProjectsToolbar = ({
       )}
     </ButtonGroup>
   );
-};
+});

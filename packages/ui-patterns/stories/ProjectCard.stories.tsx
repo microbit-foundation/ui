@@ -58,7 +58,7 @@ export const Selectable: Story = {
   args: {
     children: <Glyph />,
     isSelected: true,
-    onSelected: (id) => alert(`toggle ${id}`),
+    onToggleSelected: (id) => alert(`toggle ${id}`),
     onSkipToToolbar: () => alert("skip to toolbar"),
   },
 };

@@ -17,4 +17,4 @@ export interface ProjectSummary {
 
 export type ProjectSortField = "name" | "timestamp";
 
-export type SortDirection = "asc" | "desc";
+export type ProjectSortDirection = "asc" | "desc";

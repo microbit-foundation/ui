@@ -16,16 +16,18 @@ import {
   VStack,
 } from "@microbit/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
+import { useIntl } from "react-intl";
 import {
   defaultSortDirection,
   ProjectCard,
+  ProjectSearchInput,
+  ProjectSortDirection,
   ProjectSortField,
+  ProjectSortInput,
   ProjectsToolbar,
+  ProjectsToolbarHandle,
   rankProjects,
-  SearchInput,
-  SortDirection,
-  SortInput,
   sortProjects,
   useProjectActions,
   useProjectSelection,
@@ -88,16 +90,27 @@ const Glyph = () => (
  * width, and what rename, duplicate and delete actually do.
  */
 const ProjectsPageExample = () => {
+  const intl = useIntl();
   const [projects, setProjects] = useState(initialProjects);
   const [query, setQuery] = useState("");
   const [field, setField] = useState<ProjectSortField>("timestamp");
-  const [direction, setDirection] = useState<SortDirection>("desc");
+  const [direction, setDirection] = useState<ProjectSortDirection>("desc");
   const selection = useProjectSelection(projects);
   const mobileIconOnly = useBreakpointValue({ base: true, md: false });
 
+  // The toolbar renders twice, for wide and narrow layouts; skip to
+  // whichever is visible.
+  const wideToolbarRef = useRef<ProjectsToolbarHandle>(null);
+  const narrowToolbarRef = useRef<ProjectsToolbarHandle>(null);
+  const handleSkipToToolbar = useCallback(() => {
+    if (!wideToolbarRef.current?.focus()) {
+      narrowToolbarRef.current?.focus();
+    }
+  }, []);
+
   const actions = useProjectActions({
     projects,
-    getSelectedIds: () => selection.selectedIds,
+    selectedIds: selection.selectedIds,
     onRename: (id, name) =>
       setProjects((ps) => ps.map((p) => (p.id === id ? { ...p, name } : p))),
     onDuplicate: (id, name) =>
@@ -116,8 +129,8 @@ const ProjectsPageExample = () => {
     () =>
       query.trim()
         ? rankProjects(projects, query, (p) => p.files)
-        : sortProjects(projects, field, direction),
-    [direction, field, projects, query],
+        : sortProjects(projects, field, direction, intl.locale),
+    [direction, field, intl.locale, projects, query],
   );
 
   return (
@@ -126,7 +139,7 @@ const ProjectsPageExample = () => {
       <VStack as="main" alignItems="center" bg="whitesmoke" minH="100vh">
         <Box w="100%" maxW="1180px" p={4} display="flex" flexDir="column">
           <HStack mb={4} justifyContent="space-between" alignItems="center">
-            <SearchInput
+            <ProjectSearchInput
               value={query}
               onChange={(value) => {
                 if (value.trim()) {
@@ -146,15 +159,16 @@ const ProjectsPageExample = () => {
                 ml="auto"
               >
                 <ProjectsToolbar
+                  ref={wideToolbarRef}
                   selectedCount={selection.selectedIds.length}
                   onRename={actions.rename}
                   onDuplicate={actions.duplicate}
-                  onDelete={actions.requestDelete}
+                  onDelete={actions.delete}
                   onClearSelection={selection.clear}
                 />
               </Box>
             )}
-            <SortInput
+            <ProjectSortInput
               className={cx(
                 css({ ml: "auto" }),
                 selection.hasSelection
@@ -190,9 +204,10 @@ const ProjectsPageExample = () => {
                     project={project}
                     description={project.files.join(", ")}
                     isSelected={selection.isSelected(project.id)}
-                    onSelected={selection.toggle}
+                    onToggleSelected={selection.toggle}
+                    onSkipToToolbar={handleSkipToToolbar}
                     onOpen={(id) => alert(`open ${id}`)}
-                    onDelete={actions.requestDelete}
+                    onDelete={actions.delete}
                     onRename={actions.rename}
                     onDuplicate={actions.duplicate}
                   >
@@ -220,10 +235,11 @@ const ProjectsPageExample = () => {
           px={4}
         >
           <ProjectsToolbar
+            ref={narrowToolbarRef}
             selectedCount={selection.lastSelectedIds.length}
             onRename={actions.rename}
             onDuplicate={actions.duplicate}
-            onDelete={actions.requestDelete}
+            onDelete={actions.delete}
             onClearSelection={selection.clear}
             isAttached={false}
             iconOnly={mobileIconOnly}

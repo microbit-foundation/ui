@@ -12,6 +12,9 @@ import { ProjectSummary } from "./types";
 
 type NameDialogReason = "rename" | "duplicate";
 
+// A stable default so the callbacks below do not re-create every render.
+const noSelection: string[] = [];
+
 export interface UseProjectActionsOptions {
   projects: ProjectSummary[];
   onRename: (id: string, name: string) => void | Promise<void>;
@@ -22,7 +25,7 @@ export interface UseProjectActionsOptions {
    * The current selection, for toolbar actions that name no project. Rename
    * and duplicate act only when exactly one project is selected.
    */
-  getSelectedIds?: () => string[];
+  selectedIds?: string[];
 }
 
 /**
@@ -42,7 +45,7 @@ export interface ProjectActions {
   /** Opens the name dialog for the copy. Needs exactly one project. */
   duplicate: ProjectAction;
   /** Opens the confirm dialog for one project or the selection. */
-  requestDelete: ProjectAction;
+  delete: ProjectAction;
 }
 
 /**
@@ -55,7 +58,7 @@ export const useProjectActions = ({
   onRename,
   onDuplicate,
   onDelete,
-  getSelectedIds,
+  selectedIds = noSelection,
 }: UseProjectActionsOptions): ProjectActions => {
   const [target, setTarget] = useState<ProjectSummary | undefined>();
   const [nameReason, setNameReason] = useState<NameDialogReason>();
@@ -69,12 +72,11 @@ export const useProjectActions = ({
 
   const resolve = useCallback(
     (id?: string): ProjectSummary | undefined => {
-      const selected = getSelectedIds?.() ?? [];
       const resolvedId =
-        id ?? (selected.length === 1 ? selected[0] : undefined);
+        id ?? (selectedIds.length === 1 ? selectedIds[0] : undefined);
       return projects.find((p) => p.id === resolvedId);
     },
-    [getSelectedIds, projects],
+    [selectedIds, projects],
   );
 
   const openNameDialog = useCallback(
@@ -113,25 +115,25 @@ export const useProjectActions = ({
 
   const requestDelete = useCallback<ProjectAction>(
     (id, trigger) => {
-      const project = id ? resolve(id) : undefined;
+      const project = resolve(id);
       setTarget(project);
       setTrigger(trigger);
-      if (project || (getSelectedIds?.().length ?? 0) > 0) {
+      if (project || selectedIds.length > 0) {
         setConfirming(true);
       }
     },
-    [getSelectedIds, resolve],
+    [resolve, selectedIds],
   );
   const closeConfirm = useCallback(() => setConfirming(false), []);
   const confirmDelete = useCallback(async () => {
-    const ids = target ? [target.id] : getSelectedIds?.() ?? [];
+    const ids = target ? [target.id] : selectedIds;
     closeConfirm();
     if (ids.length > 0) {
       await onDelete(ids);
     }
-  }, [closeConfirm, getSelectedIds, onDelete, target]);
+  }, [closeConfirm, onDelete, selectedIds, target]);
 
-  const selectedCount = getSelectedIds?.().length ?? 0;
+  const selectedCount = selectedIds.length;
   const dialogs = (
     <>
       <NameProjectDialog
@@ -204,5 +206,5 @@ export const useProjectActions = ({
     </>
   );
 
-  return { dialogs, rename, duplicate, requestDelete };
+  return { dialogs, rename, duplicate, delete: requestDelete };
 };

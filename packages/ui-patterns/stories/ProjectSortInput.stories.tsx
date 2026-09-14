@@ -9,13 +9,13 @@ import { useState } from "react";
 import {
   defaultSortDirection,
   ProjectSortField,
-  SortDirection,
-  SortInput,
+  ProjectSortDirection,
+  ProjectSortInput,
 } from "../src";
 
 const meta = {
-  title: "Projects/SortInput",
-  component: SortInput,
+  title: "Projects/ProjectSortInput",
+  component: ProjectSortInput,
   decorators: [
     (Story) => (
       <Box p={4}>
@@ -23,16 +23,16 @@ const meta = {
       </Box>
     ),
   ],
-} satisfies Meta<typeof SortInput>;
+} satisfies Meta<typeof ProjectSortInput>;
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
 const Controlled = ({ hasSearchQuery }: { hasSearchQuery: boolean }) => {
   const [field, setField] = useState<ProjectSortField>("timestamp");
-  const [direction, setDirection] = useState<SortDirection>("desc");
+  const [direction, setDirection] = useState<ProjectSortDirection>("desc");
   return (
-    <SortInput
+    <ProjectSortInput
       field={field}
       direction={direction}
       onFieldChange={(next) => {

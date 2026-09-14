@@ -90,6 +90,31 @@ describe("NameProjectDialog", () => {
     ).toBeDefined();
   });
 
+  it("does not open in an error state for an empty initial name", async () => {
+    const user = userEvent.setup();
+    render(
+      <NameProjectDialog
+        isOpen
+        initialName=""
+        onClose={() => {}}
+        onSave={() => {}}
+        confirmText="Create"
+      />,
+      { wrapper: Providers },
+    );
+    expect(dialog().queryByText("The project name cannot be empty")).toBeNull();
+    expect(
+      dialog().getByRole<HTMLButtonElement>("button", { name: "Create" })
+        .disabled,
+    ).toBe(true);
+    const field = dialog().getByRole("textbox", { name: /Name/ });
+    await user.type(field, "a");
+    await user.clear(field);
+    expect(
+      dialog().getByText("The project name cannot be empty"),
+    ).toBeDefined();
+  });
+
   it("takes a heading, confirm text and helper text", () => {
     render(
       <NameProjectDialog

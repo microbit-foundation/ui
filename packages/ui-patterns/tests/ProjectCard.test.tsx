@@ -93,7 +93,7 @@ describe("ProjectCard", () => {
 
   it("shows a selection checkbox and skip link only when selectable", async () => {
     const user = userEvent.setup();
-    const onSelected = vi.fn();
+    const onToggleSelected = vi.fn();
     const onSkipToToolbar = vi.fn();
     const { rerender } = render(
       <ProjectCard
@@ -114,7 +114,7 @@ describe("ProjectCard", () => {
       <ProjectCard
         project={project}
         isSelected={false}
-        onSelected={onSelected}
+        onToggleSelected={onToggleSelected}
         onSkipToToolbar={onSkipToToolbar}
         onOpen={() => {}}
         onDelete={() => {}}
@@ -123,7 +123,7 @@ describe("ProjectCard", () => {
       />,
     );
     await user.click(screen.getByRole("checkbox", { name: "Select Heart" }));
-    expect(onSelected).toHaveBeenCalledWith("p1");
+    expect(onToggleSelected).toHaveBeenCalledWith("p1");
     await user.click(screen.getByRole("button", { name: "Skip to toolbar" }));
     expect(onSkipToToolbar).toHaveBeenCalledOnce();
   });
@@ -149,7 +149,7 @@ const Harness = ({
     onRename,
     onDuplicate,
     onDelete,
-    getSelectedIds: () => selection.selectedIds,
+    selectedIds: selection.selectedIds,
   });
   return (
     <>
@@ -159,7 +159,7 @@ const Harness = ({
           selectedCount={selection.selectedIds.length}
           onRename={actions.rename}
           onDuplicate={actions.duplicate}
-          onDelete={actions.requestDelete}
+          onDelete={actions.delete}
           onClearSelection={selection.clear}
         />
       )}
@@ -168,9 +168,9 @@ const Harness = ({
           key={p.id}
           project={p}
           isSelected={selection.isSelected(p.id)}
-          onSelected={selection.toggle}
+          onToggleSelected={selection.toggle}
           onOpen={() => {}}
-          onDelete={actions.requestDelete}
+          onDelete={actions.delete}
           onRename={actions.rename}
           onDuplicate={actions.duplicate}
         />
@@ -223,6 +223,26 @@ describe("useProjectActions", () => {
     ).toBeDefined();
     await user.click(alert.getByRole("button", { name: "Delete 2 projects" }));
     expect(onDelete).toHaveBeenCalledWith(["a", "b"]);
+  });
+
+  it("names the project when deleting a single selection from the toolbar", async () => {
+    const user = userEvent.setup();
+    const onDelete = vi.fn();
+    render(
+      <Harness onRename={vi.fn()} onDuplicate={vi.fn()} onDelete={onDelete} />,
+      {
+        wrapper: Providers,
+      },
+    );
+    await user.click(screen.getByRole("checkbox", { name: "Select Alpha" }));
+    await user.click(screen.getByRole("button", { name: "Delete" }));
+    const alert = within(screen.getByRole("alertdialog"));
+    expect(
+      alert.getByRole("heading", { name: "Confirm delete project" }),
+    ).toBeDefined();
+    expect(alert.getByText(/delete the project "Alpha"/)).toBeDefined();
+    await user.click(alert.getByRole("button", { name: "Delete" }));
+    expect(onDelete).toHaveBeenCalledWith(["a"]);
   });
 
   it("deletes one project from its menu, naming it in the confirmation", async () => {

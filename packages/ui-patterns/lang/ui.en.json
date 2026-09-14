@@ -28,7 +28,7 @@
     "description": "Heading of the dialog confirming deletion of several projects"
   },
   "ui-patterns.delete-projects-confirm-text": {
-    "defaultMessage": "Are you sure you want to delete {numProjects} projects?",
+    "defaultMessage": "Are you sure you want to delete {numProjects, plural, one {# project} other {# projects}}?",
     "description": "Body of the dialog confirming deletion of several projects"
   },
   "ui-patterns.duplicate-project-action": {

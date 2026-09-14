@@ -6,10 +6,15 @@
 import { SharedUIProvider } from "@microbit/ui";
 import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { ReactNode } from "react";
+import { createRef, ReactNode } from "react";
 import { IntlProvider } from "react-intl";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { ProjectsToolbar, SearchInput, SortInput } from "../src";
+import {
+  ProjectSearchInput,
+  ProjectSortInput,
+  ProjectsToolbar,
+  ProjectsToolbarHandle,
+} from "../src";
 
 afterEach(cleanup);
 
@@ -19,18 +24,21 @@ const Providers = ({ children }: { children: ReactNode }) => (
   </IntlProvider>
 );
 
-describe("SearchInput", () => {
+describe("ProjectSearchInput", () => {
   it("reports typing and clears back to the box", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    const { rerender } = render(<SearchInput value="" onChange={onChange} />, {
-      wrapper: Providers,
-    });
+    const { rerender } = render(
+      <ProjectSearchInput value="" onChange={onChange} />,
+      {
+        wrapper: Providers,
+      },
+    );
     expect(screen.queryByRole("button", { name: "Clear" })).toBeNull();
     await user.type(screen.getByRole("searchbox", { name: "Search" }), "h");
     expect(onChange).toHaveBeenLastCalledWith("h");
 
-    rerender(<SearchInput value="heart" onChange={onChange} />);
+    rerender(<ProjectSearchInput value="heart" onChange={onChange} />);
     await user.click(screen.getByRole("button", { name: "Clear" }));
     expect(onChange).toHaveBeenLastCalledWith("");
     expect(document.activeElement).toBe(
@@ -39,13 +47,13 @@ describe("SearchInput", () => {
   });
 });
 
-describe("SortInput", () => {
+describe("ProjectSortInput", () => {
   it("offers name and last modified with a direction toggle", async () => {
     const user = userEvent.setup();
     const onFieldChange = vi.fn();
     const onToggleDirection = vi.fn();
     render(
-      <SortInput
+      <ProjectSortInput
         field="timestamp"
         direction="desc"
         onFieldChange={onFieldChange}
@@ -65,7 +73,7 @@ describe("SortInput", () => {
 
   it("shows relevance and disables itself while searching", () => {
     render(
-      <SortInput
+      <ProjectSortInput
         field="name"
         direction="asc"
         onFieldChange={() => {}}
@@ -89,8 +97,10 @@ describe("SortInput", () => {
 
 describe("ProjectsToolbar", () => {
   it("offers rename and duplicate only for a single selection", () => {
+    const ref = createRef<ProjectsToolbarHandle>();
     const { rerender } = render(
       <ProjectsToolbar
+        ref={ref}
         selectedCount={1}
         onRename={() => {}}
         onDuplicate={() => {}}
@@ -100,6 +110,10 @@ describe("ProjectsToolbar", () => {
       { wrapper: Providers },
     );
     const group = screen.getByRole("group", { name: "Selection actions" });
+    expect(ref.current?.focus()).toBe(true);
+    expect(document.activeElement).toBe(
+      screen.getByRole("button", { name: "Rename" }),
+    );
     expect(screen.getAllByRole("button").map((b) => b.textContent)).toEqual([
       "Rename",
       "Duplicate",
