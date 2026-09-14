@@ -14,5 +14,6 @@ export * from "./NotFoundPage";
 export * from "./UnexpectedErrorPage";
 export * from "./YoutubeVideoEmbed";
 export * from "./get-default-language";
+export * from "./projects";
 export * from "./languages";
 export { uiPatternsMessage } from "./messages";

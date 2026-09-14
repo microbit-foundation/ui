@@ -57,6 +57,7 @@ export * from "./ListBox";
 export * from "./ComboBox";
 export * from "./Menu";
 export * from "./Modal";
+export * from "./ConfirmDialog";
 export * from "./PopoverArrow";
 export * from "./SharedUIProvider";
 export * from "./Tooltip";

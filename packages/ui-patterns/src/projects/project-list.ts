@@ -1,0 +1,170 @@
+/**
+ * List state shared by the projects pages: ranking a search, sorting, and
+ * a multi-selection that forgets projects that disappear.
+ *
+ * (c) 2026, Micro:bit Educational Foundation and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+import { useCallback, useMemo, useReducer } from "react";
+import {
+  ProjectSortField,
+  ProjectSummary,
+  ProjectSortDirection,
+} from "./types";
+
+/**
+ * Ranks projects against a search query. Every term must match the name or
+ * one of the app's secondary terms (file names, action names). Name matches
+ * outrank secondary matches; exact beats prefix beats substring. Projects
+ * with no match are dropped.
+ */
+export const rankProjects = <P extends ProjectSummary>(
+  projects: P[],
+  query: string,
+  secondaryTerms: (project: P) => string[] = () => [],
+): P[] => {
+  const terms = query.toLowerCase().trim().split(/\s+/).filter(Boolean);
+  if (terms.length === 0) {
+    return projects;
+  }
+  const ranked: Array<{ project: P; score: number }> = [];
+  for (const project of projects) {
+    const name = project.name.toLowerCase();
+    const secondary = secondaryTerms(project).map((t) => t.toLowerCase());
+    const allMatch = terms.every(
+      (term) => name.includes(term) || secondary.some((s) => s.includes(term)),
+    );
+    if (!allMatch) {
+      continue;
+    }
+    let score = 0;
+    for (const term of terms) {
+      if (name === term) {
+        score += 100;
+      } else if (name.startsWith(term)) {
+        score += 50;
+      } else if (name.includes(term)) {
+        score += 30;
+      }
+      for (const s of secondary) {
+        if (s === term) {
+          score += 15;
+        } else if (s.startsWith(term)) {
+          score += 8;
+        } else if (s.includes(term)) {
+          score += 5;
+        }
+      }
+    }
+    ranked.push({ project, score });
+  }
+  return ranked.sort((a, b) => b.score - a.score).map((r) => r.project);
+};
+
+/**
+ * Sorts by name (case-insensitively, in the given locale) or by timestamp.
+ * Pass the app's locale: the runtime default follows the OS language, which
+ * need not be the language the user chose in the app.
+ */
+export const sortProjects = <P extends ProjectSummary>(
+  projects: P[],
+  field: ProjectSortField,
+  direction: ProjectSortDirection,
+  locale?: string,
+): P[] => {
+  const collator = new Intl.Collator(locale, { sensitivity: "base" });
+  const sorted = [...projects].sort((a, b) =>
+    field === "name"
+      ? collator.compare(a.name, b.name)
+      : a.timestamp - b.timestamp,
+  );
+  return direction === "desc" ? sorted.reverse() : sorted;
+};
+
+/** The default direction when switching to a field: newest first, A to Z. */
+export const defaultSortDirection = (
+  field: ProjectSortField,
+): ProjectSortDirection => (field === "name" ? "asc" : "desc");
+
+export interface ProjectSelection {
+  selectedIds: string[];
+  hasSelection: boolean;
+  /**
+   * The selection as it was when last non-empty. For a toolbar that slides
+   * out on clearing, so it does not change shape mid-animation.
+   */
+  lastSelectedIds: string[];
+  isSelected: (id: string) => boolean;
+  toggle: (id: string) => void;
+  clear: () => void;
+}
+
+interface SelectionState {
+  selected: string[];
+  last: string[];
+}
+
+type SelectionAction =
+  | { type: "toggle"; id: string; projectIds: Set<string> }
+  | { type: "clear" };
+
+const selectionReducer = (
+  state: SelectionState,
+  action: SelectionAction,
+): SelectionState => {
+  switch (action.type) {
+    case "toggle": {
+      // Ids of projects that have since left the list are dropped here rather
+      // than when the list changes, so `last` keeps its shape while a toolbar
+      // slides out after a delete.
+      const live = state.selected.filter((id) => action.projectIds.has(id));
+      const selected = live.includes(action.id)
+        ? live.filter((v) => v !== action.id)
+        : [...live, action.id];
+      return { selected, last: selected.length > 0 ? selected : state.last };
+    }
+    case "clear":
+      return { selected: [], last: state.last };
+  }
+};
+
+const noSelection: SelectionState = { selected: [], last: [] };
+
+/**
+ * Multi-selection of projects by id. A project that leaves the list (deleted,
+ * perhaps in another tab) leaves the selection too.
+ */
+export const useProjectSelection = (
+  projects: ProjectSummary[],
+): ProjectSelection => {
+  const [state, dispatch] = useReducer(selectionReducer, noSelection);
+  const projectIds = useMemo(
+    () => new Set(projects.map((p) => p.id)),
+    [projects],
+  );
+  const selectedIds = useMemo(
+    () => state.selected.filter((id) => projectIds.has(id)),
+    [projectIds, state.selected],
+  );
+  const toggle = useCallback(
+    (id: string) => dispatch({ type: "toggle", id, projectIds }),
+    [projectIds],
+  );
+  const clear = useCallback(() => dispatch({ type: "clear" }), []);
+  const isSelected = useCallback(
+    (id: string) => selectedIds.includes(id),
+    [selectedIds],
+  );
+  return useMemo(
+    () => ({
+      selectedIds,
+      hasSelection: selectedIds.length > 0,
+      lastSelectedIds: state.last,
+      isSelected,
+      toggle,
+      clear,
+    }),
+    [selectedIds, state.last, isSelected, toggle, clear],
+  );
+};

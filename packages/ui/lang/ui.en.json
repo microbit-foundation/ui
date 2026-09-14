@@ -3,6 +3,10 @@
     "defaultMessage": "Breadcrumb",
     "description": "Accessible label for the breadcrumb navigation trail (the WAI-ARIA APG's conventional name)"
   },
+  "ui.cancel-action": {
+    "defaultMessage": "Cancel",
+    "description": "Cancel button in dialogs"
+  },
   "ui.close-action": {
     "defaultMessage": "Close",
     "description": "Close button text or label"

@@ -28,6 +28,13 @@ blocks.
   pass a narrowed set where landing a user in a language silently would be
   wrong (e.g. incomplete native-app translations).
 
+- **Project components** — the building blocks of a "my projects" page:
+  `ProjectCard`, the selection toolbar, search and sort controls, the
+  name dialog, and `useProjectActions` for the rename, duplicate and
+  delete flows behind them (the delete confirmation is `@microbit/ui`'s
+  `ConfirmDialog`). Page layout and the grid stay app-side; see the
+  "Projects/Page example" story for a composition.
+
 - **Error views** — the full-page fallbacks every app carries.
   `UnexpectedErrorPage` says an unexpected error occurred, links to the
   app's support site, offers a reload, and shows an optional error
