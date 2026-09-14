@@ -18,7 +18,6 @@ import {
   ReactNode,
   RefObject,
   useCallback,
-  useRef,
   useState,
 } from "react";
 import { FormattedMessage } from "react-intl";
@@ -70,7 +69,7 @@ export const NameProjectDialog = ({
   // Select the whole name on the first focus after opening, so typing
   // replaces it, but not on later focuses, which would override a click's
   // caret position.
-  const hasSelectedRef = useRef(false);
+  const [hasSelected, setHasSelected] = useState(false);
   // Start afresh from the initial name each time the dialog opens. Adjusting
   // state during render, as React recommends for state derived from a prop
   // change, rather than an effect that would flash the stale name.
@@ -80,7 +79,7 @@ export const NameProjectDialog = ({
     if (isOpen) {
       setName(initialName);
       setIsEdited(false);
-      hasSelectedRef.current = false;
+      setHasSelected(false);
     }
   }
   const isValid = isValidProjectName(name);
@@ -89,12 +88,15 @@ export const NameProjectDialog = ({
     setName(value);
     setIsEdited(true);
   }, []);
-  const handleFocus = useCallback((event: FocusEvent<HTMLInputElement>) => {
-    if (!hasSelectedRef.current) {
-      hasSelectedRef.current = true;
-      event.target.setSelectionRange(0, event.target.value.length);
-    }
-  }, []);
+  const handleFocus = useCallback(
+    (event: FocusEvent<HTMLInputElement>) => {
+      if (!hasSelected) {
+        setHasSelected(true);
+        event.target.setSelectionRange(0, event.target.value.length);
+      }
+    },
+    [hasSelected],
+  );
   const handleSave = useCallback(() => {
     if (isValid) {
       onSave(name.trim());
