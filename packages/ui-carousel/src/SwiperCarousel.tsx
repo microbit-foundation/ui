@@ -48,6 +48,21 @@ const SwiperCarousel = ({
   const { direction } = useLocale();
   const reducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
   const swiperRef = useRef<SwiperClass>();
+  const pointerModality = useRef(false);
+  useEffect(() => {
+    const onPointerDown = () => {
+      pointerModality.current = true;
+    };
+    const onKeyDown = () => {
+      pointerModality.current = false;
+    };
+    window.addEventListener("pointerdown", onPointerDown, true);
+    window.addEventListener("keydown", onKeyDown, true);
+    return () => {
+      window.removeEventListener("pointerdown", onPointerDown, true);
+      window.removeEventListener("keydown", onKeyDown, true);
+    };
+  }, []);
   const handleSlideFocus = useCallback(
     (e: React.FocusEvent<HTMLElement, Element>) => {
       const swiper = swiperRef.current;
@@ -57,7 +72,11 @@ const SwiperCarousel = ({
         // overflow-hidden container desyncs the view.
         swiper.el.scrollLeft = 0;
         swiper.slides.forEach((slide, i) => {
-          if (slide.contains(e.target)) {
+          if (
+            slide.contains(e.target) &&
+            !pointerModality.current &&
+            !slide.classList.contains("swiper-slide-fully-visible")
+          ) {
             swiper.activeIndex = i;
             swiper.updateSlidesClasses();
             swiper.slideTo(i);

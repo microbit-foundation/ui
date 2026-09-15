@@ -3,7 +3,17 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { css, cx, LinkBox, LinkOverlay, LinkOverlayButton } from "@microbit/ui";
+import {
+  css,
+  cx,
+  IconButton,
+  LinkBox,
+  LinkOverlay,
+  LinkOverlayButton,
+  MenuItem,
+  MenuList,
+  MenuTrigger,
+} from "@microbit/ui";
 import { ReactElement } from "react";
 
 /**
@@ -50,6 +60,60 @@ export const exampleCards = (count: number): ReactElement[] =>
           cardImageTints[i % cardImageTints.length],
         )}
       />
+      <div
+        className={css({
+          display: "flex",
+          flexDirection: "column",
+          gap: 2,
+          p: 4,
+        })}
+      >
+        <p className={css({ fontWeight: "semibold" })}>
+          <LinkOverlayButton css={{ _focusVisible: { focusRing: "outline" } }}>
+            Card {i + 1}
+          </LinkOverlayButton>
+        </p>
+        <p className={css({ color: "gray.600", fontSize: "sm" })}>
+          {descriptions[i % descriptions.length]}
+        </p>
+      </div>
+    </LinkBox>
+  ));
+
+/**
+ * Cards with a "…" actions menu in the corner, like the apps' project cards.
+ * React-aria menu triggers focus themselves on press, so these exercise
+ * focus-follows-slide staying put: opening a wholly visible card's menu must
+ * not move the carousel.
+ */
+export const menuCards = (count: number): ReactElement[] =>
+  Array.from({ length: count }, (_, i) => (
+    <LinkBox key={i} className={cardStyle}>
+      <div
+        className={cx(
+          css({ height: "120px" }),
+          cardImageTints[i % cardImageTints.length],
+        )}
+      />
+      <MenuTrigger>
+        <IconButton
+          aria-label={`Card ${i + 1} actions`}
+          variant="ghost"
+          css={{
+            position: "absolute",
+            top: 1,
+            insetEnd: 1,
+            zIndex: 1,
+            fontSize: "xl",
+          }}
+        >
+          ⋮
+        </IconButton>
+        <MenuList>
+          <MenuItem onAction={() => alert(`open ${i + 1}`)}>Open</MenuItem>
+          <MenuItem onAction={() => alert(`delete ${i + 1}`)}>Delete</MenuItem>
+        </MenuList>
+      </MenuTrigger>
       <div
         className={css({
           display: "flex",

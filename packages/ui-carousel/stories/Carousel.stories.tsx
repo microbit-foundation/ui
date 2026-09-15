@@ -5,7 +5,7 @@
  */
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Carousel } from "../src";
-import { exampleCards, linkCards } from "./cards";
+import { exampleCards, linkCards, menuCards } from "./cards";
 
 const meta = {
   title: "Carousel/Carousel",
@@ -39,6 +39,20 @@ export const LinkCards: Story = {
   args: {
     carouselItems: linkCards(12),
     containerLabel: "Example link cards",
+  },
+};
+
+/**
+ * Cards with a "…" actions menu, as the apps' project cards have. The menu
+ * trigger focuses itself on press, driving focus-follows-slide: opening a
+ * wholly visible card's menu (or tabbing to it) must not move the carousel.
+ * Most visible at narrow widths, where the carousel can be at a position
+ * that isn't the focused card's own snap point.
+ */
+export const MenuCards: Story = {
+  args: {
+    carouselItems: menuCards(12),
+    containerLabel: "Example menu cards",
   },
 };
 
