@@ -48,6 +48,21 @@ const SwiperCarousel = ({
   const { direction } = useLocale();
   const reducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
   const swiperRef = useRef<SwiperClass>();
+  const pointerModality = useRef(false);
+  useEffect(() => {
+    const onPointerDown = () => {
+      pointerModality.current = true;
+    };
+    const onKeyDown = () => {
+      pointerModality.current = false;
+    };
+    window.addEventListener("pointerdown", onPointerDown, true);
+    window.addEventListener("keydown", onKeyDown, true);
+    return () => {
+      window.removeEventListener("pointerdown", onPointerDown, true);
+      window.removeEventListener("keydown", onKeyDown, true);
+    };
+  }, []);
   const handleSlideFocus = useCallback(
     (e: React.FocusEvent<HTMLElement, Element>) => {
       const swiper = swiperRef.current;
@@ -59,7 +74,7 @@ const SwiperCarousel = ({
         swiper.slides.forEach((slide, i) => {
           if (
             slide.contains(e.target) &&
-            // Only scroll the card into view if it is not already fully visible.
+            !pointerModality.current &&
             !slide.classList.contains("swiper-slide-fully-visible")
           ) {
             swiper.activeIndex = i;
