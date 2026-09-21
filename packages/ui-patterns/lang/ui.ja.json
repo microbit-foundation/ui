@@ -1,4 +1,28 @@
 {
+  "ui-patterns.clear-action": {
+    "defaultMessage": "クリア"
+  },
+  "ui-patterns.copied-feedback": {
+    "defaultMessage": "コピーしました"
+  },
+  "ui-patterns.delete-project-action": {
+    "defaultMessage": "{count, plural, other {{count}件のプロジェクトを削除}}"
+  },
+  "ui-patterns.delete-project-confirm-heading": {
+    "defaultMessage": "プロジェクトの削除の確認"
+  },
+  "ui-patterns.delete-project-confirm-text": {
+    "defaultMessage": "プロジェクト「{project}」を削除してよろしいですか？"
+  },
+  "ui-patterns.delete-projects-confirm-heading": {
+    "defaultMessage": "プロジェクトの削除の確認"
+  },
+  "ui-patterns.duplicate-project-action": {
+    "defaultMessage": "複製"
+  },
+  "ui-patterns.duplicate-project-heading": {
+    "defaultMessage": "プロジェクトを複製"
+  },
   "ui-patterns.help-translate": {
     "defaultMessage": "翻訳を手伝う"
   },
@@ -25,5 +49,65 @@
   },
   "ui-patterns.language-toast-title": {
     "defaultMessage": "言語が完全にサポートされていません"
+  },
+  "ui-patterns.name-project-heading": {
+    "defaultMessage": "プロジェクトに名前を付ける"
+  },
+  "ui-patterns.not-found-home-link": {
+    "defaultMessage": "ホームへ"
+  },
+  "ui-patterns.open-project-action": {
+    "defaultMessage": "開く"
+  },
+  "ui-patterns.project-menu-label": {
+    "defaultMessage": "{name}アクションメニュー"
+  },
+  "ui-patterns.project-name-not-empty": {
+    "defaultMessage": "プロジェクト名は空にできません"
+  },
+  "ui-patterns.reload-action": {
+    "defaultMessage": "ページをリロードするにはクリックします"
+  },
+  "ui-patterns.rename-project-action": {
+    "defaultMessage": "名前を変更"
+  },
+  "ui-patterns.rename-project-heading": {
+    "defaultMessage": "プロジェクト名を変更"
+  },
+  "ui-patterns.search": {
+    "defaultMessage": "検索"
+  },
+  "ui-patterns.select-project-action": {
+    "defaultMessage": "{name}を選択"
+  },
+  "ui-patterns.selection-actions-group": {
+    "defaultMessage": "選択アクション"
+  },
+  "ui-patterns.skip-to-toolbar-action": {
+    "defaultMessage": "ツールバーにスキップ"
+  },
+  "ui-patterns.sort-option-last-modified": {
+    "defaultMessage": "更新日時"
+  },
+  "ui-patterns.sort-option-relevance": {
+    "defaultMessage": "関係度"
+  },
+  "ui-patterns.sort-order-ascending-label": {
+    "defaultMessage": "昇順で並べ替え"
+  },
+  "ui-patterns.sort-order-descending-label": {
+    "defaultMessage": "降順で並び替え"
+  },
+  "ui-patterns.sort-projects-label": {
+    "defaultMessage": "プロジェクトの並び替え"
+  },
+  "ui-patterns.support-request": {
+    "defaultMessage": "<link>サポートリクエストの提出</link> を検討してください。"
+  },
+  "ui-patterns.timestamp-now": {
+    "defaultMessage": "現在"
+  },
+  "ui-patterns.timestamp-seconds": {
+    "defaultMessage": "数秒前"
   }
 }

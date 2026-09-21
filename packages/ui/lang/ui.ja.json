@@ -2,6 +2,9 @@
   "ui.breadcrumb": {
     "defaultMessage": "パンくずリスト"
   },
+  "ui.cancel-action": {
+    "defaultMessage": "キャンセル"
+  },
   "ui.close-action": {
     "defaultMessage": "閉じる"
   },

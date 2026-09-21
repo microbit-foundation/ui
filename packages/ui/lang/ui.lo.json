@@ -2,6 +2,9 @@
   "ui.breadcrumb": {
     "defaultMessage": "ແຖບເສັ້ນທາງນຳທາງ"
   },
+  "ui.cancel-action": {
+    "defaultMessage": "ຍົກເລີກ\n"
+  },
   "ui.close-action": {
     "defaultMessage": "ປິດໜ້າ"
   },

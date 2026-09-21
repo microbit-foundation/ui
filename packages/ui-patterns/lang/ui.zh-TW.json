@@ -1,4 +1,28 @@
 {
+  "ui-patterns.clear-action": {
+    "defaultMessage": "清除"
+  },
+  "ui-patterns.copied-feedback": {
+    "defaultMessage": "複製的"
+  },
+  "ui-patterns.delete-project-action": {
+    "defaultMessage": "{count, plural, one {刪除} other {刪除 {count} 個專案}}"
+  },
+  "ui-patterns.delete-project-confirm-heading": {
+    "defaultMessage": "確認刪除專案"
+  },
+  "ui-patterns.delete-project-confirm-text": {
+    "defaultMessage": "您確定您要刪除專案「{project}」嗎？"
+  },
+  "ui-patterns.delete-projects-confirm-heading": {
+    "defaultMessage": "確認刪除專案"
+  },
+  "ui-patterns.duplicate-project-action": {
+    "defaultMessage": "複製"
+  },
+  "ui-patterns.duplicate-project-heading": {
+    "defaultMessage": "複製專案"
+  },
   "ui-patterns.help-translate": {
     "defaultMessage": "說明翻譯"
   },
@@ -22,5 +46,59 @@
   },
   "ui-patterns.language-toast-title": {
     "defaultMessage": "語言未完全支持"
+  },
+  "ui-patterns.name-project-heading": {
+    "defaultMessage": "為您的專案命名"
+  },
+  "ui-patterns.not-found-home-link": {
+    "defaultMessage": "回到首頁"
+  },
+  "ui-patterns.open-project-action": {
+    "defaultMessage": "開啟"
+  },
+  "ui-patterns.project-menu-label": {
+    "defaultMessage": " {name} 動作選單"
+  },
+  "ui-patterns.project-name-not-empty": {
+    "defaultMessage": "專案名稱不可為空白"
+  },
+  "ui-patterns.rename-project-action": {
+    "defaultMessage": "重新命名"
+  },
+  "ui-patterns.rename-project-heading": {
+    "defaultMessage": "重新命名專案"
+  },
+  "ui-patterns.search": {
+    "defaultMessage": "搜尋"
+  },
+  "ui-patterns.select-project-action": {
+    "defaultMessage": "選擇 {name}"
+  },
+  "ui-patterns.selection-actions-group": {
+    "defaultMessage": "選擇動作"
+  },
+  "ui-patterns.skip-to-toolbar-action": {
+    "defaultMessage": "跳至工具列"
+  },
+  "ui-patterns.sort-option-last-modified": {
+    "defaultMessage": "上次修改"
+  },
+  "ui-patterns.sort-option-relevance": {
+    "defaultMessage": "相關性"
+  },
+  "ui-patterns.sort-order-ascending-label": {
+    "defaultMessage": "升序排序"
+  },
+  "ui-patterns.sort-order-descending-label": {
+    "defaultMessage": "降序排序"
+  },
+  "ui-patterns.sort-projects-label": {
+    "defaultMessage": "排序專案"
+  },
+  "ui-patterns.timestamp-now": {
+    "defaultMessage": "現在"
+  },
+  "ui-patterns.timestamp-seconds": {
+    "defaultMessage": "幾秒前"
   }
 }

@@ -2,6 +2,9 @@
   "ui.breadcrumb": {
     "defaultMessage": "巡覽路徑"
   },
+  "ui.cancel-action": {
+    "defaultMessage": "取消"
+  },
   "ui.close-action": {
     "defaultMessage": "關閉"
   },

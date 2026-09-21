@@ -1,4 +1,16 @@
 {
+  "ui-patterns.clear-action": {
+    "defaultMessage": "清除"
+  },
+  "ui-patterns.copied-feedback": {
+    "defaultMessage": "已复制"
+  },
+  "ui-patterns.duplicate-project-action": {
+    "defaultMessage": "复制"
+  },
+  "ui-patterns.duplicate-project-heading": {
+    "defaultMessage": "复制项目"
+  },
   "ui-patterns.help-translate": {
     "defaultMessage": "帮助翻译"
   },
@@ -23,7 +35,34 @@
   "ui-patterns.language-toast-title": {
     "defaultMessage": "该语言没有完全支持"
   },
+  "ui-patterns.name-label": {
+    "defaultMessage": "姓名"
+  },
+  "ui-patterns.name-project-heading": {
+    "defaultMessage": "为您的项目命名"
+  },
+  "ui-patterns.not-found-home-link": {
+    "defaultMessage": "返回首页"
+  },
+  "ui-patterns.open-project-action": {
+    "defaultMessage": "打开"
+  },
   "ui-patterns.play-video": {
     "defaultMessage": "播放视频：{title}"
+  },
+  "ui-patterns.project-name-not-empty": {
+    "defaultMessage": "项目名称不能为空"
+  },
+  "ui-patterns.reload-action": {
+    "defaultMessage": "点击重新加载页面"
+  },
+  "ui-patterns.search": {
+    "defaultMessage": "搜索​​​​"
+  },
+  "ui-patterns.sort-option-name": {
+    "defaultMessage": "姓名"
+  },
+  "ui-patterns.support-request": {
+    "defaultMessage": "请点击 <link>创建一个求助请求</link>."
   }
 }

@@ -2,6 +2,9 @@
   "ui.breadcrumb": {
     "defaultMessage": "Trilha de navegação"
   },
+  "ui.cancel-action": {
+    "defaultMessage": "Cancelar"
+  },
   "ui.close-action": {
     "defaultMessage": "Fechar"
   },

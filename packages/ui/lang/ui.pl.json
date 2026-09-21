@@ -2,6 +2,9 @@
   "ui.breadcrumb": {
     "defaultMessage": "Ścieżka nawigacji"
   },
+  "ui.cancel-action": {
+    "defaultMessage": "Anuluj"
+  },
   "ui.close-action": {
     "defaultMessage": "Zamknij"
   },

@@ -1,4 +1,37 @@
 {
+  "ui-patterns.clear-action": {
+    "defaultMessage": "crwdns371090:0crwdne371090:0"
+  },
+  "ui-patterns.copied-feedback": {
+    "defaultMessage": "crwdns371092:0crwdne371092:0"
+  },
+  "ui-patterns.copy-error-reference-action": {
+    "defaultMessage": "crwdns371094:0crwdne371094:0"
+  },
+  "ui-patterns.delete-project-action": {
+    "defaultMessage": "crwdns371096:0count={count}crwdnd371096:0count={count}crwdne371096:0"
+  },
+  "ui-patterns.delete-project-confirm-heading": {
+    "defaultMessage": "crwdns371098:0crwdne371098:0"
+  },
+  "ui-patterns.delete-project-confirm-text": {
+    "defaultMessage": "crwdns371100:0{project}crwdne371100:0"
+  },
+  "ui-patterns.delete-projects-confirm-heading": {
+    "defaultMessage": "crwdns371102:0crwdne371102:0"
+  },
+  "ui-patterns.delete-projects-confirm-text": {
+    "defaultMessage": "crwdns371104:0numProjects={numProjects}crwdne371104:0"
+  },
+  "ui-patterns.duplicate-project-action": {
+    "defaultMessage": "crwdns371106:0crwdne371106:0"
+  },
+  "ui-patterns.duplicate-project-heading": {
+    "defaultMessage": "crwdns371108:0crwdne371108:0"
+  },
+  "ui-patterns.error-reference": {
+    "defaultMessage": "crwdns371110:0{id}crwdne371110:0"
+  },
   "ui-patterns.help-translate": {
     "defaultMessage": "crwdns370126:0crwdne370126:0"
   },
@@ -26,7 +59,79 @@
   "ui-patterns.language-toast-title": {
     "defaultMessage": "crwdns370142:0crwdne370142:0"
   },
+  "ui-patterns.name-label": {
+    "defaultMessage": "crwdns371112:0crwdne371112:0"
+  },
+  "ui-patterns.name-project-heading": {
+    "defaultMessage": "crwdns371114:0crwdne371114:0"
+  },
+  "ui-patterns.not-found-home-link": {
+    "defaultMessage": "crwdns371116:0crwdne371116:0"
+  },
+  "ui-patterns.not-found-title": {
+    "defaultMessage": "crwdns371118:0crwdne371118:0"
+  },
+  "ui-patterns.open-project-action": {
+    "defaultMessage": "crwdns371120:0crwdne371120:0"
+  },
   "ui-patterns.play-video": {
     "defaultMessage": "crwdns370180:0{title}crwdne370180:0"
+  },
+  "ui-patterns.project-menu-label": {
+    "defaultMessage": "crwdns371122:0{name}crwdne371122:0"
+  },
+  "ui-patterns.project-name-not-empty": {
+    "defaultMessage": "crwdns371124:0crwdne371124:0"
+  },
+  "ui-patterns.reload-action": {
+    "defaultMessage": "crwdns371126:0crwdne371126:0"
+  },
+  "ui-patterns.rename-project-action": {
+    "defaultMessage": "crwdns371128:0crwdne371128:0"
+  },
+  "ui-patterns.rename-project-heading": {
+    "defaultMessage": "crwdns371130:0crwdne371130:0"
+  },
+  "ui-patterns.search": {
+    "defaultMessage": "crwdns371132:0crwdne371132:0"
+  },
+  "ui-patterns.select-project-action": {
+    "defaultMessage": "crwdns371134:0{name}crwdne371134:0"
+  },
+  "ui-patterns.selection-actions-group": {
+    "defaultMessage": "crwdns371136:0crwdne371136:0"
+  },
+  "ui-patterns.skip-to-toolbar-action": {
+    "defaultMessage": "crwdns371138:0crwdne371138:0"
+  },
+  "ui-patterns.sort-option-last-modified": {
+    "defaultMessage": "crwdns371140:0crwdne371140:0"
+  },
+  "ui-patterns.sort-option-name": {
+    "defaultMessage": "crwdns371142:0crwdne371142:0"
+  },
+  "ui-patterns.sort-option-relevance": {
+    "defaultMessage": "crwdns371144:0crwdne371144:0"
+  },
+  "ui-patterns.sort-order-ascending-label": {
+    "defaultMessage": "crwdns371146:0crwdne371146:0"
+  },
+  "ui-patterns.sort-order-descending-label": {
+    "defaultMessage": "crwdns371148:0crwdne371148:0"
+  },
+  "ui-patterns.sort-projects-label": {
+    "defaultMessage": "crwdns371150:0crwdne371150:0"
+  },
+  "ui-patterns.support-request": {
+    "defaultMessage": "crwdns371152:0crwdne371152:0"
+  },
+  "ui-patterns.timestamp-now": {
+    "defaultMessage": "crwdns371154:0crwdne371154:0"
+  },
+  "ui-patterns.timestamp-seconds": {
+    "defaultMessage": "crwdns371156:0crwdne371156:0"
+  },
+  "ui-patterns.unexpected-error-title": {
+    "defaultMessage": "crwdns371158:0crwdne371158:0"
   }
 }

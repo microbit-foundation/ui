@@ -1,4 +1,28 @@
 {
+  "ui-patterns.clear-action": {
+    "defaultMessage": "ລຶບข้อมูล"
+  },
+  "ui-patterns.copied-feedback": {
+    "defaultMessage": "ຄັດລອກແລ້ວ\n"
+  },
+  "ui-patterns.delete-project-action": {
+    "defaultMessage": "{count, plural, one {ລຶບ} other {ລຶບ {count} ໂຄງການ}}"
+  },
+  "ui-patterns.delete-project-confirm-heading": {
+    "defaultMessage": "ຢືນຢັນການລຶບໂຄງການ"
+  },
+  "ui-patterns.delete-project-confirm-text": {
+    "defaultMessage": "ທ່ານແນ່ໃຈບໍວ່າຕ້ອງການລຶບໂຄງການ \"{project}\"?"
+  },
+  "ui-patterns.delete-projects-confirm-heading": {
+    "defaultMessage": "ຢືນຢັນການລຶບໂຄງການ"
+  },
+  "ui-patterns.duplicate-project-action": {
+    "defaultMessage": "ສຳເນົາຊ້ຳ"
+  },
+  "ui-patterns.duplicate-project-heading": {
+    "defaultMessage": "ສຳເນົາໂຄງການຊ້ຳ"
+  },
   "ui-patterns.help-translate": {
     "defaultMessage": "ຊ່ວຍແປ"
   },
@@ -22,5 +46,71 @@
   },
   "ui-patterns.language-toast-title": {
     "defaultMessage": "ພາສາບໍ່ຮອງຮັບຢ່າງເຕັມທີ່"
+  },
+  "ui-patterns.name-label": {
+    "defaultMessage": "ຊື່\n"
+  },
+  "ui-patterns.name-project-heading": {
+    "defaultMessage": "ຕັ້ງຊື່ໂປຣເຈັກຂອງເຈົ້າ\n"
+  },
+  "ui-patterns.not-found-title": {
+    "defaultMessage": "ບໍ່ພົບໜ້າທີ່ຕ້ອງການ\n"
+  },
+  "ui-patterns.open-project-action": {
+    "defaultMessage": "ເປີດ\n"
+  },
+  "ui-patterns.project-menu-label": {
+    "defaultMessage": "{name} ເມນູການກະທຳ"
+  },
+  "ui-patterns.project-name-not-empty": {
+    "defaultMessage": "ຊື່ໂປຣເຈັກບໍ່ສາມາດວ່າງໄດ້\n"
+  },
+  "ui-patterns.reload-action": {
+    "defaultMessage": "ຄລິກເພື່ອໂຫຼດໜ້າໃໝ່\n"
+  },
+  "ui-patterns.rename-project-action": {
+    "defaultMessage": "ປ່ຽນຊື່"
+  },
+  "ui-patterns.rename-project-heading": {
+    "defaultMessage": "ປ່ຽນຊື່ໂຄງການ"
+  },
+  "ui-patterns.search": {
+    "defaultMessage": "ຄົ້ນຫາ\n"
+  },
+  "ui-patterns.select-project-action": {
+    "defaultMessage": "ເລືອກ {name}"
+  },
+  "ui-patterns.selection-actions-group": {
+    "defaultMessage": "ການເລືອກການກະທຳ"
+  },
+  "ui-patterns.skip-to-toolbar-action": {
+    "defaultMessage": "ຂ້າມໄປທີ່ແຖບເຄື່ອງມື"
+  },
+  "ui-patterns.sort-option-last-modified": {
+    "defaultMessage": "ແກ້ໄຂລ່າສຸດ"
+  },
+  "ui-patterns.sort-option-name": {
+    "defaultMessage": "ຊື່\n"
+  },
+  "ui-patterns.sort-option-relevance": {
+    "defaultMessage": "ຄວາມກ່ຽວຂ້ອງ"
+  },
+  "ui-patterns.sort-order-ascending-label": {
+    "defaultMessage": "ລຳດັບຈາກນ້ອຍໄປຫາໃຫຍ່"
+  },
+  "ui-patterns.sort-order-descending-label": {
+    "defaultMessage": "ລຳດັບຈາກໃຫຍ່ໄປຫານ້ອຍ"
+  },
+  "ui-patterns.sort-projects-label": {
+    "defaultMessage": "ຈັດລຳດັບໂຄງການ"
+  },
+  "ui-patterns.support-request": {
+    "defaultMessage": "ກະລຸນາພິຈາລະນາ <link>ສົ່ງຄຳຮ້ອງຂໍສະໜັບສະໜູນ</link>"
+  },
+  "ui-patterns.timestamp-now": {
+    "defaultMessage": "ຕອນນີ້"
+  },
+  "ui-patterns.timestamp-seconds": {
+    "defaultMessage": "ສອງສາມວິນາທີກ່ອນ"
   }
 }

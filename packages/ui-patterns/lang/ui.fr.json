@@ -1,4 +1,28 @@
 {
+  "ui-patterns.clear-action": {
+    "defaultMessage": "Effacer"
+  },
+  "ui-patterns.copied-feedback": {
+    "defaultMessage": "Copié"
+  },
+  "ui-patterns.delete-project-action": {
+    "defaultMessage": "{count, plural, one {Supprimer} other {Supprimer {count} projets}}"
+  },
+  "ui-patterns.delete-project-confirm-heading": {
+    "defaultMessage": "Confirmer la suppression du projet"
+  },
+  "ui-patterns.delete-project-confirm-text": {
+    "defaultMessage": "Voulez-vous vraiment supprimer ce projet ({project}) ?"
+  },
+  "ui-patterns.delete-projects-confirm-heading": {
+    "defaultMessage": "Confirmer la suppression des projets"
+  },
+  "ui-patterns.duplicate-project-action": {
+    "defaultMessage": "Dupliquer"
+  },
+  "ui-patterns.duplicate-project-heading": {
+    "defaultMessage": "Dupliquer le projet"
+  },
   "ui-patterns.help-translate": {
     "defaultMessage": "Contribuer à la traduction"
   },
@@ -26,7 +50,67 @@
   "ui-patterns.language-toast-title": {
     "defaultMessage": "La langue n'est pas entièrement prise en charge"
   },
+  "ui-patterns.name-project-heading": {
+    "defaultMessage": "Donnez un nom à votre projet"
+  },
+  "ui-patterns.not-found-home-link": {
+    "defaultMessage": "Aller à la page d'accueil"
+  },
+  "ui-patterns.open-project-action": {
+    "defaultMessage": "Ouvrir"
+  },
   "ui-patterns.play-video": {
     "defaultMessage": "Lire la vidéo : {title}"
+  },
+  "ui-patterns.project-menu-label": {
+    "defaultMessage": "Menu des actions {name}"
+  },
+  "ui-patterns.project-name-not-empty": {
+    "defaultMessage": "Le nom du projet ne peut pas être vide"
+  },
+  "ui-patterns.reload-action": {
+    "defaultMessage": "Cliquez pour recharger la page"
+  },
+  "ui-patterns.rename-project-action": {
+    "defaultMessage": "Renommer"
+  },
+  "ui-patterns.rename-project-heading": {
+    "defaultMessage": "Renommer le projet"
+  },
+  "ui-patterns.search": {
+    "defaultMessage": "Recherche"
+  },
+  "ui-patterns.select-project-action": {
+    "defaultMessage": "Sélectionner {name}"
+  },
+  "ui-patterns.selection-actions-group": {
+    "defaultMessage": "Sélection des actions "
+  },
+  "ui-patterns.skip-to-toolbar-action": {
+    "defaultMessage": "Passer à la barre d'outils"
+  },
+  "ui-patterns.sort-option-last-modified": {
+    "defaultMessage": "Dernière modification"
+  },
+  "ui-patterns.sort-option-relevance": {
+    "defaultMessage": "Pertinence"
+  },
+  "ui-patterns.sort-order-ascending-label": {
+    "defaultMessage": "Ordre croissant"
+  },
+  "ui-patterns.sort-order-descending-label": {
+    "defaultMessage": "Ordre décroissant"
+  },
+  "ui-patterns.sort-projects-label": {
+    "defaultMessage": "Trier les projets"
+  },
+  "ui-patterns.support-request": {
+    "defaultMessage": "Veuillez <link>formuler une demande de support</link>."
+  },
+  "ui-patterns.timestamp-now": {
+    "defaultMessage": "maintenant"
+  },
+  "ui-patterns.timestamp-seconds": {
+    "defaultMessage": "il y a quelques secondes"
   }
 }

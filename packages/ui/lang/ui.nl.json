@@ -2,6 +2,9 @@
   "ui.breadcrumb": {
     "defaultMessage": "Kruimelspoor"
   },
+  "ui.cancel-action": {
+    "defaultMessage": "Annuleren"
+  },
   "ui.close-action": {
     "defaultMessage": "Afsluiten"
   },
