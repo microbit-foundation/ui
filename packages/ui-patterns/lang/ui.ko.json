@@ -1,4 +1,28 @@
 {
+  "ui-patterns.clear-action": {
+    "defaultMessage": "지우기"
+  },
+  "ui-patterns.copied-feedback": {
+    "defaultMessage": "복사됨"
+  },
+  "ui-patterns.delete-project-action": {
+    "defaultMessage": "{count, plural, other {프로젝트 {count}개 삭제}}"
+  },
+  "ui-patterns.delete-project-confirm-heading": {
+    "defaultMessage": "프로젝트 삭제 확인"
+  },
+  "ui-patterns.delete-project-confirm-text": {
+    "defaultMessage": "''{project}'' 프로젝트를 정말 삭제할까요?"
+  },
+  "ui-patterns.delete-projects-confirm-heading": {
+    "defaultMessage": "프로젝트 삭제 확인"
+  },
+  "ui-patterns.duplicate-project-action": {
+    "defaultMessage": "복제"
+  },
+  "ui-patterns.duplicate-project-heading": {
+    "defaultMessage": "프로젝트 복제"
+  },
   "ui-patterns.help-translate": {
     "defaultMessage": "번역 지원"
   },
@@ -22,5 +46,65 @@
   },
   "ui-patterns.language-toast-title": {
     "defaultMessage": "완전히 지원되지 않는 언어"
+  },
+  "ui-patterns.name-project-heading": {
+    "defaultMessage": "프로젝트 이름을 지정하세요"
+  },
+  "ui-patterns.not-found-home-link": {
+    "defaultMessage": "처음 페이지로"
+  },
+  "ui-patterns.open-project-action": {
+    "defaultMessage": "열기"
+  },
+  "ui-patterns.project-menu-label": {
+    "defaultMessage": "{name} 행동 메뉴"
+  },
+  "ui-patterns.project-name-not-empty": {
+    "defaultMessage": "프로젝트 이름을 입력해야 합니다"
+  },
+  "ui-patterns.reload-action": {
+    "defaultMessage": "페이지를 다시 로드하려면 클릭하세요"
+  },
+  "ui-patterns.rename-project-action": {
+    "defaultMessage": "이름 변경"
+  },
+  "ui-patterns.rename-project-heading": {
+    "defaultMessage": "프로젝트 이름 변경"
+  },
+  "ui-patterns.search": {
+    "defaultMessage": "찾기"
+  },
+  "ui-patterns.select-project-action": {
+    "defaultMessage": "{name} 선택"
+  },
+  "ui-patterns.selection-actions-group": {
+    "defaultMessage": "선택 항목 행동"
+  },
+  "ui-patterns.skip-to-toolbar-action": {
+    "defaultMessage": "도구 모음으로 건너뛰기"
+  },
+  "ui-patterns.sort-option-last-modified": {
+    "defaultMessage": "최근 수정 날짜"
+  },
+  "ui-patterns.sort-option-relevance": {
+    "defaultMessage": "연관성"
+  },
+  "ui-patterns.sort-order-ascending-label": {
+    "defaultMessage": "오름차순"
+  },
+  "ui-patterns.sort-order-descending-label": {
+    "defaultMessage": "내림차순"
+  },
+  "ui-patterns.sort-projects-label": {
+    "defaultMessage": "프로젝트 정렬"
+  },
+  "ui-patterns.support-request": {
+    "defaultMessage": "<link>지원 요청</link>을 해주시기 바랍니다."
+  },
+  "ui-patterns.timestamp-now": {
+    "defaultMessage": "지금"
+  },
+  "ui-patterns.timestamp-seconds": {
+    "defaultMessage": "몇 초 전"
   }
 }

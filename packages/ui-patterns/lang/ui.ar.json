@@ -1,4 +1,19 @@
 {
+  "ui-patterns.clear-action": {
+    "defaultMessage": "تفريغ"
+  },
+  "ui-patterns.copied-feedback": {
+    "defaultMessage": "تم النسخ"
+  },
+  "ui-patterns.delete-project-confirm-heading": {
+    "defaultMessage": "تأكيد حذف المشروع"
+  },
+  "ui-patterns.delete-project-confirm-text": {
+    "defaultMessage": "هل أنت متأكد من حذف المشروع \"{project}\"؟"
+  },
+  "ui-patterns.duplicate-project-action": {
+    "defaultMessage": "تكرار"
+  },
   "ui-patterns.help-translate": {
     "defaultMessage": "ساعدنا في الترجمة"
   },
@@ -25,5 +40,50 @@
   },
   "ui-patterns.language-toast-title": {
     "defaultMessage": "اللغة غير مدعومة بشكل كامل"
+  },
+  "ui-patterns.name-label": {
+    "defaultMessage": "الاسم"
+  },
+  "ui-patterns.name-project-heading": {
+    "defaultMessage": "اسم مشروعك"
+  },
+  "ui-patterns.not-found-home-link": {
+    "defaultMessage": "انتقل إلى الصفحة الرئيسية"
+  },
+  "ui-patterns.open-project-action": {
+    "defaultMessage": "فتح"
+  },
+  "ui-patterns.project-name-not-empty": {
+    "defaultMessage": "لا يمكن أن يكون إسم المشروع فارغاُ"
+  },
+  "ui-patterns.reload-action": {
+    "defaultMessage": "انقر لإعادة تحميل الصفحة"
+  },
+  "ui-patterns.rename-project-action": {
+    "defaultMessage": "إعادة تسمية"
+  },
+  "ui-patterns.search": {
+    "defaultMessage": "بحث"
+  },
+  "ui-patterns.selection-actions-group": {
+    "defaultMessage": "إجراءات الاختيار"
+  },
+  "ui-patterns.sort-option-last-modified": {
+    "defaultMessage": "آخر تعديل"
+  },
+  "ui-patterns.sort-option-name": {
+    "defaultMessage": "الاسم"
+  },
+  "ui-patterns.sort-order-ascending-label": {
+    "defaultMessage": "الترتيب التصاعدي"
+  },
+  "ui-patterns.sort-order-descending-label": {
+    "defaultMessage": "الترتيب التنازلي"
+  },
+  "ui-patterns.sort-projects-label": {
+    "defaultMessage": "فرز المشاريع"
+  },
+  "ui-patterns.support-request": {
+    "defaultMessage": "يرجى النظر في تقديم <link>طلب دعم</link>."
   }
 }

@@ -1,4 +1,28 @@
 {
+  "ui-patterns.clear-action": {
+    "defaultMessage": "Xóa\n"
+  },
+  "ui-patterns.copied-feedback": {
+    "defaultMessage": "Đã sao chép\n"
+  },
+  "ui-patterns.delete-project-action": {
+    "defaultMessage": "{count, plural, one {Xóa} other {Xóa {count} dự án}}"
+  },
+  "ui-patterns.delete-project-confirm-heading": {
+    "defaultMessage": "Xác nhận xóa dự án"
+  },
+  "ui-patterns.delete-project-confirm-text": {
+    "defaultMessage": "Bạn có chắc chắn muốn xóa dự án \"{project}\" không?"
+  },
+  "ui-patterns.delete-projects-confirm-heading": {
+    "defaultMessage": "Xác nhận xóa dự án"
+  },
+  "ui-patterns.duplicate-project-action": {
+    "defaultMessage": "Sao chép"
+  },
+  "ui-patterns.duplicate-project-heading": {
+    "defaultMessage": "Sao chép dự án"
+  },
   "ui-patterns.help-translate": {
     "defaultMessage": "Trợ giúp dịch thuật"
   },
@@ -22,5 +46,65 @@
   },
   "ui-patterns.language-toast-title": {
     "defaultMessage": "Ngôn ngữ không được hỗ trợ đầy đủ"
+  },
+  "ui-patterns.name-project-heading": {
+    "defaultMessage": "Đặt tên cho dự án của Các bạn\n"
+  },
+  "ui-patterns.not-found-home-link": {
+    "defaultMessage": "Quay lại trang chủ"
+  },
+  "ui-patterns.open-project-action": {
+    "defaultMessage": "Mở\n"
+  },
+  "ui-patterns.project-menu-label": {
+    "defaultMessage": "Menu chuyển động {name}"
+  },
+  "ui-patterns.project-name-not-empty": {
+    "defaultMessage": "Tên dự án không được để trống.\n"
+  },
+  "ui-patterns.reload-action": {
+    "defaultMessage": "Bấm để tải lại trang"
+  },
+  "ui-patterns.rename-project-action": {
+    "defaultMessage": "Đổi tên"
+  },
+  "ui-patterns.rename-project-heading": {
+    "defaultMessage": "Đổi tên dự án"
+  },
+  "ui-patterns.search": {
+    "defaultMessage": "Tìm kiếm"
+  },
+  "ui-patterns.select-project-action": {
+    "defaultMessage": "Chọn {name}"
+  },
+  "ui-patterns.selection-actions-group": {
+    "defaultMessage": "Các chuyển động lựa chọn"
+  },
+  "ui-patterns.skip-to-toolbar-action": {
+    "defaultMessage": "Bỏ qua tới thanh công cụ"
+  },
+  "ui-patterns.sort-option-last-modified": {
+    "defaultMessage": "Sửa đổi lần gần nhất"
+  },
+  "ui-patterns.sort-option-relevance": {
+    "defaultMessage": "Mức độ liên quan"
+  },
+  "ui-patterns.sort-order-ascending-label": {
+    "defaultMessage": "Thứ tự tăng dần"
+  },
+  "ui-patterns.sort-order-descending-label": {
+    "defaultMessage": "Thứ tự giảm dần"
+  },
+  "ui-patterns.sort-projects-label": {
+    "defaultMessage": "Sắp xếp dự án"
+  },
+  "ui-patterns.support-request": {
+    "defaultMessage": "Vui lòng xem xét <link>đưa ra yêu cầu hỗ trợ</link>."
+  },
+  "ui-patterns.timestamp-now": {
+    "defaultMessage": "bây giờ"
+  },
+  "ui-patterns.timestamp-seconds": {
+    "defaultMessage": "vài giây trước đây"
   }
 }

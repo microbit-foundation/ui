@@ -1,4 +1,28 @@
 {
+  "ui-patterns.clear-action": {
+    "defaultMessage": "Esborra"
+  },
+  "ui-patterns.copied-feedback": {
+    "defaultMessage": "Copiat"
+  },
+  "ui-patterns.delete-project-action": {
+    "defaultMessage": "{count, plural, one {Esborra} other {Esborra {count} projectes}}"
+  },
+  "ui-patterns.delete-project-confirm-heading": {
+    "defaultMessage": "Confirma l'eliminació del projecte"
+  },
+  "ui-patterns.delete-project-confirm-text": {
+    "defaultMessage": "Estàs segur que vols suprimir el projecte \"{project}\"?"
+  },
+  "ui-patterns.delete-projects-confirm-heading": {
+    "defaultMessage": "Confirma l'eliminació del projecte"
+  },
+  "ui-patterns.duplicate-project-action": {
+    "defaultMessage": "Duplica"
+  },
+  "ui-patterns.duplicate-project-heading": {
+    "defaultMessage": "Duplicar el projecte"
+  },
   "ui-patterns.help-translate": {
     "defaultMessage": "Ajuda a traduir"
   },
@@ -26,7 +50,67 @@
   "ui-patterns.language-toast-title": {
     "defaultMessage": "L'idioma no està disponible totalment"
   },
+  "ui-patterns.name-project-heading": {
+    "defaultMessage": "Anomena el teu projecte"
+  },
+  "ui-patterns.not-found-home-link": {
+    "defaultMessage": "Vés a la pàgina d'inici"
+  },
+  "ui-patterns.open-project-action": {
+    "defaultMessage": "Obert"
+  },
   "ui-patterns.play-video": {
     "defaultMessage": "Reprodueix el vídeo: {title}"
+  },
+  "ui-patterns.project-menu-label": {
+    "defaultMessage": "Menú d'accions {name}"
+  },
+  "ui-patterns.project-name-not-empty": {
+    "defaultMessage": "El nom del projecte no pot estar buit"
+  },
+  "ui-patterns.reload-action": {
+    "defaultMessage": "Fes clic per tornar a carregar la pàgina"
+  },
+  "ui-patterns.rename-project-action": {
+    "defaultMessage": "Reanomena"
+  },
+  "ui-patterns.rename-project-heading": {
+    "defaultMessage": "Reanomena el projecte"
+  },
+  "ui-patterns.search": {
+    "defaultMessage": "Cerca"
+  },
+  "ui-patterns.select-project-action": {
+    "defaultMessage": "Selecciona {name}"
+  },
+  "ui-patterns.selection-actions-group": {
+    "defaultMessage": "Selecció d'accions"
+  },
+  "ui-patterns.skip-to-toolbar-action": {
+    "defaultMessage": "Salta a la barra d'eines"
+  },
+  "ui-patterns.sort-option-last-modified": {
+    "defaultMessage": "Darrer modificat"
+  },
+  "ui-patterns.sort-option-relevance": {
+    "defaultMessage": "Rellevància"
+  },
+  "ui-patterns.sort-order-ascending-label": {
+    "defaultMessage": "Ordre ascendent"
+  },
+  "ui-patterns.sort-order-descending-label": {
+    "defaultMessage": "Ordre descendent"
+  },
+  "ui-patterns.sort-projects-label": {
+    "defaultMessage": "Ordena els projectes"
+  },
+  "ui-patterns.support-request": {
+    "defaultMessage": "Si us plau, considera<link>fer una sol·licitud d'assistència</link>."
+  },
+  "ui-patterns.timestamp-now": {
+    "defaultMessage": "ara"
+  },
+  "ui-patterns.timestamp-seconds": {
+    "defaultMessage": "fa uns segons"
   }
 }

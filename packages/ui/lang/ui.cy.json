@@ -2,6 +2,9 @@
   "ui.breadcrumb": {
     "defaultMessage": "Briwsionyn Bara"
   },
+  "ui.cancel-action": {
+    "defaultMessage": "Canslo"
+  },
   "ui.close-action": {
     "defaultMessage": "Cau"
   },

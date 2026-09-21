@@ -2,6 +2,9 @@
   "ui.breadcrumb": {
     "defaultMessage": "Grabhróg aráin"
   },
+  "ui.cancel-action": {
+    "defaultMessage": "Cealaigh"
+  },
   "ui.close-action": {
     "defaultMessage": "Dún"
   },

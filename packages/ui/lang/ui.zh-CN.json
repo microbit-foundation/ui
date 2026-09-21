@@ -2,6 +2,9 @@
   "ui.breadcrumb": {
     "defaultMessage": "痕迹导航"
   },
+  "ui.cancel-action": {
+    "defaultMessage": "取消"
+  },
   "ui.close-action": {
     "defaultMessage": "关闭"
   },

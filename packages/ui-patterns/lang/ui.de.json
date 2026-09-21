@@ -1,4 +1,19 @@
 {
+  "ui-patterns.clear-action": {
+    "defaultMessage": "Löschen"
+  },
+  "ui-patterns.copied-feedback": {
+    "defaultMessage": "Kopiert"
+  },
+  "ui-patterns.delete-projects-confirm-heading": {
+    "defaultMessage": "Löschen der Projekte bestätigen"
+  },
+  "ui-patterns.duplicate-project-action": {
+    "defaultMessage": "Duplizieren"
+  },
+  "ui-patterns.duplicate-project-heading": {
+    "defaultMessage": "Projekt duplizieren"
+  },
   "ui-patterns.help-translate": {
     "defaultMessage": "Beim Übersetzen helfen"
   },
@@ -22,5 +37,26 @@
   },
   "ui-patterns.language-toast-title": {
     "defaultMessage": "Sprache nicht vollständig unterstützt"
+  },
+  "ui-patterns.name-project-heading": {
+    "defaultMessage": "Benenne dein Projekt"
+  },
+  "ui-patterns.not-found-home-link": {
+    "defaultMessage": "Zur Startseite"
+  },
+  "ui-patterns.open-project-action": {
+    "defaultMessage": "Öffnen"
+  },
+  "ui-patterns.project-name-not-empty": {
+    "defaultMessage": "Der Projektname darf nicht leer sein"
+  },
+  "ui-patterns.reload-action": {
+    "defaultMessage": "Klicken, um Seite neu zu laden"
+  },
+  "ui-patterns.search": {
+    "defaultMessage": "Suche"
+  },
+  "ui-patterns.support-request": {
+    "defaultMessage": "Bitte denken Sie darüber nach, <link>eine Supportanfrage einzureichen</link>."
   }
 }

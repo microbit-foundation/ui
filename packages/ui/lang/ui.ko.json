@@ -2,6 +2,9 @@
   "ui.breadcrumb": {
     "defaultMessage": "이동경로"
   },
+  "ui.cancel-action": {
+    "defaultMessage": "취소"
+  },
   "ui.close-action": {
     "defaultMessage": "닫기"
   },

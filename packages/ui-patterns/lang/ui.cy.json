@@ -1,4 +1,7 @@
 {
+  "ui-patterns.copied-feedback": {
+    "defaultMessage": "Copïwyd"
+  },
   "ui-patterns.language": {
     "defaultMessage": "Iaith"
   },
@@ -19,5 +22,20 @@
   },
   "ui-patterns.language-toast-title": {
     "defaultMessage": "Iaith heb ei chefnogi'n llawn"
+  },
+  "ui-patterns.not-found-home-link": {
+    "defaultMessage": "Mynd i'r hafan"
+  },
+  "ui-patterns.not-found-title": {
+    "defaultMessage": "Tudalen heb ei chanfod"
+  },
+  "ui-patterns.reload-action": {
+    "defaultMessage": "Cliciwch i ail-lwytho'r dudalen"
+  },
+  "ui-patterns.search": {
+    "defaultMessage": "Chwilio"
+  },
+  "ui-patterns.support-request": {
+    "defaultMessage": "Ystyriwch <link>gwneud cais am gymorth</link>."
   }
 }

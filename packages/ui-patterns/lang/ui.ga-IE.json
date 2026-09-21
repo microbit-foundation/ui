@@ -1,4 +1,28 @@
 {
+  "ui-patterns.clear-action": {
+    "defaultMessage": "Glan"
+  },
+  "ui-patterns.copied-feedback": {
+    "defaultMessage": "Cóipeáilte"
+  },
+  "ui-patterns.delete-project-action": {
+    "defaultMessage": "{count, plural, one {Scrios 1 tionscadal} other {Scrios {count} tionscadail}}"
+  },
+  "ui-patterns.delete-project-confirm-heading": {
+    "defaultMessage": "Deimhnigh scriosadh tionscadail"
+  },
+  "ui-patterns.delete-project-confirm-text": {
+    "defaultMessage": "An bhfuil tú cinnte gur mian leat an tionscadal \"{project}\" a scriosadh?"
+  },
+  "ui-patterns.delete-projects-confirm-heading": {
+    "defaultMessage": "Deimhnigh scriosadh tionscadal"
+  },
+  "ui-patterns.duplicate-project-action": {
+    "defaultMessage": "Dúblach"
+  },
+  "ui-patterns.duplicate-project-heading": {
+    "defaultMessage": "Tionscadal dúblach"
+  },
   "ui-patterns.help-translate": {
     "defaultMessage": "Cabhair a aistriú"
   },
@@ -26,7 +50,67 @@
   "ui-patterns.language-toast-title": {
     "defaultMessage": "Teanga nach dtacaítear go hiomlán léi"
   },
+  "ui-patterns.name-project-heading": {
+    "defaultMessage": "Ainmnigh do thionscadal"
+  },
+  "ui-patterns.not-found-home-link": {
+    "defaultMessage": "Téigh chuig leathanach baile"
+  },
+  "ui-patterns.open-project-action": {
+    "defaultMessage": "Oscail"
+  },
   "ui-patterns.play-video": {
     "defaultMessage": "Seinn físeán: {title}"
+  },
+  "ui-patterns.project-menu-label": {
+    "defaultMessage": "Roghchlár gníomhartha {name}"
+  },
+  "ui-patterns.project-name-not-empty": {
+    "defaultMessage": "Ní féidir ainm an tionscadail a fholmhú"
+  },
+  "ui-patterns.reload-action": {
+    "defaultMessage": "Cliceáil chun an leathanach a athluchtú"
+  },
+  "ui-patterns.rename-project-action": {
+    "defaultMessage": "Athainmnigh"
+  },
+  "ui-patterns.rename-project-heading": {
+    "defaultMessage": "Athainmnigh an tionscadal"
+  },
+  "ui-patterns.search": {
+    "defaultMessage": "Cuardaigh"
+  },
+  "ui-patterns.select-project-action": {
+    "defaultMessage": "Roghnaigh {name}"
+  },
+  "ui-patterns.selection-actions-group": {
+    "defaultMessage": "Gníomhartha roghnúcháin"
+  },
+  "ui-patterns.skip-to-toolbar-action": {
+    "defaultMessage": "Léim go dtí an barra uirlisí"
+  },
+  "ui-patterns.sort-option-last-modified": {
+    "defaultMessage": "Athraithe go deireanach"
+  },
+  "ui-patterns.sort-option-relevance": {
+    "defaultMessage": "Ábharthacht"
+  },
+  "ui-patterns.sort-order-ascending-label": {
+    "defaultMessage": "Ord ardaitheach"
+  },
+  "ui-patterns.sort-order-descending-label": {
+    "defaultMessage": "Ord íslitheach"
+  },
+  "ui-patterns.sort-projects-label": {
+    "defaultMessage": "Sórtáil tionscadail"
+  },
+  "ui-patterns.support-request": {
+    "defaultMessage": "Smaoinigh ar <link>iarratas tacaíochta a ardú</link>."
+  },
+  "ui-patterns.timestamp-now": {
+    "defaultMessage": "anois"
+  },
+  "ui-patterns.timestamp-seconds": {
+    "defaultMessage": "cúpla soicind ó shin"
   }
 }

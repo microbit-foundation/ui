@@ -1,4 +1,28 @@
 {
+  "ui-patterns.clear-action": {
+    "defaultMessage": "Verwijderen"
+  },
+  "ui-patterns.copied-feedback": {
+    "defaultMessage": "Gekopieerd"
+  },
+  "ui-patterns.delete-project-action": {
+    "defaultMessage": "{count, plural, one {Verwijder} other {Verwijder {count} projecten}}"
+  },
+  "ui-patterns.delete-project-confirm-heading": {
+    "defaultMessage": "Verwijderen van project bevestigen"
+  },
+  "ui-patterns.delete-project-confirm-text": {
+    "defaultMessage": "Weet je zeker dat je project \"{project}\" wilt verwijderen?"
+  },
+  "ui-patterns.delete-projects-confirm-heading": {
+    "defaultMessage": "Verwijderen van projecten bevestigen"
+  },
+  "ui-patterns.duplicate-project-action": {
+    "defaultMessage": "Kopiëren"
+  },
+  "ui-patterns.duplicate-project-heading": {
+    "defaultMessage": "Kopieer project"
+  },
   "ui-patterns.help-translate": {
     "defaultMessage": "Help met vertalen"
   },
@@ -26,7 +50,67 @@
   "ui-patterns.language-toast-title": {
     "defaultMessage": "Taal niet volledig ondersteund"
   },
+  "ui-patterns.name-project-heading": {
+    "defaultMessage": "Geef een naam aan je project"
+  },
+  "ui-patterns.not-found-home-link": {
+    "defaultMessage": "Ga naar de startpagina"
+  },
+  "ui-patterns.open-project-action": {
+    "defaultMessage": "Open"
+  },
   "ui-patterns.play-video": {
     "defaultMessage": "Speel video: {title}"
+  },
+  "ui-patterns.project-menu-label": {
+    "defaultMessage": "{name} actiesmenu"
+  },
+  "ui-patterns.project-name-not-empty": {
+    "defaultMessage": "De projectnaam kan niet leeg zijn"
+  },
+  "ui-patterns.reload-action": {
+    "defaultMessage": "Klik om de pagina te herladen"
+  },
+  "ui-patterns.rename-project-action": {
+    "defaultMessage": "Hernoemen"
+  },
+  "ui-patterns.rename-project-heading": {
+    "defaultMessage": "Hernoem project"
+  },
+  "ui-patterns.search": {
+    "defaultMessage": "Zoeken"
+  },
+  "ui-patterns.select-project-action": {
+    "defaultMessage": "Selecteer {name}"
+  },
+  "ui-patterns.selection-actions-group": {
+    "defaultMessage": "Selectie-acties"
+  },
+  "ui-patterns.skip-to-toolbar-action": {
+    "defaultMessage": "Ga naar werkbalk"
+  },
+  "ui-patterns.sort-option-last-modified": {
+    "defaultMessage": "Laatst gewijzigd"
+  },
+  "ui-patterns.sort-option-relevance": {
+    "defaultMessage": "Relevantie"
+  },
+  "ui-patterns.sort-order-ascending-label": {
+    "defaultMessage": "Oplopende volgorde"
+  },
+  "ui-patterns.sort-order-descending-label": {
+    "defaultMessage": "Aflopende volgorde"
+  },
+  "ui-patterns.sort-projects-label": {
+    "defaultMessage": "Projecten sorteren"
+  },
+  "ui-patterns.support-request": {
+    "defaultMessage": "Overweeg <link>een ondersteuningsverzoek</link> in te dienen."
+  },
+  "ui-patterns.timestamp-now": {
+    "defaultMessage": "nu"
+  },
+  "ui-patterns.timestamp-seconds": {
+    "defaultMessage": "een paar seconden geleden"
   }
 }
