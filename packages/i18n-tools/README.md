@@ -178,7 +178,7 @@ One-time setup, and for each new repo:
 ## Running
 
 Apps add the package as a dev dependency and call `microbit-i18n` from npm
-scripts. It needs Node 24 or later.
+scripts. It needs Node 20 or later.
 
 The published package holds the compiled `dist/`, built by `tsc` on
 `prepare`, so an `npm install` in this repo builds it too. When an app links
