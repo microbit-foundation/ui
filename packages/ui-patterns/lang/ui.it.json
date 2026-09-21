@@ -25,5 +25,8 @@
   },
   "ui-patterns.language-toast-title": {
     "defaultMessage": "Lingua non completamente supportata"
+  },
+  "ui-patterns.play-video": {
+    "defaultMessage": "Riproduci video: {title}"
   }
 }
