@@ -14,6 +14,28 @@ import type { CrowdinConfig } from "./index.ts";
 const Crowdin = crowdinClient.default;
 type Client = InstanceType<typeof Crowdin>;
 
+/**
+ * Crowdin language ids that differ from the BCP 47 tag we use everywhere else.
+ *
+ * The Foundation's Crowdin defines a custom "hk" language rather than the
+ * standard "zh-HK". Renaming it there would orphan the existing translations,
+ * so configs and on-disk catalogs use the BCP 47 tag and we swap at the API
+ * boundary. This holds for every project on that Crowdin, so it is built in
+ * rather than configured per project.
+ */
+const crowdinLanguageIds = new Map([["zh-HK", "hk"]]);
+const bcp47Tags = new Map(
+  [...crowdinLanguageIds].map(([tag, id]) => [id, tag]),
+);
+
+/** The id Crowdin's API knows a language by. */
+export const toCrowdinLanguageId = (language: string): string =>
+  crowdinLanguageIds.get(language) ?? language;
+
+/** The BCP 47 tag for a language id Crowdin gave us. */
+export const fromCrowdinLanguageId = (languageId: string): string =>
+  bcp47Tags.get(languageId) ?? languageId;
+
 export const tokenEnvVar = "CROWDIN_PERSONAL_TOKEN";
 
 export const requireToken = (): string => {
@@ -252,7 +274,7 @@ export class CrowdinProject {
       this.projectId,
       file.id,
       {
-        targetLanguageId: languageId,
+        targetLanguageId: toCrowdinLanguageId(languageId),
         skipUntranslatedStrings: skipUntranslated,
         exportApprovedOnly: approvedOnly,
       },
@@ -274,7 +296,7 @@ export class CrowdinProject {
         this.projectId,
         directory.id,
         {
-          targetLanguageIds: [languageId],
+          targetLanguageIds: [toCrowdinLanguageId(languageId)],
           skipUntranslatedStrings: skipUntranslated,
           exportApprovedOnly: approvedOnly,
           preserveFolderHierarchy: true,
@@ -416,7 +438,10 @@ export class CrowdinProject {
     const response = await this.api.translationStatusApi
       .withFetchAll(fetchAllLimit)
       .getFileProgress(this.projectId, file.id);
-    return response.data.map((p) => p.data);
+    return response.data.map((p) => ({
+      ...p.data,
+      languageId: fromCrowdinLanguageId(p.data.languageId),
+    }));
   }
 }
 
