@@ -3,8 +3,13 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { describe, expect, it } from "vitest";
-import { CrowdinProject } from "../src/crowdin.ts";
+import type { SourceFilesModel } from "@crowdin/crowdin-api-client";
+import { describe, expect, it, vi } from "vitest";
+import {
+  CrowdinProject,
+  fromCrowdinLanguageId,
+  toCrowdinLanguageId,
+} from "../src/crowdin.ts";
 
 interface Listing {
   branchId?: number;
@@ -171,5 +176,99 @@ describe("CrowdinProject.uploadSource", () => {
     expect(await project.findFile("packages/ui-carousel/ui.en.json")).toBe(
       file,
     );
+  });
+});
+
+/**
+ * A fake of just the calls that carry a language id, over file id 10.
+ */
+const fakeLanguageClient = (progress: { languageId: string }[] = []) => {
+  const calls: { kind: string; languages: string[] }[] = [];
+  const api = {
+    translationsApi: {
+      buildProjectFileTranslation(
+        _projectId: number,
+        _fileId: number,
+        request: { targetLanguageId: string },
+      ) {
+        calls.push({
+          kind: "buildFile",
+          languages: [request.targetLanguageId],
+        });
+        return Promise.resolve({
+          data: { url: "https://example.test/x.json" },
+        });
+      },
+      buildProjectDirectoryTranslation(
+        _projectId: number,
+        _directoryId: number,
+        request: { targetLanguageIds: string[] },
+      ) {
+        calls.push({
+          kind: "buildDirectory",
+          languages: request.targetLanguageIds,
+        });
+        return Promise.resolve({ data: { url: "https://example.test/x.zip" } });
+      },
+    },
+    translationStatusApi: {
+      withFetchAll() {
+        return this;
+      },
+      getFileProgress() {
+        return Promise.resolve({
+          data: progress.map((data) => ({ data })),
+        });
+      },
+    },
+  };
+  return {
+    api: api as unknown as Parameters<typeof CrowdinProject.withClient>[0],
+    calls,
+  };
+};
+
+describe("Crowdin language ids", () => {
+  it("maps zh-HK to the custom id the project uses, and leaves others alone", () => {
+    expect(toCrowdinLanguageId("zh-HK")).toBe("hk");
+    expect(fromCrowdinLanguageId("hk")).toBe("zh-HK");
+    for (const language of ["zh-TW", "zh-CN", "pt-BR", "fr", "lol"]) {
+      expect(toCrowdinLanguageId(language)).toBe(language);
+      expect(fromCrowdinLanguageId(language)).toBe(language);
+    }
+  });
+
+  it("asks Crowdin for a file translation by its id", async () => {
+    const { api, calls } = fakeLanguageClient();
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(() => Promise.resolve(new Response("{}"))),
+    );
+    const project = CrowdinProject.withClient(api, 1, branch);
+    await project.downloadTranslation(
+      { id: 10 } as SourceFilesModel.File,
+      "zh-HK",
+    );
+    await project.downloadTranslation(
+      { id: 10 } as SourceFilesModel.File,
+      "zh-TW",
+    );
+    expect(calls).toEqual([
+      { kind: "buildFile", languages: ["hk"] },
+      { kind: "buildFile", languages: ["zh-TW"] },
+    ]);
+    vi.unstubAllGlobals();
+  });
+
+  it("reports progress against the BCP 47 tag so it matches the config", async () => {
+    const { api } = fakeLanguageClient([
+      { languageId: "hk" },
+      { languageId: "zh-TW" },
+    ]);
+    const project = CrowdinProject.withClient(api, 1, branch);
+    const progress = await project.fileProgress({
+      id: 10,
+    } as SourceFilesModel.File);
+    expect(progress.map((p) => p.languageId)).toEqual(["zh-HK", "zh-TW"]);
   });
 });
