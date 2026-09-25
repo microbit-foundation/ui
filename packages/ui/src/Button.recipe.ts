@@ -59,6 +59,9 @@ export const button = defineRecipe({
     },
   },
   variants: {
+    // Variants resetting geometry that `size` sets use `&&` to outrank it,
+    // and not compound variants, which would throw on a responsive `size`
+    // (docs/hints.md).
     size: {
       lg: { h: "12", minW: "12", fontSize: "lg", px: "6" },
       md: { h: "10", minW: "10", fontSize: "md", px: "4" },
@@ -73,13 +76,12 @@ export const button = defineRecipe({
         display: "inline",
         lineHeight: "inherit",
         m: "0",
-        p: "0",
         borderRadius: "unset",
+        "&&": { p: "0" },
       },
-      // Link-shaped button: no padding/height, underline on hover.
+      // Link-shaped button: no padding/height/min-width, underline on hover.
       link: {
-        padding: 0,
-        height: "auto",
+        "&&": { p: "0", h: "auto", minW: "auto" },
         lineHeight: "normal",
         verticalAlign: "baseline",
         borderWidth: "0",

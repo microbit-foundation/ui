@@ -51,12 +51,15 @@ work. Consumption setup and the CSS-variable contract are in
   `utilities` layer beats `recipes` in every state, so overriding a
   property the variant changes on hover/press means restating those states
   in the override — or promoting the whole look to a variant.
-- **One variant group's flat value cannot beat another group's responsive
-  value.** Panda hoists every media query below all base rules, so above
-  the breakpoint the responsive rule wins on source order regardless of the
-  recipe. The fix is a doubled selector in the variant that must win:
-  `"&&": { fontSize: "4xl" }`. Don't reason about emit order — it tracks
-  extraction order, not the recipe; read it out of `panda cssgen`.
+- **One variant group cannot reliably beat another on the same property.**
+  Two groups' rules tie on specificity in the recipes layer, so source order
+  decides, and it tracks extraction order, not the recipe — Button's `link`
+  lost its `p: 0` to the `size` class in one app and not in Storybook. A
+  responsive value always wins: Panda hoists every media query below all
+  base rules. The fix is a doubled selector in the variant that must win:
+  `"&&": { fontSize: "4xl" }`. A compound variant also wins (it renders into
+  `utilities`), but once a recipe has any, a responsive value for _any_ of
+  its variant props throws at runtime.
 - **A container style that a child's recipe should be able to override has
   to live in `globalCss`, not the container's `css()`.** A container styling
   its children from `utilities` outranks every variant, so a "default unless
