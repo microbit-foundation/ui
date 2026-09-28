@@ -5,6 +5,9 @@
   "ui-patterns.copied-feedback": {
     "defaultMessage": "Copiado"
   },
+  "ui-patterns.copy-error-reference-action": {
+    "defaultMessage": "Copiar referência de erro"
+  },
   "ui-patterns.delete-project-action": {
     "defaultMessage": "{count, plural, one {Excluir} other {Excluir {count} projetos}}"
   },
@@ -17,11 +20,17 @@
   "ui-patterns.delete-projects-confirm-heading": {
     "defaultMessage": "Confirmar exclusão de projetos"
   },
+  "ui-patterns.delete-projects-confirm-text": {
+    "defaultMessage": "Tem certeza que deseja excluir  {numProjects, plural, one {# project} other {# projects}}?"
+  },
   "ui-patterns.duplicate-project-action": {
     "defaultMessage": "Duplicar"
   },
   "ui-patterns.duplicate-project-heading": {
     "defaultMessage": "Duplicar projeto"
+  },
+  "ui-patterns.error-reference": {
+    "defaultMessage": "Referência do erro: {id}"
   },
   "ui-patterns.help-translate": {
     "defaultMessage": "Ajude a traduzir"
@@ -50,11 +59,17 @@
   "ui-patterns.language-toast-title": {
     "defaultMessage": "O idioma possui suporte parcial"
   },
+  "ui-patterns.name-label": {
+    "defaultMessage": "Nome"
+  },
   "ui-patterns.name-project-heading": {
     "defaultMessage": "Dê um nome ao seu projeto"
   },
   "ui-patterns.not-found-home-link": {
     "defaultMessage": "Ir para a página inicial"
+  },
+  "ui-patterns.not-found-title": {
+    "defaultMessage": "Página não encontrada"
   },
   "ui-patterns.open-project-action": {
     "defaultMessage": "Abrir"
@@ -92,6 +107,9 @@
   "ui-patterns.sort-option-last-modified": {
     "defaultMessage": "Última modificação"
   },
+  "ui-patterns.sort-option-name": {
+    "defaultMessage": " Nome"
+  },
   "ui-patterns.sort-option-relevance": {
     "defaultMessage": "Relevância"
   },
@@ -112,5 +130,8 @@
   },
   "ui-patterns.timestamp-seconds": {
     "defaultMessage": "alguns segundos atrás"
+  },
+  "ui-patterns.unexpected-error-title": {
+    "defaultMessage": "Ocorreu um erro inesperado"
   }
 }

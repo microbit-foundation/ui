@@ -5,6 +5,9 @@
   "ui-patterns.copied-feedback": {
     "defaultMessage": "Skopiowane"
   },
+  "ui-patterns.copy-error-reference-action": {
+    "defaultMessage": "Kopiuj odniesienie do błędu"
+  },
   "ui-patterns.delete-project-action": {
     "defaultMessage": "{count, plural, one {Usuń} other {Usuń {count} projekty}}"
   },
@@ -17,11 +20,17 @@
   "ui-patterns.delete-projects-confirm-heading": {
     "defaultMessage": "Potwierdź usunięcie projektu"
   },
+  "ui-patterns.delete-projects-confirm-text": {
+    "defaultMessage": "Czy na pewno chcesz usunąć {numProjects, plural, one {# projekt} few {# projekty} many {# projekty} other {# projekty}}?"
+  },
   "ui-patterns.duplicate-project-action": {
     "defaultMessage": "Duplikuj"
   },
   "ui-patterns.duplicate-project-heading": {
     "defaultMessage": "Duplikuj projekt"
+  },
+  "ui-patterns.error-reference": {
+    "defaultMessage": "Odniesienie do błędu: {id}"
   },
   "ui-patterns.help-translate": {
     "defaultMessage": "Pomóż tłumaczyć"
@@ -50,11 +59,17 @@
   "ui-patterns.language-toast-title": {
     "defaultMessage": "Język nie w pełni obsługiwany"
   },
+  "ui-patterns.name-label": {
+    "defaultMessage": "Nazwa"
+  },
   "ui-patterns.name-project-heading": {
     "defaultMessage": "Nazwij swój projektu"
   },
   "ui-patterns.not-found-home-link": {
     "defaultMessage": "Przejdź na stronę domową"
+  },
+  "ui-patterns.not-found-title": {
+    "defaultMessage": "Nie znaleziono strony"
   },
   "ui-patterns.open-project-action": {
     "defaultMessage": "Otwórz"
@@ -92,6 +107,9 @@
   "ui-patterns.sort-option-last-modified": {
     "defaultMessage": "Ostatnia modyfikacja"
   },
+  "ui-patterns.sort-option-name": {
+    "defaultMessage": "Nazwa"
+  },
   "ui-patterns.sort-option-relevance": {
     "defaultMessage": "Znaczenie"
   },
@@ -112,5 +130,8 @@
   },
   "ui-patterns.timestamp-seconds": {
     "defaultMessage": "parę sekund temu"
+  },
+  "ui-patterns.unexpected-error-title": {
+    "defaultMessage": "Wystąpił nieoczekiwany błąd"
   }
 }

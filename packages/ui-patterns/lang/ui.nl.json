@@ -5,6 +5,9 @@
   "ui-patterns.copied-feedback": {
     "defaultMessage": "Gekopieerd"
   },
+  "ui-patterns.copy-error-reference-action": {
+    "defaultMessage": "Kopieer foutreferentie"
+  },
   "ui-patterns.delete-project-action": {
     "defaultMessage": "{count, plural, one {Verwijder} other {Verwijder {count} projecten}}"
   },
@@ -17,11 +20,17 @@
   "ui-patterns.delete-projects-confirm-heading": {
     "defaultMessage": "Verwijderen van projecten bevestigen"
   },
+  "ui-patterns.delete-projects-confirm-text": {
+    "defaultMessage": "Weet je zeker dat je {numProjects, plural, one {# project} other {# project}} wil verwijderen?"
+  },
   "ui-patterns.duplicate-project-action": {
     "defaultMessage": "Kopiëren"
   },
   "ui-patterns.duplicate-project-heading": {
     "defaultMessage": "Kopieer project"
+  },
+  "ui-patterns.error-reference": {
+    "defaultMessage": "Foutreferentie: {id}"
   },
   "ui-patterns.help-translate": {
     "defaultMessage": "Help met vertalen"
@@ -50,11 +59,17 @@
   "ui-patterns.language-toast-title": {
     "defaultMessage": "Taal niet volledig ondersteund"
   },
+  "ui-patterns.name-label": {
+    "defaultMessage": "Naam"
+  },
   "ui-patterns.name-project-heading": {
     "defaultMessage": "Geef een naam aan je project"
   },
   "ui-patterns.not-found-home-link": {
     "defaultMessage": "Ga naar de startpagina"
+  },
+  "ui-patterns.not-found-title": {
+    "defaultMessage": "Pagina niet gevonden"
   },
   "ui-patterns.open-project-action": {
     "defaultMessage": "Open"
@@ -84,13 +99,16 @@
     "defaultMessage": "Selecteer {name}"
   },
   "ui-patterns.selection-actions-group": {
-    "defaultMessage": "Selectie-acties"
+    "defaultMessage": "Kies-acties"
   },
   "ui-patterns.skip-to-toolbar-action": {
     "defaultMessage": "Ga naar werkbalk"
   },
   "ui-patterns.sort-option-last-modified": {
     "defaultMessage": "Laatst gewijzigd"
+  },
+  "ui-patterns.sort-option-name": {
+    "defaultMessage": "Naam"
   },
   "ui-patterns.sort-option-relevance": {
     "defaultMessage": "Relevantie"
@@ -112,5 +130,8 @@
   },
   "ui-patterns.timestamp-seconds": {
     "defaultMessage": "een paar seconden geleden"
+  },
+  "ui-patterns.unexpected-error-title": {
+    "defaultMessage": "Er is een onverwachte fout opgetreden"
   }
 }

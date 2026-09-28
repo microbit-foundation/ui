@@ -5,6 +5,9 @@
   "ui-patterns.copied-feedback": {
     "defaultMessage": "Copiat"
   },
+  "ui-patterns.copy-error-reference-action": {
+    "defaultMessage": "Copia la referència de l'error"
+  },
   "ui-patterns.delete-project-action": {
     "defaultMessage": "{count, plural, one {Esborra} other {Esborra {count} projectes}}"
   },
@@ -17,11 +20,17 @@
   "ui-patterns.delete-projects-confirm-heading": {
     "defaultMessage": "Confirma l'eliminació del projecte"
   },
+  "ui-patterns.delete-projects-confirm-text": {
+    "defaultMessage": "Estàs segur que vols eliminar {numProjects, plural, one {# projecte} other {# projectes}}?"
+  },
   "ui-patterns.duplicate-project-action": {
     "defaultMessage": "Duplica"
   },
   "ui-patterns.duplicate-project-heading": {
     "defaultMessage": "Duplicar el projecte"
+  },
+  "ui-patterns.error-reference": {
+    "defaultMessage": "Referència de l'error: {id}"
   },
   "ui-patterns.help-translate": {
     "defaultMessage": "Ajuda a traduir"
@@ -50,11 +59,17 @@
   "ui-patterns.language-toast-title": {
     "defaultMessage": "L'idioma no està disponible totalment"
   },
+  "ui-patterns.name-label": {
+    "defaultMessage": "Nom"
+  },
   "ui-patterns.name-project-heading": {
     "defaultMessage": "Anomena el teu projecte"
   },
   "ui-patterns.not-found-home-link": {
     "defaultMessage": "Vés a la pàgina d'inici"
+  },
+  "ui-patterns.not-found-title": {
+    "defaultMessage": "No s'ha trobat la pàgina"
   },
   "ui-patterns.open-project-action": {
     "defaultMessage": "Obert"
@@ -92,6 +107,9 @@
   "ui-patterns.sort-option-last-modified": {
     "defaultMessage": "Darrer modificat"
   },
+  "ui-patterns.sort-option-name": {
+    "defaultMessage": "Nom"
+  },
   "ui-patterns.sort-option-relevance": {
     "defaultMessage": "Rellevància"
   },
@@ -112,5 +130,8 @@
   },
   "ui-patterns.timestamp-seconds": {
     "defaultMessage": "fa uns segons"
+  },
+  "ui-patterns.unexpected-error-title": {
+    "defaultMessage": "S'ha produït un error inesperat"
   }
 }
