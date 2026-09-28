@@ -5,6 +5,9 @@
   "ui-patterns.copied-feedback": {
     "defaultMessage": "Cóipeáilte"
   },
+  "ui-patterns.copy-error-reference-action": {
+    "defaultMessage": "Cóipeáil an tagairt earráide"
+  },
   "ui-patterns.delete-project-action": {
     "defaultMessage": "{count, plural, one {Scrios 1 tionscadal} other {Scrios {count} tionscadail}}"
   },
@@ -22,6 +25,9 @@
   },
   "ui-patterns.duplicate-project-heading": {
     "defaultMessage": "Tionscadal dúblach"
+  },
+  "ui-patterns.error-reference": {
+    "defaultMessage": "Tagairt earráide: {id}"
   },
   "ui-patterns.help-translate": {
     "defaultMessage": "Cabhair a aistriú"
@@ -50,11 +56,17 @@
   "ui-patterns.language-toast-title": {
     "defaultMessage": "Teanga nach dtacaítear go hiomlán léi"
   },
+  "ui-patterns.name-label": {
+    "defaultMessage": "Ainm"
+  },
   "ui-patterns.name-project-heading": {
     "defaultMessage": "Ainmnigh do thionscadal"
   },
   "ui-patterns.not-found-home-link": {
     "defaultMessage": "Téigh chuig leathanach baile"
+  },
+  "ui-patterns.not-found-title": {
+    "defaultMessage": "Níor aimsíodh an leathanach"
   },
   "ui-patterns.open-project-action": {
     "defaultMessage": "Oscail"
@@ -92,6 +104,9 @@
   "ui-patterns.sort-option-last-modified": {
     "defaultMessage": "Athraithe go deireanach"
   },
+  "ui-patterns.sort-option-name": {
+    "defaultMessage": "Ainm"
+  },
   "ui-patterns.sort-option-relevance": {
     "defaultMessage": "Ábharthacht"
   },
@@ -112,5 +127,8 @@
   },
   "ui-patterns.timestamp-seconds": {
     "defaultMessage": "cúpla soicind ó shin"
+  },
+  "ui-patterns.unexpected-error-title": {
+    "defaultMessage": "Tharla earráid gan choinne"
   }
 }

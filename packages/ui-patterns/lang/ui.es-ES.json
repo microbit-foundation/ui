@@ -5,6 +5,9 @@
   "ui-patterns.copied-feedback": {
     "defaultMessage": "Copiado"
   },
+  "ui-patterns.copy-error-reference-action": {
+    "defaultMessage": "Copiar referencia del error"
+  },
   "ui-patterns.delete-project-action": {
     "defaultMessage": "{count, plural, one {Borrar {count} proyecto} other {Borrar {count} proyectos}}"
   },
@@ -17,11 +20,17 @@
   "ui-patterns.delete-projects-confirm-heading": {
     "defaultMessage": "Confirmar eliminación de proyectos"
   },
+  "ui-patterns.delete-projects-confirm-text": {
+    "defaultMessage": "¿Estás seguro de que deseas eliminar {numProjects, plural, one {# proyect} other {# proyects}}?"
+  },
   "ui-patterns.duplicate-project-action": {
     "defaultMessage": "Duplicado"
   },
   "ui-patterns.duplicate-project-heading": {
     "defaultMessage": "Proyecto duplicado"
+  },
+  "ui-patterns.error-reference": {
+    "defaultMessage": "Referencia del error: {id}"
   },
   "ui-patterns.help-translate": {
     "defaultMessage": "Ayudar a traducir"
@@ -58,6 +67,9 @@
   },
   "ui-patterns.not-found-home-link": {
     "defaultMessage": "Ir a la página de inicio"
+  },
+  "ui-patterns.not-found-title": {
+    "defaultMessage": "Página no encontrada"
   },
   "ui-patterns.open-project-action": {
     "defaultMessage": "Abrir"
@@ -115,5 +127,8 @@
   },
   "ui-patterns.timestamp-seconds": {
     "defaultMessage": "hace algunos segundos"
+  },
+  "ui-patterns.unexpected-error-title": {
+    "defaultMessage": "Se produjo un error inesperado"
   }
 }
