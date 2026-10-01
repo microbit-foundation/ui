@@ -45,10 +45,12 @@ setup below, minus the app/brand presets. Everything an app must do:
    both `tsconfig.json` `paths` and the bundler config (see the
    `viteFinal` in `apps/storybook`'s `.storybook/main.ts`).
 
-   App code imports `css`, `cx`, `cva` and `sva` from `styled-system/css`,
-   not from `@microbit/ui`: Panda extracts a helper only when it is imported
-   from the generated module, and a call through a re-export emits no CSS
-   and no diagnostic.
+   App code imports `css`, `cx`, `cva` and `sva` from `styled-system/css`
+   and `styled` from `styled-system/jsx`, not from `@microbit/ui`: Panda
+   extracts those only when they are imported from the generated module, and
+   a call through a re-export emits no CSS and no diagnostic. What
+   `@microbit/ui` does export — the components, the layout patterns,
+   `token` — is safe wherever it is used.
 
 4. **Generate and load the CSS** with Panda's PostCSS plugin. Keep Vite's
    default transformer — do **not** set `css.transformer: "lightningcss"`,

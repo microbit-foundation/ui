@@ -25,15 +25,13 @@ work. Consumption setup and the CSS-variable contract are in
   shorthand (`borderColor: "gray.700 transparent"`) the token name emits
   verbatim — invalid CSS the browser drops. Use per-side longhands, or
   interpolate explicitly (`{colors.gray.700}` in string values).
-- **Import the styling helpers from `styled-system/css`.** Panda matches on
-  the module a helper was imported from, so `css`, `cva` and `sva` reached
-  through a re-export extract nothing — the classes land on the element and
-  no CSS exists for them. `@microbit/ui` therefore does not re-export them,
-  which turns the miss into a compile error. `styled` is still re-exported
-  and is still a trap: `styled(Component)` works from anywhere, the
-  `styled.tag` member-expression form only from `styled-system/jsx`. The
-  pattern components (`Box`, `Flex`, …) extract by component and prop name,
-  so their style props are safe through the re-export.
+- **Import the styling helpers from `styled-system`.** Panda matches on the
+  module a helper was imported from, so `css`, `cva`, `sva` and `styled`
+  reached through a re-export extract nothing — the classes land on the
+  element and no CSS exists for them. `@microbit/ui` therefore re-exports
+  none of them, which turns the miss into a compile error. What it does
+  re-export is safe wherever it is used: the pattern components (`Box`,
+  `Flex`, …) extract by component and prop name, not by import site.
 - **Runtime-selected variants need `staticCss` in the preset.** `variant`/
   `size` forwarded as props are invisible to static analysis. If a preset
   adds recipes or variants selected at runtime, extend `staticCss` in the
