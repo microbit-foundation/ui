@@ -3,7 +3,8 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { Box, css, Grid } from "@microbit/ui";
+import { Box, Grid } from "@microbit/ui";
+import { css } from "styled-system/css";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { ProjectCard } from "../src";
 

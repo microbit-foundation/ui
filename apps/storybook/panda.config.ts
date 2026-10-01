@@ -36,7 +36,6 @@ const extraPresets: Preset[] = process.env.UI_PRESET_STACK
 export default defineConfig({
   preflight: true,
   jsxFramework: "react",
-  eject: true,
   presets: ["@pandacss/preset-base", basePreset, ...extraPresets],
   include: [
     "../../packages/ui-carousel/src/**/*.{ts,tsx}",
