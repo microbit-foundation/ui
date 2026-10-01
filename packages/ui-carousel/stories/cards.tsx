@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: MIT
  */
 import {
-  css,
-  cx,
   IconButton,
   LinkBox,
   LinkOverlay,
@@ -14,6 +12,7 @@ import {
   MenuList,
   MenuTrigger,
 } from "@microbit/ui";
+import { css, cx } from "styled-system/css";
 import { ReactElement } from "react";
 
 /**
