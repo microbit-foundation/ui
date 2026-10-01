@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { css } from "@microbit/ui";
+import { css } from "styled-system/css";
 import { ReactElement, useCallback, useMemo } from "react";
 import { SwiperClass } from "swiper/react";
 import SwiperCarousel from "./SwiperCarousel";

@@ -3,7 +3,8 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { css, cx, useMediaQuery } from "@microbit/ui";
+import { useMediaQuery } from "@microbit/ui";
+import { css, cx } from "styled-system/css";
 import React, { ReactElement, useCallback, useEffect, useRef } from "react";
 import { useLocale } from "react-aria";
 import { useIntl } from "react-intl";

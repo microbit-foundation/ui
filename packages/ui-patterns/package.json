@@ -35,14 +35,15 @@
   },
   "peerDependencies": {
     "@microbit/ui": "^0.5.0",
-    "@pandacss/dev": "^1.11.4",
+    "@pandacss/dev": "^2.0.1",
     "react": "^18.3.1",
     "react-icons": "^4.12.0 || ^5.0.0",
     "react-intl": "^6.6.8 || ^7.0.0"
   },
   "devDependencies": {
     "@microbit/ui": "*",
-    "@pandacss/dev": "^1.11.4",
+    "@pandacss/dev": "^2.0.1",
+    "@pandacss/preset-base": "^2.0.1",
     "@storybook/react-vite": "^10.5.2",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",

@@ -25,10 +25,12 @@ setup below, minus the app/brand presets. Everything an app must do:
 
    Later presets override earlier ones token-by-token — the base recipes and
    semantic tokens reference the brand tokens, which is how a brand swap
-   restyles everything without touching recipes. Set `eject: true` (the stack
-   supplies the full token system). After changing an _external_ preset
-   dependency, regenerate clean: `rm -rf styled-system && npm run panda` —
-   incremental codegen does not detect external preset changes.
+   restyles everything without touching recipes. Install
+   `@pandacss/preset-base` as a direct dependency: `@pandacss/dev` no longer
+   pulls it in, and nothing is added to the stack implicitly. After changing
+   an _external_ preset dependency, regenerate clean:
+   `rm -rf styled-system && npm run panda` — incremental codegen does not
+   detect external preset changes.
 
 2. **Include this package's source** in `panda.config.ts` so Panda extracts
    the styles the components use:
@@ -42,6 +44,14 @@ setup below, minus the app/brand presets. Everything an app must do:
    importers, this package's source included — a `styled-system` alias in
    both `tsconfig.json` `paths` and the bundler config (see the
    `viteFinal` in `apps/storybook`'s `.storybook/main.ts`).
+
+   App code imports `css`, `cx`, `cva` and `sva` from `styled-system/css`
+   and `styled` from `styled-system/jsx`, not from `@microbit/ui`: Panda
+   extracts those only when they are imported from the generated module, and
+   a call through a re-export emits no CSS and no diagnostic. What
+   `@microbit/ui` does export — the components, the layout patterns,
+   `token` — is safe wherever it is used.
+
 4. **Generate and load the CSS** with Panda's PostCSS plugin. Keep Vite's
    default transformer — do **not** set `css.transformer: "lightningcss"`,
    which disables PostCSS. Add a `postcss.config.cjs`:
