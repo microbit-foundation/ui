@@ -25,10 +25,12 @@ setup below, minus the app/brand presets. Everything an app must do:
 
    Later presets override earlier ones token-by-token — the base recipes and
    semantic tokens reference the brand tokens, which is how a brand swap
-   restyles everything without touching recipes. Set `eject: true` (the stack
-   supplies the full token system). After changing an _external_ preset
-   dependency, regenerate clean: `rm -rf styled-system && npm run panda` —
-   incremental codegen does not detect external preset changes.
+   restyles everything without touching recipes. Install
+   `@pandacss/preset-base` as a direct dependency: `@pandacss/dev` no longer
+   pulls it in, and nothing is added to the stack implicitly. After changing
+   an _external_ preset dependency, regenerate clean:
+   `rm -rf styled-system && npm run panda` — incremental codegen does not
+   detect external preset changes.
 
 2. **Include this package's source** in `panda.config.ts` so Panda extracts
    the styles the components use:

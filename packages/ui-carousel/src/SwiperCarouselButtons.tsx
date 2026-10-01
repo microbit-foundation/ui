@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: MIT
  */
-import { css } from "@microbit/ui";
+import { css } from "styled-system/css";
 import { useEffect, useState } from "react";
 import { useLocale } from "react-aria";
 import { useIntl } from "react-intl";

@@ -25,10 +25,12 @@ work. Consumption setup and the CSS-variable contract are in
   shorthand (`borderColor: "gray.700 transparent"`) the token name emits
   verbatim — invalid CSS the browser drops. Use per-side longhands, or
   interpolate explicitly (`{colors.gray.700}` in string values).
-- **`styled.tag` requires importing `styled` from `styled-system/jsx`.**
-  The `@microbit/ui` re-export works for `styled(Component)` but Panda
-  doesn't recognise the member-expression form through a re-export: the
-  classes land on the element and no CSS exists for them.
+- **Import the styling helpers from `styled-system/*`, never from the
+  `@microbit/ui` re-export.** Panda matches on the module a helper was
+  imported from, so `css`, `cx` and `cva` reached through the re-export
+  extract nothing: the classes land on the element and no CSS exists for
+  them. `styled` is the same story — `styled(Component)` works through the
+  re-export, the `styled.tag` member-expression form does not.
 - **Runtime-selected variants need `staticCss` in the preset.** `variant`/
   `size` forwarded as props are invisible to static analysis. If a preset
   adds recipes or variants selected at runtime, extend `staticCss` in the
@@ -44,9 +46,11 @@ work. Consumption setup and the CSS-variable contract are in
 - **Same-property conflicts across separate `css()` calls race on emit
   order.** cx'ing a base class with an override class does not mean the
   override wins; merge into a single `css(base, override)` call so
-  conflicts resolve at merge time. Longhands beat shorthands across calls
-  too. (A `styled()` factory's own props are safe: base, variants and props
-  merge before emitting.)
+  conflicts resolve at merge time. (A `styled()` factory's own props are
+  safe: base, variants and props merge before emitting.) Shorthand against
+  longhand is the exception: Panda sorts atomic rules by how broad the
+  property is, so `paddingTop` beats `padding` across calls whichever was
+  extracted first.
 - **A flat `css` override silences a variant's interaction states.** The
   `utilities` layer beats `recipes` in every state, so overriding a
   property the variant changes on hover/press means restating those states

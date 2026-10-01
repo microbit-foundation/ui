@@ -29,6 +29,7 @@
     "postcss": "^8.5.26"
   },
   "allowScripts": {
+    "@parcel/watcher": false,
     "esbuild": true,
     "fsevents": true
   }
