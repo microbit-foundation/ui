@@ -8,11 +8,13 @@
  * shared-ui consumers (and a future extracted library) import from one place
  * rather than reaching into the generated `styled-system` directly.
  *
- * `css`, `cva`, `sva` and `cx` are deliberately NOT re-exported: Panda
- * extracts a helper only when it is imported from `styled-system/css`, so
+ * `css`, `cva`, `sva`, `cx` and `styled` are deliberately NOT re-exported:
+ * Panda extracts those only when they are imported from `styled-system`, so
  * calls reaching one through here would produce no CSS and no diagnostic.
  * (`cx` only joins strings, but it shares the import line with `css`.)
- * `token` is a runtime variable lookup with nothing to extract.
+ * Everything this module does export works wherever it is used: the pattern
+ * components extract by name, and `token` is a runtime variable lookup with
+ * nothing to extract.
  */
 export { token } from "styled-system/tokens";
 export type { SystemStyleObject } from "styled-system/types";
@@ -27,16 +29,10 @@ export type {
   GridProps,
 } from "styled-system/jsx";
 
-// Layout patterns — Box/Flex/Stack/etc.
-//
-// The pattern components extract by component and prop name, so their style
-// props work through this re-export.
-//
-// `styled` is re-exported for the `styled(Component)` form, which works from
-// anywhere. The `styled.tag` JSX form does NOT: Panda recognises the factory by
-// the module it was imported from, so `<styled.table css={…}>` on a `styled`
-// imported from here silently produces no CSS. Import it from
-// "styled-system/jsx" for that.
+// Layout patterns — Box/Flex/Stack/etc. These extract by component and prop
+// name, so their style props work through a re-export. `styled` does not:
+// `styled(Component)` would be safe but `<styled.table css={…}>` silently
+// produces no CSS, so it stays in "styled-system/jsx" with the helpers.
 export {
   AspectRatio,
   Box,
@@ -49,7 +45,6 @@ export {
   GridItem,
   Center,
   Wrap,
-  styled,
 } from "styled-system/jsx";
 
 /**
