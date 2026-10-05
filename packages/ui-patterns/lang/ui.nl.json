@@ -21,7 +21,7 @@
     "defaultMessage": "Verwijderen van projecten bevestigen"
   },
   "ui-patterns.delete-projects-confirm-text": {
-    "defaultMessage": "Weet je zeker dat je {numProjects, plural, one {# project} other {# project}} wil verwijderen?"
+    "defaultMessage": "Weet je zeker dat je {numProjects, plural, one {# project} other {# projecten}} wil verwijderen?"
   },
   "ui-patterns.duplicate-project-action": {
     "defaultMessage": "Kopiëren"
@@ -99,7 +99,7 @@
     "defaultMessage": "Selecteer {name}"
   },
   "ui-patterns.selection-actions-group": {
-    "defaultMessage": "Kies-acties"
+    "defaultMessage": "Selectie-acties"
   },
   "ui-patterns.skip-to-toolbar-action": {
     "defaultMessage": "Ga naar werkbalk"
