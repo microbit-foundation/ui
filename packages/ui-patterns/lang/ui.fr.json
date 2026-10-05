@@ -21,7 +21,7 @@
     "defaultMessage": "Confirmer la suppression des projets"
   },
   "ui-patterns.delete-projects-confirm-text": {
-    "defaultMessage": "Êtes-vous sûr de vouloir supprimer {numProjects, plural, one {# projet} other {# projets}}?"
+    "defaultMessage": "Voulez-vous vraiment supprimer {numProjects, plural, one {# projet} other {# projets}} ?"
   },
   "ui-patterns.duplicate-project-action": {
     "defaultMessage": "Dupliquer"
