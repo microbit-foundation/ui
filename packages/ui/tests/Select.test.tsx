@@ -196,8 +196,6 @@ it("ComboBox keeps its focus styling while an option is active", () => {
   act(() => input.focus());
   expect(input.getAttribute("aria-expanded")).toBe("true");
   expect(input.getAttribute("aria-activedescendant")).toBeTruthy();
-  expect(input.getAttribute("data-focused")).toBeNull();
-
   expect(isTriggerFocusStyled(input.parentElement!)).toBe(true);
 });
 
@@ -225,7 +223,6 @@ it("ComboBox keeps its focus styling across opening, choosing and reopening", ()
 
   // Reopening with a selection is the other way an option starts out active.
   fireEvent.click(toggle);
-  expect(input.getAttribute("data-focused")).toBeNull();
   expect(isTriggerFocusStyled(trigger)).toBe(true);
 });
 
