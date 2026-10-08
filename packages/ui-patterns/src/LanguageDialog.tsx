@@ -71,7 +71,7 @@ export interface LanguageDialogProps {
   isOpen: boolean;
   onClose: () => void;
   /** Element to return focus to, typically the settings menu button. */
-  finalFocusRef?: RefObject<HTMLElement>;
+  finalFocusRef?: RefObject<HTMLElement | null>;
   /** Languages to offer, in any order; the dialog sorts by registry order. */
   languages: LanguageDialogLanguage[];
   /**

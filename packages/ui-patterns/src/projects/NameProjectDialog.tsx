@@ -39,7 +39,7 @@ export interface NameProjectDialogProps {
   confirmText: ReactNode;
   /** Shown under the field, e.g. what the name is used for. */
   helperText?: ReactNode;
-  finalFocusRef?: RefObject<HTMLElement>;
+  finalFocusRef?: RefObject<HTMLElement | null>;
   onCloseComplete?: () => void;
 }
 

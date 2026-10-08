@@ -22,7 +22,7 @@ export interface ConfirmDialogProps {
   confirmText: ReactNode;
   /** Defaults to "Cancel". */
   cancelText?: ReactNode;
-  finalFocusRef?: RefObject<HTMLElement>;
+  finalFocusRef?: RefObject<HTMLElement | null>;
   onCloseComplete?: () => void;
 }
 

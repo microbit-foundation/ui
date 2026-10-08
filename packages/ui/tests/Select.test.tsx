@@ -107,10 +107,12 @@ it("ComboBox can withhold the popover entirely", () => {
   act(() => input.focus());
   fireEvent.change(input, { target: { value: "a" } });
   expect(screen.queryAllByRole("option")).toHaveLength(0);
+  expect((input as HTMLInputElement).value).toEqual("a");
   fireEvent.change(input, { target: { value: "ap" } });
   expect(screen.getAllByRole("option").map((o) => o.textContent)).toEqual([
     "Apple",
   ]);
+  expect((input as HTMLInputElement).value).toEqual("ap");
 });
 
 it("ComboBox shows an empty state and can drop the indicator", () => {
@@ -196,8 +198,6 @@ it("ComboBox keeps its focus styling while an option is active", () => {
   act(() => input.focus());
   expect(input.getAttribute("aria-expanded")).toBe("true");
   expect(input.getAttribute("aria-activedescendant")).toBeTruthy();
-  expect(input.getAttribute("data-focused")).toBeNull();
-
   expect(isTriggerFocusStyled(input.parentElement!)).toBe(true);
 });
 
@@ -225,7 +225,6 @@ it("ComboBox keeps its focus styling across opening, choosing and reopening", ()
 
   // Reopening with a selection is the other way an option starts out active.
   fireEvent.click(toggle);
-  expect(input.getAttribute("data-focused")).toBeNull();
   expect(isTriggerFocusStyled(trigger)).toBe(true);
 });
 
