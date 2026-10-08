@@ -107,10 +107,12 @@ it("ComboBox can withhold the popover entirely", () => {
   act(() => input.focus());
   fireEvent.change(input, { target: { value: "a" } });
   expect(screen.queryAllByRole("option")).toHaveLength(0);
+  expect((input as HTMLInputElement).value).toEqual("a");
   fireEvent.change(input, { target: { value: "ap" } });
   expect(screen.getAllByRole("option").map((o) => o.textContent)).toEqual([
     "Apple",
   ]);
+  expect((input as HTMLInputElement).value).toEqual("ap");
 });
 
 it("ComboBox shows an empty state and can drop the indicator", () => {
