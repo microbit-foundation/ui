@@ -1,6 +1,6 @@
 {
   "ui.breadcrumb": {
-    "defaultMessage": "Sendero de navegación"
+    "defaultMessage": "Breadcrumb"
   },
   "ui.cancel-action": {
     "defaultMessage": "Cancelar"
@@ -18,13 +18,13 @@
     "defaultMessage": "Cargando"
   },
   "ui.numberfield-decrease": {
-    "defaultMessage": "Reducir {fieldLabel}"
+    "defaultMessage": "Disminuir {fieldLabel}"
   },
   "ui.numberfield-increase": {
     "defaultMessage": "Aumentar {fieldLabel}"
   },
   "ui.select-placeholder": {
-    "defaultMessage": "Seleccionar un artículo"
+    "defaultMessage": "Selecciona un elemento"
   },
   "ui.select-row-action": {
     "defaultMessage": "Seleccionar"
