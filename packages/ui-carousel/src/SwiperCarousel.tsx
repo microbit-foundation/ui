@@ -47,7 +47,7 @@ const SwiperCarousel = ({
   const intl = useIntl();
   const { direction } = useLocale();
   const reducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
-  const swiperRef = useRef<SwiperClass>();
+  const swiperRef = useRef<SwiperClass | undefined>(undefined);
   const pointerModality = useRef(false);
   useEffect(() => {
     const onPointerDown = () => {

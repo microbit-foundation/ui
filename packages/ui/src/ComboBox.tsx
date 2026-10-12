@@ -7,6 +7,7 @@ import {
   ForwardedRef,
   forwardRef,
   ReactNode,
+  useContext,
   useLayoutEffect,
   useRef,
   useState,
@@ -15,6 +16,7 @@ import {
   Button as RACButton,
   ComboBox as RACComboBox,
   ComboBoxProps as RACComboBoxProps,
+  ComboBoxStateContext,
   Input as RACInput,
   ListBox as RACListBox,
   Popover,
@@ -97,6 +99,27 @@ export interface ComboBoxProps<T extends object>
   contentCss?: SystemStyleObject;
   className?: string;
 }
+
+/**
+ * Holds the list shut while `isPopoverHidden`, rather than unmounting the
+ * popover. RAC builds the collection from the ListBox children *inside* the
+ * popover, so unmounting it also empties the collection — and an empty
+ * collection can't open (without `allowsEmptyCollection`), so the next
+ * keystroke's open lands before the remounted children have repopulated it
+ * and the list never appears. React 18's effect ordering happened to win that
+ * race; React 19's does not.
+ *
+ * Layout effect, not a passive one, so the open render never reaches a paint.
+ */
+const KeepPopoverClosed = ({ isHidden }: { isHidden?: boolean }) => {
+  const state = useContext(ComboBoxStateContext);
+  useLayoutEffect(() => {
+    if (isHidden && state?.isOpen) {
+      state.setOpen(false);
+    }
+  });
+  return null;
+};
 
 /**
  * ComboBox — a text input that filters a listbox, for choosing one of a known
@@ -202,30 +225,29 @@ const ComboBoxInner = <T extends object>(
             </RACButton>
           )}
         </div>
-        {!isPopoverHidden && (
-          <Popover
-            triggerRef={triggerRef}
-            placement={placement}
-            maxHeight={maxHeight}
-            style={triggerWidth ? { width: triggerWidth } : undefined}
-            className={cx(
-              slots.content,
-              contentCss ? css(contentCss) : undefined,
-            )}
+        <KeepPopoverClosed isHidden={isPopoverHidden} />
+        <Popover
+          triggerRef={triggerRef}
+          placement={placement}
+          maxHeight={maxHeight}
+          style={triggerWidth ? { width: triggerWidth } : undefined}
+          className={cx(
+            slots.content,
+            contentCss ? css(contentCss) : undefined,
+          )}
+        >
+          <RACListBox
+            aria-label={intl.formatMessage(uiMessage("ui.combobox-listbox"))}
+            className={slots.list}
+            renderEmptyState={
+              emptyState
+                ? () => <div className={slots.empty}>{emptyState}</div>
+                : undefined
+            }
           >
-            <RACListBox
-              aria-label={intl.formatMessage(uiMessage("ui.combobox-listbox"))}
-              className={slots.list}
-              renderEmptyState={
-                emptyState
-                  ? () => <div className={slots.empty}>{emptyState}</div>
-                  : undefined
-              }
-            >
-              {children}
-            </RACListBox>
-          </Popover>
-        )}
+            {children}
+          </RACListBox>
+        </Popover>
         <FieldSupport
           helperText={helperText}
           errorMessage={errorMessage}
