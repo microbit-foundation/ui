@@ -21,7 +21,7 @@
     "defaultMessage": "Confirmar exclusão de projetos"
   },
   "ui-patterns.delete-projects-confirm-text": {
-    "defaultMessage": "Tem certeza que deseja excluir  {numProjects, plural, one {# project} other {# projects}}?"
+    "defaultMessage": "Deseja mesmo excluir  {numProjects, plural, one {# projeto} other {# projetos}}?"
   },
   "ui-patterns.duplicate-project-action": {
     "defaultMessage": "Duplicar"
