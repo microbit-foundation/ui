@@ -36,6 +36,16 @@ export const WithActions: Story = {
   },
 };
 
+/** `subtitle` sits between the heading and the cards. */
+export const WithSubtitle: Story = {
+  args: {
+    title: "Make it: code it projects",
+    subtitle:
+      "Quick projects in MakeCode, Python & Scratch to help you get the most out of the micro:bit’s features — and have fun!",
+    carouselItems: exampleCards(8),
+  },
+};
+
 /**
  * `titleSuffix` renders beside the heading but stays out of the carousel's
  * accessible name.
