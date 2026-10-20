@@ -80,6 +80,10 @@ export interface ComboBoxProps<T extends object>
    * query length — react-aria has no `minLength`, and rendering an empty list
    * still opens an empty card. Derive it from a controlled `inputValue`, so
    * the keystroke that clears the gate is the one that opens the list.
+   *
+   * While true, nothing can open the list: the chevron is disabled, and
+   * ArrowUp/ArrowDown are stopped before they reach the input (so an
+   * `onKeyDown` you pass won't see them either).
    */
   isPopoverHidden?: boolean;
   placement?: PopoverProps["placement"];
@@ -103,8 +107,8 @@ export interface ComboBoxProps<T extends object>
 
 /**
  * Closes a list left open when `isPopoverHidden` turns on (deleting back
- * below the minimum query length). Opening is blocked at source (see
- * the `menuTrigger` override and arrow-key guard below); it also backstops 
+ * below the minimum query length). Opening is blocked at source — see the
+ * `menuTrigger` override and arrow-key guard below — and this also catches
  * RAC's rarer open paths, such as the iPad VoiceOver tap on the input.
  *
  * Layout effect, not a passive one, so the stale list never reaches a paint.
@@ -239,6 +243,15 @@ const ComboBoxInner = <T extends object>(
           )}
         </div>
         <ClosePopoverWhenHidden isHidden={isPopoverHidden} />
+        {/*
+          Always mounted, even while isPopoverHidden: RAC builds the
+          collection from the ListBox children inside the popover, so
+          unmounting it also empties the collection — and an empty
+          collection can't open (without allowsEmptyCollection), so the next
+          keystroke's open lands before the remounted children have
+          repopulated it and the list never appears. React 18's effect
+          ordering happened to win that race; React 19's does not.
+        */}
         <Popover
           triggerRef={triggerRef}
           placement={placement}
