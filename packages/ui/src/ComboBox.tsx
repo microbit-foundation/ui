@@ -76,9 +76,10 @@ export interface ComboBoxProps<T extends object>
    */
   emptyState?: ReactNode;
   /**
-   * Keep the dropdown shut until this prop is true. For gating on a minimum
+   * Keep the dropdown shut while this prop is true. For gating on a minimum
    * query length — react-aria has no `minLength`, and rendering an empty list
-   * still opens an empty card.
+   * still opens an empty card. Derive it from a controlled `inputValue`, so
+   * the keystroke that clears the gate is the one that opens the list.
    */
   isPopoverHidden?: boolean;
   placement?: PopoverProps["placement"];
@@ -101,17 +102,14 @@ export interface ComboBoxProps<T extends object>
 }
 
 /**
- * Holds the list shut while `isPopoverHidden`, rather than unmounting the
- * popover. RAC builds the collection from the ListBox children *inside* the
- * popover, so unmounting it also empties the collection — and an empty
- * collection can't open (without `allowsEmptyCollection`), so the next
- * keystroke's open lands before the remounted children have repopulated it
- * and the list never appears. React 18's effect ordering happened to win that
- * race; React 19's does not.
+ * Closes a list left open when `isPopoverHidden` turns on (deleting back
+ * below the minimum query length). Opening is blocked at source (see
+ * the `menuTrigger` override and arrow-key guard below); it also backstops 
+ * RAC's rarer open paths, such as the iPad VoiceOver tap on the input.
  *
- * Layout effect, not a passive one, so the open render never reaches a paint.
+ * Layout effect, not a passive one, so the stale list never reaches a paint.
  */
-const KeepPopoverClosed = ({ isHidden }: { isHidden?: boolean }) => {
+const ClosePopoverWhenHidden = ({ isHidden }: { isHidden?: boolean }) => {
   const state = useContext(ComboBoxStateContext);
   useLayoutEffect(() => {
     if (isHidden && state?.isOpen) {
@@ -140,6 +138,7 @@ const ComboBoxInner = <T extends object>(
     indicator,
     emptyState,
     isPopoverHidden,
+    menuTrigger,
     placement = "bottom start",
     maxHeight,
     helperText,
@@ -190,6 +189,8 @@ const ComboBoxInner = <T extends object>(
       <RACComboBox
         allowsEmptyCollection={emptyState != null}
         {...rest}
+        // "manual" stops typing and focus from opening the list at all.
+        menuTrigger={isPopoverHidden ? "manual" : menuTrigger}
         className={cx(fieldSlots.root, slots.root, className)}
       >
         {label != null && (
@@ -205,6 +206,17 @@ const ComboBoxInner = <T extends object>(
         <div
           ref={triggerRef}
           data-keyboard-modality={isFocusVisible || undefined}
+          // "manual" still lets the arrow keys open the list, and RAC's
+          // handler is on the input, so stop them on the way down.
+          onKeyDownCapture={
+            isPopoverHidden
+              ? (e) => {
+                  if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+                    e.stopPropagation();
+                  }
+                }
+              : undefined
+          }
           className={cx(
             slots.trigger,
             triggerCss ? css(triggerCss) : undefined,
@@ -219,13 +231,14 @@ const ComboBoxInner = <T extends object>(
           {indicator !== null && (
             <RACButton
               aria-label={intl.formatMessage(uiMessage("ui.combobox-trigger"))}
+              isDisabled={isPopoverHidden}
               className={slots.indicator}
             >
               {indicator ?? <Icon as={RiArrowDownSLine} />}
             </RACButton>
           )}
         </div>
-        <KeepPopoverClosed isHidden={isPopoverHidden} />
+        <ClosePopoverWhenHidden isHidden={isPopoverHidden} />
         <Popover
           triggerRef={triggerRef}
           placement={placement}
