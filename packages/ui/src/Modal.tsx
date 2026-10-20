@@ -173,7 +173,7 @@ export interface ModalOwnProps {
    * Element to focus when the dialog closes, instead of the element that was
    * focused when it opened.
    */
-  finalFocusRef?: RefObject<HTMLElement>;
+  finalFocusRef?: RefObject<HTMLElement | null>;
   /**
    * Accessible name for dialogs without a ModalHeader (which otherwise
    * provides the label). One of the two is required — react-aria warns in

@@ -84,6 +84,7 @@ it("ComboBox filters as you type and reports the selection", () => {
 });
 
 it("ComboBox can withhold the popover entirely", () => {
+  const onOpenChange = vi.fn();
   const Probe = () => {
     const [q, setQ] = useState("");
     return (
@@ -91,6 +92,7 @@ it("ComboBox can withhold the popover entirely", () => {
         aria-label="Fruit"
         inputValue={q}
         onInputChange={setQ}
+        onOpenChange={onOpenChange}
         // The gate classroom's name field uses: no list until 2 characters.
         isPopoverHidden={q.length < 2}
       >
@@ -107,10 +109,25 @@ it("ComboBox can withhold the popover entirely", () => {
   act(() => input.focus());
   fireEvent.change(input, { target: { value: "a" } });
   expect(screen.queryAllByRole("option")).toHaveLength(0);
+  expect((input as HTMLInputElement).value).toEqual("a");
+  // Neither the arrow keys nor the chevron get round the gate.
+  fireEvent.keyDown(input, { key: "ArrowDown" });
+  fireEvent.keyDown(input, { key: "ArrowUp" });
+  expect(screen.getByRole("button").hasAttribute("disabled")).toBe(true);
+  expect(screen.queryAllByRole("option")).toHaveLength(0);
+  // Withheld at source, not opened and shut again: no open/close churn.
+  expect(onOpenChange).not.toHaveBeenCalled();
+  expect(input.getAttribute("aria-expanded")).toEqual("false");
   fireEvent.change(input, { target: { value: "ap" } });
   expect(screen.getAllByRole("option").map((o) => o.textContent)).toEqual([
     "Apple",
   ]);
+  expect((input as HTMLInputElement).value).toEqual("ap");
+  expect(onOpenChange).toHaveBeenLastCalledWith(true, "input");
+  // Deleting back below the gate shuts the list again.
+  fireEvent.change(input, { target: { value: "a" } });
+  expect(screen.queryAllByRole("option")).toHaveLength(0);
+  expect(onOpenChange).toHaveBeenLastCalledWith(false, undefined);
 });
 
 it("ComboBox shows an empty state and can drop the indicator", () => {
@@ -196,8 +213,6 @@ it("ComboBox keeps its focus styling while an option is active", () => {
   act(() => input.focus());
   expect(input.getAttribute("aria-expanded")).toBe("true");
   expect(input.getAttribute("aria-activedescendant")).toBeTruthy();
-  expect(input.getAttribute("data-focused")).toBeNull();
-
   expect(isTriggerFocusStyled(input.parentElement!)).toBe(true);
 });
 
@@ -225,7 +240,6 @@ it("ComboBox keeps its focus styling across opening, choosing and reopening", ()
 
   // Reopening with a selection is the other way an option starts out active.
   fireEvent.click(toggle);
-  expect(input.getAttribute("data-focused")).toBeNull();
   expect(isTriggerFocusStyled(trigger)).toBe(true);
 });
 

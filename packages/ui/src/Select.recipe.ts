@@ -127,6 +127,9 @@ export const select = defineSlotRecipe({
       background: "transparent",
       border: "none",
       cursor: "pointer",
+      // Disabled only while ComboBox's isPopoverHidden withholds the list:
+      // it should stop looking clickable, not look like a disabled field.
+      "&[data-disabled]": { cursor: "default" },
       // No focus styling, deliberately: react-aria keeps a ComboBox's toggle
       // button out of the tab order (the input owns the keyboard), so a ring
       // here would only ever be reachable programmatically, and would suggest

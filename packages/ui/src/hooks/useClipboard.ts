@@ -14,7 +14,9 @@ export function useClipboard(
   timeoutMs = 1500,
 ): { onCopy: () => void; hasCopied: boolean } {
   const [hasCopied, setHasCopied] = useState(false);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined,
+  );
   const markCopied = useCallback(() => {
     setHasCopied(true);
     clearTimeout(timeoutRef.current);
