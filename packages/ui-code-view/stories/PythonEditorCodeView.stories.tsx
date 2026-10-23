@@ -31,3 +31,16 @@ while True:
 `,
   },
 };
+
+/**
+ * Wide enough to scroll sideways, which puts the code in the tab order so a
+ * keyboard can scroll it.
+ */
+export const LongLine: Story = {
+  args: {
+    code: `from microbit import *
+
+display.scroll("This message is long enough that the line runs past the edge of most screens, so the code scrolls sideways")
+`,
+  },
+};

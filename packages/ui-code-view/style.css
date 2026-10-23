@@ -52,6 +52,12 @@
   overflow-x: auto;
 }
 
+/* The @microbit/ui focus ring. The view's padding leaves room for it. */
+.mb-code-view__code:focus-visible {
+  outline: 2px solid var(--colors-focus-ring, #1a1a1a);
+  outline-offset: 2px;
+}
+
 /* Colours come from the `code.*` tokens in @microbit/ui's base preset, so a
    brand preset restyles this view and the Python Editor together. The
    fallbacks repeat the base preset's OSS defaults for apps without Panda. */

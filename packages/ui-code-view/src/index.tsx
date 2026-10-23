@@ -11,6 +11,7 @@
 import hljs from "highlight.js/lib/core";
 import python from "highlight.js/lib/languages/python";
 import typescript from "highlight.js/lib/languages/typescript";
+import { type RefObject, useEffect, useRef, useState } from "react";
 
 // A private instance so an app's own highlight.js configuration (e.g. a
 // classPrefix, which would break style.css) can't reach these components.
@@ -29,6 +30,32 @@ export interface CodeViewProps {
 
 type Variant = "python-editor" | "makecode-javascript";
 
+/**
+ * Whether the element currently scrolls sideways. Safari doesn't make scroll
+ * containers keyboard-focusable, so a scrolling view needs a tabIndex to be
+ * reachable without a mouse; one that fits stays out of the tab order.
+ */
+const useScrollsHorizontally = (
+  ref: RefObject<HTMLElement | null>,
+  content: string,
+) => {
+  const [scrolls, setScrolls] = useState(false);
+  useEffect(() => {
+    const element = ref.current;
+    if (!element) {
+      return;
+    }
+    const update = () => setScrolls(element.scrollWidth > element.clientWidth);
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(element);
+    // A web font arriving changes the content's width but not the element's.
+    void document.fonts?.ready.then(update);
+    return () => observer.disconnect();
+  }, [ref, content]);
+  return scrolls;
+};
+
 const CodeView = ({
   code,
   className,
@@ -46,6 +73,8 @@ const CodeView = ({
     language,
     ignoreIllegals: true,
   }).value;
+  const codeRef = useRef<HTMLPreElement>(null);
+  const scrolls = useScrollsHorizontally(codeRef, html);
   // Line numbers are a separate column rather than a prefix on each line so
   // highlight.js's output never needs splitting: its spans for multi-line
   // strings and comments cross line breaks.
@@ -60,7 +89,11 @@ const CodeView = ({
       <pre className="mb-code-view__gutter" aria-hidden="true">
         {lineNumbers}
       </pre>
-      <pre className="mb-code-view__code">
+      <pre
+        ref={codeRef}
+        className="mb-code-view__code"
+        tabIndex={scrolls ? 0 : undefined}
+      >
         {/* eslint-disable-next-line @eslint-react/dom-no-dangerously-set-innerhtml -- escaped by highlight.js, see above */}
         <code dangerouslySetInnerHTML={{ __html: html }} />
       </pre>
