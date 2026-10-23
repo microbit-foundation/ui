@@ -170,6 +170,20 @@ export const basePreset = definePreset({
         // Removing the slot is a follow-up needing an ml-trainer lockstep.
         brand: colors.blue,
         brand2: colors.gray,
+        // Syntax-highlighting palette, read as CSS variables by the Python
+        // Editor's CodeMirror theme and by @microbit/ui-code-view's stylesheet
+        // (whose var() fallbacks repeat these values for apps without Panda).
+        // Generic OSS defaults; brand presets set the micro:bit palette.
+        code: {
+          default: { value: "black" },
+          comment: { value: "gray" },
+          keyword: { value: "darkblue" },
+          literal: { value: "darkgreen" },
+          string: { value: "green" },
+          // Below the 4.5:1 text floor (gray.500 meets it); matches the
+          // editor's gutter pending a decision on line-number contrast.
+          lineNumber: { value: "{colors.gray.350}" },
+        },
       },
       spacing: {
         ...spacing,
