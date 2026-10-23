@@ -34,6 +34,10 @@ It will be a while before this settles down as a component API, but in the short
 - [`@microbit/ui-carousel`](./packages/ui-carousel) — Swiper-based carousel
   components in the micro:bit design language. Also ships as source,
   consumed the same way; `@microbit/ui` and `swiper` are peer dependencies.
+- [`@microbit/ui-code-view`](./packages/ui-code-view) — read-only,
+  syntax-highlighted code styled like the micro:bit Python Editor and
+  MakeCode's JavaScript view. Unlike the others it ships built, with a plain
+  stylesheet, so apps without Panda can use it too.
 - [`@microbit/ui-patterns`](./packages/ui-patterns) — higher-level patterns
   composed from `@microbit/ui` primitives. Also ships as source, consumed
   the same way; `@microbit/ui` is a peer dependency.
@@ -42,7 +46,7 @@ It will be a while before this settles down as a component API, but in the short
 
 Packages are versioned independently. To release one, create a GitHub
 release whose tag carries the package's prefix — `ui-vX.Y.Z`,
-`ui-carousel-vX.Y.Z` or `ui-patterns-vX.Y.Z` (bare `vX.Y.Z` still means
+`ui-carousel-vX.Y.Z`, `ui-code-view-vX.Y.Z` or `ui-patterns-vX.Y.Z` (bare `vX.Y.Z` still means
 `@microbit/ui`, the pre-monorepo convention). The build workflow routes the release to the
 package by prefix, derives the npm version from the tag's numeric part, and
 publishes that package alone; an unrecognised prefix fails the build.

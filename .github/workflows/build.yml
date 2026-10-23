@@ -36,11 +36,12 @@ jobs:
           case "$TAG" in
             "") PACKAGE="ui" ;;
             ui-carousel-v[0-9]*) PACKAGE="ui-carousel" ;;
+            ui-code-view-v[0-9]*) PACKAGE="ui-code-view" ;;
             ui-patterns-v[0-9]*) PACKAGE="ui-patterns" ;;
             i18n-tools-v[0-9]*) PACKAGE="i18n-tools" ;;
             ui-v[0-9]* | v[0-9]*) PACKAGE="ui" ;;
             *)
-              echo "Unrecognised release tag '$TAG' (expected ui-vX.Y.Z, ui-carousel-vX.Y.Z, ui-patterns-vX.Y.Z, i18n-tools-vX.Y.Z or legacy vX.Y.Z)" >&2
+              echo "Unrecognised release tag '$TAG' (expected ui-vX.Y.Z, ui-carousel-vX.Y.Z, ui-code-view-vX.Y.Z, ui-patterns-vX.Y.Z, i18n-tools-vX.Y.Z or legacy vX.Y.Z)" >&2
               exit 1
               ;;
           esac

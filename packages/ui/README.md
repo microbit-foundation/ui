@@ -209,7 +209,8 @@ Panda emits every token as a CSS custom property with its default naming —
 - `fonts.display` → `var(--fonts-display)`
 
 These names are **API** for styling that lives outside React/Panda — e.g.
-CodeMirror highlight styles or xterm themes written as raw CSS. Two rules
+CodeMirror highlight styles, xterm themes, or `@microbit/ui-code-view`'s
+stylesheet, which reads the `code.*` syntax-highlighting colours. Two rules
 keep them stable:
 
 - Never set `hashing` or `prefix` in `panda.config.ts`.
