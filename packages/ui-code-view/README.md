@@ -13,17 +13,23 @@ match the editors the code comes from. Successor to
 
 Both take a `code` prop and show line numbers. An optional `className` goes on
 the outermost element, for example to make the background transparent.
+Highlighting is done by [highlight.js](https://highlightjs.org/), which is a
+regular dependency.
+
 The view is always left to right (`dir="ltr"`), whatever the page direction,
-and marked `translate="no"` so browser translation leaves the code alone. Highlighting is done by
-[highlight.js](https://highlightjs.org/), which is a regular dependency.
+and marked `translate="no"` so browser translation leaves the code alone.
+While the code is too wide for the view, it is a focusable group named
+"Python code" or "JavaScript code", so keyboard users can scroll it; code
+that fits adds no tab stop. Line numbers are hidden from screen readers.
 
 ## Consumption
 
 Unlike the other packages in this repo, this one **ships built** (ES modules
 plus type declarations) and is styled by a **plain stylesheet**, so it works
-in apps with or without Panda CSS. It supports React 17, 18 and 19.
+in apps with or without Panda CSS. It supports React 17, 18 and 19, and
+needs `react-intl` (6 or 7), a peer dependency, for its accessible names.
 
-1. Install the package.
+1. Install the package, and `react-intl` if the app doesn't already have it.
 2. Import the stylesheet once.
 
    In an app set up as the [`@microbit/ui` README](../ui/README.md)
@@ -50,6 +56,15 @@ in apps with or without Panda CSS. It supports React 17, 18 and 19.
 
    <PythonEditorCodeView code={"from microbit import *\n"} />;
    ```
+
+   They must be inside an `IntlProvider`.
+
+4. **Strings**: English needs no catalog, as the components carry inline
+   `defaultMessage`s. For other locales, compile this package's
+   `lang/ui.<locale>.json` into your per-locale catalogs alongside your own
+   (message ids are namespaced `ui-code-view.`), for example with
+   `formatjs compile`, as the [`@microbit/ui` README](../ui/README.md)
+   describes for its catalogs.
 
 The stylesheet loads Source Code Pro from `fonts.microbit.org` for the Python
 view. Its class names (`mb-code-view…` and highlight.js's `hljs-…`) are part

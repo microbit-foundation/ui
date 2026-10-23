@@ -12,6 +12,8 @@ import hljs from "highlight.js/lib/core";
 import python from "highlight.js/lib/languages/python";
 import typescript from "highlight.js/lib/languages/typescript";
 import { type RefObject, useEffect, useRef, useState } from "react";
+import { useIntl } from "react-intl";
+import { codeViewMessage } from "./messages";
 
 // A private instance so an app's own highlight.js configuration (e.g. a
 // classPrefix, which would break style.css) can't reach these components.
@@ -61,7 +63,13 @@ const CodeView = ({
   className,
   language,
   variant,
-}: CodeViewProps & { language: string; variant: Variant }) => {
+  label,
+}: CodeViewProps & {
+  language: string;
+  variant: Variant;
+  label: Parameters<typeof codeViewMessage>[0];
+}) => {
+  const intl = useIntl();
   // A trailing newline ends the last line rather than starting another.
   const lineNumbers = code
     .replace(/\n$/, "")
@@ -89,10 +97,16 @@ const CodeView = ({
       <pre className="mb-code-view__gutter" aria-hidden="true">
         {lineNumbers}
       </pre>
+      {/* Once focusable it needs a name, which a pre (role generic) can't
+          take; group rather than region keeps code out of the landmarks. */}
       <pre
         ref={codeRef}
         className="mb-code-view__code"
-        tabIndex={scrolls ? 0 : undefined}
+        {...(scrolls && {
+          tabIndex: 0,
+          role: "group",
+          "aria-label": intl.formatMessage(codeViewMessage(label)),
+        })}
       >
         {/* eslint-disable-next-line @eslint-react/dom-no-dangerously-set-innerhtml -- escaped by highlight.js, see above */}
         <code dangerouslySetInnerHTML={{ __html: html }} />
@@ -103,10 +117,20 @@ const CodeView = ({
 
 /** Python, styled like the micro:bit Python Editor. */
 export const PythonEditorCodeView = (props: CodeViewProps) => (
-  <CodeView {...props} language="python" variant="python-editor" />
+  <CodeView
+    {...props}
+    language="python"
+    variant="python-editor"
+    label="ui-code-view.python-label"
+  />
 );
 
 /** MakeCode's JavaScript (a TypeScript subset), styled like its code view. */
 export const MakeCodeJavaScriptCodeView = (props: CodeViewProps) => (
-  <CodeView {...props} language="typescript" variant="makecode-javascript" />
+  <CodeView
+    {...props}
+    language="typescript"
+    variant="makecode-javascript"
+    label="ui-code-view.makecode-javascript-label"
+  />
 );

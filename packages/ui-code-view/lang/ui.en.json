@@ -1,0 +1,10 @@
+{
+  "ui-code-view.makecode-javascript-label": {
+    "defaultMessage": "JavaScript code",
+    "description": "Accessible name for a scrollable, read-only view of a MakeCode project's JavaScript"
+  },
+  "ui-code-view.python-label": {
+    "defaultMessage": "Python code",
+    "description": "Accessible name for a scrollable, read-only view of Python code"
+  }
+}
