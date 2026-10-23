@@ -50,8 +50,12 @@ const CodeView = ({
   // highlight.js's output never needs splitting: its spans for multi-line
   // strings and comments cross line breaks.
   return (
+    // Code reads left to right whatever the page direction, and browser
+    // translation would rewrite identifiers and comments.
     <div
       className={`mb-code-view mb-code-view--${variant}${className ? ` ${className}` : ""}`}
+      dir="ltr"
+      translate="no"
     >
       <pre className="mb-code-view__gutter" aria-hidden="true">
         {lineNumbers}

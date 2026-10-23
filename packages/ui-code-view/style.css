@@ -92,8 +92,9 @@
   color: #000000;
   font-family: Monaco, Menlo, "Ubuntu Mono", Consolas, source-code-pro,
     monospace;
-  font-size: 19px;
-  line-height: 26px;
+  /* 19px/26px at the default root size, scaling with the user's setting. */
+  font-size: 1.1875rem;
+  line-height: calc(26 / 19);
 }
 
 .mb-code-view--makecode-javascript .mb-code-view__gutter {

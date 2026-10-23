@@ -12,7 +12,9 @@ match the editors the code comes from. Successor to
   MakeCode's JavaScript view.
 
 Both take a `code` prop and show line numbers. An optional `className` goes on
-the outermost element, for example to make the background transparent. Highlighting is done by
+the outermost element, for example to make the background transparent.
+The view is always left to right (`dir="ltr"`), whatever the page direction,
+and marked `translate="no"` so browser translation leaves the code alone. Highlighting is done by
 [highlight.js](https://highlightjs.org/), which is a regular dependency.
 
 ## Consumption
