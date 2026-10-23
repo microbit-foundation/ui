@@ -1,0 +1,48 @@
+{
+  "name": "@microbit/ui-code-view",
+  "version": "0.0.0",
+  "description": "Read-only, syntax-highlighted code views styled like the micro:bit Python Editor and MakeCode's JavaScript view. Plain CSS, no Panda setup needed; see README.",
+  "license": "MIT",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/microbit-foundation/ui.git",
+    "directory": "packages/ui-code-view"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./style.css": "./style.css"
+  },
+  "files": [
+    "dist",
+    "style.css",
+    "README.md",
+    "LICENSE.md"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "prepare": "npm run build",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "highlight.js": "^11.12.0"
+  },
+  "peerDependencies": {
+    "react": "^17.0.0 || ^18.0.0 || ^19.0.0"
+  },
+  "devDependencies": {
+    "@storybook/react-vite": "^10.5.2",
+    "@types/react": "^18.3.3",
+    "react": "^18.3.1",
+    "typescript": "^5.4.2"
+  }
+}

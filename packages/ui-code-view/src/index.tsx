@@ -1,0 +1,75 @@
+/**
+ * (c) 2026, Micro:bit Educational Foundation and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+/**
+ * ui-code-view — read-only, syntax-highlighted code in the style of the
+ * micro:bit editors. Styled by the package's plain stylesheet
+ * (`@microbit/ui-code-view/style.css`), not Panda.
+ */
+import hljs from "highlight.js/lib/core";
+import python from "highlight.js/lib/languages/python";
+import typescript from "highlight.js/lib/languages/typescript";
+
+// A private instance so an app's own highlight.js configuration (e.g. a
+// classPrefix, which would break style.css) can't reach these components.
+const highlighter = hljs.newInstance();
+highlighter.registerLanguage("python", python);
+highlighter.registerLanguage("typescript", typescript);
+
+export interface CodeViewProps {
+  code: string;
+  /**
+   * Added to the outermost element, e.g. to change the background. In a Panda
+   * app a `css()` class wins over the stylesheet's `vendor` layer.
+   */
+  className?: string;
+}
+
+type Variant = "python-editor" | "makecode-javascript";
+
+const CodeView = ({
+  code,
+  className,
+  language,
+  variant,
+}: CodeViewProps & { language: string; variant: Variant }) => {
+  // A trailing newline ends the last line rather than starting another.
+  const lineNumbers = code
+    .replace(/\n$/, "")
+    .split("\n")
+    .map((_, i) => i + 1)
+    .join("\n");
+  // highlight.js escapes the source; its output contains only its own spans.
+  const html = highlighter.highlight(code, {
+    language,
+    ignoreIllegals: true,
+  }).value;
+  // Line numbers are a separate column rather than a prefix on each line so
+  // highlight.js's output never needs splitting: its spans for multi-line
+  // strings and comments cross line breaks.
+  return (
+    <div
+      className={`mb-code-view mb-code-view--${variant}${className ? ` ${className}` : ""}`}
+    >
+      <pre className="mb-code-view__gutter" aria-hidden="true">
+        {lineNumbers}
+      </pre>
+      <pre className="mb-code-view__code">
+        {/* eslint-disable-next-line @eslint-react/dom-no-dangerously-set-innerhtml -- escaped by highlight.js, see above */}
+        <code dangerouslySetInnerHTML={{ __html: html }} />
+      </pre>
+    </div>
+  );
+};
+
+/** Python, styled like the micro:bit Python Editor. */
+export const PythonEditorCodeView = (props: CodeViewProps) => (
+  <CodeView {...props} language="python" variant="python-editor" />
+);
+
+/** MakeCode's JavaScript (a TypeScript subset), styled like its code view. */
+export const MakeCodeJavaScriptCodeView = (props: CodeViewProps) => (
+  <CodeView {...props} language="typescript" variant="makecode-javascript" />
+);
