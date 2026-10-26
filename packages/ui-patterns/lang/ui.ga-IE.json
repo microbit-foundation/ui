@@ -20,6 +20,9 @@
   "ui-patterns.delete-projects-confirm-heading": {
     "defaultMessage": "Deimhnigh scriosadh tionscadal"
   },
+  "ui-patterns.delete-projects-confirm-text": {
+    "defaultMessage": "An bhfuil tú cinnte gur mian leat {numProjects, plural, one {# tionscadal} two {# thionscadal} few {# tionscadal} many {# dtionscadal} other {# tionscadal}} a scriosadh?"
+  },
   "ui-patterns.duplicate-project-action": {
     "defaultMessage": "Dúblach"
   },
