@@ -94,6 +94,11 @@ const CodeView = ({
   );
   const codeRef = useRef<HTMLPreElement>(null);
   const scrolls = useScrollsHorizontally(codeRef, html);
+  // Browsers drop focus from an element that stops being focusable, so a
+  // resize or zoom that ends the scrolling mustn't take the tabIndex away
+  // until focus moves on.
+  const [focused, setFocused] = useState(false);
+  const focusable = scrolls || focused;
   // Line numbers are a separate column rather than a prefix on each line so
   // highlight.js's output never needs splitting: its spans for multi-line
   // strings and comments cross line breaks.
@@ -113,7 +118,9 @@ const CodeView = ({
       <pre
         ref={codeRef}
         className="mb-code-view__code"
-        {...(scrolls && {
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
+        {...(focusable && {
           tabIndex: 0,
           role: "group",
           "aria-label": intl.formatMessage({ id: label }),
