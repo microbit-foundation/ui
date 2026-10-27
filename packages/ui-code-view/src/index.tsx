@@ -13,7 +13,6 @@ import python from "highlight.js/lib/languages/python";
 import typescript from "highlight.js/lib/languages/typescript";
 import { type RefObject, useEffect, useRef, useState } from "react";
 import { useIntl } from "react-intl";
-import { codeViewMessage } from "./messages";
 
 // A private instance so an app's own highlight.js configuration (e.g. a
 // classPrefix, which would break style.css) can't reach these components.
@@ -31,6 +30,14 @@ export interface CodeViewProps {
 }
 
 type Variant = "python-editor" | "makecode-javascript";
+
+/**
+ * Ids in lang/ui.en.json. There's no inline English: apps compile this
+ * package's catalogs, English included, into their own (see README).
+ */
+type LabelId =
+  | "ui-code-view.python-label"
+  | "ui-code-view.makecode-javascript-label";
 
 /**
  * Whether the element currently scrolls sideways. Safari doesn't make scroll
@@ -67,7 +74,7 @@ const CodeView = ({
 }: CodeViewProps & {
   language: string;
   variant: Variant;
-  label: Parameters<typeof codeViewMessage>[0];
+  label: LabelId;
 }) => {
   const intl = useIntl();
   // A trailing newline ends the last line rather than starting another.
@@ -105,7 +112,7 @@ const CodeView = ({
         {...(scrolls && {
           tabIndex: 0,
           role: "group",
-          "aria-label": intl.formatMessage(codeViewMessage(label)),
+          "aria-label": intl.formatMessage({ id: label }),
         })}
       >
         {/* eslint-disable-next-line @eslint-react/dom-no-dangerously-set-innerhtml -- escaped by highlight.js, see above */}

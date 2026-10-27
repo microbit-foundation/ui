@@ -6,7 +6,13 @@
 import { cleanup, render, screen } from "@testing-library/react";
 import { IntlProvider } from "react-intl";
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
+import en from "../lang/ui.en.json";
 import { MakeCodeJavaScriptCodeView, PythonEditorCodeView } from "../src";
+
+// The English an app compiles from this package's catalog.
+const english = Object.fromEntries(
+  Object.entries(en).map(([id, { defaultMessage }]) => [id, defaultMessage]),
+);
 
 // jsdom does no layout, so scrollWidth and clientWidth are both 0 and it has
 // no ResizeObserver. Each test sets the widths the code element reports.
@@ -38,7 +44,7 @@ afterEach(() => {
 it("stays out of the tab order when the code fits", () => {
   setWidths(100, 100);
   const { container } = render(
-    <IntlProvider locale="en">
+    <IntlProvider locale="en" messages={english}>
       <PythonEditorCodeView code="x = 1" />
     </IntlProvider>,
   );
@@ -50,7 +56,7 @@ it("stays out of the tab order when the code fits", () => {
 it("is a focusable, named group when the code scrolls", () => {
   setWidths(500, 100);
   render(
-    <IntlProvider locale="en">
+    <IntlProvider locale="en" messages={english}>
       <PythonEditorCodeView code="x = 1" />
       <MakeCodeJavaScriptCodeView code="let x = 1" />
     </IntlProvider>,

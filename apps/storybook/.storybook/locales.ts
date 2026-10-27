@@ -12,12 +12,12 @@ import { languages } from "@microbit/ui-patterns";
  * step sits between editing a translation and seeing it.
  *
  * The packages are globbed into one catalog per locale: the ids are
- * namespaced (`ui.` / `ui-patterns.` / `ui-carousel.`) so they cannot
+ * namespaced (`ui.` / `ui-patterns.` / `ui-carousel.` / `ui-code-view.`) so they cannot
  * collide.
  */
 const catalogs = import.meta.glob<
   Record<string, { defaultMessage: string; description: string }>
->("../../../packages/{ui,ui-carousel,ui-patterns}/lang/*.json", {
+>("../../../packages/{ui,ui-carousel,ui-code-view,ui-patterns}/lang/*.json", {
   eager: true,
   import: "default",
 });

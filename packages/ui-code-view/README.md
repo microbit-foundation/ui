@@ -59,12 +59,24 @@ needs `react-intl` (6 or 7), a peer dependency, for its accessible names.
 
    They must be inside an `IntlProvider`.
 
-4. **Strings**: English needs no catalog, as the components carry inline
-   `defaultMessage`s. For other locales, compile this package's
-   `lang/ui.<locale>.json` into your per-locale catalogs alongside your own
-   (message ids are namespaced `ui-code-view.`), for example with
-   `formatjs compile`, as the [`@microbit/ui` README](../ui/README.md)
-   describes for its catalogs.
+4. **Strings**: the components carry no inline English, so compile this
+   package's catalogs into your per-locale catalogs alongside your own,
+   **English included** (message ids are namespaced `ui-code-view.`). With
+   [`@microbit/i18n-tools`](../i18n-tools), list the package in your catalog
+   config and `microbit-i18n compile` merges it, backfilling English for
+   locales without a translation:
+
+   ```js
+   catalogs: [
+     {
+       source: "lang/ui.en.json",
+       out: "app/messages/ui.{lang}.json",
+       packages: ["@microbit/ui-code-view"],
+     },
+   ],
+   ```
+
+   Without the catalog, the accessible names render as message ids.
 
 The stylesheet loads Source Code Pro from `fonts.microbit.org` for the Python
 view. Its class names (`mb-code-view…` and highlight.js's `hljs-…`) are part
@@ -96,6 +108,8 @@ The MakeCode view's colours are fixed: they copy MakeCode's own look.
 - `PythonCodeRendering` is now `PythonEditorCodeView`, and
   `MakeCodeJavaScriptRendering` is now `MakeCodeJavaScriptCodeView`.
 - The stylesheet is `@microbit/ui-code-view/style.css`.
+- The components now need an `IntlProvider` and this package's compiled
+  catalogs (see [Consumption](#consumption)).
 - Style the view through `className` rather than by targeting its inner
   elements. The old package rendered a single `<pre>`; the new markup is
   different, so selectors such as `& pre` no longer reach the background.
