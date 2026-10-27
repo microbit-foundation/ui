@@ -11,12 +11,8 @@
   font-family: "Source Code Pro";
   font-style: normal;
   font-weight: 500;
-  src:
-    local(""),
-    url("https://fonts.microbit.org/source-code-pro/v14/source-code-pro-v14-latin-500.woff2")
-      format("woff2"),
-    url("https://fonts.microbit.org/source-code-pro/v14/source-code-pro-v14-latin-500.woff")
-      format("woff");
+  src: url("https://fonts.microbit.org/source-code-pro/v14/source-code-pro-v14-latin-500.woff2")
+    format("woff2");
 }
 
 .mb-code-view {
