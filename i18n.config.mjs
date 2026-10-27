@@ -43,6 +43,7 @@ export default defineConfig({
   catalogs: [
     packageCatalog("ui"),
     packageCatalog("ui-carousel"),
+    packageCatalog("ui-code-view"),
     packageCatalog("ui-patterns"),
   ],
 });

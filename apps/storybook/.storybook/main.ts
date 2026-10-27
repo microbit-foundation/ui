@@ -53,6 +53,7 @@ const config: StorybookConfig = {
   // their styles are extracted into this build's CSS.
   stories: [
     "../../../packages/ui-carousel/stories/**/*.stories.@(ts|tsx)",
+    "../../../packages/ui-code-view/stories/**/*.stories.@(ts|tsx)",
     "../../../packages/ui/stories/**/*.stories.@(ts|tsx)",
     "../../../packages/ui-patterns/stories/**/*.stories.@(ts|tsx)",
   ],

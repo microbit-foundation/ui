@@ -1,0 +1,127 @@
+/*
+ * (c) 2026, Micro:bit Educational Foundation and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ *
+ * Plain CSS so apps without Panda can use the package. Panda apps import it
+ * into their `vendor` cascade layer, where it beats the preflight's pre/code
+ * rules but loses to app styling.
+ */
+@font-face {
+  font-family: "Source Code Pro";
+  font-style: normal;
+  font-weight: 500;
+  src: url("https://fonts.microbit.org/source-code-pro/v14/source-code-pro-v14-latin-500.woff2")
+    format("woff2");
+}
+
+/* Rules on the outer element are zero-specificity so a consumer's className
+   beats them in apps without cascade layers too, whatever the stylesheet
+   order. The resets below keep their specificity: they must still beat
+   app-wide pre/code rules. */
+:where(.mb-code-view) {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  margin: 0;
+  padding: 20px 10px;
+}
+
+/* Resets so app-wide pre/code styling can't throw the two columns out of
+   line with each other. */
+.mb-code-view__gutter,
+.mb-code-view__code,
+.mb-code-view__code code {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+}
+
+.mb-code-view__gutter {
+  /* Explicit because Panda's preflight makes everything border-box. */
+  box-sizing: content-box;
+  min-width: 2em;
+  text-align: right;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.mb-code-view__code {
+  overflow-x: auto;
+}
+
+/* The @microbit/ui focus ring. The view's padding leaves room for it. */
+.mb-code-view__code:focus-visible {
+  outline: 2px solid var(--colors-focus-ring, #1a1a1a);
+  outline-offset: 2px;
+}
+
+/* Colours come from the `code.*` tokens in @microbit/ui's base preset, so a
+   brand preset restyles this view and the Python Editor together. The
+   fallbacks repeat the base preset's OSS defaults for apps without Panda. */
+:where(.mb-code-view--python-editor) {
+  background: #fcfcfc;
+  color: var(--colors-code-default, black);
+  font-family: "Source Code Pro", monospace;
+  font-size: 1.2rem;
+  line-height: 1.4;
+}
+
+.mb-code-view--python-editor .mb-code-view__gutter {
+  padding-right: 1em;
+  color: var(--colors-code-line-number, #b4b4b4);
+}
+
+.mb-code-view--python-editor .hljs-keyword {
+  color: var(--colors-code-keyword, darkblue);
+}
+
+.mb-code-view--python-editor .hljs-string {
+  color: var(--colors-code-string, green);
+}
+
+.mb-code-view--python-editor .hljs-comment {
+  color: var(--colors-code-comment, gray);
+}
+
+/* The editor has no number colour: CodeMirror's Python grammar treats numbers
+   as literals. */
+.mb-code-view--python-editor .hljs-literal,
+.mb-code-view--python-editor .hljs-number {
+  color: var(--colors-code-literal, darkgreen);
+}
+
+:where(.mb-code-view--makecode-javascript) {
+  background: #ecf0f1;
+  color: #000000;
+  font-family: Monaco, Menlo, "Ubuntu Mono", Consolas, source-code-pro,
+    monospace;
+  /* 19px/26px at the default root size, scaling with the user's setting. */
+  font-size: 1.1875rem;
+  line-height: calc(26 / 19);
+}
+
+.mb-code-view--makecode-javascript .mb-code-view__gutter {
+  padding-right: 1.6em;
+  color: #2c3e50;
+}
+
+.mb-code-view--makecode-javascript .hljs-keyword,
+.mb-code-view--makecode-javascript .hljs-built_in,
+.mb-code-view--makecode-javascript .hljs-literal {
+  color: #0000ff;
+}
+
+.mb-code-view--makecode-javascript .hljs-string {
+  color: #a31515;
+}
+
+.mb-code-view--makecode-javascript .hljs-comment {
+  color: #008000;
+}
+
+.mb-code-view--makecode-javascript .hljs-number {
+  color: #008080;
+}
