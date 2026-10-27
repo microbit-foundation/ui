@@ -24,10 +24,10 @@ jobs:
       - run: npm ci
       - run: npm run format:check
       # Route a release to a package by its tag prefix: ui-vX.Y.Z,
-      # ui-carousel-vX.Y.Z, ui-patterns-vX.Y.Z or i18n-tools-vX.Y.Z (bare
-      # vX.Y.Z is the pre-monorepo @microbit/ui convention). The versioner derives the
-      # version from the tag's numeric part. Branch builds default to ui;
-      # nothing is published.
+      # ui-carousel-vX.Y.Z, ui-code-view-vX.Y.Z, ui-patterns-vX.Y.Z or
+      # i18n-tools-vX.Y.Z (bare vX.Y.Z is the pre-monorepo @microbit/ui
+      # convention). The versioner derives the version from the tag's numeric
+      # part. Branch builds default to ui; nothing is published.
       - name: Route release tag to a package
         id: route
         env:
