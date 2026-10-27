@@ -50,17 +50,19 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
-it("numbers each line, not counting a trailing newline", () => {
+it("numbers each line, whatever the line endings, not counting a trailing newline", () => {
   setWidths(100, 100);
   const { container } = render(
     <IntlProvider locale="en" messages={english}>
       <PythonEditorCodeView code={"a\n\nb\n"} />
       <PythonEditorCodeView code="" />
+      <PythonEditorCodeView code={"a\r\nb\rc\r\n"} />
     </IntlProvider>,
   );
   const gutters = container.querySelectorAll(".mb-code-view__gutter");
   expect(gutters[0].textContent).toBe("1\n2\n3");
   expect(gutters[1].textContent).toBe("1");
+  expect(gutters[2].textContent).toBe("1\n2\n3");
 });
 
 it("stays out of the tab order when the code fits", () => {

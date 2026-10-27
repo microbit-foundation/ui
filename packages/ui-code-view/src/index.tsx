@@ -71,7 +71,7 @@ const useScrollsHorizontally = (
 };
 
 const CodeView = ({
-  code,
+  code: source,
   className,
   language,
   variant,
@@ -82,6 +82,9 @@ const CodeView = ({
   label: LabelId;
 }) => {
   const intl = useIntl();
+  // The HTML parser turns a lone \r into a line break, so counting only \n
+  // would number fewer lines than the code shows.
+  const code = source.replace(/\r\n?/g, "\n");
   // A trailing newline ends the last line rather than starting another.
   const lineNumbers = code
     .replace(/\n$/, "")
