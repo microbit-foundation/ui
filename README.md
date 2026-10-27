@@ -44,12 +44,25 @@ It will be a while before this settles down as a component API, but in the short
 
 ## Releases
 
-Packages are versioned independently. To release one, create a GitHub
+Packages are versioned independently. To release one, publish a GitHub
 release whose tag carries the package's prefix — `ui-vX.Y.Z`,
-`ui-carousel-vX.Y.Z`, `ui-code-view-vX.Y.Z` or `ui-patterns-vX.Y.Z` (bare `vX.Y.Z` still means
-`@microbit/ui`, the pre-monorepo convention). The build workflow routes the release to the
-package by prefix, derives the npm version from the tag's numeric part, and
-publishes that package alone; an unrecognised prefix fails the build.
+`ui-carousel-vX.Y.Z`, `ui-code-view-vX.Y.Z`, `ui-patterns-vX.Y.Z` or
+`i18n-tools-vX.Y.Z`. Publishing creates the tag, and the tag push runs the
+build workflow, which routes it to the package by prefix, derives the npm
+version from the tag's numeric part, and publishes that package alone; an
+unrecognised prefix fails the build.
+
+Generate the notes from the package's previous release, or GitHub may compare
+against another package's tag:
+
+```bash
+git fetch --tags
+gh release create ui-carousel-v0.4.4 --generate-notes \
+  --notes-start-tag "$(git tag -l 'ui-carousel-v*' --sort=-v:refname | head -1)"
+```
+
+Leave out `--notes-start-tag` for a package's first release. The notes list
+every pull request merged since that tag, including ones for other packages.
 
 ## Storybook
 

@@ -136,7 +136,7 @@ npm run storybook
 
 ## Releases
 
-Create a GitHub release with a tag of the form `ui-code-view-vX.Y.Z`. The
+Publish a GitHub release with a tag of the form `ui-code-view-vX.Y.Z`. The
 build workflow routes the release to this package by the tag prefix and
 publishes it. This package is versioned independently of `@microbit/ui`.
 

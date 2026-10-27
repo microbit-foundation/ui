@@ -1,10 +1,11 @@
 name: build
 on:
-  release:
-    types: [created]
   push:
     branches:
       - "**"
+    # Publishing a GitHub release creates its tag; a draft has no tag yet.
+    tags:
+      - "*-v*"
 env:
   # renovate: datasource=npm depName=npm
   NPM_VERSION: "11"
@@ -25,13 +26,12 @@ jobs:
       - run: npm run format:check
       # Route a release to a package by its tag prefix: ui-vX.Y.Z,
       # ui-carousel-vX.Y.Z, ui-code-view-vX.Y.Z, ui-patterns-vX.Y.Z or
-      # i18n-tools-vX.Y.Z (bare vX.Y.Z is the pre-monorepo @microbit/ui
-      # convention). The versioner derives the version from the tag's numeric
-      # part. Branch builds default to ui; nothing is published.
+      # i18n-tools-vX.Y.Z. The versioner derives the version from the tag's
+      # numeric part. Branch builds default to ui; nothing is published.
       - name: Route release tag to a package
         id: route
         env:
-          TAG: ${{ github.event.release.tag_name }}
+          TAG: ${{ github.ref_type == 'tag' && github.ref_name || '' }}
         run: |
           case "$TAG" in
             "") PACKAGE="ui" ;;
@@ -39,9 +39,9 @@ jobs:
             ui-code-view-v[0-9]*) PACKAGE="ui-code-view" ;;
             ui-patterns-v[0-9]*) PACKAGE="ui-patterns" ;;
             i18n-tools-v[0-9]*) PACKAGE="i18n-tools" ;;
-            ui-v[0-9]* | v[0-9]*) PACKAGE="ui" ;;
+            ui-v[0-9]*) PACKAGE="ui" ;;
             *)
-              echo "Unrecognised release tag '$TAG' (expected ui-vX.Y.Z, ui-carousel-vX.Y.Z, ui-code-view-vX.Y.Z, ui-patterns-vX.Y.Z, i18n-tools-vX.Y.Z or legacy vX.Y.Z)" >&2
+              echo "Unrecognised release tag '$TAG' (expected ui-vX.Y.Z, ui-carousel-vX.Y.Z, ui-code-view-vX.Y.Z, ui-patterns-vX.Y.Z or i18n-tools-vX.Y.Z)" >&2
               exit 1
               ;;
           esac
@@ -52,24 +52,24 @@ jobs:
       - run: npm run ci
       - run: npm pack -w @microbit/${{ steps.route.outputs.package }}
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        if: github.event_name == 'release'
+        if: github.ref_type == 'tag'
         with:
           name: npm-tarball
           path: "*.tgz"
           if-no-files-found: error
           retention-days: 1
       # On main, hand the Storybook this run just built and checked to the
-      # deploy job below. Releases are excluded naturally: their ref is a tag.
+      # deploy job below.
       - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6
-        if: github.ref == 'refs/heads/main' && github.event_name != 'release'
+        if: github.ref == 'refs/heads/main'
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5
-        if: github.ref == 'refs/heads/main' && github.event_name != 'release'
+        if: github.ref == 'refs/heads/main'
         with:
           path: apps/storybook/storybook-static
 
   publish:
     needs: build
-    if: github.event_name == 'release'
+    if: github.ref_type == 'tag'
     runs-on: ubuntu-latest
     environment: npm-publish
     permissions:
@@ -88,7 +88,7 @@ jobs:
 
   deploy-storybook:
     needs: build
-    if: github.ref == 'refs/heads/main' && github.event_name != 'release'
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     # Allow the GITHUB_TOKEN to deploy to Pages.
     permissions:

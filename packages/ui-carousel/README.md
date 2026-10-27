@@ -73,7 +73,7 @@ npm run storybook
 
 ## Releases
 
-Create a GitHub release with a tag of the form `ui-carousel-vX.Y.Z`
+Publish a GitHub release with a tag of the form `ui-carousel-vX.Y.Z`
 (e.g. `ui-carousel-v0.1.0-alpha.1`). The build workflow routes the release
 to this package by the tag prefix and publishes it. This package is
 versioned independently of `@microbit/ui`.
