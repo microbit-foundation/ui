@@ -15,7 +15,11 @@
     format("woff2");
 }
 
-.mb-code-view {
+/* Rules on the outer element are zero-specificity so a consumer's className
+   beats them in apps without cascade layers too, whatever the stylesheet
+   order. The resets below keep their specificity: they must still beat
+   app-wide pre/code rules. */
+:where(.mb-code-view) {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   margin: 0;
@@ -57,7 +61,7 @@
 /* Colours come from the `code.*` tokens in @microbit/ui's base preset, so a
    brand preset restyles this view and the Python Editor together. The
    fallbacks repeat the base preset's OSS defaults for apps without Panda. */
-.mb-code-view--python-editor {
+:where(.mb-code-view--python-editor) {
   background: #fcfcfc;
   color: var(--colors-code-default, black);
   font-family: "Source Code Pro", monospace;
@@ -89,7 +93,7 @@
   color: var(--colors-code-literal, darkgreen);
 }
 
-.mb-code-view--makecode-javascript {
+:where(.mb-code-view--makecode-javascript) {
   background: #ecf0f1;
   color: #000000;
   font-family: Monaco, Menlo, "Ubuntu Mono", Consolas, source-code-pro,

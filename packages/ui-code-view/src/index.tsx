@@ -23,8 +23,9 @@ highlighter.registerLanguage("typescript", typescript);
 export interface CodeViewProps {
   code: string;
   /**
-   * Added to the outermost element, e.g. to change the background. In a Panda
-   * app a `css()` class wins over the stylesheet's `vendor` layer.
+   * Added to the outermost element, e.g. to change the background. Any class
+   * wins over the stylesheet's rules for that element, which are
+   * zero-specificity, so stylesheet order and cascade layers don't matter.
    */
   className?: string;
 }
