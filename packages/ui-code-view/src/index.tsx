@@ -11,7 +11,7 @@
 import hljs from "highlight.js/lib/core";
 import python from "highlight.js/lib/languages/python";
 import typescript from "highlight.js/lib/languages/typescript";
-import { type RefObject, useEffect, useRef, useState } from "react";
+import { type RefObject, useEffect, useMemo, useRef, useState } from "react";
 import { useIntl } from "react-intl";
 
 // A private instance so an app's own highlight.js configuration (e.g. a
@@ -59,8 +59,12 @@ const useScrollsHorizontally = (
     const observer = new ResizeObserver(update);
     observer.observe(element);
     // A web font arriving changes the content's width but not the element's.
-    void document.fonts?.ready.then(update);
-    return () => observer.disconnect();
+    let active = true;
+    void document.fonts?.ready.then(() => active && update());
+    return () => {
+      active = false;
+      observer.disconnect();
+    };
   }, [ref, content]);
   return scrolls;
 };
@@ -84,10 +88,10 @@ const CodeView = ({
     .map((_, i) => i + 1)
     .join("\n");
   // highlight.js escapes the source; its output contains only its own spans.
-  const html = highlighter.highlight(code, {
-    language,
-    ignoreIllegals: true,
-  }).value;
+  const html = useMemo(
+    () => highlighter.highlight(code, { language, ignoreIllegals: true }).value,
+    [code, language],
+  );
   const codeRef = useRef<HTMLPreElement>(null);
   const scrolls = useScrollsHorizontally(codeRef, html);
   // Line numbers are a separate column rather than a prefix on each line so
