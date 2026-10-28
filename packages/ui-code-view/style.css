@@ -40,9 +40,6 @@
 }
 
 .mb-code-view__gutter {
-  /* Explicit because Panda's preflight makes everything border-box. */
-  box-sizing: content-box;
-  min-width: 2em;
   text-align: right;
   -webkit-user-select: none;
   user-select: none;
