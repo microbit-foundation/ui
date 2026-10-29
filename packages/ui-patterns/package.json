@@ -34,7 +34,7 @@
     "@formatjs/intl-localematcher": "^0.8.0"
   },
   "peerDependencies": {
-    "@microbit/ui": "^0.5.2",
+    "@microbit/ui": "^0.6.0",
     "@pandacss/dev": "^2.4.0",
     "react": "^18.3.1 || ^19.0.0",
     "react-icons": "^4.12.0 || ^5.0.0",
