@@ -31,6 +31,13 @@ work. Consumption setup and the CSS-variable contract are in
   shorthand (`borderColor: "gray.700 transparent"`) the token name emits
   verbatim — invalid CSS the browser drops. Use per-side longhands, or
   interpolate explicitly (`{colors.gray.700}` in string values).
+- **Don't pair a side border shorthand with `borderColor`.**
+  `borderTop="1px solid"` resets the top colour, and Panda doesn't order it
+  relative to a separate `borderColor` utility, so the line is drawn in
+  `currentColor` or the intended colour depending on emit order (v2 changed
+  it). Put the colour in the shorthand
+  (`borderTop="1px solid {colors.gray.200}"`), or use properties that don't
+  overlap (`borderWidth` + `borderStyle` + `borderColor`).
 - **Import the styling helpers from `styled-system`.** Panda matches on the
   module a helper was imported from, so `css`, `cva`, `sva` and `styled`
   reached through a re-export extract nothing — the classes land on the
