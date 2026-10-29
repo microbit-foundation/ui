@@ -43,7 +43,7 @@
   },
   "dependencies": {
     "@crowdin/crowdin-api-client": "^1.56.4",
-    "@formatjs/icu-messageformat-parser": "^2.9.4",
+    "@formatjs/icu-messageformat-parser": "^3.5.22",
     "fflate": "^0.8.3"
   }
 }
