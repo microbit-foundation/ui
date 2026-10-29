@@ -33,6 +33,7 @@ export * from "./RadioGroup";
 export * from "./Skeleton";
 export * from "./Slide";
 export * from "./Slider";
+export * from "./SplitView";
 export * from "./Select";
 export * from "./Spinner";
 export * from "./Svg";
