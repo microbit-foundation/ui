@@ -5,8 +5,6 @@
  */
 import {
   Box,
-  css,
-  cx,
   Flex,
   Grid,
   HStack,
@@ -15,6 +13,7 @@ import {
   useBreakpointValue,
   VStack,
 } from "@microbit/ui";
+import { css, cx } from "styled-system/css";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { useIntl } from "react-intl";

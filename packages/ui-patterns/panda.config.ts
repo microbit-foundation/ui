@@ -16,7 +16,6 @@ import { defineConfig } from "@pandacss/dev";
 export default defineConfig({
   preflight: true,
   jsxFramework: "react",
-  eject: true,
   presets: ["@pandacss/preset-base", basePreset],
   include: ["./src/**/*.{ts,tsx}", "./stories/**/*.{ts,tsx}"],
   outdir: "styled-system",
