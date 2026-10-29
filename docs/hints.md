@@ -17,6 +17,12 @@ work. Consumption setup and the CSS-variable contract are in
   and style props on `styled()`-factory components (cross-file). For
   data-driven values use inline `style`, with runtime `token()` lookups.
   Verify against the generated CSS, not the rendered page.
+- **Don't test a ternary-initialised variable in a style ternary.** With
+  `const mode = text ? "button" : "icon"`, Panda 2 folds
+  `mode === "icon" ? a : b` to `b`, and `flag ? a : b` (where flag comes
+  from a ternary) to `a`, so the other branch emits no CSS
+  (chakra-ui/panda#4056). Test the original value inline instead:
+  `text ? b : a`.
 - **Utility-named props extract from _any_ capitalised JSX component.**
   Extraction is per-prop-name, not per-component: a custom prop that shares
   a utility's name (e.g. `content`) emits a broken CSS rule. Don't use
