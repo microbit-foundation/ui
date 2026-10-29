@@ -99,8 +99,7 @@ export const ProjectsToolbar = forwardRef<
           ? {
               "& > button": { borderRadius: 0 },
               "& > button + button": {
-                borderInlineStart: "1px solid",
-                borderColor: "gray.200",
+                borderInlineStart: "1px solid {colors.gray.200}",
               },
             }
           : undefined
