@@ -28,7 +28,6 @@ export const splitView = defineSlotRecipe({
   base: {
     root: {
       display: "flex",
-      width: "100%",
       "&[data-orientation=horizontal]": {
         flexDirection: "column",
       },

@@ -129,6 +129,9 @@ export interface SplitViewProps extends HTMLAttributes<HTMLDivElement> {
  * user's layout. Persisting the size is the app's call: control it with
  * `size`/`onSizeChangeEnd`.
  *
+ * The root sizes like any flex container, so give it its extent from the
+ * layout (e.g. `flex: 1` with a zero minimum), and stacked panes a height.
+ *
  * Collapsing the primary pane is app state (`mode`), driven by the app's own
  * controls, which also serve as the non-drag alternative WCAG 2.5.7 asks for.
  */
