@@ -1,0 +1,115 @@
+/**
+ * (c) 2026, Micro:bit Educational Foundation and contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+import { defineSlotRecipe } from "@pandacss/dev";
+
+/**
+ * SplitView slot recipe — two panes either side of a draggable splitter.
+ * Consumed by SplitView.tsx.
+ *
+ * Orientation (the splitter's, as for `aria-orientation`: `vertical` sits
+ * between side-by-side panes) and drag state come from data attributes the
+ * component sets (`data-orientation`, `data-dragging`) rather than
+ * variants, so there is nothing runtime-selected and no `staticCss` entry is
+ * needed.
+ *
+ * The splitter's look is meant to be restyled per app via its `css` prop:
+ * the grip inherits `color`, so one override tints both. An override of `bg`
+ * also replaces the hover and pressed fills, so restate `_hover` and
+ * `_active` alongside it.
+ *
+ * Registered in the base preset (base-preset.ts).
+ */
+export const splitView = defineSlotRecipe({
+  className: "splitView",
+  slots: ["root", "pane", "splitter", "grip"],
+  base: {
+    root: {
+      display: "flex",
+      "&[data-orientation=horizontal]": {
+        flexDirection: "column",
+      },
+      // useMove cancels the pointerdown, but on desktop only marks the
+      // splitter itself unselectable; this stops a drag over either pane
+      // selecting its text.
+      "&[data-dragging]": {
+        userSelect: "none",
+      },
+    },
+    pane: {
+      // The primary pane's size is an inline style; the secondary takes the
+      // rest. Zero minimums let the secondary shrink below its content's
+      // intrinsic size, which flex items otherwise refuse to do.
+      "&[data-primary]": {
+        flex: "none",
+      },
+      "&:not([data-primary])": {
+        flex: "1 1 0",
+        minWidth: 0,
+        minHeight: 0,
+      },
+      "&[data-collapsed]": {
+        visibility: "hidden",
+      },
+    },
+    splitter: {
+      position: "relative",
+      // Paint the focus ring over the following pane.
+      zIndex: 1,
+      flex: "none",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      bg: "gray.100",
+      color: "blackAlpha.800",
+      touchAction: "none",
+      outline: "none",
+      transitionProperty: "background",
+      transitionDuration: "ultra-fast",
+      transitionTimingFunction: "ease-in",
+      // The neutral button's ladder.
+      _hover: { bg: "gray.300" },
+      _active: { bg: "gray.350" },
+      "&[data-orientation=vertical]": {
+        width: "2.5",
+        cursor: "col-resize",
+      },
+      "&[data-orientation=horizontal]": {
+        height: "2.5",
+        cursor: "row-resize",
+      },
+      _focusVisible: {
+        focusRing: "outline",
+      },
+      // A 10px bar is a small touch target; widen the hit area to 24px
+      // without changing the drawn width. Coarse pointers only, so a mouse
+      // keeps reaching the scrollbars at the panes' edges.
+      "@media (pointer: coarse)": {
+        "&::before": {
+          content: '""',
+          position: "absolute",
+        },
+        "&[data-orientation=vertical]::before": {
+          insetBlock: 0,
+          insetInline: "-7px",
+        },
+        "&[data-orientation=horizontal]::before": {
+          insetInline: 0,
+          insetBlock: "-7px",
+        },
+      },
+    },
+    grip: {
+      width: "6",
+      height: "6",
+      flex: "none",
+      color: "inherit",
+      pointerEvents: "none",
+      "[data-orientation=horizontal] > &": {
+        transform: "rotate(90deg)",
+      },
+    },
+  },
+});
