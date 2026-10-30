@@ -307,3 +307,32 @@ it("resizes by pointer drag, marking the root as dragging", () => {
   expect(splitter().hasAttribute("data-pressed")).toBe(false);
   expect(onSizeChangeEnd.mock.calls).toEqual([[400]]);
 });
+
+it("ends a drag when the mode leaves open", () => {
+  const onSizeChangeEnd = vi.fn();
+  const { container, rerender } = renderSplitView({ onSizeChangeEnd });
+  const root = container.firstElementChild as HTMLElement;
+  const renderMode = (mode: SplitViewMode) =>
+    rerender(
+      <SplitView
+        mode={mode}
+        defaultSize={300}
+        onSizeChangeEnd={onSizeChangeEnd}
+      >
+        <SplitViewPane primary data-testid="primary" />
+        <SplitViewSplitter aria-label="Resize sidebar" />
+        <SplitViewPane />
+      </SplitView>,
+    );
+  pointer("pointerDown", splitter(), 305);
+  pointer("pointerMove", window, 345);
+  renderMode("collapsed");
+  expect(root.hasAttribute("data-dragging")).toBe(false);
+  expect(onSizeChangeEnd.mock.calls).toEqual([[340]]);
+  pointer("pointerMove", window, 400);
+  pointer("pointerUp", window, 400);
+  renderMode("open");
+  expect(primaryWidth()).toBe("340px");
+  expect(splitter().hasAttribute("data-pressed")).toBe(false);
+  expect(onSizeChangeEnd.mock.calls).toEqual([[340]]);
+});

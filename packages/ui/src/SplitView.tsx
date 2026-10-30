@@ -386,14 +386,20 @@ export type SplitViewSplitterProps = Omit<
   };
 
 /**
- * The splitter between the panes. Renders only in `open` mode. Needs an
- * accessible name: label it by what it resizes ("Resize sidebar"), or point
- * `aria-labelledby` at the primary pane's visible heading.
+ * The splitter between the panes. Renders only in `open` mode; leaving it
+ * ends any drag in progress. Needs an accessible name: label it by what it
+ * resizes ("Resize sidebar"), or point `aria-labelledby` at the primary
+ * pane's visible heading.
  *
  * Event handlers chain with the splitter's own, so an app can add the
  * pattern's optional Enter to collapse and restore, or a double-click reset.
  */
-export const SplitViewSplitter = ({
+export const SplitViewSplitter = (props: SplitViewSplitterProps) => {
+  const { mode } = useSplitViewContext("SplitViewSplitter");
+  return mode === "open" ? <OpenSplitter {...props} /> : null;
+};
+
+const OpenSplitter = ({
   css: cssProp,
   className,
   children,
@@ -402,7 +408,6 @@ export const SplitViewSplitter = ({
   const slots = splitView();
   const {
     orientation,
-    mode,
     primaryId,
     primaryRef,
     primarySize,
@@ -422,6 +427,21 @@ export const SplitViewSplitter = ({
   // Set on press rather than from useMove, which only starts a move once the
   // pointer moves.
   const [pressed, setPressed] = useState(false);
+  const pointerMoving = useRef(false);
+
+  // useMove doesn't end a move when it unmounts, as it does when the mode
+  // leaves `open` mid-drag (say an app collapsing a pane dragged below a
+  // threshold).
+  useLayoutEffect(
+    () => () => {
+      if (pointerMoving.current) {
+        pointerMoving.current = false;
+        setDragging(false);
+        commitSize();
+      }
+    },
+    [setDragging, commitSize],
+  );
 
   const { moveProps } = useMove({
     onMoveStart(e) {
@@ -436,6 +456,7 @@ export const SplitViewSplitter = ({
         growth.current = centre(primary) < centre(splitter) ? 1 : -1;
       }
       if (e.pointerType !== "keyboard") {
+        pointerMoving.current = true;
         setDragging(true);
       }
     },
@@ -454,6 +475,7 @@ export const SplitViewSplitter = ({
       setSize(clamp(position.current, primaryMinSize, primaryMaxSize));
     },
     onMoveEnd() {
+      pointerMoving.current = false;
       setDragging(false);
       commitSize();
     },
@@ -482,9 +504,6 @@ export const SplitViewSplitter = ({
     }
   };
 
-  if (mode !== "open") {
-    return null;
-  }
   const range = primaryMaxSize - primaryMinSize;
   const percent =
     Number.isFinite(range) && range > 0
