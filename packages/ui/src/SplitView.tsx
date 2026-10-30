@@ -58,6 +58,7 @@ interface SplitViewContextValue {
   primarySize: number;
   primaryMinSize: number;
   primaryMaxSize: number;
+  startMove: () => void;
   setSize: (size: number) => void;
   commitSize: () => void;
   setDragging: (dragging: boolean) => void;
@@ -213,10 +214,14 @@ export const SplitView = ({
         );
   const primarySize = clamp(requestedSize, primaryMinSize, max);
 
+  // The size last passed to onSizeChange. A controlled parent may reject it
+  // without re-rendering, so each move starts again from the rendered size.
   const latestSize = useRef(primarySize);
+  const startMove = useCallback(() => {
+    latestSize.current = primarySize;
+  }, [primarySize]);
   const callbacks = useRef({ onSizeChange, onSizeChangeEnd });
   useLayoutEffect(() => {
-    latestSize.current = primarySize;
     callbacks.current = { onSizeChange, onSizeChangeEnd };
   });
   const isControlled = size !== undefined;
@@ -256,6 +261,7 @@ export const SplitView = ({
       primarySize,
       primaryMinSize,
       primaryMaxSize: max,
+      startMove,
       setSize,
       commitSize,
       setDragging,
@@ -269,6 +275,7 @@ export const SplitView = ({
       primarySize,
       primaryMinSize,
       max,
+      startMove,
       setSize,
       commitSize,
     ],
@@ -413,6 +420,7 @@ const OpenSplitter = ({
     primarySize,
     primaryMinSize,
     primaryMaxSize,
+    startMove,
     setSize,
     commitSize,
     setDragging,
@@ -445,6 +453,7 @@ const OpenSplitter = ({
 
   const { moveProps } = useMove({
     onMoveStart(e) {
+      startMove();
       position.current = primarySize;
       // Measured rather than derived from DOM order and text direction:
       // the layout already accounts for both.
@@ -495,10 +504,12 @@ const OpenSplitter = ({
   const onKeyDown = (e: KeyboardEvent) => {
     if (e.key === "Home") {
       e.preventDefault();
+      startMove();
       setSize(primaryMinSize);
       commitSize();
     } else if (e.key === "End" && Number.isFinite(primaryMaxSize)) {
       e.preventDefault();
+      startMove();
       setSize(primaryMaxSize);
       commitSize();
     }

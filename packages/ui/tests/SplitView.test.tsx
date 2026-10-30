@@ -336,3 +336,24 @@ it("ends a drag when the mode leaves open", () => {
   expect(splitter().hasAttribute("data-pressed")).toBe(false);
   expect(onSizeChangeEnd.mock.calls).toEqual([[340]]);
 });
+
+it("asks again for a size a controlled parent didn't take", () => {
+  const onSizeChange = vi.fn();
+  const onSizeChangeEnd = vi.fn();
+  render(
+    <SplitView
+      size={250}
+      onSizeChange={onSizeChange}
+      onSizeChangeEnd={onSizeChangeEnd}
+    >
+      <SplitViewPane primary data-testid="primary" />
+      <SplitViewSplitter aria-label="Resize" />
+      <SplitViewPane />
+    </SplitView>,
+  );
+  fireEvent.keyDown(splitter(), { key: "ArrowRight" });
+  fireEvent.keyDown(splitter(), { key: "ArrowRight" });
+  expect(onSizeChange.mock.calls).toEqual([[260], [260]]);
+  expect(onSizeChangeEnd.mock.calls).toEqual([[260], [260]]);
+  expect(primaryWidth()).toBe("250px");
+});
