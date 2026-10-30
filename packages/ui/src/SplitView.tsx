@@ -8,6 +8,7 @@ import {
   CSSProperties,
   HTMLAttributes,
   KeyboardEvent,
+  PointerEvent,
   ReactNode,
   RefObject,
   useCallback,
@@ -198,6 +199,9 @@ export const SplitView = ({
     callbacks.current = { onSizeChange, onSizeChangeEnd };
   });
   const isControlled = size !== undefined;
+  // A key press that doesn't move the splitter (an arrow across the split
+  // axis, Home at the minimum) still ends a move, but has nothing to persist.
+  const uncommitted = useRef(false);
 
   const setSize = useCallback(
     (next: number) => {
@@ -205,6 +209,7 @@ export const SplitView = ({
         return;
       }
       latestSize.current = next;
+      uncommitted.current = true;
       if (!isControlled) {
         setUncontrolledSize(next);
       }
@@ -213,6 +218,10 @@ export const SplitView = ({
     [isControlled],
   );
   const commitSize = useCallback(() => {
+    if (!uncommitted.current) {
+      return;
+    }
+    uncommitted.current = false;
     callbacks.current.onSizeChangeEnd?.(latestSize.current);
   }, []);
 
@@ -310,24 +319,39 @@ type SplitterLabelling =
   | { "aria-label": string; "aria-labelledby"?: string }
   | { "aria-label"?: string; "aria-labelledby": string };
 
-export type SplitViewSplitterProps = SplitterLabelling & {
-  /** Per-instance style overrides, merged after the recipe. */
-  css?: SystemStyleObject;
-  className?: string;
-  /** Replaces the default grip icon. */
-  children?: ReactNode;
-};
+export type SplitViewSplitterProps = Omit<
+  HTMLAttributes<HTMLDivElement>,
+  | "role"
+  | "children"
+  | "aria-label"
+  | "aria-labelledby"
+  | "aria-orientation"
+  | "aria-controls"
+  | "aria-valuemin"
+  | "aria-valuemax"
+  | "aria-valuenow"
+  | "aria-valuetext"
+> &
+  SplitterLabelling & {
+    /** Per-instance style overrides, merged after the recipe. */
+    css?: SystemStyleObject;
+    /** Replaces the default grip icon. */
+    children?: ReactNode;
+  };
 
 /**
  * The splitter between the panes. Renders only in `open` mode. Needs an
  * accessible name: label it by what it resizes ("Resize sidebar"), or point
  * `aria-labelledby` at the primary pane's visible heading.
+ *
+ * Event handlers chain with the splitter's own, so an app can add the
+ * pattern's optional Enter to collapse and restore, or a double-click reset.
  */
 export const SplitViewSplitter = ({
   css: cssProp,
   className,
   children,
-  ...labelling
+  ...rest
 }: SplitViewSplitterProps) => {
   const slots = splitView();
   const {
@@ -386,6 +410,14 @@ export const SplitViewSplitter = ({
     },
   });
 
+  // Routes the drag's events, and its cursor, to the splitter wherever the
+  // pointer goes; an iframe would otherwise swallow them. jsdom lacks it.
+  const onPointerDown = (e: PointerEvent<HTMLDivElement>) => {
+    if (e.button === 0) {
+      e.currentTarget.setPointerCapture?.(e.pointerId);
+    }
+  };
+
   const onKeyDown = (e: KeyboardEvent) => {
     if (e.key === "Home") {
       e.preventDefault();
@@ -411,6 +443,7 @@ export const SplitViewSplitter = ({
   // does it), at the cost of desktop screen readers announcing a slider.
   return (
     <div
+      {...mergeProps(rest, moveProps, focusProps, { onKeyDown, onPointerDown })}
       ref={ref}
       role="separator"
       tabIndex={0}
@@ -430,7 +463,6 @@ export const SplitViewSplitter = ({
         cssProp ? css(cssProp) : undefined,
         className,
       )}
-      {...mergeProps(moveProps, focusProps, { onKeyDown }, labelling)}
     >
       {children ?? <RiMore2Fill aria-hidden className={slots.grip} />}
     </div>

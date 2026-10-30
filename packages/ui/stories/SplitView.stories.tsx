@@ -169,6 +169,39 @@ export const PrimaryAtEndWithIframe: Story = {
 };
 
 /**
+ * An iframe beside the SplitView rather than in it: drag the splitter right,
+ * over the iframe, then back. The drag must keep tracking the pointer and
+ * end on release over the iframe.
+ */
+export const IframeOutside: Story = {
+  args: { children: null },
+  render: () => (
+    <Frame>
+      <HStack gap={0} flex="1" minHeight={0} alignItems="stretch">
+        <SplitView
+          defaultSize={240}
+          primaryMinSize={160}
+          css={{ flex: "1", minWidth: 0 }}
+        >
+          <SplitViewPane primary css={{ overflowY: "auto", bg: "gray.50" }}>
+            <Prose heading="Sidebar" />
+          </SplitViewPane>
+          <SplitViewSplitter aria-label="Resize sidebar" />
+          <SplitViewPane css={{ overflowY: "auto" }}>
+            <Prose heading="Main content" />
+          </SplitViewPane>
+        </SplitView>
+        <iframe
+          title="Embedded page"
+          srcDoc="<body style='font-family:sans-serif;background:#eee'><p>An iframe outside the SplitView.</p></body>"
+          style={{ border: 0, width: "40%", flex: "none" }}
+        />
+      </HStack>
+    </Frame>
+  ),
+};
+
+/**
  * Controlled size, persisted by the app: reload the story and the size is
  * kept. `onSizeChangeEnd` fires once per drag or key press.
  */

@@ -142,6 +142,36 @@ it("reports the final size once per interaction", () => {
   expect(onSizeChangeEnd.mock.calls).toEqual([[310], [320]]);
 });
 
+it("doesn't report a key press that leaves the size unchanged", () => {
+  const onSizeChangeEnd = vi.fn();
+  renderSplitView({ onSizeChangeEnd });
+  fireEvent.keyDown(splitter(), { key: "ArrowUp" });
+  fireEvent.keyDown(splitter(), { key: "Home" });
+  fireEvent.keyDown(splitter(), { key: "Home" });
+  fireEvent.keyDown(splitter(), { key: "ArrowLeft" });
+  expect(onSizeChangeEnd.mock.calls).toEqual([[200]]);
+});
+
+it("chains app handlers with the splitter's own", () => {
+  const onKeyDown = vi.fn();
+  render(
+    <SplitView defaultSize={300}>
+      <SplitViewPane primary data-testid="primary" />
+      <SplitViewSplitter
+        aria-label="Resize"
+        data-testid="splitter"
+        onKeyDown={onKeyDown}
+      />
+      <SplitViewPane />
+    </SplitView>,
+  );
+  expect(splitter().dataset.testid).toBe("splitter");
+  fireEvent.keyDown(splitter(), { key: "Enter" });
+  fireEvent.keyDown(splitter(), { key: "ArrowRight" });
+  expect(onKeyDown).toHaveBeenCalledTimes(2);
+  expect(primaryWidth()).toBe("310px");
+});
+
 it("follows a controlled size", () => {
   const onSizeChange = vi.fn();
   const { rerender } = render(

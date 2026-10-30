@@ -11,8 +11,9 @@ import { defineSlotRecipe } from "@pandacss/dev";
  *
  * Orientation (the splitter's, as for `aria-orientation`: `vertical` sits
  * between side-by-side panes) and drag state come from data attributes the
- * component sets (`data-orientation`, `data-dragging`) rather than variants, so there is
- * nothing runtime-selected and no `staticCss` entry is needed.
+ * component sets (`data-orientation`, `data-dragging`) rather than
+ * variants, so there is nothing runtime-selected and no `staticCss` entry is
+ * needed.
  *
  * The splitter's look is meant to be restyled per app via its `css` prop:
  * the grip inherits `color`, so one override tints both.
@@ -35,12 +36,6 @@ export const splitView = defineSlotRecipe({
       "&[data-dragging]": {
         userSelect: "none",
       },
-      "&[data-dragging][data-orientation=vertical]": {
-        cursor: "col-resize",
-      },
-      "&[data-dragging][data-orientation=horizontal]": {
-        cursor: "row-resize",
-      },
     },
     pane: {
       // The primary pane's size is an inline style; the secondary takes the
@@ -53,11 +48,6 @@ export const splitView = defineSlotRecipe({
         flex: "1 1 0",
         minWidth: 0,
         minHeight: 0,
-      },
-      // An iframe pane (the Python Editor's simulator) would swallow the
-      // pointer events of a drag that crosses it.
-      "[data-dragging] > &": {
-        pointerEvents: "none",
       },
       "&[data-collapsed]": {
         visibility: "hidden",
