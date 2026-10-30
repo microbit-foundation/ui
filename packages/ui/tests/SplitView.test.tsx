@@ -10,6 +10,7 @@ import {
   render,
   screen,
 } from "@testing-library/react";
+import { createRef } from "react";
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import {
   SplitView,
@@ -356,4 +357,24 @@ it("asks again for a size a controlled parent didn't take", () => {
   expect(onSizeChange.mock.calls).toEqual([[260], [260]]);
   expect(onSizeChangeEnd.mock.calls).toEqual([[260], [260]]);
   expect(primaryWidth()).toBe("250px");
+});
+
+it("forwards refs, keeping its own on the primary pane", () => {
+  primaryLeft = 310;
+  const rootRef = createRef<HTMLDivElement>();
+  const primaryRef = createRef<HTMLDivElement>();
+  const splitterRef = createRef<HTMLDivElement>();
+  render(
+    <SplitView ref={rootRef} defaultSize={300}>
+      <SplitViewPane />
+      <SplitViewSplitter ref={splitterRef} aria-label="Resize" />
+      <SplitViewPane ref={primaryRef} primary data-testid="primary" />
+    </SplitView>,
+  );
+  expect(rootRef.current?.dataset.orientation).toBe("vertical");
+  expect(primaryRef.current).toBe(screen.getByTestId("primary"));
+  expect(splitterRef.current).toBe(splitter());
+  // The splitter reads the primary pane's position through its own ref.
+  fireEvent.keyDown(splitter(), { key: "ArrowRight" });
+  expect(primaryWidth()).toBe("290px");
 });
