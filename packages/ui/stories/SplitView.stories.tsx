@@ -70,10 +70,11 @@ const ModeButtons = ({
 );
 
 /**
- * A sidebar as the primary pane. Tab to the separator and use the arrow keys,
- * Home and End; the `mode` buttons show the compact and collapsed states.
+ * Panes side by side, with a sidebar as the primary pane. Tab to the
+ * separator and use the arrow keys, Home and End; the `mode` buttons show
+ * the compact and collapsed states.
  */
-export const Sidebar: Story = {
+export const VerticalSplitter: Story = {
   args: { children: null },
   render: () => {
     const [mode, setMode] = useState<SplitViewMode>("open");
@@ -95,6 +96,41 @@ export const Sidebar: Story = {
           <SplitViewSeparator aria-label="Resize sidebar" />
           <SplitViewPane css={{ overflowY: "auto" }}>
             <Prose heading="Main content" />
+          </SplitViewPane>
+        </SplitView>
+      </Frame>
+    );
+  },
+};
+
+/** Stacked panes, primary at the bottom, like a serial terminal. */
+export const HorizontalSplitter: Story = {
+  args: { children: null },
+  render: () => {
+    const [mode, setMode] = useState<SplitViewMode>("open");
+    return (
+      <Frame>
+        <ModeButtons mode={mode} onChange={setMode} />
+        <SplitView
+          orientation="horizontal"
+          mode={mode}
+          compactSize={48}
+          defaultSize={200}
+          minSize={120}
+          secondaryMinSize={200}
+          css={{ flex: "1", minHeight: 0 }}
+        >
+          <SplitViewPane css={{ overflowY: "auto" }}>
+            <Prose heading="Editor" />
+          </SplitViewPane>
+          <SplitViewSeparator aria-label="Resize serial terminal" />
+          <SplitViewPane
+            primary
+            css={{ overflowY: "auto", bg: "gray.800", color: "white" }}
+          >
+            <Text p={3} fontFamily="mono">
+              Serial output
+            </Text>
           </SplitViewPane>
         </SplitView>
       </Frame>
@@ -130,41 +166,6 @@ export const PrimaryAtEndWithIframe: Story = {
       </SplitView>
     </Frame>
   ),
-};
-
-/** Stacked panes, primary at the bottom, like a serial terminal. */
-export const Vertical: Story = {
-  args: { children: null },
-  render: () => {
-    const [mode, setMode] = useState<SplitViewMode>("open");
-    return (
-      <Frame>
-        <ModeButtons mode={mode} onChange={setMode} />
-        <SplitView
-          orientation="vertical"
-          mode={mode}
-          compactSize={48}
-          defaultSize={200}
-          minSize={120}
-          secondaryMinSize={200}
-          css={{ flex: "1", minHeight: 0 }}
-        >
-          <SplitViewPane css={{ overflowY: "auto" }}>
-            <Prose heading="Editor" />
-          </SplitViewPane>
-          <SplitViewSeparator aria-label="Resize serial terminal" />
-          <SplitViewPane
-            primary
-            css={{ overflowY: "auto", bg: "gray.800", color: "white" }}
-          >
-            <Text p={3} fontFamily="mono">
-              Serial output
-            </Text>
-          </SplitViewPane>
-        </SplitView>
-      </Frame>
-    );
-  },
 };
 
 /**

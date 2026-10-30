@@ -9,8 +9,9 @@ import { defineSlotRecipe } from "@pandacss/dev";
  * SplitView slot recipe — two panes either side of a draggable separator.
  * Consumed by SplitView.tsx.
  *
- * Orientation and drag state come from data attributes the component sets
- * (`data-orientation`, `data-dragging`) rather than variants, so there is
+ * Orientation (the splitter's, as for `aria-orientation`: `vertical` sits
+ * between side-by-side panes) and drag state come from data attributes the
+ * component sets (`data-orientation`, `data-dragging`) rather than variants, so there is
  * nothing runtime-selected and no `staticCss` entry is needed.
  *
  * The separator's look is meant to be restyled per app via its `css` prop:
@@ -25,7 +26,7 @@ export const splitView = defineSlotRecipe({
     root: {
       display: "flex",
       width: "100%",
-      "&[data-orientation=vertical]": {
+      "&[data-orientation=horizontal]": {
         flexDirection: "column",
       },
       // useMove cancels the pointerdown, but on desktop only marks the
@@ -34,10 +35,10 @@ export const splitView = defineSlotRecipe({
       "&[data-dragging]": {
         userSelect: "none",
       },
-      "&[data-dragging][data-orientation=horizontal]": {
+      "&[data-dragging][data-orientation=vertical]": {
         cursor: "col-resize",
       },
-      "&[data-dragging][data-orientation=vertical]": {
+      "&[data-dragging][data-orientation=horizontal]": {
         cursor: "row-resize",
       },
     },
@@ -74,11 +75,11 @@ export const splitView = defineSlotRecipe({
       color: "blackAlpha.800",
       touchAction: "none",
       outline: "none",
-      "&[data-orientation=horizontal]": {
+      "&[data-orientation=vertical]": {
         width: "2.5",
         cursor: "col-resize",
       },
-      "&[data-orientation=vertical]": {
+      "&[data-orientation=horizontal]": {
         height: "2.5",
         cursor: "row-resize",
       },
@@ -93,11 +94,11 @@ export const splitView = defineSlotRecipe({
           content: '""',
           position: "absolute",
         },
-        "&[data-orientation=horizontal]::before": {
+        "&[data-orientation=vertical]::before": {
           insetBlock: 0,
           insetInline: "-7px",
         },
-        "&[data-orientation=vertical]::before": {
+        "&[data-orientation=horizontal]::before": {
           insetInline: 0,
           insetBlock: "-7px",
         },
@@ -109,7 +110,7 @@ export const splitView = defineSlotRecipe({
       flex: "none",
       color: "inherit",
       pointerEvents: "none",
-      "[data-orientation=vertical] > &": {
+      "[data-orientation=horizontal] > &": {
         transform: "rotate(90deg)",
       },
     },

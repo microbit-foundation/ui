@@ -71,8 +71,9 @@ const clamp = (value: number, min: number, max: number) =>
 
 export interface SplitViewProps extends HTMLAttributes<HTMLDivElement> {
   /**
-   * How the panes are laid out: `horizontal` places them side by side (with
-   * a vertical separator), `vertical` stacks them.
+   * The splitter's orientation, as for `aria-orientation`: `vertical` sits
+   * between side-by-side panes and moves left and right; `horizontal` sits
+   * between stacked panes and moves up and down.
    */
   orientation?: SplitViewOrientation;
   mode?: SplitViewMode;
@@ -124,7 +125,7 @@ export interface SplitViewProps extends HTMLAttributes<HTMLDivElement> {
  * controls, which also serve as the non-drag alternative WCAG 2.5.7 asks for.
  */
 export const SplitView = ({
-  orientation = "horizontal",
+  orientation = "vertical",
   mode = "open",
   compactSize = 0,
   size,
@@ -159,13 +160,13 @@ export const SplitView = ({
       return;
     }
     const measure = () => {
-      const horizontal = orientation === "horizontal";
+      const sideBySide = orientation === "vertical";
       const rootRect = root.getBoundingClientRect();
-      const total = horizontal ? rootRect.width : rootRect.height;
+      const total = sideBySide ? rootRect.width : rootRect.height;
       const separator = root.querySelector(":scope > [data-split-separator]");
       const separatorRect = separator?.getBoundingClientRect();
       const separatorSize = separatorRect
-        ? horizontal
+        ? sideBySide
           ? separatorRect.width
           : separatorRect.height
         : 0;
@@ -285,7 +286,7 @@ export const SplitViewPane = ({
     const extent =
       mode === "open" ? primarySize : mode === "compact" ? compactSize : 0;
     sizeStyle =
-      orientation === "horizontal" ? { width: extent } : { height: extent };
+      orientation === "vertical" ? { width: extent } : { height: extent };
   }
   return (
     <div
@@ -343,7 +344,7 @@ export const SplitViewSeparator = ({
   const position = useRef(0);
   // +1 when moving the separator right/down grows the primary pane.
   const growth = useRef(1);
-  const horizontal = orientation === "horizontal";
+  const sideBySide = orientation === "vertical";
   const { isFocusVisible, focusProps } = useFocusRing();
 
   const { moveProps } = useMove({
@@ -355,7 +356,7 @@ export const SplitViewSeparator = ({
       const separator = ref.current?.getBoundingClientRect();
       if (primary && separator) {
         const centre = (r: DOMRect) =>
-          horizontal ? r.left + r.width / 2 : r.top + r.height / 2;
+          sideBySide ? r.left + r.width / 2 : r.top + r.height / 2;
         growth.current = centre(primary) < centre(separator) ? 1 : -1;
       }
       if (e.pointerType !== "keyboard") {
@@ -363,7 +364,7 @@ export const SplitViewSeparator = ({
       }
     },
     onMove(e) {
-      let delta = horizontal ? e.deltaX : e.deltaY;
+      let delta = sideBySide ? e.deltaX : e.deltaY;
       if (e.pointerType === "keyboard") {
         // Arrows across the split axis do nothing (APG window splitter).
         delta *= keyboardStep;
@@ -410,7 +411,7 @@ export const SplitViewSeparator = ({
       ref={ref}
       role="separator"
       tabIndex={0}
-      aria-orientation={horizontal ? "vertical" : "horizontal"}
+      aria-orientation={orientation}
       aria-controls={primaryId}
       aria-valuemin={0}
       aria-valuemax={100}

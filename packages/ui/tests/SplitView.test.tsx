@@ -177,9 +177,9 @@ it("drops the separator when compact or collapsed", () => {
   );
 });
 
-it("sizes a vertical split by height", () => {
+it("sizes the primary pane by height for a horizontal splitter", () => {
   render(
-    <SplitView orientation="vertical" defaultSize={150}>
+    <SplitView orientation="horizontal" defaultSize={150}>
       <SplitViewPane />
       <SplitViewSeparator aria-label="Resize" />
       <SplitViewPane primary data-testid="primary" />
