@@ -416,6 +416,9 @@ export const SplitViewSplitter = ({
   const growth = useRef(1);
   const sideBySide = orientation === "vertical";
   const { isFocusVisible, focusProps } = useFocusRing();
+  // Set on press rather than from useMove, which only starts a move once the
+  // pointer moves.
+  const [pressed, setPressed] = useState(false);
 
   const { moveProps } = useMove({
     onMoveStart(e) {
@@ -453,13 +456,16 @@ export const SplitViewSplitter = ({
     },
   });
 
-  // Routes the drag's events, and its cursor, to the splitter wherever the
-  // pointer goes; an iframe would otherwise swallow them. jsdom lacks it.
+  // Capture routes the drag's events, and its cursor, to the splitter
+  // wherever the pointer goes; an iframe would otherwise swallow them. Its
+  // loss marks the end of the press, moved or not. jsdom lacks it.
   const onPointerDown = (e: PointerEvent<HTMLDivElement>) => {
     if (e.button === 0) {
       e.currentTarget.setPointerCapture?.(e.pointerId);
+      setPressed(true);
     }
   };
+  const onLostPointerCapture = () => setPressed(false);
 
   const onKeyDown = (e: KeyboardEvent) => {
     if (e.key === "Home") {
@@ -486,7 +492,11 @@ export const SplitViewSplitter = ({
   // does it), at the cost of desktop screen readers announcing a slider.
   return (
     <div
-      {...mergeProps(rest, moveProps, focusProps, { onKeyDown, onPointerDown })}
+      {...mergeProps(rest, moveProps, focusProps, {
+        onKeyDown,
+        onPointerDown,
+        onLostPointerCapture,
+      })}
       ref={ref}
       role="separator"
       tabIndex={0}
@@ -501,6 +511,7 @@ export const SplitViewSplitter = ({
       data-splitter=""
       data-orientation={orientation}
       data-focus-visible={isFocusVisible || undefined}
+      data-pressed={pressed || undefined}
       className={cx(
         slots.splitter,
         cssProp ? css(cssProp) : undefined,

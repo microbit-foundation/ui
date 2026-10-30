@@ -16,7 +16,9 @@ import { defineSlotRecipe } from "@pandacss/dev";
  * needed.
  *
  * The splitter's look is meant to be restyled per app via its `css` prop:
- * the grip inherits `color`, so one override tints both.
+ * the grip inherits `color`, so one override tints both. An override of `bg`
+ * also replaces the hover and pressed fills, so restate `_hover` and
+ * `_active` alongside it.
  *
  * Registered in the base preset (base-preset.ts).
  */
@@ -65,6 +67,12 @@ export const splitView = defineSlotRecipe({
       color: "blackAlpha.800",
       touchAction: "none",
       outline: "none",
+      transitionProperty: "background",
+      transitionDuration: "ultra-fast",
+      transitionTimingFunction: "ease-in",
+      // The neutral button's ladder.
+      _hover: { bg: "gray.300" },
+      _active: { bg: "gray.350" },
       "&[data-orientation=vertical]": {
         width: "2.5",
         cursor: "col-resize",

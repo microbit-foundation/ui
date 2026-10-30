@@ -291,6 +291,7 @@ it("resizes by pointer drag, marking the root as dragging", () => {
   const { container } = renderSplitView({ onSizeChangeEnd });
   const root = container.firstElementChild as HTMLElement;
   pointer("pointerDown", splitter(), 305);
+  expect(splitter().hasAttribute("data-pressed")).toBe(true);
   pointer("pointerMove", window, 345);
   expect(primaryWidth()).toBe("340px");
   expect(root.hasAttribute("data-dragging")).toBe(true);
@@ -301,5 +302,8 @@ it("resizes by pointer drag, marking the root as dragging", () => {
   expect(primaryWidth()).toBe("400px");
   pointer("pointerUp", window, 405);
   expect(root.hasAttribute("data-dragging")).toBe(false);
+  // The browser fires this on release, as the splitter captured the pointer.
+  fireEvent.lostPointerCapture(splitter());
+  expect(splitter().hasAttribute("data-pressed")).toBe(false);
   expect(onSizeChangeEnd.mock.calls).toEqual([[400]]);
 });

@@ -266,7 +266,13 @@ export const RestyledSplitter: Story = {
         </SplitViewPane>
         <SplitViewSplitter
           aria-label="Resize sidebar"
-          css={{ bg: "#eaecf1", color: "brand.500", boxShadow: "md" }}
+          css={{
+            bg: "#eaecf1",
+            color: "brand.500",
+            boxShadow: "md",
+            _hover: { bg: "#dcdfe6" },
+            _active: { bg: "#d0d4dd" },
+          }}
         />
         <SplitViewPane css={{ overflowY: "auto" }}>
           <Prose heading="Main content" />
