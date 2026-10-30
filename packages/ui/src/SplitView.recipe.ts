@@ -6,7 +6,7 @@
 import { defineSlotRecipe } from "@pandacss/dev";
 
 /**
- * SplitView slot recipe — two panes either side of a draggable separator.
+ * SplitView slot recipe — two panes either side of a draggable splitter.
  * Consumed by SplitView.tsx.
  *
  * Orientation (the splitter's, as for `aria-orientation`: `vertical` sits
@@ -14,14 +14,14 @@ import { defineSlotRecipe } from "@pandacss/dev";
  * component sets (`data-orientation`, `data-dragging`) rather than variants, so there is
  * nothing runtime-selected and no `staticCss` entry is needed.
  *
- * The separator's look is meant to be restyled per app via its `css` prop:
+ * The splitter's look is meant to be restyled per app via its `css` prop:
  * the grip inherits `color`, so one override tints both.
  *
  * Registered in the base preset (base-preset.ts).
  */
 export const splitView = defineSlotRecipe({
   className: "splitView",
-  slots: ["root", "pane", "separator", "grip"],
+  slots: ["root", "pane", "splitter", "grip"],
   base: {
     root: {
       display: "flex",
@@ -30,7 +30,7 @@ export const splitView = defineSlotRecipe({
         flexDirection: "column",
       },
       // useMove cancels the pointerdown, but on desktop only marks the
-      // separator itself unselectable; this stops a drag over either pane
+      // splitter itself unselectable; this stops a drag over either pane
       // selecting its text.
       "&[data-dragging]": {
         userSelect: "none",
@@ -63,7 +63,7 @@ export const splitView = defineSlotRecipe({
         visibility: "hidden",
       },
     },
-    separator: {
+    splitter: {
       position: "relative",
       // Paint the focus ring over the following pane.
       zIndex: 1,

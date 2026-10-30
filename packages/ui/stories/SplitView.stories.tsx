@@ -12,7 +12,7 @@ import {
   SplitView,
   SplitViewMode,
   SplitViewPane,
-  SplitViewSeparator,
+  SplitViewSplitter,
   Stack,
   Text,
 } from "../src";
@@ -26,7 +26,7 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-// Selectable text in both panes: a drag of the separator across it must not
+// Selectable text in both panes: a drag of the splitter across it must not
 // select any.
 const Prose = ({ heading }: { heading: string }) => (
   <Stack gap={3} p={4}>
@@ -71,7 +71,7 @@ const ModeButtons = ({
 
 /**
  * Panes side by side, with a sidebar as the primary pane. Tab to the
- * separator and use the arrow keys, Home and End; the `mode` buttons show
+ * splitter and use the arrow keys, Home and End; the `mode` buttons show
  * the compact and collapsed states.
  */
 export const VerticalSplitter: Story = {
@@ -85,15 +85,15 @@ export const VerticalSplitter: Story = {
           mode={mode}
           compactSize={64}
           defaultSize={320}
-          minSize={200}
-          maxSize={600}
+          primaryMinSize={200}
+          primaryMaxSize={600}
           secondaryMinSize={300}
           css={{ flex: "1", minHeight: 0 }}
         >
           <SplitViewPane primary css={{ overflowY: "auto", bg: "gray.50" }}>
             {mode === "compact" ? null : <Prose heading="Sidebar" />}
           </SplitViewPane>
-          <SplitViewSeparator aria-label="Resize sidebar" />
+          <SplitViewSplitter aria-label="Resize sidebar" />
           <SplitViewPane css={{ overflowY: "auto" }}>
             <Prose heading="Main content" />
           </SplitViewPane>
@@ -116,14 +116,14 @@ export const HorizontalSplitter: Story = {
           mode={mode}
           compactSize={48}
           defaultSize={200}
-          minSize={120}
+          primaryMinSize={120}
           secondaryMinSize={200}
           css={{ flex: "1", minHeight: 0 }}
         >
           <SplitViewPane css={{ overflowY: "auto" }}>
             <Prose heading="Editor" />
           </SplitViewPane>
-          <SplitViewSeparator aria-label="Resize serial terminal" />
+          <SplitViewSplitter aria-label="Resize serial terminal" />
           <SplitViewPane
             primary
             css={{ overflowY: "auto", bg: "gray.800", color: "white" }}
@@ -148,14 +148,14 @@ export const PrimaryAtEndWithIframe: Story = {
     <Frame>
       <SplitView
         defaultSize={360}
-        minSize={240}
+        primaryMinSize={240}
         secondaryMinSize={300}
         css={{ flex: "1", minHeight: 0 }}
       >
         <SplitViewPane css={{ overflowY: "auto" }}>
           <Prose heading="Editor" />
         </SplitViewPane>
-        <SplitViewSeparator aria-label="Resize simulator" />
+        <SplitViewSplitter aria-label="Resize simulator" />
         <SplitViewPane primary>
           <iframe
             title="Embedded page"
@@ -197,7 +197,7 @@ export const Persisted: Story = {
             }
             setSaves((n) => n + 1);
           }}
-          minSize={200}
+          primaryMinSize={200}
           secondaryMinSize={300}
           css={{ flex: "1", minHeight: 0 }}
         >
@@ -207,7 +207,7 @@ export const Persisted: Story = {
               <Text>Saves: {saves}</Text>
             </Stack>
           </SplitViewPane>
-          <SplitViewSeparator aria-label="Resize sidebar" />
+          <SplitViewSplitter aria-label="Resize sidebar" />
           <SplitViewPane>
             <Prose heading="Main content" />
           </SplitViewPane>
@@ -217,21 +217,21 @@ export const Persisted: Story = {
   },
 };
 
-/** The separator restyled per app, here as the Python Editor draws it. */
-export const RestyledSeparator: Story = {
+/** The splitter restyled per app, here as the Python Editor draws it. */
+export const RestyledSplitter: Story = {
   args: { children: null },
   render: () => (
     <Frame>
       <SplitView
         defaultSize={320}
-        minSize={200}
+        primaryMinSize={200}
         secondaryMinSize={300}
         css={{ flex: "1", minHeight: 0 }}
       >
         <SplitViewPane primary css={{ overflowY: "auto" }}>
           <Prose heading="Sidebar" />
         </SplitViewPane>
-        <SplitViewSeparator
+        <SplitViewSplitter
           aria-label="Resize sidebar"
           css={{ bg: "#eaecf1", color: "brand.500", boxShadow: "md" }}
         />

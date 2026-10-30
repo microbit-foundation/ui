@@ -30,11 +30,11 @@ import { splitView } from "styled-system/recipes";
 import { SystemStyleObject } from "styled-system/types";
 
 /**
- * - `open`: the primary pane is resizable and the separator is shown.
- * - `compact`: the primary pane is fixed at `compactSize`, with no separator
+ * - `open`: the primary pane is resizable and the splitter is shown.
+ * - `compact`: the primary pane is fixed at `compactSize`, with no splitter
  *   (e.g. a sidebar reduced to an icon rail).
  * - `collapsed`: the primary pane is hidden (kept mounted, but out of the
- *   tab order and accessibility tree), with no separator.
+ *   tab order and accessibility tree), with no splitter.
  */
 export type SplitViewMode = "open" | "compact" | "collapsed";
 
@@ -49,8 +49,8 @@ interface SplitViewContextValue {
   primaryId: string;
   primaryRef: RefObject<HTMLDivElement>;
   primarySize: number;
-  minSize: number;
-  maxSize: number;
+  primaryMinSize: number;
+  primaryMaxSize: number;
   setSize: (size: number) => void;
   commitSize: () => void;
   setDragging: (dragging: boolean) => void;
@@ -91,9 +91,9 @@ export interface SplitViewProps extends HTMLAttributes<HTMLDivElement> {
    */
   onSizeChangeEnd?: (size: number) => void;
   /** The primary pane's minimum size in px. */
-  minSize?: number;
+  primaryMinSize?: number;
   /** The primary pane's maximum size in px. */
-  maxSize?: number;
+  primaryMaxSize?: number;
   /**
    * The secondary pane's minimum size in px. When the container is too small
    * for both minimums, the primary pane keeps its minimum and the secondary
@@ -103,16 +103,16 @@ export interface SplitViewProps extends HTMLAttributes<HTMLDivElement> {
   /** Per-instance style overrides, merged after the recipe. */
   css?: SystemStyleObject;
   /**
-   * Two `SplitViewPane`s, one marked `primary`, with a `SplitViewSeparator`
+   * Two `SplitViewPane`s, one marked `primary`, with a `SplitViewSplitter`
    * between them. Either pane may be the primary.
    */
   children: ReactNode;
 }
 
 /**
- * SplitView — two panes with a separator that resizes one of them: the
+ * SplitView — two panes with a splitter that resizes one of them: the
  * primary pane has an explicit size, and the secondary takes the rest. A
- * WAI-ARIA window splitter: the separator is focusable, resizes with the
+ * WAI-ARIA window splitter: the splitter is focusable, resizes with the
  * arrow keys (Home/End for the primary pane's minimum/maximum), and exposes
  * its position to assistive tech as a percentage of the available range.
  *
@@ -132,8 +132,8 @@ export const SplitView = ({
   defaultSize,
   onSizeChange,
   onSizeChangeEnd,
-  minSize = 0,
-  maxSize = Infinity,
+  primaryMinSize = 0,
+  primaryMaxSize = Infinity,
   secondaryMinSize = 0,
   css: cssProp,
   className,
@@ -145,10 +145,10 @@ export const SplitView = ({
   const primaryRef = useRef<HTMLDivElement>(null);
   const primaryId = useId();
   const [uncontrolledSize, setUncontrolledSize] = useState(
-    defaultSize ?? minSize,
+    defaultSize ?? primaryMinSize,
   );
   const requestedSize = size ?? uncontrolledSize;
-  // Container size less the separator. Undefined until measured, and while
+  // Container size less the splitter. Undefined until measured, and while
   // the container has no size (e.g. inside a hidden tab), so the primary
   // pane isn't clamped to nothing.
   const [available, setAvailable] = useState<number>();
@@ -163,14 +163,14 @@ export const SplitView = ({
       const sideBySide = orientation === "vertical";
       const rootRect = root.getBoundingClientRect();
       const total = sideBySide ? rootRect.width : rootRect.height;
-      const separator = root.querySelector(":scope > [data-split-separator]");
-      const separatorRect = separator?.getBoundingClientRect();
-      const separatorSize = separatorRect
+      const splitter = root.querySelector(":scope > [data-splitter]");
+      const splitterRect = splitter?.getBoundingClientRect();
+      const splitterSize = splitterRect
         ? sideBySide
-          ? separatorRect.width
-          : separatorRect.height
+          ? splitterRect.width
+          : splitterRect.height
         : 0;
-      setAvailable(total > 0 ? total - separatorSize : undefined);
+      setAvailable(total > 0 ? total - splitterSize : undefined);
     };
     measure();
     if (typeof ResizeObserver === "undefined") {
@@ -179,14 +179,17 @@ export const SplitView = ({
     const observer = new ResizeObserver(measure);
     observer.observe(root);
     return () => observer.disconnect();
-    // `mode` because the separator only renders when open.
+    // `mode` because the splitter only renders when open.
   }, [orientation, mode]);
 
   const max =
     available === undefined
-      ? Math.max(minSize, maxSize)
-      : Math.max(minSize, Math.min(maxSize, available - secondaryMinSize));
-  const primarySize = clamp(requestedSize, minSize, max);
+      ? Math.max(primaryMinSize, primaryMaxSize)
+      : Math.max(
+          primaryMinSize,
+          Math.min(primaryMaxSize, available - secondaryMinSize),
+        );
+  const primarySize = clamp(requestedSize, primaryMinSize, max);
 
   const latestSize = useRef(primarySize);
   const callbacks = useRef({ onSizeChange, onSizeChangeEnd });
@@ -221,8 +224,8 @@ export const SplitView = ({
       primaryId,
       primaryRef,
       primarySize,
-      minSize,
-      maxSize: max,
+      primaryMinSize,
+      primaryMaxSize: max,
       setSize,
       commitSize,
       setDragging,
@@ -233,7 +236,7 @@ export const SplitView = ({
       compactSize,
       primaryId,
       primarySize,
-      minSize,
+      primaryMinSize,
       max,
       setSize,
       commitSize,
@@ -261,8 +264,8 @@ export const SplitView = ({
 
 export interface SplitViewPaneProps extends HTMLAttributes<HTMLDivElement> {
   /**
-   * The pane the separator sizes; exactly one pane is primary. It takes the
-   * SplitView's generated id, which the separator's `aria-controls` names.
+   * The pane the splitter sizes; exactly one pane is primary. It takes the
+   * SplitView's generated id, which the splitter's `aria-controls` names.
    */
   primary?: boolean;
   /** Per-instance style overrides, merged after the recipe. */
@@ -303,11 +306,11 @@ export const SplitViewPane = ({
   );
 };
 
-type SeparatorLabelling =
+type SplitterLabelling =
   | { "aria-label": string; "aria-labelledby"?: string }
   | { "aria-label"?: string; "aria-labelledby": string };
 
-export type SplitViewSeparatorProps = SeparatorLabelling & {
+export type SplitViewSplitterProps = SplitterLabelling & {
   /** Per-instance style overrides, merged after the recipe. */
   css?: SystemStyleObject;
   className?: string;
@@ -316,16 +319,16 @@ export type SplitViewSeparatorProps = SeparatorLabelling & {
 };
 
 /**
- * The separator between the panes. Renders only in `open` mode. Needs an
+ * The splitter between the panes. Renders only in `open` mode. Needs an
  * accessible name: label it by what it resizes ("Resize sidebar"), or point
  * `aria-labelledby` at the primary pane's visible heading.
  */
-export const SplitViewSeparator = ({
+export const SplitViewSplitter = ({
   css: cssProp,
   className,
   children,
   ...labelling
-}: SplitViewSeparatorProps) => {
+}: SplitViewSplitterProps) => {
   const slots = splitView();
   const {
     orientation,
@@ -333,16 +336,16 @@ export const SplitViewSeparator = ({
     primaryId,
     primaryRef,
     primarySize,
-    minSize,
-    maxSize,
+    primaryMinSize,
+    primaryMaxSize,
     setSize,
     commitSize,
     setDragging,
-  } = useSplitViewContext("SplitViewSeparator");
+  } = useSplitViewContext("SplitViewSplitter");
   const { locale } = useLocale();
   const ref = useRef<HTMLDivElement>(null);
   const position = useRef(0);
-  // +1 when moving the separator right/down grows the primary pane.
+  // +1 when moving the splitter right/down grows the primary pane.
   const growth = useRef(1);
   const sideBySide = orientation === "vertical";
   const { isFocusVisible, focusProps } = useFocusRing();
@@ -353,11 +356,11 @@ export const SplitViewSeparator = ({
       // Measured rather than derived from DOM order and text direction:
       // the layout already accounts for both.
       const primary = primaryRef.current?.getBoundingClientRect();
-      const separator = ref.current?.getBoundingClientRect();
-      if (primary && separator) {
+      const splitter = ref.current?.getBoundingClientRect();
+      if (primary && splitter) {
         const centre = (r: DOMRect) =>
           sideBySide ? r.left + r.width / 2 : r.top + r.height / 2;
-        growth.current = centre(primary) < centre(separator) ? 1 : -1;
+        growth.current = centre(primary) < centre(splitter) ? 1 : -1;
       }
       if (e.pointerType !== "keyboard") {
         setDragging(true);
@@ -373,9 +376,9 @@ export const SplitViewSeparator = ({
         return;
       }
       // Track the unclamped pointer position so that dragging past a limit
-      // and back doesn't shift the separator relative to the pointer.
+      // and back doesn't shift the splitter relative to the pointer.
       position.current += delta * growth.current;
-      setSize(clamp(position.current, minSize, maxSize));
+      setSize(clamp(position.current, primaryMinSize, primaryMaxSize));
     },
     onMoveEnd() {
       setDragging(false);
@@ -386,11 +389,11 @@ export const SplitViewSeparator = ({
   const onKeyDown = (e: KeyboardEvent) => {
     if (e.key === "Home") {
       e.preventDefault();
-      setSize(minSize);
+      setSize(primaryMinSize);
       commitSize();
-    } else if (e.key === "End" && Number.isFinite(maxSize)) {
+    } else if (e.key === "End" && Number.isFinite(primaryMaxSize)) {
       e.preventDefault();
-      setSize(maxSize);
+      setSize(primaryMaxSize);
       commitSize();
     }
   };
@@ -398,12 +401,12 @@ export const SplitViewSeparator = ({
   if (mode !== "open") {
     return null;
   }
-  const range = maxSize - minSize;
+  const range = primaryMaxSize - primaryMinSize;
   const percent =
     Number.isFinite(range) && range > 0
-      ? Math.round(((primarySize - minSize) / range) * 100)
+      ? Math.round(((primarySize - primaryMinSize) / range) * 100)
       : 0;
-  // Known gap: TalkBack doesn't send swipe adjustments to a separator. A
+  // Known gap: TalkBack doesn't send swipe adjustments to a role="separator". A
   // visually hidden range input fixes that (react-aria's column resizer
   // does it), at the cost of desktop screen readers announcing a slider.
   return (
@@ -419,11 +422,11 @@ export const SplitViewSeparator = ({
       aria-valuetext={new Intl.NumberFormat(locale, {
         style: "percent",
       }).format(percent / 100)}
-      data-split-separator=""
+      data-splitter=""
       data-orientation={orientation}
       data-focus-visible={isFocusVisible || undefined}
       className={cx(
-        slots.separator,
+        slots.splitter,
         cssProp ? css(cssProp) : undefined,
         className,
       )}

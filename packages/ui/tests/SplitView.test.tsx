@@ -16,10 +16,10 @@ import {
   SplitViewMode,
   SplitViewPane,
   SplitViewProps,
-  SplitViewSeparator,
+  SplitViewSplitter,
 } from "../src";
 
-// jsdom has no layout. A 1000px root with a 10px separator at 300px;
+// jsdom has no layout. A 1000px root with a 10px splitter at 300px;
 // the primary pane's position is set per test, as the browser would lay it
 // out from DOM order and text direction.
 let primaryLeft = 0;
@@ -30,7 +30,7 @@ beforeEach(() => {
       // Square, so the same geometry serves either orientation.
       const rect = (start: number, size: number) =>
         ({ left: start, top: start, width: size, height: size }) as DOMRect;
-      if (this.hasAttribute("data-split-separator")) {
+      if (this.hasAttribute("data-splitter")) {
         return rect(300, 10);
       }
       if (this.hasAttribute("data-orientation")) {
@@ -67,25 +67,25 @@ const renderSplitView = ({
     <SplitView
       mode={mode}
       defaultSize={300}
-      minSize={200}
-      maxSize={600}
+      primaryMinSize={200}
+      primaryMaxSize={600}
       secondaryMinSize={300}
       compactSize={64}
       {...props}
     >
       {primaryAtEnd ? secondary : primary}
-      <SplitViewSeparator aria-label="Resize sidebar" />
+      <SplitViewSplitter aria-label="Resize sidebar" />
       {primaryAtEnd ? primary : secondary}
     </SplitView>,
   );
 };
 
-const separator = () => screen.getByRole("separator");
+const splitter = () => screen.getByRole("separator");
 const primaryWidth = () => screen.getByTestId("primary").style.width;
 
 it("exposes a window splitter controlling the primary pane", () => {
   renderSplitView();
-  const sep = separator();
+  const sep = splitter();
   expect(sep).toHaveProperty("tabIndex", 0);
   expect(sep.getAttribute("aria-label")).toBe("Resize sidebar");
   expect(sep.getAttribute("aria-orientation")).toBe("vertical");
@@ -101,70 +101,70 @@ it("exposes a window splitter controlling the primary pane", () => {
 
 it("resizes with the arrow keys along the split axis only", () => {
   renderSplitView();
-  fireEvent.keyDown(separator(), { key: "ArrowRight" });
+  fireEvent.keyDown(splitter(), { key: "ArrowRight" });
   expect(primaryWidth()).toBe("310px");
-  fireEvent.keyDown(separator(), { key: "ArrowLeft" });
-  fireEvent.keyDown(separator(), { key: "ArrowLeft" });
+  fireEvent.keyDown(splitter(), { key: "ArrowLeft" });
+  fireEvent.keyDown(splitter(), { key: "ArrowLeft" });
   expect(primaryWidth()).toBe("290px");
-  fireEvent.keyDown(separator(), { key: "ArrowUp" });
+  fireEvent.keyDown(splitter(), { key: "ArrowUp" });
   expect(primaryWidth()).toBe("290px");
 });
 
-it("moves the separator, not the pane edge, when the primary pane follows it", () => {
+it("moves the splitter, not the pane edge, when the primary pane follows it", () => {
   primaryLeft = 310;
   renderSplitView({ primaryAtEnd: true });
-  fireEvent.keyDown(separator(), { key: "ArrowRight" });
+  fireEvent.keyDown(splitter(), { key: "ArrowRight" });
   expect(primaryWidth()).toBe("290px");
 });
 
 it("jumps to the minimum and maximum with Home and End", () => {
   renderSplitView();
-  fireEvent.keyDown(separator(), { key: "End" });
+  fireEvent.keyDown(splitter(), { key: "End" });
   expect(primaryWidth()).toBe("600px");
-  expect(separator().getAttribute("aria-valuenow")).toBe("100");
-  fireEvent.keyDown(separator(), { key: "Home" });
+  expect(splitter().getAttribute("aria-valuenow")).toBe("100");
+  fireEvent.keyDown(splitter(), { key: "Home" });
   expect(primaryWidth()).toBe("200px");
 });
 
 it("caps the primary pane to leave the secondary its minimum", () => {
-  renderSplitView({ maxSize: Infinity, defaultSize: 900 });
-  // 1000px less the 10px separator less the secondary's 300px.
+  renderSplitView({ primaryMaxSize: Infinity, defaultSize: 900 });
+  // 1000px less the 10px splitter less the secondary's 300px.
   expect(primaryWidth()).toBe("690px");
-  fireEvent.keyDown(separator(), { key: "End" });
+  fireEvent.keyDown(splitter(), { key: "End" });
   expect(primaryWidth()).toBe("690px");
 });
 
 it("reports the final size once per interaction", () => {
   const onSizeChangeEnd = vi.fn();
   renderSplitView({ onSizeChangeEnd });
-  fireEvent.keyDown(separator(), { key: "ArrowRight" });
-  fireEvent.keyDown(separator(), { key: "ArrowRight" });
+  fireEvent.keyDown(splitter(), { key: "ArrowRight" });
+  fireEvent.keyDown(splitter(), { key: "ArrowRight" });
   expect(onSizeChangeEnd.mock.calls).toEqual([[310], [320]]);
 });
 
 it("follows a controlled size", () => {
   const onSizeChange = vi.fn();
   const { rerender } = render(
-    <SplitView size={250} onSizeChange={onSizeChange} minSize={200}>
+    <SplitView size={250} onSizeChange={onSizeChange} primaryMinSize={200}>
       <SplitViewPane primary data-testid="primary" />
-      <SplitViewSeparator aria-label="Resize" />
+      <SplitViewSplitter aria-label="Resize" />
       <SplitViewPane />
     </SplitView>,
   );
-  fireEvent.keyDown(separator(), { key: "ArrowRight" });
+  fireEvent.keyDown(splitter(), { key: "ArrowRight" });
   expect(onSizeChange).toHaveBeenCalledWith(260);
   expect(primaryWidth()).toBe("250px");
   rerender(
-    <SplitView size={260} onSizeChange={onSizeChange} minSize={200}>
+    <SplitView size={260} onSizeChange={onSizeChange} primaryMinSize={200}>
       <SplitViewPane primary data-testid="primary" />
-      <SplitViewSeparator aria-label="Resize" />
+      <SplitViewSplitter aria-label="Resize" />
       <SplitViewPane />
     </SplitView>,
   );
   expect(primaryWidth()).toBe("260px");
 });
 
-it("drops the separator when compact or collapsed", () => {
+it("drops the splitter when compact or collapsed", () => {
   const { unmount } = renderSplitView({ mode: "compact" });
   expect(screen.queryByRole("separator")).toBeNull();
   expect(primaryWidth()).toBe("64px");
@@ -181,11 +181,11 @@ it("sizes the primary pane by height for a horizontal splitter", () => {
   render(
     <SplitView orientation="horizontal" defaultSize={150}>
       <SplitViewPane />
-      <SplitViewSeparator aria-label="Resize" />
+      <SplitViewSplitter aria-label="Resize" />
       <SplitViewPane primary data-testid="primary" />
     </SplitView>,
   );
-  expect(separator().getAttribute("aria-orientation")).toBe("horizontal");
+  expect(splitter().getAttribute("aria-orientation")).toBe("horizontal");
   expect(screen.getByTestId("primary").style.height).toBe("150px");
 });
 
@@ -209,11 +209,11 @@ it("resizes by pointer drag, marking the root as dragging", () => {
   const onSizeChangeEnd = vi.fn();
   const { container } = renderSplitView({ onSizeChangeEnd });
   const root = container.firstElementChild as HTMLElement;
-  pointer("pointerDown", separator(), 305);
+  pointer("pointerDown", splitter(), 305);
   pointer("pointerMove", window, 345);
   expect(primaryWidth()).toBe("340px");
   expect(root.hasAttribute("data-dragging")).toBe(true);
-  // Past the maximum and back: the separator stays under the pointer.
+  // Past the maximum and back: the splitter stays under the pointer.
   pointer("pointerMove", window, 1000);
   expect(primaryWidth()).toBe("600px");
   pointer("pointerMove", window, 405);
