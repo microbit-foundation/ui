@@ -36,6 +36,12 @@ import { SystemStyleObject } from "styled-system/types";
  *   (e.g. a sidebar reduced to an icon rail).
  * - `collapsed`: the primary pane is hidden (kept mounted, but out of the
  *   tab order and accessibility tree), with no splitter.
+ *
+ * Focus is the app's to manage when the mode changes. Leaving `open`
+ * unmounts the splitter, so if it had focus (say a keyboard shortcut changed
+ * the mode) focus drops to the document body; collapsing leaves focus inside
+ * the primary pane on a hidden element. Move it to the control that changed
+ * the mode, or into the secondary pane.
  */
 export type SplitViewMode = "open" | "compact" | "collapsed";
 
@@ -55,6 +61,7 @@ interface SplitViewContextValue {
   setSize: (size: number) => void;
   commitSize: () => void;
   setDragging: (dragging: boolean) => void;
+  setPrimaryPaneId: (id: string | undefined) => void;
 }
 
 const SplitViewContext = createContext<SplitViewContextValue | null>(null);
@@ -144,14 +151,16 @@ export const SplitView = ({
   const slots = splitView();
   const rootRef = useRef<HTMLDivElement>(null);
   const primaryRef = useRef<HTMLDivElement>(null);
-  const primaryId = useId();
+  const generatedId = useId();
+  const [primaryPaneId, setPrimaryPaneId] = useState<string>();
+  const primaryId = primaryPaneId ?? generatedId;
   const [uncontrolledSize, setUncontrolledSize] = useState(
     defaultSize ?? primaryMinSize,
   );
   const requestedSize = size ?? uncontrolledSize;
-  // Container size less the splitter. Undefined until measured, and while
-  // the container has no size (e.g. inside a hidden tab), so the primary
-  // pane isn't clamped to nothing.
+  // Container content size less the splitter and gaps. Undefined until
+  // measured, and while the container has no size (e.g. inside a hidden
+  // tab), so the primary pane isn't clamped to nothing.
   const [available, setAvailable] = useState<number>();
   const [dragging, setDragging] = useState(false);
 
@@ -160,18 +169,27 @@ export const SplitView = ({
     if (!root) {
       return;
     }
+    // Layout sizes rather than bounding rects, which a transformed ancestor
+    // would scale.
     const measure = () => {
       const sideBySide = orientation === "vertical";
-      const rootRect = root.getBoundingClientRect();
-      const total = sideBySide ? rootRect.width : rootRect.height;
-      const splitter = root.querySelector(":scope > [data-splitter]");
-      const splitterRect = splitter?.getBoundingClientRect();
-      const splitterSize = splitterRect
+      const style = getComputedStyle(root);
+      const px = (value: string) => parseFloat(value) || 0;
+      const content = sideBySide
+        ? root.clientWidth - px(style.paddingLeft) - px(style.paddingRight)
+        : root.clientHeight - px(style.paddingTop) - px(style.paddingBottom);
+      const gaps =
+        Math.max(root.children.length - 1, 0) *
+        px(sideBySide ? style.columnGap : style.rowGap);
+      const splitter = root.querySelector<HTMLElement>(
+        ":scope > [data-splitter]",
+      );
+      const splitterSize = splitter
         ? sideBySide
-          ? splitterRect.width
-          : splitterRect.height
+          ? splitter.offsetWidth
+          : splitter.offsetHeight
         : 0;
-      setAvailable(total > 0 ? total - splitterSize : undefined);
+      setAvailable(content > 0 ? content - gaps - splitterSize : undefined);
     };
     measure();
     if (typeof ResizeObserver === "undefined") {
@@ -238,6 +256,7 @@ export const SplitView = ({
       setSize,
       commitSize,
       setDragging,
+      setPrimaryPaneId,
     }),
     [
       orientation,
@@ -273,8 +292,8 @@ export const SplitView = ({
 
 export interface SplitViewPaneProps extends HTMLAttributes<HTMLDivElement> {
   /**
-   * The pane the splitter sizes; exactly one pane is primary. It takes the
-   * SplitView's generated id, which the splitter's `aria-controls` names.
+   * The pane the splitter sizes; exactly one pane is primary. The splitter's
+   * `aria-controls` names its `id`, generated unless given.
    */
   primary?: boolean;
   /** Per-instance style overrides, merged after the recipe. */
@@ -291,20 +310,44 @@ export const SplitViewPane = ({
   ...rest
 }: SplitViewPaneProps) => {
   const slots = splitView();
-  const { orientation, mode, compactSize, primaryId, primaryRef, primarySize } =
-    useSplitViewContext("SplitViewPane");
+  const {
+    orientation,
+    mode,
+    compactSize,
+    primaryId,
+    primaryRef,
+    primarySize,
+    setPrimaryPaneId,
+  } = useSplitViewContext("SplitViewPane");
+  const id = rest.id;
+  useLayoutEffect(() => {
+    if (primary && id) {
+      setPrimaryPaneId(id);
+      return () => setPrimaryPaneId(undefined);
+    }
+  }, [primary, id, setPrimaryPaneId]);
   let sizeStyle: CSSProperties | undefined;
   if (primary) {
     const extent =
       mode === "open" ? primarySize : mode === "compact" ? compactSize : 0;
     sizeStyle =
       orientation === "vertical" ? { width: extent } : { height: extent };
+    if (mode === "collapsed") {
+      // Inline, as a recipe rule would lose to padding or a border from the
+      // pane's `css`, leaving a gap where the pane was.
+      Object.assign(sizeStyle, {
+        padding: 0,
+        borderWidth: 0,
+        minWidth: 0,
+        minHeight: 0,
+      });
+    }
   }
   return (
     <div
       {...rest}
       ref={primary ? primaryRef : undefined}
-      id={primary ? primaryId : rest.id}
+      id={id ?? (primary ? primaryId : undefined)}
       data-primary={primary || undefined}
       data-collapsed={(primary && mode === "collapsed") || undefined}
       className={cx(slots.pane, cssProp ? css(cssProp) : undefined, className)}

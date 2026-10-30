@@ -21,20 +21,32 @@ import {
 
 // jsdom has no layout. A 1000px root with a 10px splitter at 300px;
 // the primary pane's position is set per test, as the browser would lay it
-// out from DOM order and text direction.
+// out from DOM order and text direction. Square, so the same geometry serves
+// either orientation.
 let primaryLeft = 0;
 beforeEach(() => {
   primaryLeft = 0;
+  const layoutSize = function (this: Element) {
+    if (this.hasAttribute("data-splitter")) {
+      return 10;
+    }
+    if (this.hasAttribute("data-orientation")) {
+      return 1000;
+    }
+    return 0;
+  };
+  for (const prop of ["clientWidth", "clientHeight"] as const) {
+    vi.spyOn(Element.prototype, prop, "get").mockImplementation(layoutSize);
+  }
+  for (const prop of ["offsetWidth", "offsetHeight"] as const) {
+    vi.spyOn(HTMLElement.prototype, prop, "get").mockImplementation(layoutSize);
+  }
   vi.spyOn(Element.prototype, "getBoundingClientRect").mockImplementation(
     function (this: Element) {
-      // Square, so the same geometry serves either orientation.
       const rect = (start: number, size: number) =>
         ({ left: start, top: start, width: size, height: size }) as DOMRect;
       if (this.hasAttribute("data-splitter")) {
         return rect(300, 10);
-      }
-      if (this.hasAttribute("data-orientation")) {
-        return rect(0, 1000);
       }
       if (this.hasAttribute("data-primary")) {
         return rect(primaryLeft, 300);
@@ -134,6 +146,17 @@ it("caps the primary pane to leave the secondary its minimum", () => {
   expect(primaryWidth()).toBe("690px");
 });
 
+it("leaves out the root's padding and gaps from the available space", () => {
+  renderSplitView({
+    primaryMaxSize: Infinity,
+    defaultSize: 900,
+    style: { padding: "0 20px", columnGap: "5px" },
+  });
+  // 1000px less 40px padding, two 5px gaps, the 10px splitter and the
+  // secondary's 300px.
+  expect(primaryWidth()).toBe("640px");
+});
+
 it("reports the final size once per interaction", () => {
   const onSizeChangeEnd = vi.fn();
   renderSplitView({ onSizeChangeEnd });
@@ -205,6 +228,34 @@ it("drops the splitter when compact or collapsed", () => {
   expect(screen.getByTestId("primary").hasAttribute("data-collapsed")).toBe(
     true,
   );
+});
+
+it("drops a collapsed pane's padding and border", () => {
+  render(
+    <SplitView mode="collapsed">
+      <SplitViewPane
+        primary
+        data-testid="primary"
+        style={{ padding: 16, borderRight: "1px solid" }}
+      />
+      <SplitViewPane />
+    </SplitView>,
+  );
+  const { style } = screen.getByTestId("primary");
+  expect(style.padding).toBe("0px");
+  expect(style.borderWidth).toBe("0px");
+});
+
+it("names a primary pane's own id in aria-controls", () => {
+  render(
+    <SplitView>
+      <SplitViewPane primary id="sidebar" data-testid="primary" />
+      <SplitViewSplitter aria-label="Resize" />
+      <SplitViewPane />
+    </SplitView>,
+  );
+  expect(screen.getByTestId("primary").id).toBe("sidebar");
+  expect(splitter().getAttribute("aria-controls")).toBe("sidebar");
 });
 
 it("sizes the primary pane by height for a horizontal splitter", () => {
