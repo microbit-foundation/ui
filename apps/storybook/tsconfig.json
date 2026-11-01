@@ -10,5 +10,10 @@
       "styled-system/*": ["./styled-system/*"]
     }
   },
-  "include": [".storybook", "load-extra-presets.ts", "panda.config.ts"]
+  "include": [
+    ".storybook",
+    "load-extra-presets.ts",
+    "panda.config.ts",
+    "vitest.config.ts"
+  ]
 }
