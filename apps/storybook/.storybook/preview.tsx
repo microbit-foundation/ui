@@ -54,6 +54,13 @@ const preview: Preview = {
     // disableSaveFromUI hides the Controls-panel buttons that would write
     // tweaked args back into the .stories.tsx files.
     controls: { expanded: true, disableSaveFromUI: true },
+    // Axe violations fail the story's test (`npm test`), not just the panel.
+    // Colour contrast is downgraded to "needs review" (the panel's Incomplete
+    // tab) until the brand palettes, OSS and private, meet it.
+    a11y: {
+      test: "error",
+      config: { rules: [{ id: "color-contrast", reviewOnFail: true }] },
+    },
     options: {
       storySort: {
         order: [

@@ -57,6 +57,7 @@ const config: StorybookConfig = {
     "../../../packages/ui/stories/**/*.stories.@(ts|tsx)",
     "../../../packages/ui-patterns/stories/**/*.stories.@(ts|tsx)",
   ],
+  addons: ["@storybook/addon-a11y", "@storybook/addon-vitest"],
   features: {
     // No onboarding checklist in the sidebar or menu.
     sidebarOnboardingChecklist: false,

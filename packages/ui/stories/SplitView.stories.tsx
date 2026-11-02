@@ -183,11 +183,17 @@ export const IframeOutside: Story = {
           primaryMinSize={160}
           css={{ flex: "1", minWidth: 0 }}
         >
-          <SplitViewPane primary css={{ overflowY: "auto", bg: "gray.50" }}>
+          {/* Focusable so keyboard users can scroll panes that have no
+              focusable content of their own. */}
+          <SplitViewPane
+            primary
+            tabIndex={0}
+            css={{ overflowY: "auto", bg: "gray.50" }}
+          >
             <Prose heading="Sidebar" />
           </SplitViewPane>
           <SplitViewSplitter aria-label="Resize sidebar" />
-          <SplitViewPane css={{ overflowY: "auto" }}>
+          <SplitViewPane tabIndex={0} css={{ overflowY: "auto" }}>
             <Prose heading="Main content" />
           </SplitViewPane>
         </SplitView>
