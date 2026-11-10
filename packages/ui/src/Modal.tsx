@@ -59,15 +59,20 @@ const isTabbable = (element: Element) =>
 
 /**
  * Tab handling for iframes in the dialog, which react-aria's focus
- * containment gets wrong in Firefox: FocusScope re-implements Tab as a
- * synchronous programmatic focus of the next tabbable element, and Firefox
- * silently drops a synchronous focus() of a cross-origin iframe made during
- * key event dispatch — the keystroke appears to do nothing. The same call
- * deferred to the next frame works, so this capture-phase listener (which
- * runs before FocusScope's bubble-phase one) claims the keystroke whenever
- * the element Tab would move to is an iframe, and performs the move
- * deferred. Every other Tab is left to FocusScope. Remove if react-aria
- * defers iframe focus itself.
+ * containment gets wrong: FocusScope re-implements Tab as a synchronous
+ * programmatic focus of the next tabbable element. For an iframe that
+ * focuses the frame and nothing in it, an extra tab stop with no focus
+ * indicator, and Firefox silently drops the call for a cross-origin frame
+ * made during key event dispatch, so the keystroke appears to do nothing.
+ *
+ * This capture-phase listener (which runs before FocusScope's bubble-phase
+ * one) claims the keystroke whenever the element Tab would move to is an
+ * iframe. Where the frame is next in document order it leaves the move to
+ * the browser, which goes straight to the first or last control inside.
+ * Where reaching the frame means wrapping round the dialog the browser
+ * would leave the page instead, and FocusScope pulls focus back to where it
+ * started, so there the shim focuses the frame itself, a frame later for
+ * Firefox. Every other Tab is left to FocusScope.
  */
 const IframeTabShim = ({
   containerRef,
@@ -97,17 +102,18 @@ const IframeTabShim = ({
       if (index === -1) {
         return;
       }
-      const target =
-        tabbables[
-          (index + (e.shiftKey ? -1 : 1) + tabbables.length) % tabbables.length
-        ];
+      const next = index + (e.shiftKey ? -1 : 1);
+      const wraps = next < 0 || next >= tabbables.length;
+      const target = tabbables[(next + tabbables.length) % tabbables.length];
       if (!(target instanceof HTMLIFrameElement)) {
         return;
       }
-      e.preventDefault();
-      // Keep FocusScope's own document-level handler from also acting.
+      // Keep FocusScope's own document-level handler from acting.
       e.stopImmediatePropagation();
-      requestAnimationFrame(() => target.focus());
+      if (wraps) {
+        e.preventDefault();
+        requestAnimationFrame(() => target.focus());
+      }
     };
     const doc = containerRef.current?.ownerDocument ?? document;
     doc.addEventListener("keydown", onKeyDown, true);
