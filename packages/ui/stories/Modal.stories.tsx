@@ -4,7 +4,8 @@
  * SPDX-License-Identifier: MIT
  */
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { expect, screen, waitFor } from "storybook/test";
 import {
   Button,
   ButtonGroup,
@@ -206,5 +207,202 @@ export const AlertDialog: Story = {
         </Modal>
       </>
     );
+  },
+};
+
+// Stands in for an embedded editor or form. The sandbox gives it an opaque
+// origin, so the page can no more reach into it than into a real embed, and
+// it reports its own focus so the story can show where Tab landed.
+const frameDocument = `<!doctype html>
+<html lang="en">
+  <body style="font-family: sans-serif">
+    <button id="first">First in frame</button>
+    <button id="last">Last in frame</button>
+    <script>
+      const report = () =>
+        parent.postMessage(
+          { frameFocus: document.hasFocus() ? document.activeElement.id : "" },
+          "*",
+        );
+      for (const type of ["focusin", "focusout", "focus", "blur"]) {
+        addEventListener(type, () => setTimeout(report));
+      }
+    </script>
+  </body>
+</html>`;
+
+const IframeModal = ({ footer }: { footer: boolean }) => {
+  const [isOpen, setOpen] = useState(true);
+  const [frameFocus, setFrameFocus] = useState("");
+  const frameRef = useRef<HTMLIFrameElement>(null);
+  useEffect(() => {
+    const listener = (e: MessageEvent) => {
+      if (e.source === frameRef.current?.contentWindow) {
+        setFrameFocus((e.data as { frameFocus: string }).frameFocus);
+      }
+    };
+    window.addEventListener("message", listener);
+    return () => window.removeEventListener("message", listener);
+  }, []);
+  return (
+    <>
+      <Button variant="primary" onPress={() => setOpen(true)}>
+        Open modal
+      </Button>
+      <Modal size="lg" isOpen={isOpen} onClose={() => setOpen(false)}>
+        <ModalCloseButton />
+        <ModalHeader>Embedded content</ModalHeader>
+        <ModalBody>
+          <Text>
+            Focused in frame:{" "}
+            <output data-testid="frame-focus">{frameFocus || "nothing"}</output>
+          </Text>
+          <Button variant="secondary">Before frame</Button>
+          <iframe
+            ref={frameRef}
+            title="Embedded content"
+            sandbox="allow-scripts"
+            srcDoc={frameDocument}
+            style={{ display: "block", width: "100%", height: "6rem" }}
+          />
+        </ModalBody>
+        {footer && (
+          <ModalFooter>
+            <Button variant="secondary" onPress={() => setOpen(false)}>
+              Done
+            </Button>
+          </ModalFooter>
+        )}
+      </Modal>
+    </>
+  );
+};
+
+// storybook/test's key events are simulated: they move focus themselves and
+// never reach into a frame. Real key presses exist only under the vitest
+// browser runner, so the play functions below do nothing in the Storybook UI.
+const realKeyboard = async () =>
+  "__vitest_browser__" in globalThis
+    ? (await import("vitest/browser")).userEvent
+    : undefined;
+
+const tab = "{Tab}";
+const shiftTab = "{Shift>}{Tab}{/Shift}";
+
+const expectFrameFocus = (id: string) =>
+  waitFor(() =>
+    expect(screen.getByTestId("frame-focus")).toHaveTextContent(id),
+  );
+
+const expectFocus = (name: string) =>
+  waitFor(() => expect(screen.getByRole("button", { name })).toHaveFocus());
+
+// Firefox makes stops of its own on the way into and out of a frame, with
+// or without a dialog, so there the stories check only that Tab gets
+// through in both directions. Without the shim it doesn't.
+const isFirefox = navigator.userAgent.includes("Firefox");
+
+type Keyboard = NonNullable<Awaited<ReturnType<typeof realKeyboard>>>;
+
+const pressUntil = async (
+  keyboard: Keyboard,
+  key: string,
+  expectation: () => Promise<unknown>,
+) => {
+  for (let presses = 1; ; presses++) {
+    await keyboard.keyboard(key);
+    try {
+      await expectation();
+      return;
+    } catch (e) {
+      if (presses === 4) {
+        throw e;
+      }
+    }
+  }
+};
+
+const frameFocusIs = (id: string) => () =>
+  waitFor(
+    () => expect(screen.getByTestId("frame-focus")).toHaveTextContent(id),
+    { timeout: 500 },
+  );
+
+const focusIsOn = (name: string) => () =>
+  waitFor(() => expect(screen.getByRole("button", { name })).toHaveFocus(), {
+    timeout: 500,
+  });
+
+/**
+ * Tab moves between the dialog's controls and those inside an iframe without
+ * stopping on the frame itself.
+ */
+export const WithIframe: Story = {
+  render: () => <IframeModal footer />,
+  play: async () => {
+    const keyboard = await realKeyboard();
+    if (!keyboard) {
+      return;
+    }
+    (await screen.findByRole("button", { name: "Before frame" })).focus();
+    if (isFirefox) {
+      await pressUntil(keyboard, tab, frameFocusIs("first"));
+      await pressUntil(keyboard, tab, focusIsOn("Done"));
+      await pressUntil(keyboard, shiftTab, frameFocusIs("first"));
+      await pressUntil(keyboard, shiftTab, focusIsOn("Before frame"));
+      return;
+    }
+    await keyboard.keyboard(tab);
+    await expectFrameFocus("first");
+    await keyboard.keyboard(tab);
+    await expectFrameFocus("last");
+    await keyboard.keyboard(tab);
+    await expectFocus("Done");
+    await keyboard.keyboard(shiftTab);
+    await expectFrameFocus("last");
+    await keyboard.keyboard(shiftTab);
+    await expectFrameFocus("first");
+    await keyboard.keyboard(shiftTab);
+    await expectFocus("Before frame");
+  },
+};
+
+/**
+ * The frame as the dialog's last tabbable element, as in a full-screen
+ * editor under a toolbar. Shift+Tab from the first control wraps round to
+ * the frame, which does take focus itself: the page cannot reach the last
+ * control of a cross-origin frame, and the next Shift+Tab gets there.
+ */
+export const WithIframeLast: Story = {
+  render: () => <IframeModal footer={false} />,
+  play: async () => {
+    const keyboard = await realKeyboard();
+    if (!keyboard) {
+      return;
+    }
+    (await screen.findByRole("button", { name: "Close" })).focus();
+    await keyboard.keyboard(shiftTab);
+    await waitFor(() =>
+      expect(screen.getByTitle("Embedded content")).toHaveFocus(),
+    );
+    if (isFirefox) {
+      await pressUntil(keyboard, shiftTab, focusIsOn("Before frame"));
+      await pressUntil(keyboard, tab, () =>
+        waitFor(
+          () =>
+            expect(screen.getByTestId("frame-focus")).not.toHaveTextContent(
+              "nothing",
+            ),
+          { timeout: 500 },
+        ),
+      );
+      return;
+    }
+    await keyboard.keyboard(shiftTab);
+    await expectFrameFocus("last");
+
+    screen.getByRole("button", { name: "Before frame" }).focus();
+    await keyboard.keyboard(tab);
+    await expectFrameFocus("first");
   },
 };

@@ -101,32 +101,32 @@ it("a controlled Modal ignores an ambient trigger state", () => {
   expect(onClose).toHaveBeenCalledTimes(1);
 });
 
-it("hands Tab onto an iframe itself, deferred, instead of FocusScope", async () => {
-  // FocusScope's synchronous focus of a cross-origin iframe is dropped by
-  // Firefox; the Modal's capture-phase shim claims exactly this keystroke
-  // and moves focus a frame later. Both directions land on the iframe.
+it("leaves Tab onto an iframe to the browser, except when wrapping", async () => {
+  // jsdom has no sequential focus navigation, so this covers only who claims
+  // the keystroke. The Modal stories cover where focus lands, in a browser.
   render(
     <IntlProvider locale="en">
       <Modal isOpen onClose={() => undefined} aria-label="Video">
         <ModalCloseButton />
+        <Button>Before</Button>
         <ModalBody>
           <iframe title="the video" src="https://example.com/embed" />
         </ModalBody>
-        <Button>Done</Button>
       </Modal>
     </IntlProvider>,
   );
   const iframe = screen.getByTitle("the video");
+  const before = screen.getByRole("button", { name: "Before" });
+  before.focus();
+  // fireEvent returns false when the event's default was prevented.
+  expect(fireEvent.keyDown(before, { key: "Tab" })).toBe(true);
+  expect(document.activeElement).toBe(before);
+
+  // Wrapping backwards from the first control: the shim focuses the frame
+  // itself, deferred.
   const close = screen.getByRole("button", { name: /close/i });
   close.focus();
-  fireEvent.keyDown(close, { key: "Tab" });
-  // Deferred: not yet moved within this frame...
+  expect(fireEvent.keyDown(close, { key: "Tab", shiftKey: true })).toBe(false);
   expect(document.activeElement).toBe(close);
-  // ...but on the iframe after the rAF.
-  await waitFor(() => expect(document.activeElement).toBe(iframe));
-
-  const done = screen.getByRole("button", { name: "Done" });
-  done.focus();
-  fireEvent.keyDown(done, { key: "Tab", shiftKey: true });
   await waitFor(() => expect(document.activeElement).toBe(iframe));
 });
