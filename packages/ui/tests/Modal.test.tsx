@@ -130,3 +130,31 @@ it("leaves Tab onto an iframe to the browser, except when wrapping", async () =>
   expect(document.activeElement).toBe(close);
   await waitFor(() => expect(document.activeElement).toBe(iframe));
 });
+
+it("wraps Tab out of a frame at the end of the dialog", async () => {
+  // Key presses in a frame never reach the page, so guards at the ends of
+  // the dialog become tab stops while a frame has focus.
+  render(
+    <IntlProvider locale="en">
+      <Modal isOpen onClose={() => undefined} aria-label="Video">
+        <ModalCloseButton />
+        <ModalBody>
+          <iframe title="the video" src="https://example.com/embed" />
+        </ModalBody>
+      </Modal>
+    </IntlProvider>,
+  );
+  const dialog = screen.getByRole("dialog");
+  const endGuard = dialog.lastElementChild as HTMLElement;
+  const close = screen.getByRole("button", { name: /close/i });
+  close.focus();
+  expect(endGuard.tabIndex).toBe(-1);
+
+  screen.getByTitle("the video").focus();
+  await waitFor(() => expect(endGuard.tabIndex).toBe(0));
+
+  // Where the browser's Tab lands on leaving the frame.
+  endGuard.focus();
+  expect(document.activeElement).toBe(close);
+  expect(endGuard.tabIndex).toBe(-1);
+});

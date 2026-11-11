@@ -80,6 +80,27 @@ const IframeTabShim = ({
   containerRef: RefObject<HTMLElement | null>;
 }) => {
   useEffect(() => {
+    const container = containerRef.current;
+    if (!container) {
+      return;
+    }
+    const doc = container.ownerDocument;
+    const tabbables = () =>
+      Array.from(
+        container.querySelectorAll<HTMLElement>(TABBABLE_SELECTOR),
+      ).filter((el) => isTabbable(el) && !el.hasAttribute(guardAttribute));
+    const guards = () =>
+      Array.from(
+        container.querySelectorAll<HTMLElement>(`[${guardAttribute}]`),
+      );
+    const focusTabbable = (target: HTMLElement | undefined) => {
+      if (target instanceof HTMLIFrameElement) {
+        requestAnimationFrame(() => target.focus());
+      } else {
+        target?.focus();
+      }
+    };
+
     const onKeyDown = (e: KeyboardEvent) => {
       if (
         e.key !== "Tab" ||
@@ -90,21 +111,18 @@ const IframeTabShim = ({
       ) {
         return;
       }
-      const container = containerRef.current;
-      const active = container?.ownerDocument.activeElement;
-      if (!container || !active || !container.contains(active)) {
+      const active = doc.activeElement;
+      if (!active || !container.contains(active)) {
         return;
       }
-      const tabbables = Array.from(
-        container.querySelectorAll<HTMLElement>(TABBABLE_SELECTOR),
-      ).filter(isTabbable);
-      const index = tabbables.indexOf(active as HTMLElement);
+      const all = tabbables();
+      const index = all.indexOf(active as HTMLElement);
       if (index === -1) {
         return;
       }
       const next = index + (e.shiftKey ? -1 : 1);
-      const wraps = next < 0 || next >= tabbables.length;
-      const target = tabbables[(next + tabbables.length) % tabbables.length];
+      const wraps = next < 0 || next >= all.length;
+      const target = all[(next + all.length) % all.length];
       if (!(target instanceof HTMLIFrameElement)) {
         return;
       }
@@ -112,15 +130,73 @@ const IframeTabShim = ({
       e.stopImmediatePropagation();
       if (wraps) {
         e.preventDefault();
-        requestAnimationFrame(() => target.focus());
+        focusTabbable(target);
       }
     };
-    const doc = containerRef.current?.ownerDocument ?? document;
+
+    // Key presses inside a frame never reach this page, so Tab from a
+    // frame's last control, with the frame last in the dialog, would leave
+    // for the browser's own controls. While focus is in a frame the guards
+    // at either end of the dialog become tab stops to catch that, and send
+    // focus round to the other end. They are tab stops only then: at other
+    // times they would be an extra stop on the way in from the browser's
+    // controls.
+    const setGuardsTabbable = (tabbable: boolean) => {
+      for (const guard of guards()) {
+        guard.tabIndex = tabbable ? 0 : -1;
+      }
+    };
+    const armIfInFrame = () => {
+      const active = doc.activeElement;
+      if (active instanceof HTMLIFrameElement && container.contains(active)) {
+        setGuardsTabbable(true);
+      }
+    };
+    // Chromium also tells this page when focus enters a frame (a blur on
+    // the window, a focus on the frame element); Firefox only says that the
+    // previous control lost focus.
+    let armTimeout: ReturnType<typeof setTimeout> | undefined;
+    const onFocusOut = () => {
+      clearTimeout(armTimeout);
+      armTimeout = setTimeout(armIfInFrame);
+    };
+    const onFocusIn = (e: FocusEvent) => {
+      const target = e.target as HTMLElement;
+      if (target instanceof HTMLIFrameElement) {
+        setGuardsTabbable(true);
+        return;
+      }
+      setGuardsTabbable(false);
+      const position = target.getAttribute(guardAttribute);
+      if (position) {
+        const all = tabbables();
+        focusTabbable(position === "end" ? all[0] : all[all.length - 1]);
+      }
+    };
+
     doc.addEventListener("keydown", onKeyDown, true);
-    return () => doc.removeEventListener("keydown", onKeyDown, true);
+    container.addEventListener("focusin", onFocusIn);
+    container.addEventListener("focusout", onFocusOut);
+    return () => {
+      clearTimeout(armTimeout);
+      container.removeEventListener("focusout", onFocusOut);
+      doc.removeEventListener("keydown", onKeyDown, true);
+      container.removeEventListener("focusin", onFocusIn);
+    };
   }, [containerRef]);
   return null;
 };
+
+const guardAttribute = "data-focus-guard";
+
+const FocusGuard = ({ position }: { position: "start" | "end" }) => (
+  <span
+    {...{ [guardAttribute]: position }}
+    tabIndex={-1}
+    aria-hidden="true"
+    style={{ outline: "none" }}
+  />
+);
 
 type DialogSlots = ReturnType<typeof dialog>;
 
@@ -310,9 +386,11 @@ export const Modal = ({
       >
         <Dialog role={role} aria-label={ariaLabel} className={slots.inner}>
           <IframeTabShim containerRef={contentRef} />
+          <FocusGuard position="start" />
           <SlotContext.Provider value={{ slots, onClose: close }}>
             {children}
           </SlotContext.Provider>
+          <FocusGuard position="end" />
         </Dialog>
       </RACModal>
     </ModalOverlay>
