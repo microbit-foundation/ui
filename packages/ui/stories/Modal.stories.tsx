@@ -371,7 +371,8 @@ export const WithIframe: Story = {
  * The frame as the dialog's last tabbable element, as in a full-screen
  * editor under a toolbar. Shift+Tab from the first control wraps round to
  * the frame, which does take focus itself: the page cannot reach the last
- * control of a cross-origin frame, and the next Shift+Tab gets there.
+ * control of a cross-origin frame, and the next Shift+Tab gets there. Tab
+ * from the frame's last control wraps round to the dialog's first.
  */
 export const WithIframeLast: Story = {
   render: () => <IframeModal footer={false} />,
@@ -396,6 +397,7 @@ export const WithIframeLast: Story = {
           { timeout: 500 },
         ),
       );
+      await pressUntil(keyboard, tab, focusIsOn("Close"));
       return;
     }
     await keyboard.keyboard(shiftTab);
@@ -404,5 +406,9 @@ export const WithIframeLast: Story = {
     screen.getByRole("button", { name: "Before frame" }).focus();
     await keyboard.keyboard(tab);
     await expectFrameFocus("first");
+    await keyboard.keyboard(tab);
+    await expectFrameFocus("last");
+    await keyboard.keyboard(tab);
+    await expectFocus("Close");
   },
 };
