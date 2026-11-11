@@ -69,10 +69,11 @@ const isTabbable = (element: Element) =>
  * one) claims the keystroke whenever the element Tab would move to is an
  * iframe. Where the frame is next in document order it leaves the move to
  * the browser, which goes straight to the first or last control inside.
- * Where reaching the frame means wrapping round the dialog the browser
- * would leave the page instead, and FocusScope pulls focus back to where it
- * started, so there the shim focuses the frame itself, a frame later for
- * Firefox. Every other Tab is left to FocusScope.
+ * Where reaching the frame means wrapping round the dialog, the browser
+ * left to itself would leave the page, so the shim first moves focus to a
+ * guard at the far end of the dialog and the browser's Tab carries on from
+ * there. Nothing focuses a frame from script, which Firefox would drop.
+ * Every other Tab is left to FocusScope.
  */
 const IframeTabShim = ({
   containerRef,
@@ -100,6 +101,10 @@ const IframeTabShim = ({
         target?.focus();
       }
     };
+
+    // Set while this page focuses a guard itself, as distinct from the
+    // browser's Tab landing on one.
+    let launching = false;
 
     const onKeyDown = (e: KeyboardEvent) => {
       if (
@@ -129,8 +134,15 @@ const IframeTabShim = ({
       // Keep FocusScope's own document-level handler from acting.
       e.stopImmediatePropagation();
       if (wraps) {
-        e.preventDefault();
-        focusTabbable(target);
+        // Start the browser's own Tab from the guard at the far end, so it
+        // carries on to the first or last control inside the frame.
+        const guard = guards().find(
+          (g) =>
+            g.getAttribute(guardAttribute) === (e.shiftKey ? "end" : "start"),
+        );
+        launching = true;
+        guard?.focus({ preventScroll: true });
+        launching = false;
       }
     };
 
@@ -168,7 +180,7 @@ const IframeTabShim = ({
       }
       setGuardsTabbable(false);
       const position = target.getAttribute(guardAttribute);
-      if (position) {
+      if (position && !launching) {
         const all = tabbables();
         focusTabbable(position === "end" ? all[0] : all[all.length - 1]);
       }

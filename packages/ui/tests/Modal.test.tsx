@@ -101,9 +101,10 @@ it("a controlled Modal ignores an ambient trigger state", () => {
   expect(onClose).toHaveBeenCalledTimes(1);
 });
 
-it("leaves Tab onto an iframe to the browser, except when wrapping", async () => {
-  // jsdom has no sequential focus navigation, so this covers only who claims
-  // the keystroke. The Modal stories cover where focus lands, in a browser.
+it("leaves Tab onto an iframe to the browser", () => {
+  // jsdom has no sequential focus navigation, so this covers only what the
+  // shim does to the keystroke. The Modal stories cover where focus lands,
+  // in a browser.
   render(
     <IntlProvider locale="en">
       <Modal isOpen onClose={() => undefined} aria-label="Video">
@@ -115,20 +116,19 @@ it("leaves Tab onto an iframe to the browser, except when wrapping", async () =>
       </Modal>
     </IntlProvider>,
   );
-  const iframe = screen.getByTitle("the video");
+  const dialog = screen.getByRole("dialog");
   const before = screen.getByRole("button", { name: "Before" });
   before.focus();
   // fireEvent returns false when the event's default was prevented.
   expect(fireEvent.keyDown(before, { key: "Tab" })).toBe(true);
   expect(document.activeElement).toBe(before);
 
-  // Wrapping backwards from the first control: the shim focuses the frame
-  // itself, deferred.
+  // Wrapping backwards from the first control: focus moves to the guard
+  // after the frame, for the browser's Shift+Tab to carry on from.
   const close = screen.getByRole("button", { name: /close/i });
   close.focus();
-  expect(fireEvent.keyDown(close, { key: "Tab", shiftKey: true })).toBe(false);
-  expect(document.activeElement).toBe(close);
-  await waitFor(() => expect(document.activeElement).toBe(iframe));
+  expect(fireEvent.keyDown(close, { key: "Tab", shiftKey: true })).toBe(true);
+  expect(document.activeElement).toBe(dialog.lastElementChild);
 });
 
 it("wraps Tab out of a frame at the end of the dialog", async () => {
