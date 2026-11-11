@@ -328,6 +328,15 @@ const frameFocusIs = (id: string) => () =>
     { timeout: 500 },
   );
 
+const frameHasFocus = () =>
+  waitFor(
+    () =>
+      expect(screen.getByTestId("frame-focus")).not.toHaveTextContent(
+        "nothing",
+      ),
+    { timeout: 500 },
+  );
+
 const focusIsOn = (name: string) => () =>
   waitFor(() => expect(screen.getByRole("button", { name })).toHaveFocus(), {
     timeout: 500,
@@ -369,10 +378,8 @@ export const WithIframe: Story = {
 
 /**
  * The frame as the dialog's last tabbable element, as in a full-screen
- * editor under a toolbar. Shift+Tab from the first control wraps round to
- * the frame, which does take focus itself: the page cannot reach the last
- * control of a cross-origin frame, and the next Shift+Tab gets there. Tab
- * from the frame's last control wraps round to the dialog's first.
+ * editor under a toolbar. Tab wraps round the dialog in both directions
+ * between its first control and the controls in the frame.
  */
 export const WithIframeLast: Story = {
   render: () => <IframeModal footer={false} />,
@@ -382,26 +389,17 @@ export const WithIframeLast: Story = {
       return;
     }
     (await screen.findByRole("button", { name: "Close" })).focus();
-    await keyboard.keyboard(shiftTab);
-    await waitFor(() =>
-      expect(screen.getByTitle("Embedded content")).toHaveFocus(),
-    );
     if (isFirefox) {
+      await pressUntil(keyboard, shiftTab, frameHasFocus);
       await pressUntil(keyboard, shiftTab, focusIsOn("Before frame"));
-      await pressUntil(keyboard, tab, () =>
-        waitFor(
-          () =>
-            expect(screen.getByTestId("frame-focus")).not.toHaveTextContent(
-              "nothing",
-            ),
-          { timeout: 500 },
-        ),
-      );
+      await pressUntil(keyboard, tab, frameHasFocus);
       await pressUntil(keyboard, tab, focusIsOn("Close"));
       return;
     }
     await keyboard.keyboard(shiftTab);
     await expectFrameFocus("last");
+    await keyboard.keyboard(shiftTab);
+    await expectFrameFocus("first");
 
     screen.getByRole("button", { name: "Before frame" }).focus();
     await keyboard.keyboard(tab);
