@@ -101,10 +101,39 @@ it("a controlled Modal ignores an ambient trigger state", () => {
   expect(onClose).toHaveBeenCalledTimes(1);
 });
 
-it("hands Tab onto an iframe itself, deferred, instead of FocusScope", async () => {
-  // FocusScope's synchronous focus of a cross-origin iframe is dropped by
-  // Firefox; the Modal's capture-phase shim claims exactly this keystroke
-  // and moves focus a frame later. Both directions land on the iframe.
+it("leaves Tab onto an iframe to the browser", () => {
+  // jsdom has no sequential focus navigation, so this covers only what the
+  // shim does to the keystroke. The Modal stories cover where focus lands,
+  // in a browser.
+  render(
+    <IntlProvider locale="en">
+      <Modal isOpen onClose={() => undefined} aria-label="Video">
+        <ModalCloseButton />
+        <Button>Before</Button>
+        <ModalBody>
+          <iframe title="the video" src="https://example.com/embed" />
+        </ModalBody>
+      </Modal>
+    </IntlProvider>,
+  );
+  const dialog = screen.getByRole("dialog");
+  const before = screen.getByRole("button", { name: "Before" });
+  before.focus();
+  // fireEvent returns false when the event's default was prevented.
+  expect(fireEvent.keyDown(before, { key: "Tab" })).toBe(true);
+  expect(document.activeElement).toBe(before);
+
+  // Wrapping backwards from the first control: focus moves to the guard
+  // after the frame, for the browser's Shift+Tab to carry on from.
+  const close = screen.getByRole("button", { name: /close/i });
+  close.focus();
+  expect(fireEvent.keyDown(close, { key: "Tab", shiftKey: true })).toBe(true);
+  expect(document.activeElement).toBe(dialog.lastElementChild);
+});
+
+it("wraps Tab out of a frame at the end of the dialog", async () => {
+  // Key presses in a frame never reach the page, so guards at the ends of
+  // the dialog become tab stops while a frame has focus.
   render(
     <IntlProvider locale="en">
       <Modal isOpen onClose={() => undefined} aria-label="Video">
@@ -112,21 +141,20 @@ it("hands Tab onto an iframe itself, deferred, instead of FocusScope", async () 
         <ModalBody>
           <iframe title="the video" src="https://example.com/embed" />
         </ModalBody>
-        <Button>Done</Button>
       </Modal>
     </IntlProvider>,
   );
-  const iframe = screen.getByTitle("the video");
+  const dialog = screen.getByRole("dialog");
+  const endGuard = dialog.lastElementChild as HTMLElement;
   const close = screen.getByRole("button", { name: /close/i });
   close.focus();
-  fireEvent.keyDown(close, { key: "Tab" });
-  // Deferred: not yet moved within this frame...
-  expect(document.activeElement).toBe(close);
-  // ...but on the iframe after the rAF.
-  await waitFor(() => expect(document.activeElement).toBe(iframe));
+  expect(endGuard.tabIndex).toBe(-1);
 
-  const done = screen.getByRole("button", { name: "Done" });
-  done.focus();
-  fireEvent.keyDown(done, { key: "Tab", shiftKey: true });
-  await waitFor(() => expect(document.activeElement).toBe(iframe));
+  screen.getByTitle("the video").focus();
+  await waitFor(() => expect(endGuard.tabIndex).toBe(0));
+
+  // Where the browser's Tab lands on leaving the frame.
+  endGuard.focus();
+  expect(document.activeElement).toBe(close);
+  expect(endGuard.tabIndex).toBe(-1);
 });

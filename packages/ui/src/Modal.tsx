@@ -59,15 +59,21 @@ const isTabbable = (element: Element) =>
 
 /**
  * Tab handling for iframes in the dialog, which react-aria's focus
- * containment gets wrong in Firefox: FocusScope re-implements Tab as a
- * synchronous programmatic focus of the next tabbable element, and Firefox
- * silently drops a synchronous focus() of a cross-origin iframe made during
- * key event dispatch — the keystroke appears to do nothing. The same call
- * deferred to the next frame works, so this capture-phase listener (which
- * runs before FocusScope's bubble-phase one) claims the keystroke whenever
- * the element Tab would move to is an iframe, and performs the move
- * deferred. Every other Tab is left to FocusScope. Remove if react-aria
- * defers iframe focus itself.
+ * containment gets wrong: FocusScope re-implements Tab as a synchronous
+ * programmatic focus of the next tabbable element. For an iframe that
+ * focuses the frame and nothing in it, an extra tab stop with no focus
+ * indicator, and Firefox silently drops the call for a cross-origin frame
+ * made during key event dispatch, so the keystroke appears to do nothing.
+ *
+ * This capture-phase listener (which runs before FocusScope's bubble-phase
+ * one) claims the keystroke whenever the element Tab would move to is an
+ * iframe. Where the frame is next in document order it leaves the move to
+ * the browser, which goes straight to the first or last control inside.
+ * Where reaching the frame means wrapping round the dialog, the browser
+ * left to itself would leave the page, so the shim first moves focus to a
+ * guard at the far end of the dialog and the browser's Tab carries on from
+ * there. Nothing focuses a frame from script, which Firefox would drop.
+ * Every other Tab is left to FocusScope.
  */
 const IframeTabShim = ({
   containerRef,
@@ -75,6 +81,31 @@ const IframeTabShim = ({
   containerRef: RefObject<HTMLElement | null>;
 }) => {
   useEffect(() => {
+    const container = containerRef.current;
+    if (!container) {
+      return;
+    }
+    const doc = container.ownerDocument;
+    const tabbables = () =>
+      Array.from(
+        container.querySelectorAll<HTMLElement>(TABBABLE_SELECTOR),
+      ).filter((el) => isTabbable(el) && !el.hasAttribute(guardAttribute));
+    const guards = () =>
+      Array.from(
+        container.querySelectorAll<HTMLElement>(`[${guardAttribute}]`),
+      );
+    const focusTabbable = (target: HTMLElement | undefined) => {
+      if (target instanceof HTMLIFrameElement) {
+        requestAnimationFrame(() => target.focus());
+      } else {
+        target?.focus();
+      }
+    };
+
+    // Set while this page focuses a guard itself, as distinct from the
+    // browser's Tab landing on one.
+    let launching = false;
+
     const onKeyDown = (e: KeyboardEvent) => {
       if (
         e.key !== "Tab" ||
@@ -85,36 +116,99 @@ const IframeTabShim = ({
       ) {
         return;
       }
-      const container = containerRef.current;
-      const active = container?.ownerDocument.activeElement;
-      if (!container || !active || !container.contains(active)) {
+      const active = doc.activeElement;
+      if (!active || !container.contains(active)) {
         return;
       }
-      const tabbables = Array.from(
-        container.querySelectorAll<HTMLElement>(TABBABLE_SELECTOR),
-      ).filter(isTabbable);
-      const index = tabbables.indexOf(active as HTMLElement);
+      const all = tabbables();
+      const index = all.indexOf(active as HTMLElement);
       if (index === -1) {
         return;
       }
-      const target =
-        tabbables[
-          (index + (e.shiftKey ? -1 : 1) + tabbables.length) % tabbables.length
-        ];
+      const next = index + (e.shiftKey ? -1 : 1);
+      const wraps = next < 0 || next >= all.length;
+      const target = all[(next + all.length) % all.length];
       if (!(target instanceof HTMLIFrameElement)) {
         return;
       }
-      e.preventDefault();
-      // Keep FocusScope's own document-level handler from also acting.
+      // Keep FocusScope's own document-level handler from acting.
       e.stopImmediatePropagation();
-      requestAnimationFrame(() => target.focus());
+      if (wraps) {
+        // Start the browser's own Tab from the guard at the far end, so it
+        // carries on to the first or last control inside the frame.
+        const guard = guards().find(
+          (g) =>
+            g.getAttribute(guardAttribute) === (e.shiftKey ? "end" : "start"),
+        );
+        launching = true;
+        guard?.focus({ preventScroll: true });
+        launching = false;
+      }
     };
-    const doc = containerRef.current?.ownerDocument ?? document;
+
+    // Key presses inside a frame never reach this page, so Tab from a
+    // frame's last control, with the frame last in the dialog, would leave
+    // for the browser's own controls. While focus is in a frame the guards
+    // at either end of the dialog become tab stops to catch that, and send
+    // focus round to the other end. They are tab stops only then: at other
+    // times they would be an extra stop on the way in from the browser's
+    // controls.
+    const setGuardsTabbable = (tabbable: boolean) => {
+      for (const guard of guards()) {
+        guard.tabIndex = tabbable ? 0 : -1;
+      }
+    };
+    const armIfInFrame = () => {
+      const active = doc.activeElement;
+      if (active instanceof HTMLIFrameElement && container.contains(active)) {
+        setGuardsTabbable(true);
+      }
+    };
+    // Chromium also tells this page when focus enters a frame (a blur on
+    // the window, a focus on the frame element); Firefox only says that the
+    // previous control lost focus.
+    let armTimeout: ReturnType<typeof setTimeout> | undefined;
+    const onFocusOut = () => {
+      clearTimeout(armTimeout);
+      armTimeout = setTimeout(armIfInFrame);
+    };
+    const onFocusIn = (e: FocusEvent) => {
+      const target = e.target as HTMLElement;
+      if (target instanceof HTMLIFrameElement) {
+        setGuardsTabbable(true);
+        return;
+      }
+      setGuardsTabbable(false);
+      const position = target.getAttribute(guardAttribute);
+      if (position && !launching) {
+        const all = tabbables();
+        focusTabbable(position === "end" ? all[0] : all[all.length - 1]);
+      }
+    };
+
     doc.addEventListener("keydown", onKeyDown, true);
-    return () => doc.removeEventListener("keydown", onKeyDown, true);
+    container.addEventListener("focusin", onFocusIn);
+    container.addEventListener("focusout", onFocusOut);
+    return () => {
+      clearTimeout(armTimeout);
+      container.removeEventListener("focusout", onFocusOut);
+      doc.removeEventListener("keydown", onKeyDown, true);
+      container.removeEventListener("focusin", onFocusIn);
+    };
   }, [containerRef]);
   return null;
 };
+
+const guardAttribute = "data-focus-guard";
+
+const FocusGuard = ({ position }: { position: "start" | "end" }) => (
+  <span
+    {...{ [guardAttribute]: position }}
+    tabIndex={-1}
+    aria-hidden="true"
+    style={{ outline: "none" }}
+  />
+);
 
 type DialogSlots = ReturnType<typeof dialog>;
 
@@ -304,9 +398,11 @@ export const Modal = ({
       >
         <Dialog role={role} aria-label={ariaLabel} className={slots.inner}>
           <IframeTabShim containerRef={contentRef} />
+          <FocusGuard position="start" />
           <SlotContext.Provider value={{ slots, onClose: close }}>
             {children}
           </SlotContext.Provider>
+          <FocusGuard position="end" />
         </Dialog>
       </RACModal>
     </ModalOverlay>
