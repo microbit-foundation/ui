@@ -1,1 +1,8 @@
-{}
+{
+  "ui-code-view.makecode-javascript-label": {
+    "defaultMessage": "Cód JavaScript"
+  },
+  "ui-code-view.python-label": {
+    "defaultMessage": "Cód Python"
+  }
+}
