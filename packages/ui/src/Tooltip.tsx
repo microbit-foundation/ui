@@ -53,6 +53,13 @@ export interface TooltipProps {
   /** Controlled open state (otherwise hover/focus driven). */
   isOpen?: boolean;
   /**
+   * Stops hover and focus opening the tooltip; the trigger is unaffected.
+   * Use this, not `isOpen={false}`, to turn a tooltip off for a while:
+   * react-aria still records hover and focus while it's forced shut, and the
+   * tooltip opens by itself when control is handed back.
+   */
+  isDisabled?: boolean;
+  /**
    * Anchor element for positioning, when the child cannot register itself as
    * the trigger (i.e. it is not a RAC component or `Focusable`).
    */
@@ -105,6 +112,7 @@ export const Tooltip = ({
   placement = "top",
   hasArrow,
   isOpen,
+  isDisabled,
   triggerRef,
   delay,
   closeDelay,
@@ -113,6 +121,7 @@ export const Tooltip = ({
 }: TooltipProps) => (
   <TooltipTrigger
     isOpen={isOpen}
+    isDisabled={isDisabled}
     delay={delay}
     closeDelay={closeDelay}
     shouldCloseOnPress={shouldCloseOnPress}
