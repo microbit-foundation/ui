@@ -4,7 +4,13 @@
  * SPDX-License-Identifier: MIT
  */
 import { AspectRatio, Icon } from "@microbit/ui";
-import { useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import { RiPlayFill } from "react-icons/ri";
 import { useIntl } from "react-intl";
 import { css } from "styled-system/css";
@@ -32,9 +38,12 @@ export interface YoutubeVideoEmbedProps {
  * iPadOS reports the platform as macOS, hence the touch-points check.
  */
 const isIOS = () =>
-  typeof navigator !== "undefined" &&
-  /iP(hone|ad|od)|Mac/.test(navigator.platform) &&
-  navigator.maxTouchPoints > 1;
+  /iP(hone|ad|od)|Mac/.test(navigator.platform) && navigator.maxTouchPoints > 1;
+// The platform doesn't change, so there's nothing to subscribe to. The store
+// is for its server snapshot: hydration renders the facade, as the server
+// did, then React re-renders with the client's answer.
+const subscribeToNothing = () => () => {};
+const notOnServer = () => false;
 
 /**
  * A YouTube video as a click-to-play facade: the video's own preview image
@@ -47,6 +56,8 @@ const isIOS = () =>
  *
  * On iOS the player renders upfront instead — WebKit won't autoplay the
  * swapped-in iframe (see isIOS), so the facade would demand two taps there.
+ * It's lazily loaded, and only swapped in after hydration, since a server
+ * render can't know the platform.
  * If we revisit this we should change the facade UX to a consent interaction.
  */
 export const YoutubeVideoEmbed = ({
@@ -57,12 +68,32 @@ export const YoutubeVideoEmbed = ({
   const intl = useIntl();
   const id = encodeURIComponent(youtubeId.trim());
   const [activated, setActivated] = useState(false);
-  const showPlayer = activated || isIOS();
+  const playerUpfront = useSyncExternalStore(
+    subscribeToNothing,
+    isIOS,
+    notOnServer,
+  );
+  const showPlayer = activated || playerUpfront;
   // maxresdefault only exists for videos uploaded in ≥720p; fall back to
-  // hqdefault, which YouTube generates for everything.
+  // hqdefault, which YouTube generates for everything. A missing
+  // maxresdefault is a 404 whose body is a 120×90 placeholder, which
+  // browsers display without an error event.
   const [thumbnail, setThumbnail] = useState<"maxresdefault" | "hqdefault">(
     "maxresdefault",
   );
+  const checkLoadedThumbnail = (img: HTMLImageElement) => {
+    if (img.naturalWidth <= 120) {
+      setThumbnail("hqdefault");
+    }
+  };
+  // A server-rendered image often loads (or fails) before hydration, when
+  // React isn't yet listening, so it's also checked when React first sees
+  // it. A complete image with no width failed to load.
+  const checkThumbnailOnMount = useCallback((img: HTMLImageElement | null) => {
+    if (img?.complete && img.naturalWidth <= 120) {
+      setThumbnail("hqdefault");
+    }
+  }, []);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   useEffect(() => {
     if (activated) {
@@ -88,6 +119,7 @@ export const YoutubeVideoEmbed = ({
             activated ? "&autoplay=1" : ""
           }`}
           allow="autoplay; encrypted-media"
+          loading={activated ? undefined : "lazy"}
           frameBorder="0"
           allowFullScreen
         />
@@ -124,6 +156,8 @@ export const YoutubeVideoEmbed = ({
           <img
             src={`https://i.ytimg.com/vi/${id}/${thumbnail}.jpg`}
             alt={alt ?? ""}
+            ref={checkThumbnailOnMount}
+            onLoad={(e) => checkLoadedThumbnail(e.currentTarget)}
             onError={() => setThumbnail("hqdefault")}
           />
           {/* A solid dark disc behind the glyph, not a drop shadow: the
