@@ -126,6 +126,43 @@ export const OverlayChildren: Story = {
   },
 };
 
+/**
+ * `aria-describedby` reaches the thumb's input, so it's announced with the
+ * slider: for example, to describe threshold marks drawn on the track.
+ */
+export const Description: Story = {
+  parameters: {
+    a11y: {
+      config: {
+        rules: [
+          // Story parameters replace the preview's rules array.
+          { id: "color-contrast", reviewOnFail: true },
+          // This best-practice rule only counts a <label> element as a label,
+          // so it fails any aria-label'd input that also has a description.
+          { id: "label-title-only", enabled: false },
+        ],
+      },
+    },
+  },
+  render: () => {
+    const [value, setValue] = useState(50);
+    return (
+      <Stack maxW="md">
+        <Slider
+          aria-label="Sound level"
+          aria-describedby="sound-thresholds"
+          value={value}
+          onChange={setValue}
+          maxValue={255}
+        />
+        <Text id="sound-thresholds" fontSize="sm" color="gray.600">
+          Quiet 50, loud 150
+        </Text>
+      </Stack>
+    );
+  },
+};
+
 export const Disabled: Story = {
   render: () => (
     <Stack maxW="md">

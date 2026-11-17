@@ -20,6 +20,11 @@ export interface SliderProps {
   minValue?: number;
   maxValue?: number;
   "aria-label": string;
+  /**
+   * Further information announced with the slider, such as what notable
+   * values along the track mean.
+   */
+  "aria-describedby"?: string;
   isDisabled?: boolean;
   /**
    * Number format for the value announced to assistive tech (e.g.
@@ -68,6 +73,7 @@ export const Slider = ({
   minValue = 0,
   maxValue = 100,
   "aria-label": ariaLabel,
+  "aria-describedby": ariaDescribedBy,
   isDisabled,
   formatOptions,
   css: cssProp,
@@ -96,6 +102,7 @@ export const Slider = ({
       minValue={minValue}
       maxValue={maxValue}
       aria-label={ariaLabel}
+      aria-describedby={ariaDescribedBy}
       isDisabled={isDisabled}
       formatOptions={formatOptions}
       className={cx(slots.root, cssProp ? css(cssProp) : undefined)}
