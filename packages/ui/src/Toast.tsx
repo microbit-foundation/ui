@@ -6,6 +6,7 @@
 import { ReactNode, useMemo, useSyncExternalStore } from "react";
 import {
   Button as RACButton,
+  Text,
   UNSTABLE_Toast as RACToast,
   UNSTABLE_ToastContent as RACToastContent,
   UNSTABLE_ToastQueue as RACToastQueue,
@@ -149,13 +150,20 @@ export const ToastProvider = () => {
                 )}
               />
               <div className={slots.body}>
+                {/* Text slots, which the toast is labelled and described by. */}
                 {toast.content.title ? (
-                  <p className={slots.title}>{toast.content.title}</p>
+                  <Text slot="title" elementType="p" className={slots.title}>
+                    {toast.content.title}
+                  </Text>
                 ) : null}
                 {toast.content.description ? (
-                  <div className={slots.description}>
+                  <Text
+                    slot="description"
+                    elementType="div"
+                    className={slots.description}
+                  >
                     {toast.content.description}
-                  </div>
+                  </Text>
                 ) : null}
               </div>
             </RACToastContent>
