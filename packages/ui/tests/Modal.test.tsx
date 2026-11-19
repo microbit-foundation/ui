@@ -131,6 +131,40 @@ it("leaves Tab onto an iframe to the browser", () => {
   expect(document.activeElement).toBe(dialog.lastElementChild);
 });
 
+it("handles Tab onto an iframe from the dialog itself", () => {
+  // Where focus is once a dialog has opened, which is not a tab stop.
+  const { unmount } = render(
+    <IntlProvider locale="en">
+      <Modal isOpen onClose={() => undefined} aria-label="Video">
+        <ModalCloseButton />
+        <ModalBody>
+          <iframe title="the video" src="https://example.com/embed" />
+        </ModalBody>
+      </Modal>
+    </IntlProvider>,
+  );
+  let dialog = screen.getByRole("dialog");
+  expect(document.activeElement).toBe(dialog);
+  expect(fireEvent.keyDown(dialog, { key: "Tab", shiftKey: true })).toBe(true);
+  expect(document.activeElement).toBe(dialog.lastElementChild);
+  unmount();
+
+  render(
+    <IntlProvider locale="en">
+      <Modal isOpen onClose={() => undefined} aria-label="Video">
+        <ModalBody>
+          <iframe title="the video" src="https://example.com/embed" />
+        </ModalBody>
+        <Button>After</Button>
+      </Modal>
+    </IntlProvider>,
+  );
+  dialog = screen.getByRole("dialog");
+  expect(document.activeElement).toBe(dialog);
+  expect(fireEvent.keyDown(dialog, { key: "Tab" })).toBe(true);
+  expect(document.activeElement).toBe(dialog);
+});
+
 it("wraps Tab out of a frame at the end of the dialog", async () => {
   // Key presses in a frame never reach the page, so guards at the ends of
   // the dialog become tab stops while a frame has focus.

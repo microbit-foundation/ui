@@ -120,14 +120,20 @@ const IframeTabShim = ({
       if (!active || !container.contains(active)) {
         return;
       }
+      // Placed by document order, as FocusScope does, because focus need not
+      // be on a tab stop: it is on the dialog itself once that has opened,
+      // and after a click on its content.
       const all = tabbables();
-      const index = all.indexOf(active as HTMLElement);
-      if (index === -1) {
-        return;
-      }
-      const next = index + (e.shiftKey ? -1 : 1);
-      const wraps = next < 0 || next >= all.length;
-      const target = all[(next + all.length) % all.length];
+      const onward = all.filter(
+        (el) =>
+          active.compareDocumentPosition(el) &
+          (e.shiftKey
+            ? Node.DOCUMENT_POSITION_PRECEDING
+            : Node.DOCUMENT_POSITION_FOLLOWING),
+      );
+      const wraps = onward.length === 0;
+      const candidates = wraps ? all : onward;
+      const target = candidates[e.shiftKey ? candidates.length - 1 : 0];
       if (!(target instanceof HTMLIFrameElement)) {
         return;
       }

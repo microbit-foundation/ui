@@ -388,14 +388,23 @@ export const WithIframeLast: Story = {
     if (!keyboard) {
       return;
     }
-    (await screen.findByRole("button", { name: "Close" })).focus();
+    // Focus starts on the dialog itself, which is not a tab stop.
+    const dialog = await screen.findByRole("dialog");
+    await waitFor(() => expect(dialog).toHaveFocus());
     if (isFirefox) {
       await pressUntil(keyboard, shiftTab, frameHasFocus);
       await pressUntil(keyboard, shiftTab, focusIsOn("Before frame"));
       await pressUntil(keyboard, tab, frameHasFocus);
       await pressUntil(keyboard, tab, focusIsOn("Close"));
+      await pressUntil(keyboard, shiftTab, frameHasFocus);
+      await pressUntil(keyboard, tab, focusIsOn("Close"));
       return;
     }
+    await keyboard.keyboard(shiftTab);
+    await expectFrameFocus("last");
+
+    screen.getByRole("button", { name: "Close" }).focus();
+    await expectFrameFocus("nothing");
     await keyboard.keyboard(shiftTab);
     await expectFrameFocus("last");
     await keyboard.keyboard(shiftTab);
