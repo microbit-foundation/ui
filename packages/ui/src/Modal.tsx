@@ -74,8 +74,8 @@ const guardAttribute = "data-focus-guard";
  * Where reaching the frame means wrapping round the dialog, the browser
  * left to itself would leave the page, so the shim first moves focus to a
  * guard at the far end of the dialog and the browser's Tab carries on from
- * there. The key press itself never focuses a frame from script, which
- * Firefox would drop. Every other Tab is left to FocusScope.
+ * there. Its key handler never focuses a frame from script, which Firefox
+ * would drop. Every other Tab is left to FocusScope.
  */
 const IframeTabShim = ({
   containerRef,
@@ -96,19 +96,6 @@ const IframeTabShim = ({
       Array.from(
         container.querySelectorAll<HTMLElement>(`[${guardAttribute}]`),
       );
-    // A guard's redirect lands on a frame where that is the dialog's only
-    // tab stop, or there is one at each end. The browser's Tab has already
-    // been spent reaching the guard, so the frame itself is focused: a stop
-    // on the frame in Chromium. Deferred as a precaution, since the guard
-    // gets focus from a key press, where Firefox can drop the call.
-    const focusTabbable = (target: HTMLElement | undefined) => {
-      if (target instanceof HTMLIFrameElement) {
-        requestAnimationFrame(() => target.focus());
-      } else {
-        target?.focus();
-      }
-    };
-
     // Set while this page focuses a guard itself, as distinct from the
     // browser's Tab landing on one.
     let launching = false;
@@ -194,8 +181,12 @@ const IframeTabShim = ({
       setGuardsTabbable(false);
       const position = target.getAttribute(guardAttribute);
       if (position && !launching) {
+        // The other end is itself a frame where that is the dialog's only
+        // tab stop, or there is one at each end. The browser's Tab has
+        // been spent reaching the guard, so the frame element gets focus:
+        // one stop on the frame before the next Tab enters it.
         const all = tabbables();
-        focusTabbable(position === "end" ? all[0] : all[all.length - 1]);
+        (position === "end" ? all[0] : all[all.length - 1])?.focus();
       }
     };
 
