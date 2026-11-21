@@ -26,7 +26,7 @@ export default defineConfig({
             enabled: true,
             headless: true,
             provider: playwright(),
-            instances: [{ browser: "chromium" }],
+            instances: [{ browser: "chromium" }, { browser: "firefox" }],
           },
           setupFiles: [".storybook/vitest.setup.ts"],
         },

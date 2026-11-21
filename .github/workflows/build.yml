@@ -49,8 +49,8 @@ jobs:
       - uses: microbit-foundation/npm-package-versioner-action@v3
         with:
           working-directory: packages/${{ steps.route.outputs.package }}
-      # Story tests (apps/storybook, `npm test`) run in headless Chromium.
-      - run: npx playwright install --with-deps chromium
+      # Story tests (apps/storybook, `npm test`) run in headless Chromium and Firefox.
+      - run: npx playwright install --with-deps chromium firefox
       - run: npm run ci
       - run: npm pack -w @microbit/${{ steps.route.outputs.package }}
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
