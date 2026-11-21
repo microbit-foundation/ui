@@ -294,6 +294,11 @@ const expectFrameFocus = (id: string) =>
     expect(screen.getByTestId("frame-focus")).toHaveTextContent(id),
   );
 
+const expectFocusInFrame = () =>
+  waitFor(() =>
+    expect(screen.getByTestId("frame-focus")).not.toHaveTextContent("nothing"),
+  );
+
 const expectFocus = (name: string) =>
   waitFor(() => expect(screen.getByRole("button", { name })).toHaveFocus());
 
@@ -304,6 +309,9 @@ const isFirefox = navigator.userAgent.includes("Firefox");
 
 type Keyboard = NonNullable<Awaited<ReturnType<typeof realKeyboard>>>;
 
+// An expectation that times out is taken as a stop short of the target and
+// the key is pressed again, so one that is only slow to pass sends focus
+// past the target.
 const pressUntil = async (
   keyboard: Keyboard,
   key: string,
@@ -322,26 +330,6 @@ const pressUntil = async (
   }
 };
 
-const frameFocusIs = (id: string) => () =>
-  waitFor(
-    () => expect(screen.getByTestId("frame-focus")).toHaveTextContent(id),
-    { timeout: 500 },
-  );
-
-const frameHasFocus = () =>
-  waitFor(
-    () =>
-      expect(screen.getByTestId("frame-focus")).not.toHaveTextContent(
-        "nothing",
-      ),
-    { timeout: 500 },
-  );
-
-const focusIsOn = (name: string) => () =>
-  waitFor(() => expect(screen.getByRole("button", { name })).toHaveFocus(), {
-    timeout: 500,
-  });
-
 /**
  * Tab moves between the dialog's controls and those inside an iframe without
  * stopping on the frame itself.
@@ -355,10 +343,10 @@ export const WithIframe: Story = {
     }
     (await screen.findByRole("button", { name: "Before frame" })).focus();
     if (isFirefox) {
-      await pressUntil(keyboard, tab, frameFocusIs("first"));
-      await pressUntil(keyboard, tab, focusIsOn("Done"));
-      await pressUntil(keyboard, shiftTab, frameFocusIs("first"));
-      await pressUntil(keyboard, shiftTab, focusIsOn("Before frame"));
+      await pressUntil(keyboard, tab, () => expectFrameFocus("first"));
+      await pressUntil(keyboard, tab, () => expectFocus("Done"));
+      await pressUntil(keyboard, shiftTab, () => expectFrameFocus("first"));
+      await pressUntil(keyboard, shiftTab, () => expectFocus("Before frame"));
       return;
     }
     await keyboard.keyboard(tab);
@@ -392,12 +380,12 @@ export const WithIframeLast: Story = {
     const dialog = await screen.findByRole("dialog");
     await waitFor(() => expect(dialog).toHaveFocus());
     if (isFirefox) {
-      await pressUntil(keyboard, shiftTab, frameHasFocus);
-      await pressUntil(keyboard, shiftTab, focusIsOn("Before frame"));
-      await pressUntil(keyboard, tab, frameHasFocus);
-      await pressUntil(keyboard, tab, focusIsOn("Close"));
-      await pressUntil(keyboard, shiftTab, frameHasFocus);
-      await pressUntil(keyboard, tab, focusIsOn("Close"));
+      await pressUntil(keyboard, shiftTab, expectFocusInFrame);
+      await pressUntil(keyboard, shiftTab, () => expectFocus("Before frame"));
+      await pressUntil(keyboard, tab, expectFocusInFrame);
+      await pressUntil(keyboard, tab, () => expectFocus("Close"));
+      await pressUntil(keyboard, shiftTab, expectFocusInFrame);
+      await pressUntil(keyboard, tab, () => expectFocus("Close"));
       return;
     }
     await keyboard.keyboard(shiftTab);

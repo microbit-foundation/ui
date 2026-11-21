@@ -184,3 +184,9 @@ work. Consumption setup and the CSS-variable contract are in
   and typechecks don't catch a selector that matches nothing; a story
   rendering the whole component set in each state does (see
   `Forms/Field chrome`).
+- **`storybook/test`'s key presses are simulated and stop at a frame.** They
+  move focus from script, so Tab never enters an iframe and never runs the
+  browser's own focus navigation. Press real keys with `userEvent` from
+  `vitest/browser` instead. It exists only under the test runner, so such a
+  play function does nothing in the Storybook UI (see the iframe stories in
+  `Modal.stories.tsx`).
