@@ -192,3 +192,68 @@ it("wraps Tab out of a frame at the end of the dialog", async () => {
   expect(document.activeElement).toBe(close);
   expect(endGuard.tabIndex).toBe(-1);
 });
+
+const renderFrameModal = () => {
+  render(
+    <IntlProvider locale="en">
+      <Modal isOpen onClose={() => undefined} aria-label="Video">
+        <ModalCloseButton />
+        <ModalBody>
+          <iframe title="the video" src="https://example.com/embed" />
+        </ModalBody>
+      </Modal>
+    </IntlProvider>,
+  );
+  return {
+    close: screen.getByRole("button", { name: /close/i }),
+    frame: screen.getByTitle("the video"),
+    endGuard: screen.getByRole("dialog").lastElementChild as HTMLElement,
+  };
+};
+
+const twoFrames = () =>
+  new Promise((resolve) =>
+    requestAnimationFrame(() => requestAnimationFrame(resolve)),
+  );
+
+it("keeps FocusScope from pulling focus back while the browser tabs into a frame", async () => {
+  // Firefox moving into a cross-process frame: the control loses focus and
+  // the frame is not yet the active element when FocusScope checks.
+  const { close } = renderFrameModal();
+
+  // What FocusScope does by itself. The shim depends on this and on the
+  // attribute react-aria exempts, neither of which is public.
+  close.focus();
+  close.blur();
+  await twoFrames();
+  expect(document.activeElement).toBe(close);
+
+  fireEvent.keyDown(close, { key: "Tab" });
+  close.blur();
+  await twoFrames();
+  expect(document.activeElement).toBe(document.body);
+  await waitFor(() =>
+    expect(
+      document.documentElement.hasAttribute("data-react-aria-top-layer"),
+    ).toBe(false),
+  );
+});
+
+it("arms the guards when a frame becomes the active element late", async () => {
+  const { close, frame, endGuard } = renderFrameModal();
+  close.focus();
+  fireEvent.keyDown(close, { key: "Tab" });
+  close.blur();
+  await new Promise((resolve) => setTimeout(resolve, 20));
+  expect(endGuard.tabIndex).toBe(-1);
+
+  // No event tells the page that focus has reached the frame.
+  const activeElement = vi
+    .spyOn(document, "activeElement", "get")
+    .mockReturnValue(frame);
+  try {
+    await waitFor(() => expect(endGuard.tabIndex).toBe(0));
+  } finally {
+    activeElement.mockRestore();
+  }
+});
