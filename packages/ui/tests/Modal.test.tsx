@@ -229,6 +229,9 @@ it("keeps FocusScope from pulling focus back while the browser tabs into a frame
   expect(document.activeElement).toBe(close);
 
   fireEvent.keyDown(close, { key: "Tab" });
+  // Firefox moves focus a few milliseconds after the key press, and a
+  // frame can fall in between.
+  await twoFrames();
   close.blur();
   await twoFrames();
   expect(document.activeElement).toBe(document.body);

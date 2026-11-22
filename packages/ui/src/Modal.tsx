@@ -112,18 +112,35 @@ const IframeTabShim = ({
     // focus, and Firefox is left sending key presses to this page with the
     // frame's control focused: Tab then does nothing. react-aria exempts
     // focus inside an element carrying this attribute, so the root carries
-    // it for the frame in which that check runs.
-    let suspensions = 0;
+    // it from the key press until that check has run.
+    const root = doc.documentElement;
+    let suspended = false;
+    let focusChanges = 0;
+    let resumeTimeout: ReturnType<typeof setTimeout> | undefined;
+    const resumeContainment = () => {
+      if (suspended) {
+        suspended = false;
+        clearTimeout(resumeTimeout);
+        root.removeAttribute(topLayerAttribute);
+      }
+    };
     const suspendContainment = () => {
-      const suspension = ++suspensions;
-      const root = doc.documentElement;
+      suspended = true;
       root.setAttribute(topLayerAttribute, "true");
-      // FocusScope's check is requested after this, from the focus change
-      // the key press goes on to cause, so it runs in the first frame.
+      // For a key press that moves focus nowhere.
+      clearTimeout(resumeTimeout);
+      resumeTimeout = setTimeout(resumeContainment, 500);
+    };
+    // FocusScope requests its check from the same focus change, so it runs
+    // in the first frame after it. Counted from the focus change and not
+    // the key press, which Firefox dispatches a few milliseconds earlier:
+    // long enough for a frame to fall in between.
+    const resumeContainmentAfterCheck = () => {
+      const focusChange = ++focusChanges;
       requestAnimationFrame(() =>
         requestAnimationFrame(() => {
-          if (suspension === suspensions) {
-            root.removeAttribute(topLayerAttribute);
+          if (focusChange === focusChanges) {
+            resumeContainment();
           }
         }),
       );
@@ -203,6 +220,9 @@ const IframeTabShim = ({
       }
     };
     const onFocusOut = () => {
+      if (suspended) {
+        resumeContainmentAfterCheck();
+      }
       clearTimeout(armTimeout);
       armTimeout = setTimeout(() => armIfInFrame(5));
     };
@@ -229,10 +249,7 @@ const IframeTabShim = ({
     container.addEventListener("focusout", onFocusOut);
     return () => {
       clearTimeout(armTimeout);
-      if (suspensions > 0) {
-        suspensions++;
-        doc.documentElement.removeAttribute(topLayerAttribute);
-      }
+      resumeContainment();
       container.removeEventListener("focusout", onFocusOut);
       doc.removeEventListener("keydown", onKeyDown, true);
       container.removeEventListener("focusin", onFocusIn);
