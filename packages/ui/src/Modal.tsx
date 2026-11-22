@@ -106,37 +106,34 @@ const IframeTabShim = ({
 
     // A frame after an element in the dialog loses focus, FocusScope pulls
     // focus back to it unless the active element is still in the dialog.
-    // Firefox updates the active element late when its own Tab moves into a
-    // cross-site frame, which runs in another process. Caught in that gap,
-    // FocusScope refocuses the control while the frame goes on to take
-    // focus, and Firefox is left sending key presses to this page with the
-    // frame's control focused: Tab then does nothing. react-aria exempts
-    // focus inside an element carrying this attribute, so the root carries
-    // it from the key press until that check has run.
+    // Firefox updates the active element late when focus moves into a
+    // cross-site frame, which runs in another process, whether by its own
+    // Tab or by a click. Caught in that gap, FocusScope refocuses the
+    // control while the frame goes on to take focus, and Firefox is left
+    // sending key presses to this page with the frame's control focused:
+    // typing and Tab then do nothing.
+    //
+    // Nothing says where focus is going when it leaves, so FocusScope's
+    // check is suspended for every loss of focus to somewhere outside this
+    // page's elements: react-aria exempts focus inside an element carrying
+    // this attribute, and the root carries it until the check has run. That
+    // check also recovers focus dropped on the body, so the shim does that
+    // part itself once it is clear that focus did not go to a frame.
     const root = doc.documentElement;
     let suspended = false;
     let focusChanges = 0;
-    let resumeTimeout: ReturnType<typeof setTimeout> | undefined;
     const resumeContainment = () => {
       if (suspended) {
         suspended = false;
-        clearTimeout(resumeTimeout);
         root.removeAttribute(topLayerAttribute);
       }
     };
-    const suspendContainment = () => {
+    // FocusScope requests its check from the same focus change, so it runs
+    // in the first frame after it.
+    const suspendContainmentForCheck = () => {
+      const focusChange = ++focusChanges;
       suspended = true;
       root.setAttribute(topLayerAttribute, "true");
-      // For a key press that moves focus nowhere.
-      clearTimeout(resumeTimeout);
-      resumeTimeout = setTimeout(resumeContainment, 500);
-    };
-    // FocusScope requests its check from the same focus change, so it runs
-    // in the first frame after it. Counted from the focus change and not
-    // the key press, which Firefox dispatches a few milliseconds earlier:
-    // long enough for a frame to fall in between.
-    const resumeContainmentAfterCheck = () => {
-      const focusChange = ++focusChanges;
       requestAnimationFrame(() =>
         requestAnimationFrame(() => {
           if (focusChange === focusChanges) {
@@ -144,6 +141,28 @@ const IframeTabShim = ({
           }
         }),
       );
+    };
+    // Focus entering a frame blurs the window; focus dropped on the body
+    // does not. The blur can trail the focus change by several
+    // milliseconds, so the decision waits well past that.
+    let leftPage = false;
+    let restoreTimeout: ReturnType<typeof setTimeout> | undefined;
+    const onWindowBlur = () => {
+      leftPage = true;
+    };
+    const restoreIfDropped = (from: HTMLElement) => {
+      const active = doc.activeElement;
+      if (leftPage || (active && active !== doc.body)) {
+        return;
+      }
+      if (from.isConnected) {
+        from.focus();
+      }
+      if (!container.contains(doc.activeElement)) {
+        container
+          .querySelector<HTMLElement>("[role='dialog'], [role='alertdialog']")
+          ?.focus();
+      }
     };
 
     const onKeyDown = (e: KeyboardEvent) => {
@@ -179,7 +198,6 @@ const IframeTabShim = ({
       }
       // Keep FocusScope's own document-level handler from acting.
       e.stopImmediatePropagation();
-      suspendContainment();
       if (wraps) {
         // Start the browser's own Tab from the guard at the far end, so it
         // carries on to the first or last control inside the frame.
@@ -219,9 +237,13 @@ const IframeTabShim = ({
         armTimeout = setTimeout(() => armIfInFrame(retries - 1), 50);
       }
     };
-    const onFocusOut = () => {
-      if (suspended) {
-        resumeContainmentAfterCheck();
+    const onFocusOut = (e: FocusEvent) => {
+      if (e.relatedTarget === null) {
+        suspendContainmentForCheck();
+        leftPage = false;
+        clearTimeout(restoreTimeout);
+        const from = e.target as HTMLElement;
+        restoreTimeout = setTimeout(() => restoreIfDropped(from), 100);
       }
       clearTimeout(armTimeout);
       armTimeout = setTimeout(() => armIfInFrame(5));
@@ -247,9 +269,12 @@ const IframeTabShim = ({
     doc.addEventListener("keydown", onKeyDown, true);
     container.addEventListener("focusin", onFocusIn);
     container.addEventListener("focusout", onFocusOut);
+    doc.defaultView?.addEventListener("blur", onWindowBlur);
     return () => {
       clearTimeout(armTimeout);
+      clearTimeout(restoreTimeout);
       resumeContainment();
+      doc.defaultView?.removeEventListener("blur", onWindowBlur);
       container.removeEventListener("focusout", onFocusOut);
       doc.removeEventListener("keydown", onKeyDown, true);
       container.removeEventListener("focusin", onFocusIn);

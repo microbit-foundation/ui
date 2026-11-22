@@ -216,37 +216,42 @@ const twoFrames = () =>
     requestAnimationFrame(() => requestAnimationFrame(resolve)),
   );
 
-it("keeps FocusScope from pulling focus back while the browser tabs into a frame", async () => {
-  // Firefox moving into a cross-process frame: the control loses focus and
-  // the frame is not yet the active element when FocusScope checks.
+it("keeps FocusScope from pulling focus back when focus leaves for a frame", async () => {
+  // Firefox moving into a cross-process frame, by Tab or by a click: the
+  // control loses focus, the window blurs, and the frame is not yet the
+  // active element when FocusScope checks a frame later. The shim depends
+  // on that check and on the attribute react-aria exempts from it, neither
+  // of which is public; renaming the attribute fails this test.
   const { close } = renderFrameModal();
-
-  // What FocusScope does by itself. The shim depends on this and on the
-  // attribute react-aria exempts, neither of which is public.
   close.focus();
   close.blur();
-  await twoFrames();
-  expect(document.activeElement).toBe(close);
-
-  fireEvent.keyDown(close, { key: "Tab" });
-  // Firefox moves focus a few milliseconds after the key press, and a
-  // frame can fall in between.
-  await twoFrames();
-  close.blur();
+  fireEvent.blur(window);
   await twoFrames();
   expect(document.activeElement).toBe(document.body);
-  await waitFor(() =>
-    expect(
-      document.documentElement.hasAttribute("data-react-aria-top-layer"),
-    ).toBe(false),
-  );
+  expect(
+    document.documentElement.hasAttribute("data-react-aria-top-layer"),
+  ).toBe(false);
+
+  // Past the point where the shim would recover dropped focus.
+  await new Promise((resolve) => setTimeout(resolve, 150));
+  expect(document.activeElement).toBe(document.body);
+});
+
+it("recovers focus dropped on the body", async () => {
+  // FocusScope's check does this by itself; the shim suspends that check
+  // and so repeats it once the window is known not to have blurred.
+  const { close } = renderFrameModal();
+  close.focus();
+  close.blur();
+  expect(document.activeElement).toBe(document.body);
+  await waitFor(() => expect(document.activeElement).toBe(close));
 });
 
 it("arms the guards when a frame becomes the active element late", async () => {
   const { close, frame, endGuard } = renderFrameModal();
   close.focus();
-  fireEvent.keyDown(close, { key: "Tab" });
   close.blur();
+  fireEvent.blur(window);
   await new Promise((resolve) => setTimeout(resolve, 20));
   expect(endGuard.tabIndex).toBe(-1);
 
